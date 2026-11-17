@@ -1,0 +1,74 @@
+#
+# Copyright 2026 Davils
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# Everything a run does is decided by .github/kotlin-workflow.yml and the defaults of
+# davils-com/kotlin-workflow; this file only says when a run starts and which secrets it may use.
+# The status check to require is "Pipeline / Pipeline".
+name: Pipeline
+
+on:
+  push:
+    branches: [develop, main]
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+      - '[0-9]+.[0-9]+.[0-9]+-*'
+  pull_request:
+    branches: [develop, main]
+  merge_group:
+  schedule:
+    # Security: new vulnerabilities are published for dependencies nobody touched.
+    - cron: '0 4 * * 1'
+  workflow_dispatch:
+    inputs:
+      stages:
+        description: Comma separated stages to run instead of the policy, such as check
+        type: string
+        default: ''
+      dry-run:
+        description: Rehearse the release stage without uploading anything
+        type: boolean
+        default: false
+
+# A new push makes the run of a pull request obsolete. Nothing else is ever cancelled.
+concurrency:
+  group: pipeline-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions: {}
+
+jobs:
+  pipeline:
+    name: Pipeline
+    if: github.repository == 'davils-com/kxml'
+    # The commit of davils-com/kotlin-workflow's main branch. Dependabot moves it forward.
+    uses: davils-com/kotlin-workflow/.github/workflows/pipeline.yml@cbcd146f13c2191a34bfae886ec6790eb522db85 # main
+    permissions:
+      contents: write
+      actions: write
+      security-events: write
+      id-token: write
+      attestations: write
+      pages: write
+      pull-requests: read
+    with:
+      stages: ${{ inputs.stages }}
+      dry-run: ${{ inputs.dry-run || false }}
+    secrets:
+      MAVEN_USERNAME: ${{ secrets.DAVILS_MAVEN_NAME }}
+      MAVEN_PASSWORD: ${{ secrets.DAVILS_MAVEN_SECRET }}
+      SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+      SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
+      SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
