@@ -1,0 +1,73 @@
+#
+# Copyright 2026 Davils
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+name: Bug report
+description: Something in kxml does not behave as documented.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Never report a security problem here. Use the private vulnerability reporting instead.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you expected, and what happened instead.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Minimal reproduction
+      description: The smallest Kotlin snippet or test that shows the problem.
+      render: kotlin
+    validations:
+      required: true
+
+  - type: input
+    id: kxml-version
+    attributes:
+      label: kxml version and module
+      description: Such as kxml-core 1.0.0.
+    validations:
+      required: true
+
+  - type: input
+    id: jdk
+    attributes:
+      label: JDK and Kotlin version
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options: [Linux, macOS, Windows]
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Output
+      description: The stack trace or the output. Remove anything sensitive before pasting.
+      render: shell
+    validations:
+      required: false
