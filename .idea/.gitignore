@@ -1,0 +1,7 @@
+# Ignore everything in .idea
+*
+
+# But keep this .gitignore and the copyright profile
+!/.gitignore
+!/copyright/
+!/copyright/**
