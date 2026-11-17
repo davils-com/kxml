@@ -1,0 +1,10 @@
+* text=auto eol=lf
+*.bat text eol=crlf
+*.jar binary
+
+# The ABI dumps are compared byte for byte against freshly rendered text, and the
+# renderer always emits line feeds.
+*.api text eol=lf
+
+# The wrapper script is run by a POSIX shell, including on Windows under Git Bash.
+gradlew text eol=lf
