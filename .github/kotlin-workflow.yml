@@ -1,0 +1,80 @@
+#
+# Copyright 2026 Davils
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# What the pipeline of kxml does. Every key overrides a default of
+# actions/plan/defaults.yml in davils-com/kotlin-workflow; a key that is not there stops the run.
+version: 1
+gradle:
+  args: ["--stacktrace"]
+
+check:
+  tasks: [check]
+  reproducible:
+    clean-tasks: [":kxml-core:clean", ":kxml-serialization:clean"]
+    tasks: [":kxml-core:jar", ":kxml-serialization:jar"]
+    artifacts: ["kxml-core/build/libs/*.jar", "kxml-serialization/build/libs/*.jar"]
+
+policy:
+  push-develop:
+    stages: [check, snapshot]
+    overrides:
+      check:
+        reproducible: { enabled: true }
+  push-main:
+    overrides:
+      check:
+        reproducible: { enabled: true }
+
+security:
+  gradle:
+    tasks: ["kreateAssurance"]
+  dependency-submission:
+    enabled: false
+
+publish:
+  build-tasks: [assemble]
+  tasks:
+    - ":kxml-core:publishAllPublicationsToDavilsRepository"
+    - ":kxml-serialization:publishAllPublicationsToDavilsRepository"
+
+snapshot:
+  # kxml's own build makes every build without a release tag a snapshot.
+  kreate-snapshot: false
+
+release:
+  publications:
+    discovery: explicit
+    list:
+      - path: com/davils/kxml-core
+        artifact: kxml-core
+        task: ":kxml-core:publishMavenPublicationToDavilsRepository"
+      - path: com/davils/kxml-serialization
+        artifact: kxml-serialization
+        task: ":kxml-serialization:publishMavenPublicationToDavilsRepository"
+  attest:
+    subjects:
+      - "kxml-core/build/libs/*.jar"
+      - "kxml-serialization/build/libs/*.jar"
+  github-release:
+    enabled: false
+
+# How a pull request of Dependabot repairs itself, see CONTRIBUTING.md, "Changing a Dependency".
+dependencies:
+  lock:
+    invocations:
+      - ["kreateResolveAndLockAll", "--write-locks", "--no-configuration-cache"]
+  verification:
+    tasks: [check]
