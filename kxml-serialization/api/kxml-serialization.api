@@ -1,0 +1,163 @@
+public abstract interface com/davils/kxml/serialization/XmlDecoding {
+	public abstract fun getDiagnostics ()Ljava/util/List;
+}
+
+public final class com/davils/kxml/serialization/XmlDecoding$Decoded : com/davils/kxml/serialization/XmlDecoding {
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getDiagnostics ()Ljava/util/List;
+	public final fun getValue ()Ljava/lang/Object;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/serialization/XmlDecoding$Failed : com/davils/kxml/serialization/XmlDecoding {
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getDiagnostics ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/serialization/XmlDecodingException : kotlinx/serialization/SerializationException {
+	public final fun getDiagnostics ()Ljava/util/List;
+}
+
+public final class com/davils/kxml/serialization/XmlFormat : kotlinx/serialization/StringFormat {
+	public static final field Companion Lcom/davils/kxml/serialization/XmlFormat$Companion;
+	public final fun decodeFromElement (Lkotlinx/serialization/DeserializationStrategy;Lcom/davils/kxml/core/node/XmlNode$Element;)Ljava/lang/Object;
+	public fun decodeFromString (Lkotlinx/serialization/DeserializationStrategy;Ljava/lang/String;)Ljava/lang/Object;
+	public final fun decodeOrFailure (Lkotlinx/serialization/DeserializationStrategy;Lcom/davils/kxml/core/node/XmlNode$Element;)Lcom/davils/kxml/serialization/XmlDecoding;
+	public final fun decodeOrFailure (Lkotlinx/serialization/DeserializationStrategy;Ljava/lang/String;)Lcom/davils/kxml/serialization/XmlDecoding;
+	public final fun encodeToElement (Lkotlinx/serialization/SerializationStrategy;Ljava/lang/Object;)Lcom/davils/kxml/core/node/XmlNode$Element;
+	public fun encodeToString (Lkotlinx/serialization/SerializationStrategy;Ljava/lang/Object;)Ljava/lang/String;
+	public final fun getConfiguration ()Lcom/davils/kxml/serialization/XmlFormatConfiguration;
+	public fun getSerializersModule ()Lkotlinx/serialization/modules/SerializersModule;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/serialization/XmlFormat$Companion {
+	public final fun getDefault ()Lcom/davils/kxml/serialization/XmlFormat;
+}
+
+public final class com/davils/kxml/serialization/XmlFormatBuilder : com/davils/kore/core/dsl/ValidatingBuilder {
+	public static final field Companion Lcom/davils/kxml/serialization/XmlFormatBuilder$Companion;
+	public static final field DEFAULT_DISCRIMINATOR Ljava/lang/String;
+	public synthetic fun assemble ()Lcom/davils/kore/core/validation/Validatable;
+	protected fun assemble ()Lcom/davils/kxml/serialization/XmlFormatConfiguration;
+	public final fun getClassDiscriminator ()Lcom/davils/kxml/core/name/XmlName;
+	public final fun getNamespace ()Ljava/lang/String;
+	public final fun getNamespaceMatching ()Lcom/davils/kxml/serialization/XmlNamespaceMatching;
+	public final fun getNamingStrategy ()Lcom/davils/kxml/serialization/XmlNamingStrategy;
+	public final fun getPolymorphism ()Lcom/davils/kxml/serialization/XmlPolymorphism;
+	public final fun getSerializersModule ()Lkotlinx/serialization/modules/SerializersModule;
+	protected fun getSubject ()Ljava/lang/String;
+	public final fun getXml ()Lcom/davils/kxml/core/Xml;
+	public final fun isDeclarationWritten ()Z
+	public final fun isDefaultEncoded ()Z
+	public final fun isUnknownElementIgnored ()Z
+	public final fun setClassDiscriminator (Lcom/davils/kxml/core/name/XmlName;)V
+	public final fun setDeclarationWritten (Z)V
+	public final fun setDefaultEncoded (Z)V
+	public final fun setNamespace (Ljava/lang/String;)V
+	public final fun setNamespaceMatching (Lcom/davils/kxml/serialization/XmlNamespaceMatching;)V
+	public final fun setNamingStrategy (Lcom/davils/kxml/serialization/XmlNamingStrategy;)V
+	public final fun setPolymorphism (Lcom/davils/kxml/serialization/XmlPolymorphism;)V
+	public final fun setSerializersModule (Lkotlinx/serialization/modules/SerializersModule;)V
+	public final fun setUnknownElementIgnored (Z)V
+	public final fun setXml (Lcom/davils/kxml/core/Xml;)V
+	public final fun xml (Lkotlin/jvm/functions/Function1;)V
+}
+
+public final class com/davils/kxml/serialization/XmlFormatBuilder$Companion {
+}
+
+public final class com/davils/kxml/serialization/XmlFormatConfiguration : com/davils/kore/core/validation/Validatable {
+	public final fun getClassDiscriminator ()Lcom/davils/kxml/core/name/XmlName;
+	public final fun getNamespace ()Ljava/lang/String;
+	public final fun getNamespaceMatching ()Lcom/davils/kxml/serialization/XmlNamespaceMatching;
+	public final fun getNamingStrategy ()Lcom/davils/kxml/serialization/XmlNamingStrategy;
+	public final fun getPolymorphism ()Lcom/davils/kxml/serialization/XmlPolymorphism;
+	public final fun getSerializersModule ()Lkotlinx/serialization/modules/SerializersModule;
+	public final fun getXml ()Lcom/davils/kxml/core/Xml;
+	public final fun isDeclarationWritten ()Z
+	public final fun isDefaultEncoded ()Z
+	public final fun isUnknownElementIgnored ()Z
+	public fun toString ()Ljava/lang/String;
+	public fun validate (Lcom/davils/kore/core/validation/ValidationScope;)V
+}
+
+public final class com/davils/kxml/serialization/XmlFormatExtensionsKt {
+	public static final synthetic fun decodeFromElement (Lcom/davils/kxml/serialization/XmlFormat;Lcom/davils/kxml/core/node/XmlNode$Element;)Ljava/lang/Object;
+	public static final synthetic fun decodeOrFailure (Lcom/davils/kxml/serialization/XmlFormat;Lcom/davils/kxml/core/node/XmlNode$Element;)Lcom/davils/kxml/serialization/XmlDecoding;
+	public static final synthetic fun decodeOrFailure (Lcom/davils/kxml/serialization/XmlFormat;Ljava/lang/String;)Lcom/davils/kxml/serialization/XmlDecoding;
+	public static final synthetic fun encodeToElement (Lcom/davils/kxml/serialization/XmlFormat;Ljava/lang/Object;)Lcom/davils/kxml/core/node/XmlNode$Element;
+}
+
+public final class com/davils/kxml/serialization/XmlFormatViolationCodes {
+	public static final field INSTANCE Lcom/davils/kxml/serialization/XmlFormatViolationCodes;
+	public final fun getEMPTY_NAMESPACE-J_S2PC0 ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/serialization/XmlFormatsKt {
+	public static final fun xmlFormat (Lkotlin/jvm/functions/Function1;)Lcom/davils/kxml/serialization/XmlFormat;
+	public static synthetic fun xmlFormat$default (Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lcom/davils/kxml/serialization/XmlFormat;
+}
+
+public final class com/davils/kxml/serialization/XmlNamespaceMatching : java/lang/Enum {
+	public static final field Exact Lcom/davils/kxml/serialization/XmlNamespaceMatching;
+	public static final field LocalName Lcom/davils/kxml/serialization/XmlNamespaceMatching;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/davils/kxml/serialization/XmlNamespaceMatching;
+	public static fun values ()[Lcom/davils/kxml/serialization/XmlNamespaceMatching;
+}
+
+public abstract interface com/davils/kxml/serialization/XmlNamingStrategy {
+	public static final field Companion Lcom/davils/kxml/serialization/XmlNamingStrategy$Companion;
+	public abstract fun nameOf (Lkotlinx/serialization/descriptors/SerialDescriptor;ILjava/lang/String;)Ljava/lang/String;
+}
+
+public final class com/davils/kxml/serialization/XmlNamingStrategy$Companion {
+	public final fun getIdentity ()Lcom/davils/kxml/serialization/XmlNamingStrategy;
+	public final fun getKebabCase ()Lcom/davils/kxml/serialization/XmlNamingStrategy;
+	public final fun getPascalCase ()Lcom/davils/kxml/serialization/XmlNamingStrategy;
+}
+
+public final class com/davils/kxml/serialization/XmlPolymorphism : java/lang/Enum {
+	public static final field Attribute Lcom/davils/kxml/serialization/XmlPolymorphism;
+	public static final field Element Lcom/davils/kxml/serialization/XmlPolymorphism;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/davils/kxml/serialization/XmlPolymorphism;
+	public static fun values ()[Lcom/davils/kxml/serialization/XmlPolymorphism;
+}
+
+public abstract interface com/davils/kxml/serialization/annotation/XmlAsAttribute : java/lang/annotation/Annotation {
+}
+
+public abstract interface com/davils/kxml/serialization/annotation/XmlAsText : java/lang/annotation/Annotation {
+}
+
+public abstract interface com/davils/kxml/serialization/annotation/XmlEntry : java/lang/annotation/Annotation {
+	public static final field Companion Lcom/davils/kxml/serialization/annotation/XmlEntry$Companion;
+	public static final field DEFAULT_KEY Ljava/lang/String;
+	public static final field DEFAULT_VALUE Ljava/lang/String;
+	public abstract fun key ()Ljava/lang/String;
+	public abstract fun value ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/serialization/annotation/XmlEntry$Companion {
+	public static final field DEFAULT_KEY Ljava/lang/String;
+	public static final field DEFAULT_VALUE Ljava/lang/String;
+}
+
+public abstract interface com/davils/kxml/serialization/annotation/XmlNames : java/lang/annotation/Annotation {
+	public abstract fun names ()[Ljava/lang/String;
+}
+
+public abstract interface com/davils/kxml/serialization/annotation/XmlNamespace : java/lang/annotation/Annotation {
+	public abstract fun prefix ()Ljava/lang/String;
+	public abstract fun uri ()Ljava/lang/String;
+}
+
+public abstract interface com/davils/kxml/serialization/annotation/XmlWrapped : java/lang/annotation/Annotation {
+	public abstract fun item ()Ljava/lang/String;
+}
+
