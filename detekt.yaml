@@ -1,0 +1,246 @@
+#
+# Copyright 2026 Davils
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+config:
+  validation: true
+  warningsAsErrors: true
+
+# Applied with allRules and buildUponDefaultConfig, next to the Kreate and libraries rule sets. This file only
+# records deliberate deviations from the defaults, each with its reason.
+
+comments:
+  # Kreate's test suites live in src/<suite>, which the default test exclusions of Detekt do not know.
+  UndocumentedPublicClass:
+    active: true
+    excludes: &testSources
+      - '**/test/**'
+      - '**/unitTest/**'
+      - '**/integrationTest/**'
+    searchInNestedClass: true
+    searchInInnerClass: true
+    searchInInnerObject: true
+    searchInInnerInterface: true
+  UndocumentedPublicFunction:
+    active: true
+    excludes: *testSources
+  UndocumentedPublicProperty:
+    active: true
+    excludes: *testSources
+  KDocReferencesNonPublicProperty:
+    active: true
+    excludes: *testSources
+  OutdatedDocumentation:
+    active: true
+    allowParamOnConstructorProperties: true
+  DocumentationOverPrivateFunction:
+    active: true
+  DocumentationOverPrivateProperty:
+    active: true
+  # Detekt 2.0.0-alpha.6 reads the template inline only; kreateLicenseHeaderCheck covers the files Detekt never reads.
+  AbsentOrWrongFileLicense:
+    active: true
+    licenseTemplateIsRegex: false
+    licenseTemplate: |
+      /*
+       * Copyright 2026 Davils
+       *
+       * Licensed under the Apache License, Version 2.0 (the "License");
+       * you may not use this file except in compliance with the License.
+       * You may obtain a copy of the License at
+       *
+       *     http://www.apache.org/licenses/LICENSE-2.0
+       *
+       * Unless required by applicable law or agreed to in writing, software
+       * distributed under the License is distributed on an "AS IS" BASIS,
+       * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+       * See the License for the specific language governing permissions and
+       * limitations under the License.
+       */
+
+kreate:
+  # Protected members of public abstract classes, such as the declarations of Parameters, are API.
+  KDocOnNonPublicDeclaration:
+    allowProtected: true
+  ForbiddenBlockComment:
+    licenseHeaderPattern: 'Copyright 2026 Davils\s+\*\s+\*\s+Licensed under the Apache License, Version 2\.0'
+
+libraries:
+  # Explicit API mode decides what is public; this rule would report every public type of a library.
+  LibraryEntitiesShouldNotBePublic:
+    active: false
+  ForbiddenPublicDataClass:
+    active: true
+  # The compiler rejects an explicit Unit return type as redundant under warnings as errors.
+  LibraryCodeMustSpecifyReturnType:
+    active: true
+    allowOmitUnit: true
+
+ktlint:
+  # Assignments and supertypes stay on the declaration line, such as `class Spec : FunSpec({`, which these rules
+  # would wrap; Kotest test names are sentences, which FunctionName would refuse.
+  ClassSignature:
+    active: false
+  FunctionName:
+    active: false
+  MultilineExpressionWrapping:
+    active: false
+
+potential-bugs:
+  # Tests cast public collections to MutableList on purpose, to prove that they cannot be changed.
+  DontDowncastCollectionTypes:
+    active: true
+    excludes: *testSources
+  # Tests included: a test never needs lateinit either.
+  LateinitUsage:
+    active: true
+    excludes: []
+  UnnamedParameterUse:
+    active: true
+
+style:
+  ForbiddenComment:
+    active: true
+    comments:
+      - value: 'FIXME:'
+        reason: 'Track work in the issue tracker instead of the source.'
+      - value: 'TODO:'
+        reason: 'Track work in the issue tracker instead of the source.'
+      - value: 'STOPSHIP:'
+        reason: 'Track work in the issue tracker instead of the source.'
+  # Explicit API mode requires the modifier, which this rule would report as redundant.
+  RedundantVisibilityModifier:
+    active: false
+  # Parameters and ParameterDeclarations are abstract so that a schema can only be declared by subclassing.
+  AbstractClassCanBeConcreteClass:
+    active: true
+    excludes:
+      - '**/arguments/Parameters.kt'
+      - '**/arguments/ParameterDeclarations.kt'
+  # The compiler rejects an explicit Unit return type as redundant under warnings as errors.
+  OptionalUnit:
+    active: false
+  MaxLineLength:
+    maxLineLength: 120
+    excludeCommentStatements: false
+  ForbiddenMethodCall:
+    active: true
+    methods:
+      - value: 'kotlin.io.print'
+        reason: 'A library never writes to the standard streams. Return the result and let the caller decide where it goes.'
+      - value: 'kotlin.io.println'
+        reason: 'A library never writes to the standard streams. Return the result and let the caller decide where it goes.'
+      - value: 'java.lang.Runtime.addShutdownHook'
+        reason: 'A library never manages the lifetime of the process it runs in.'
+      - value: 'java.lang.Runtime.removeShutdownHook'
+        reason: 'A library never manages the lifetime of the process it runs in.'
+      - value: 'java.lang.Thread.setDefaultUncaughtExceptionHandler'
+        reason: 'A library never replaces the failure handling of the process it runs in.'
+      - value: 'java.lang.System.exit'
+        reason: 'A library never ends the process it runs in.'
+      - value: 'java.lang.Runtime.exit'
+        reason: 'A library never ends the process it runs in.'
+      - value: 'java.lang.Runtime.halt'
+        reason: 'A library never ends the process it runs in.'
+      - value: 'kotlin.system.exitProcess'
+        reason: 'A library never ends the process it runs in.'
+      - value: 'java.lang.Math.random'
+        reason: 'Predictable randomness. Use the SecureRandom-backed generators of Kore or java.security.SecureRandom behind a seam.'
+      - value: 'java.lang.StrictMath.random'
+        reason: 'Predictable randomness. Use the SecureRandom-backed generators of Kore or java.security.SecureRandom behind a seam.'
+      - value: 'kotlin.collections.random'
+        reason: 'Predictable randomness. Use the SecureRandom-backed generators of Kore or java.security.SecureRandom behind a seam.'
+      - value: 'kotlin.collections.randomOrNull'
+        reason: 'Predictable randomness. Use the SecureRandom-backed generators of Kore or java.security.SecureRandom behind a seam.'
+      - value: 'kotlin.collections.shuffled'
+        reason: 'Predictable randomness. Use the SecureRandom-backed generators of Kore or java.security.SecureRandom behind a seam.'
+      - value: 'kotlin.collections.shuffle'
+        reason: 'Predictable randomness. Use the SecureRandom-backed generators of Kore or java.security.SecureRandom behind a seam.'
+      - value: 'kotlin.ranges.random'
+        reason: 'Predictable randomness. Use the SecureRandom-backed generators of Kore or java.security.SecureRandom behind a seam.'
+      - value: 'kotlin.ranges.randomOrNull'
+        reason: 'Predictable randomness. Use the SecureRandom-backed generators of Kore or java.security.SecureRandom behind a seam.'
+      - value: 'kotlin.text.random'
+        reason: 'Predictable randomness. Use the SecureRandom-backed generators of Kore or java.security.SecureRandom behind a seam.'
+      - value: 'kotlin.text.randomOrNull'
+        reason: 'Predictable randomness. Use the SecureRandom-backed generators of Kore or java.security.SecureRandom behind a seam.'
+      - value: 'java.util.Collections.shuffle'
+        reason: 'Predictable randomness. Use the SecureRandom-backed generators of Kore or java.security.SecureRandom behind a seam.'
+      - value: 'java.util.Random.<init>'
+        reason: 'Predictable randomness. Use the SecureRandom-backed generators of Kore or java.security.SecureRandom behind a seam.'
+      - value: 'java.util.concurrent.ThreadLocalRandom.current'
+        reason: 'Predictable randomness. Use the SecureRandom-backed generators of Kore or java.security.SecureRandom behind a seam.'
+  ForbiddenImport:
+    active: true
+    forbiddenImports:
+      - value: 'java.util.Random'
+        reason: 'java.util.Random is predictable. Use the cryptographically secure randomness of kotlin.uuid or java.security.SecureRandom behind a seam.'
+      - value: 'kotlin.random.Random'
+        reason: 'kotlin.random.Random is predictable. Use the cryptographically secure randomness of kotlin.uuid or java.security.SecureRandom behind a seam.'
+      - value: 'java.util.concurrent.ThreadLocalRandom'
+        reason: 'ThreadLocalRandom is predictable. Use the cryptographically secure randomness of kotlin.uuid or java.security.SecureRandom behind a seam.'
+      - value: 'java.util.Timer'
+        reason: 'A library starts no threads of its own. Take a scope or a dispatcher from the caller instead.'
+      - value: 'java.util.TimerTask'
+        reason: 'A library starts no threads of its own. Take a scope or a dispatcher from the caller instead.'
+      - value: 'java.util.concurrent.ScheduledExecutorService'
+        reason: 'A library starts no threads of its own. Take a scope or a dispatcher from the caller instead.'
+      - value: 'java.util.concurrent.ScheduledThreadPoolExecutor'
+        reason: 'A library starts no threads of its own. Take a scope or a dispatcher from the caller instead.'
+      - value: 'java.io.ObjectInputStream'
+        reason: 'Java deserialization of untrusted data executes code. Parse a typed format instead.'
+      - value: 'java.text.NumberFormat'
+        reason: 'A formatter of the JDK depends on the default locale of the process. Write the canonical form explicitly.'
+      - value: 'java.text.DecimalFormat'
+        reason: 'A formatter of the JDK depends on the default locale of the process. Write the canonical form explicitly.'
+      - value: 'java.text.MessageFormat'
+        reason: 'A formatter of the JDK depends on the default locale of the process. Write the canonical form explicitly.'
+      - value: 'java.text.DateFormat'
+        reason: 'A formatter of the JDK depends on the default locale of the process. Write the canonical form explicitly.'
+      - value: 'java.text.SimpleDateFormat'
+        reason: 'A formatter of the JDK depends on the default locale of the process. Write the canonical form explicitly.'
+
+naming:
+  FunctionNameMinLength:
+    minimumFunctionNameLength: 2
+
+complexity:
+  # DSL builders and the factories of value types are wide by design: one function per option or overload.
+  TooManyFunctions:
+    allowedFunctionsPerFile: 25
+    allowedFunctionsPerClass: 25
+    allowedFunctionsPerInterface: 25
+    allowedFunctionsPerObject: 25
+    allowedFunctionsPerEnum: 25
+  # Value types such as a parameter violation or a snippet carry many properties, each a named constructor parameter.
+  LongParameterList:
+    allowedFunctionParameters: 8
+    allowedConstructorParameters: 10
+  LabeledExpression:
+    active: true
+    ignoredLabels:
+      - 'forEach'
+      - 'apply'
+      - 'run'
+      - 'let'
+      - 'also'
+      - 'with'
+      - 'configure'
+
+exceptions:
+  TooGenericExceptionCaught:
+    active: true
+  SwallowedException:
+    active: true
