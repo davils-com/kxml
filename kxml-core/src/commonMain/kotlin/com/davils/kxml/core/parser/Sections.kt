@@ -18,8 +18,10 @@ package com.davils.kxml.core.parser
 
 import com.davils.kore.core.text.TextRange
 import com.davils.kxml.core.diagnostic.XmlDiagnosticCode
+import com.davils.kxml.core.internal.charCountOf
+import com.davils.kxml.core.internal.codePointAt
+import com.davils.kxml.core.internal.unicodeNameOf
 import com.davils.kxml.core.name.XmlCharacters
-import java.util.Locale
 
 private const val CRLF: String = "\r\n"
 private const val CARRIAGE_RETURN: Char = '\r'
@@ -34,7 +36,7 @@ internal object Sections {
             failure(
                 XmlDiagnosticCode.InvalidCharacter,
                 TextRange.of(start = from + invalid, length = 1),
-                "The character U+%04X is not allowed in XML".format(Locale.ROOT, raw.codePointAt(invalid)),
+                "The character ${unicodeNameOf(raw.codePointAt(invalid))} is not allowed in XML",
             )
         }
         val joined = raw.replace(oldValue = CRLF, newValue = LINE_FEED.toString())
@@ -46,7 +48,7 @@ internal object Sections {
         while (index < raw.length) {
             val code = raw.codePointAt(index)
             if (!XmlCharacters.isCharacter(code)) return index
-            index += Character.charCount(code)
+            index += charCountOf(code)
         }
         return NONE
     }

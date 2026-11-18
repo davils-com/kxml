@@ -18,6 +18,7 @@ package com.davils.kxml.core.parser
 
 import com.davils.kore.core.text.TextRange
 import com.davils.kxml.core.diagnostic.XmlDiagnosticCode
+import com.davils.kxml.core.internal.charCountOf
 import com.davils.kxml.core.name.XmlCharacters
 
 private const val END_TAG_OPEN: String = "</"
@@ -36,7 +37,7 @@ internal class TagReader(
             failure(XmlDiagnosticCode.InvalidName, TextRange.at(start), "A name was expected")
         }
         while (!cursor.isAtEnd && XmlCharacters.isNameCharacter(cursor.codePoint())) {
-            cursor.advance(Character.charCount(cursor.codePoint()))
+            cursor.advance(charCountOf(cursor.codePoint()))
         }
         budget.name(cursor.offset - start, cursor.rangeFrom(start))
         return cursor.text.substring(startIndex = start, endIndex = cursor.offset)

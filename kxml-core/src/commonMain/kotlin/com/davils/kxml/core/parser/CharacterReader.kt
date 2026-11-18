@@ -19,8 +19,10 @@ package com.davils.kxml.core.parser
 import com.davils.kore.core.text.TextRange
 import com.davils.kxml.core.XmlEvent
 import com.davils.kxml.core.diagnostic.XmlDiagnosticCode
+import com.davils.kxml.core.internal.charCountOf
+import com.davils.kxml.core.internal.textOf
+import com.davils.kxml.core.internal.unicodeNameOf
 import com.davils.kxml.core.name.XmlCharacters
-import java.util.Locale
 
 private const val AMPERSAND: Char = '&'
 private const val LESS_THAN: Char = '<'
@@ -128,10 +130,10 @@ internal class CharacterReader(private val cursor: Cursor, private val budget: P
             failure(
                 XmlDiagnosticCode.InvalidCharacter,
                 TextRange.of(start = cursor.offset, length = 1),
-                "The character U+%04X is not allowed in XML".format(Locale.ROOT, code),
+                "The character ${unicodeNameOf(code)} is not allowed in XML",
             )
         }
-        cursor.advance(Character.charCount(code))
+        cursor.advance(charCountOf(code))
     }
 
     private fun carriageReturn(isAttribute: Boolean): String {
@@ -186,6 +188,6 @@ internal class CharacterReader(private val cursor: Cursor, private val budget: P
                 "The reference &$body; names no character XML allows",
             )
         }
-        return String(Character.toChars(code))
+        return textOf(code)
     }
 }

@@ -17,6 +17,7 @@
 package com.davils.kxml.core.parser
 
 import com.davils.kore.core.text.TextRange
+import com.davils.kxml.core.internal.codePointAt
 import com.davils.kxml.core.name.XmlCharacters
 
 internal class Cursor(val text: String) {
