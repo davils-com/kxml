@@ -25,5 +25,5 @@ kreate {
 }
 
 dependencies {
-    api(libs.kore.core)
+    commonMainApi(libs.kore.core)
 }
