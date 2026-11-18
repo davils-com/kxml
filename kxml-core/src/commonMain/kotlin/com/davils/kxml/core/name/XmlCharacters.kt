@@ -16,6 +16,9 @@
 
 package com.davils.kxml.core.name
 
+import com.davils.kxml.core.internal.allCodePoints
+import com.davils.kxml.core.internal.codePointAt
+
 private const val HEX_RADIX: Int = 16
 private const val COLON: Char = ':'
 private const val RANGE_SEPARATOR: Char = '-'
@@ -41,9 +44,8 @@ internal object XmlCharacters {
     fun isNameCharacter(code: Int): Boolean = isNameStart(code) || nameExtras.any { range -> code in range }
 
     fun isName(text: String): Boolean {
-        val codes = text.codePoints().toArray()
-        if (codes.isEmpty() || !isNameStart(codes.first())) return false
-        return codes.all(::isNameCharacter)
+        if (text.isEmpty() || !isNameStart(text.codePointAt(0))) return false
+        return text.allCodePoints(::isNameCharacter)
     }
 
     fun isNcName(text: String): Boolean = COLON !in text && isName(text)
@@ -53,7 +55,7 @@ internal object XmlCharacters {
         return parts.size <= 2 && parts.all(::isNcName)
     }
 
-    fun isText(text: String): Boolean = text.codePoints().allMatch(::isCharacter)
+    fun isText(text: String): Boolean = text.allCodePoints(::isCharacter)
 
     fun isWhitespace(text: String): Boolean = text.all(::isWhitespace)
 
