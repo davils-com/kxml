@@ -2,9 +2,9 @@
 # Manual edits can break the build and are not advised.
 # This file is expected to be part of source control.
 # To regenerate this file, run: ./gradlew :build-logic:dependencies --write-locks
-com.davils.kreate:com.davils.kreate.gradle.plugin:5.0.0=compileClasspath,precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
-com.davils:kreate-settings:5.0.0=precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testRuntimeClasspath
-com.davils:kreate:5.0.0=compileClasspath,precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+com.davils.kreate:com.davils.kreate.gradle.plugin:5.2.0=compileClasspath,precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+com.davils:kreate-settings:5.2.0=precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testRuntimeClasspath
+com.davils:kreate:5.2.0=compileClasspath,precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
 com.fasterxml.jackson.core:jackson-annotations:2.23=precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testRuntimeClasspath
 com.fasterxml.jackson.core:jackson-core:2.23.0=precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testRuntimeClasspath
 com.fasterxml.jackson.core:jackson-databind:2.23.0=precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testRuntimeClasspath
@@ -13,6 +13,9 @@ com.fasterxml.jackson.module:jackson-module-kotlin:2.23.0=precompiledScriptPlugi
 com.fasterxml.jackson:jackson-bom:2.23.0=precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testRuntimeClasspath
 com.fasterxml.woodstox:woodstox-core:7.3.0=precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testRuntimeClasspath
 com.google.code.gson:gson:2.11.0=precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testRuntimeClasspath
+com.google.devtools.ksp:symbol-processing-api:2.3.14=precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testRuntimeClasspath
+com.google.devtools.ksp:symbol-processing-common-deps:2.3.14=precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testRuntimeClasspath
+com.google.devtools.ksp:symbol-processing-gradle-plugin:2.3.14=precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testRuntimeClasspath
 com.google.errorprone:error_prone_annotations:2.27.0=precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testRuntimeClasspath
 com.squareup.moshi:moshi-kotlin:1.15.2=precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testRuntimeClasspath
 com.squareup.moshi:moshi:1.15.2=precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testRuntimeClasspath
@@ -31,6 +34,7 @@ com.vanniktech:gradle-maven-publish-plugin:0.37.0=precompiledScriptPluginAccesso
 dev.detekt:detekt-gradle-plugin:2.0.0-alpha.6=precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testRuntimeClasspath
 io.github.detekt.sarif4k:sarif4k-jvm:0.6.0=precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testRuntimeClasspath
 io.github.detekt.sarif4k:sarif4k:0.6.0=precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testRuntimeClasspath
+io.kotest:kotest-framework-plugin-gradle:6.2.7=precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testRuntimeClasspath
 io.ktor:ktor-client-core-jvm:3.6.1=precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testRuntimeClasspath
 io.ktor:ktor-client-core:3.6.1=precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testRuntimeClasspath
 io.ktor:ktor-client-java-jvm:3.6.1=precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testRuntimeClasspath
@@ -63,6 +67,7 @@ org.jetbrains.intellij.deps:coverage-report:1.0.25=precompiledScriptPluginAccess
 org.jetbrains.intellij.deps:intellij-coverage-agent:1.0.765=precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testRuntimeClasspath
 org.jetbrains.intellij.deps:intellij-coverage-reporter:1.0.765=precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testRuntimeClasspath
 org.jetbrains.kotlin.plugin.allopen:org.jetbrains.kotlin.plugin.allopen.gradle.plugin:2.4.21=precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testRuntimeClasspath
+org.jetbrains.kotlin.plugin.power-assert:org.jetbrains.kotlin.plugin.power-assert.gradle.plugin:2.2.21=precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testRuntimeClasspath
 org.jetbrains.kotlin.plugin.serialization:org.jetbrains.kotlin.plugin.serialization.gradle.plugin:2.4.21=precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testRuntimeClasspath
 org.jetbrains.kotlin:fus-statistics-gradle-plugin:2.4.21=compileClasspath,precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
 org.jetbrains.kotlin:kotlin-allopen:2.4.21=precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testRuntimeClasspath
@@ -93,6 +98,7 @@ org.jetbrains.kotlin:kotlin-klib-commonizer-api:2.4.21=precompiledScriptPluginAc
 org.jetbrains.kotlin:kotlin-klib-commonizer-embeddable:2.4.21=kotlinKlibCommonizerClasspath
 org.jetbrains.kotlin:kotlin-metadata-jvm:2.4.21=precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testRuntimeClasspath
 org.jetbrains.kotlin:kotlin-native-utils:2.4.21=compileClasspath,precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.jetbrains.kotlin:kotlin-power-assert:2.4.21=precompiledScriptPluginAccessorsGenerationClasspath,runtimeClasspath,testRuntimeClasspath
 org.jetbrains.kotlin:kotlin-reflect:1.6.10=kotlinAbiValidationCompatClasspath,kotlinBuildToolsApiClasspath,kotlinCompilerClasspath,kotlinKlibCommonizerClasspath
 org.jetbrains.kotlin:kotlin-reflect:2.4.20=runtimeClasspath
 org.jetbrains.kotlin:kotlin-reflect:2.4.21=compileClasspath,embeddedKotlin,precompiledScriptPluginAccessorsGenerationClasspath,testCompileClasspath,testRuntimeClasspath
