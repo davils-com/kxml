@@ -8,7 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 
 The first version of kxml: the XML reader, writer and kotlinx.serialization format of an internal Davils project as
-an open source library under the Apache License 2.0, built on Kore 1.0.0 with Kreate 5.0.0.
+an open source library under the Apache License 2.0, for the JVM and WebAssembly, built on Kore 2.0.0 with Kreate
+5.2.0.
 
 ### Added
 
@@ -18,6 +19,9 @@ an open source library under the Apache License 2.0, built on Kore 1.0.0 with Kr
 - `kxml-serialization`: a kotlinx.serialization `StringFormat` for XML with attributes, text content, namespaces,
   wrapped and repeated lists, maps, polymorphism by attribute or element, naming strategies and decoding with
   diagnostics instead of exceptions.
+- Both modules are Kotlin Multiplatform libraries with a `jvm` and a `wasmJs` target. Sources are decoded from UTF-8
+  and UTF-16 in common code, and the escaping of untrusted text reads the Unicode categories of the JDK on the JVM
+  and of the JavaScript engine on Wasm.
 
 ### Changed
 
