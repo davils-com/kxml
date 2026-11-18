@@ -15,12 +15,10 @@ public final class com/davils/kxml/core/Xml$Companion {
 
 public final class com/davils/kxml/core/XmlBuilder : com/davils/kore/core/dsl/ValidatingBuilder {
 	public synthetic fun assemble ()Lcom/davils/kore/core/validation/Validatable;
-	protected fun assemble ()Lcom/davils/kxml/core/XmlConfiguration;
 	public final fun emitter (Lkotlin/jvm/functions/Function1;)V
 	public final fun getDoctype ()Lcom/davils/kxml/core/XmlDoctype;
 	public final fun getEmitter ()Lcom/davils/kxml/core/emit/XmlEmitOptions;
 	public final fun getLimits ()Lcom/davils/kxml/core/limit/XmlLimits;
-	protected fun getSubject ()Ljava/lang/String;
 	public final fun getWhitespace ()Lcom/davils/kxml/core/XmlWhitespace;
 	public final fun limits (Lkotlin/jvm/functions/Function1;)V
 	public final fun setDoctype (Lcom/davils/kxml/core/XmlDoctype;)V
@@ -46,7 +44,7 @@ public final class com/davils/kxml/core/XmlDoctype : java/lang/Enum {
 	public static fun values ()[Lcom/davils/kxml/core/XmlDoctype;
 }
 
-public abstract interface com/davils/kxml/core/XmlEvent {
+public abstract interface class com/davils/kxml/core/XmlEvent {
 	public abstract fun getRange ()Lcom/davils/kore/core/text/TextRange;
 }
 
@@ -119,7 +117,7 @@ public final class com/davils/kxml/core/XmlEventResult {
 	public fun toString ()Ljava/lang/String;
 }
 
-public abstract interface com/davils/kxml/core/XmlParseResult {
+public abstract interface class com/davils/kxml/core/XmlParseResult {
 	public abstract fun getDiagnostics ()Ljava/util/List;
 }
 
@@ -241,10 +239,8 @@ public final class com/davils/kxml/core/emit/XmlEmitOptionsBuilder : com/davils/
 	public static final field Companion Lcom/davils/kxml/core/emit/XmlEmitOptionsBuilder$Companion;
 	public static final field DEFAULT_INDENT I
 	public synthetic fun assemble ()Lcom/davils/kore/core/validation/Validatable;
-	protected fun assemble ()Lcom/davils/kxml/core/emit/XmlEmitOptions;
 	public final fun getIndent ()I
 	public final fun getLineBreak ()Lcom/davils/kxml/core/emit/XmlLineBreak;
-	protected fun getSubject ()Ljava/lang/String;
 	public final fun isEmptyElementCollapsed ()Z
 	public final fun setEmptyElementCollapsed (Z)V
 	public final fun setIndent (I)V
@@ -304,14 +300,12 @@ public final class com/davils/kxml/core/limit/XmlLimitsBuilder : com/davils/kore
 	public static final field DEFAULT_NAME_LENGTH I
 	public static final field DEFAULT_TEXT_LENGTH I
 	public synthetic fun assemble ()Lcom/davils/kore/core/validation/Validatable;
-	protected fun assemble ()Lcom/davils/kxml/core/limit/XmlLimits;
 	public final fun getMaximumAttributes ()I
 	public final fun getMaximumDepth ()I
 	public final fun getMaximumElements ()J
 	public final fun getMaximumInputLength ()I
 	public final fun getMaximumNameLength ()I
 	public final fun getMaximumTextLength ()I
-	protected fun getSubject ()Ljava/lang/String;
 	public final fun setMaximumAttributes (I)V
 	public final fun setMaximumDepth (I)V
 	public final fun setMaximumElements (J)V
@@ -474,7 +468,6 @@ public final class com/davils/kxml/core/node/XmlNodesKt {
 
 public final class com/davils/kxml/core/source/XmlSource {
 	public static final field Companion Lcom/davils/kxml/core/source/XmlSource$Companion;
-	public synthetic fun <init> (Ljava/lang/String;[BLjava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getName ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 }
