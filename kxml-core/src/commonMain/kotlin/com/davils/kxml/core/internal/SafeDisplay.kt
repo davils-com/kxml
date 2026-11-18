@@ -18,12 +18,12 @@ package com.davils.kxml.core.internal
 
 import com.davils.kore.core.Limits
 import com.davils.kore.core.annotation.DavilsInternal
-import java.util.Locale
 
 private const val TAB: Int = '\t'.code
 private const val BACKSLASH: Int = '\\'.code
 private const val QUOTE: Int = '"'.code
 private const val HEX_WIDTH: Int = 4
+private const val HEX_RADIX: Int = 16
 private const val COMBINING_GRAPHEME_JOINER: Int = 0x034F
 private const val HANGUL_CHOSEONG_FILLER: Int = 0x115F
 private const val HANGUL_JUNGSEONG_FILLER: Int = 0x1160
@@ -50,22 +50,6 @@ private const val LAST_SUPPLEMENTARY_VARIATION_SELECTOR: Int = 0xE01EF
  */
 @DavilsInternal
 public object SafeDisplay {
-    private val escapedCategories: Set<Int> = setOf(
-        Character.CONTROL.toInt(),
-        Character.FORMAT.toInt(),
-        Character.LINE_SEPARATOR.toInt(),
-        Character.PARAGRAPH_SEPARATOR.toInt(),
-        Character.PRIVATE_USE.toInt(),
-        Character.UNASSIGNED.toInt(),
-        Character.SURROGATE.toInt(),
-    )
-
-    private val combiningMarks: Set<Int> = setOf(
-        Character.NON_SPACING_MARK.toInt(),
-        Character.ENCLOSING_MARK.toInt(),
-        Character.COMBINING_SPACING_MARK.toInt(),
-    )
-
     private val namedEscapes: Map<Int, String> = mapOf(
         '\n'.code to "\\n",
         '\r'.code to "\\r",
@@ -119,35 +103,34 @@ public object SafeDisplay {
         var isAttached = followsShown
         var index = 0
         while (index < value.length) {
-            val codePoint = Character.codePointAt(value, index)
+            val codePoint = value.codePointAt(index)
             val piece = pieceOf(codePoint, style, isAttached)
             if (rendered.length + piece.length > maxLength) return Rendering(rendered.toString(), value.length - index)
             rendered.append(piece)
-            isAttached = isSafe(codePoint) && piece.length == Character.charCount(codePoint)
-            index += Character.charCount(codePoint)
+            isAttached = isSafe(codePoint) && piece.length == charCountOf(codePoint)
+            index += charCountOf(codePoint)
         }
         return Rendering(rendered.toString(), omitted = 0, hasShownCharacterAtEnd = isAttached)
     }
 
     private fun pieceOf(codePoint: Int, style: Style, isAttached: Boolean): String {
-        val isLooseMark = !isAttached && Character.getType(codePoint) in combiningMarks
+        val isLooseMark = !isAttached && isCombiningMark(codePoint)
         if (isLooseMark) return unicodeEscape(codePoint)
         return style.pieces[codePoint] ?: commonPieceOf(codePoint)
     }
 
     private fun commonPieceOf(codePoint: Int): String {
-        if (!isEscaped(codePoint)) return Character.toString(codePoint)
+        if (!isEscaped(codePoint)) return textOf(codePoint)
         return namedEscapes[codePoint] ?: unicodeEscape(codePoint)
     }
 
     private fun isEscaped(codePoint: Int): Boolean {
-        val category = Character.getType(codePoint)
-        if (category in escapedCategories) return true
+        if (isEscapedCategory(codePoint)) return true
         return invisibleCodePoints.any { range -> codePoint in range }
     }
 
     private fun unicodeEscape(codePoint: Int): String {
-        val hex = Integer.toHexString(codePoint).uppercase(Locale.ROOT)
+        val hex = codePoint.toString(HEX_RADIX).uppercase()
         return "\\u{${hex.padStart(HEX_WIDTH, '0')}}"
     }
 
