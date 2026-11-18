@@ -23,4 +23,5 @@ plugins {
     id("kxml.assurance")
     id("kxml.changelog")
     id("kxml.license-header")
+    id("kxml.web-tools")
 }
