@@ -57,6 +57,9 @@ The following are **not** vulnerabilities in kxml:
 - kxml reads XML 1.0 with namespaces in UTF-8 and UTF-16 only. It does not validate against a DTD or a schema and
   never reads the internal subset of a document type declaration, so default attributes declared there are not
   applied.
+- On Wasm, `SafeDisplay` takes the Unicode categories from the regular expressions of the JavaScript engine, on the
+  JVM from the JDK. An engine with an older Unicode version may treat a newly assigned character as unassigned and
+  escape it, never the other way round for the categories that matter.
 - The limits bound the work of one call. An application that reads many documents at once bounds their number
   itself.
 - `@DavilsInternal` is a compile-time opt-in, not an access boundary. Kotlin `internal` is public in JVM bytecode:
