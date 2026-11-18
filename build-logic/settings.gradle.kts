@@ -18,11 +18,18 @@
 
 pluginManagement {
     repositories {
-        gradlePluginPortal {
-            content {
-                excludeGroupAndSubgroups("com.davils")
+        exclusiveContent {
+            forRepository {
+                gradlePluginPortal()
+            }
+
+            filter {
+                includeModule("org.gradle.kotlin.kotlin-dsl", "org.gradle.kotlin.kotlin-dsl.gradle.plugin")
+                includeModule("org.gradle.kotlin", "gradle-kotlin-dsl-plugins")
             }
         }
+
+        mavenCentral()
     }
 }
 
