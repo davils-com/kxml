@@ -47,6 +47,9 @@ kreate {
             }
 
             suites {
+                named("unitTest") {
+                    nonJvmTargets = true
+                }
                 named("integrationTest") {
                     enabled = false
                 }
