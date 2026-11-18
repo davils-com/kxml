@@ -24,7 +24,7 @@ check:
   tasks: [check]
   reproducible:
     clean-tasks: [":kxml-core:clean", ":kxml-serialization:clean"]
-    tasks: [":kxml-core:jar", ":kxml-serialization:jar"]
+    tasks: [":kxml-core:jvmJar", ":kxml-serialization:jvmJar"]
     artifacts: ["kxml-core/build/libs/*.jar", "kxml-serialization/build/libs/*.jar"]
 
 policy:
@@ -57,17 +57,32 @@ snapshot:
 release:
   publications:
     discovery: explicit
+    # In upload order: the publication of every target before the multiplatform publication that names them.
     list:
+      - path: com/davils/kxml-core-jvm
+        artifact: kxml-core-jvm
+        task: ":kxml-core:publishJvmPublicationToDavilsRepository"
+      - path: com/davils/kxml-core-wasm-js
+        artifact: kxml-core-wasm-js
+        task: ":kxml-core:publishWasmJsPublicationToDavilsRepository"
       - path: com/davils/kxml-core
         artifact: kxml-core
-        task: ":kxml-core:publishMavenPublicationToDavilsRepository"
+        task: ":kxml-core:publishKotlinMultiplatformPublicationToDavilsRepository"
+      - path: com/davils/kxml-serialization-jvm
+        artifact: kxml-serialization-jvm
+        task: ":kxml-serialization:publishJvmPublicationToDavilsRepository"
+      - path: com/davils/kxml-serialization-wasm-js
+        artifact: kxml-serialization-wasm-js
+        task: ":kxml-serialization:publishWasmJsPublicationToDavilsRepository"
       - path: com/davils/kxml-serialization
         artifact: kxml-serialization
-        task: ":kxml-serialization:publishMavenPublicationToDavilsRepository"
+        task: ":kxml-serialization:publishKotlinMultiplatformPublicationToDavilsRepository"
   attest:
     subjects:
       - "kxml-core/build/libs/*.jar"
+      - "kxml-core/build/libs/*.klib"
       - "kxml-serialization/build/libs/*.jar"
+      - "kxml-serialization/build/libs/*.klib"
   github-release:
     enabled: false
 
