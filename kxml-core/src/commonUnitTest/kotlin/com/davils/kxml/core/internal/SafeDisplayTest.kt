@@ -35,6 +35,7 @@ import com.davils.kxml.core.fixture.RIGHT_TO_LEFT_OVERRIDE
 import com.davils.kxml.core.fixture.SOFT_HYPHEN
 import com.davils.kxml.core.fixture.TAG_LATIN_A
 import com.davils.kxml.core.fixture.VARIATION_SELECTOR
+import com.davils.kxml.core.fixture.codePointsOf
 import com.davils.kxml.core.fixture.defaultIgnorableCodePoints
 import com.davils.kxml.core.fixture.hostileText
 import com.davils.kxml.core.fixture.shouldBeSafeToShow
@@ -50,7 +51,6 @@ import io.kotest.matchers.string.shouldEndWith
 import io.kotest.matchers.string.shouldNotContain
 import io.kotest.matchers.string.shouldStartWith
 import io.kotest.property.checkAll
-import java.text.Normalizer
 
 private const val CASES: Int = 500
 private const val INSIDE_QUOTES: Int = 3
@@ -58,16 +58,9 @@ private const val SHORT: Int = 8
 private const val SUFFIX_ROOM: Int = 24
 private const val PRINTABLE: String = """port 8080 äöü 日本 😀 "quoted" C:\path"""
 private const val DECOMPOSED_E_ACUTE: String = "e\u0301"
-private const val NOT_EQUAL_TO: String = "\u2260"
 
 private val invisibleCodePoints: List<Int> =
     (defaultIgnorableCodePoints + variationSelectorCodePoints).flatMap { range -> range.toList() }
-
-private val combiningMarks: Set<Int> = setOf(
-    Character.NON_SPACING_MARK.toInt(),
-    Character.ENCLOSING_MARK.toInt(),
-    Character.COMBINING_SPACING_MARK.toInt(),
-)
 
 @OptIn(DavilsInternal::class)
 class SafeDisplayTest : FunSpec({
@@ -106,7 +99,7 @@ class SafeDisplayTest : FunSpec({
 
         test("treats every code point that Unicode ignores by default and every variation selector as unsafe") {
             val missed = invisibleCodePoints.filter { codePoint ->
-                val raw = Character.toString(codePoint)
+                val raw = textOf(codePoint)
                 SafeDisplay.text("a$raw") == "a$raw"
             }
 
@@ -117,7 +110,6 @@ class SafeDisplayTest : FunSpec({
             val message = "limit=" + SafeDisplay.text("$COMBINING_LONG_SOLIDUS 5")
 
             message shouldBe "limit=\\u{0338} 5"
-            Normalizer.normalize(message, Normalizer.Form.NFC) shouldNotContain NOT_EQUAL_TO
         }
 
         test("writes a combining mark after an escape as an escape, so it cannot change how the escape looks") {
@@ -131,8 +123,8 @@ class SafeDisplayTest : FunSpec({
 
         test("never starts with a combining mark, whatever the input") {
             checkAll(CASES, hostileText) { text ->
-                val codePoints = SafeDisplay.text(text, Int.MAX_VALUE).codePoints()
-                val first = codePoints.findFirst().orElse('a'.code)
+                val codePoints = codePointsOf(SafeDisplay.text(text, Int.MAX_VALUE))
+                val first = codePoints.firstOrNull() ?: 'a'.code
 
                 isCombiningMark(first) shouldBe false
             }
@@ -210,5 +202,3 @@ class SafeDisplayTest : FunSpec({
         }
     }
 })
-
-private fun isCombiningMark(codePoint: Int): Boolean = Character.getType(codePoint) in combiningMarks
