@@ -1,7 +1,7 @@
 # kxml
 
 kxml is the XML library of Davils: a hardened, namespace-aware XML 1.0 reader and writer and a kotlinx.serialization
-format for Kotlin on the JVM, safe to feed with untrusted documents. It is built on
+format for Kotlin on the JVM and on WebAssembly (`wasmJs`), safe to feed with untrusted documents. It is built on
 [Kore](https://github.com/davils-com/kore) and published under the [Apache License 2.0](LICENSE).
 
 | Module | Artifact | What it holds |
@@ -9,9 +9,10 @@ format for Kotlin on the JVM, safe to feed with untrusted documents. It is built
 | `kxml-core` | `com.davils:kxml-core` | The reader with events, limits and diagnostics, the immutable node tree and the writer |
 | `kxml-serialization` | `com.davils:kxml-serialization` | A kotlinx.serialization format for XML |
 
-kxml requires JDK 25 and is written for Kotlin 2.4 or newer. `kxml-core` depends on `kore-core`;
-`kxml-serialization` adds `kotlinx-serialization-core`. Both are named Java modules, `com.davils.kxml.core` and
-`com.davils.kxml.serialization`.
+Both modules are Kotlin Multiplatform libraries with a `jvm` and a `wasmJs` target, like Kore 2.0. The JVM target
+requires JDK 25; the Wasm target runs in the browser and under Node.js. kxml is written for Kotlin 2.4 or newer.
+`kxml-core` depends on `kore-core`; `kxml-serialization` adds `kotlinx-serialization-core`. On the JVM both are named
+Java modules, `com.davils.kxml.core` and `com.davils.kxml.serialization`.
 
 ## Installation
 
@@ -36,6 +37,9 @@ dependencies {
     implementation("com.davils:kxml-serialization:1.0.0")
 }
 ```
+
+In a multiplatform project, declare it in `commonMain`; Gradle picks the artifact of each target. A Maven build depends
+on `kxml-core-jvm` and `kxml-serialization-jvm`.
 
 ## A short tour
 
