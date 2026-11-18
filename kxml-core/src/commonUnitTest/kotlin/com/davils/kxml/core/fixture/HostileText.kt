@@ -16,17 +16,20 @@
 
 package com.davils.kxml.core.fixture
 
+import com.davils.kxml.core.internal.charCountOf
+import com.davils.kxml.core.internal.codePointAt
+import com.davils.kxml.core.internal.isEscapedCategory
 import io.kotest.assertions.withClue
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.property.Arb
 import io.kotest.property.arbitrary.element
 import io.kotest.property.arbitrary.list
 import io.kotest.property.arbitrary.map
-import java.util.Locale
 
 private const val LONGEST_HOSTILE_TEXT: Int = 64
 private const val TAB_CODE: Int = '\t'.code
 private const val HEX: Int = 16
+private const val HEX_DIGITS: Int = 4
 private const val RANGE_SEPARATOR: String = ".."
 private const val DEFAULT_IGNORABLE_CODE_POINTS: String = "00AD 034F 061C 115F..1160 17B4..17B5 180B..180F " +
     "200B..200F 202A..202E 2060..206F 3164 FE00..FE0F FEFF FFA0 FFF0..FFF8 1BCA0..1BCA3 1D173..1D17A E0000..E0FFF"
@@ -73,20 +76,18 @@ internal val variationSelectorCodePoints: List<IntRange> = codePointRangesOf(VAR
 
 private val invisibleCodePoints: List<IntRange> = defaultIgnorableCodePoints + variationSelectorCodePoints
 
-private val unsafeCategories: Set<Int> = setOf(
-    Character.CONTROL.toInt(),
-    Character.FORMAT.toInt(),
-    Character.LINE_SEPARATOR.toInt(),
-    Character.PARAGRAPH_SEPARATOR.toInt(),
-    Character.PRIVATE_USE.toInt(),
-    Character.UNASSIGNED.toInt(),
-    Character.SURROGATE.toInt(),
-)
-
 internal fun unsafeCodePointsIn(text: String, allowTabs: Boolean = false): List<String> {
-    val codePoints = text.codePoints().toArray()
-    val unsafe = codePoints.filter { codePoint -> isUnsafe(codePoint, allowTabs) }
-    return unsafe.map { codePoint -> "U+%04X".format(Locale.ROOT, codePoint) }
+    val unsafe = codePointsOf(text).filter { codePoint -> isUnsafe(codePoint, allowTabs) }
+    return unsafe.map { codePoint -> notationOf(codePoint) }
+}
+
+internal fun codePointsOf(text: String): List<Int> = buildList {
+    var index = 0
+    while (index < text.length) {
+        val codePoint = text.codePointAt(index)
+        add(codePoint)
+        index += charCountOf(codePoint)
+    }
 }
 
 internal fun String.shouldBeSafeToShow(allowTabs: Boolean = false) {
@@ -106,10 +107,15 @@ private fun isUnsafe(codePoint: Int, allowTabs: Boolean): Boolean {
 
 private fun isUnsafeToShow(codePoint: Int): Boolean {
     val isInvisible = invisibleCodePoints.any { range -> codePoint in range }
-    return isInvisible || Character.getType(codePoint) in unsafeCategories
+    return isInvisible || isEscapedCategory(codePoint)
 }
 
 private fun codePointRangesOf(listing: String): List<IntRange> = listing.split(" ").map { entry ->
     val bounds = entry.split(RANGE_SEPARATOR).map { bound -> bound.toInt(HEX) }
     bounds.first()..bounds.last()
+}
+
+private fun notationOf(codePoint: Int): String {
+    val hex = codePoint.toString(HEX).uppercase()
+    return "U+" + hex.padStart(HEX_DIGITS, '0')
 }
