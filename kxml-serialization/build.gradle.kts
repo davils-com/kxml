@@ -25,6 +25,6 @@ kreate {
 }
 
 dependencies {
-    api(project(":kxml-core"))
-    api(libs.kotlinx.serialization.core)
+    commonMainApi(project(":kxml-core"))
+    commonMainApi(libs.kotlinx.serialization.core)
 }
