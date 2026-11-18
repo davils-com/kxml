@@ -1,4 +1,4 @@
-public abstract interface com/davils/kxml/serialization/XmlDecoding {
+public abstract interface class com/davils/kxml/serialization/XmlDecoding {
 	public abstract fun getDiagnostics ()Ljava/util/List;
 }
 
@@ -42,14 +42,12 @@ public final class com/davils/kxml/serialization/XmlFormatBuilder : com/davils/k
 	public static final field Companion Lcom/davils/kxml/serialization/XmlFormatBuilder$Companion;
 	public static final field DEFAULT_DISCRIMINATOR Ljava/lang/String;
 	public synthetic fun assemble ()Lcom/davils/kore/core/validation/Validatable;
-	protected fun assemble ()Lcom/davils/kxml/serialization/XmlFormatConfiguration;
 	public final fun getClassDiscriminator ()Lcom/davils/kxml/core/name/XmlName;
 	public final fun getNamespace ()Ljava/lang/String;
 	public final fun getNamespaceMatching ()Lcom/davils/kxml/serialization/XmlNamespaceMatching;
 	public final fun getNamingStrategy ()Lcom/davils/kxml/serialization/XmlNamingStrategy;
 	public final fun getPolymorphism ()Lcom/davils/kxml/serialization/XmlPolymorphism;
 	public final fun getSerializersModule ()Lkotlinx/serialization/modules/SerializersModule;
-	protected fun getSubject ()Ljava/lang/String;
 	public final fun getXml ()Lcom/davils/kxml/core/Xml;
 	public final fun isDeclarationWritten ()Z
 	public final fun isDefaultEncoded ()Z
@@ -85,13 +83,6 @@ public final class com/davils/kxml/serialization/XmlFormatConfiguration : com/da
 	public fun validate (Lcom/davils/kore/core/validation/ValidationScope;)V
 }
 
-public final class com/davils/kxml/serialization/XmlFormatExtensionsKt {
-	public static final synthetic fun decodeFromElement (Lcom/davils/kxml/serialization/XmlFormat;Lcom/davils/kxml/core/node/XmlNode$Element;)Ljava/lang/Object;
-	public static final synthetic fun decodeOrFailure (Lcom/davils/kxml/serialization/XmlFormat;Lcom/davils/kxml/core/node/XmlNode$Element;)Lcom/davils/kxml/serialization/XmlDecoding;
-	public static final synthetic fun decodeOrFailure (Lcom/davils/kxml/serialization/XmlFormat;Ljava/lang/String;)Lcom/davils/kxml/serialization/XmlDecoding;
-	public static final synthetic fun encodeToElement (Lcom/davils/kxml/serialization/XmlFormat;Ljava/lang/Object;)Lcom/davils/kxml/core/node/XmlNode$Element;
-}
-
 public final class com/davils/kxml/serialization/XmlFormatViolationCodes {
 	public static final field INSTANCE Lcom/davils/kxml/serialization/XmlFormatViolationCodes;
 	public final fun getEMPTY_NAMESPACE-J_S2PC0 ()Ljava/lang/String;
@@ -110,7 +101,7 @@ public final class com/davils/kxml/serialization/XmlNamespaceMatching : java/lan
 	public static fun values ()[Lcom/davils/kxml/serialization/XmlNamespaceMatching;
 }
 
-public abstract interface com/davils/kxml/serialization/XmlNamingStrategy {
+public abstract interface class com/davils/kxml/serialization/XmlNamingStrategy {
 	public static final field Companion Lcom/davils/kxml/serialization/XmlNamingStrategy$Companion;
 	public abstract fun nameOf (Lkotlinx/serialization/descriptors/SerialDescriptor;ILjava/lang/String;)Ljava/lang/String;
 }
@@ -129,13 +120,21 @@ public final class com/davils/kxml/serialization/XmlPolymorphism : java/lang/Enu
 	public static fun values ()[Lcom/davils/kxml/serialization/XmlPolymorphism;
 }
 
-public abstract interface com/davils/kxml/serialization/annotation/XmlAsAttribute : java/lang/annotation/Annotation {
+public abstract interface annotation class com/davils/kxml/serialization/annotation/XmlAsAttribute : java/lang/annotation/Annotation {
 }
 
-public abstract interface com/davils/kxml/serialization/annotation/XmlAsText : java/lang/annotation/Annotation {
+public final synthetic class com/davils/kxml/serialization/annotation/XmlAsAttribute$Impl : com/davils/kxml/serialization/annotation/XmlAsAttribute {
+	public fun <init> ()V
 }
 
-public abstract interface com/davils/kxml/serialization/annotation/XmlEntry : java/lang/annotation/Annotation {
+public abstract interface annotation class com/davils/kxml/serialization/annotation/XmlAsText : java/lang/annotation/Annotation {
+}
+
+public final synthetic class com/davils/kxml/serialization/annotation/XmlAsText$Impl : com/davils/kxml/serialization/annotation/XmlAsText {
+	public fun <init> ()V
+}
+
+public abstract interface annotation class com/davils/kxml/serialization/annotation/XmlEntry : java/lang/annotation/Annotation {
 	public static final field Companion Lcom/davils/kxml/serialization/annotation/XmlEntry$Companion;
 	public static final field DEFAULT_KEY Ljava/lang/String;
 	public static final field DEFAULT_VALUE Ljava/lang/String;
@@ -148,16 +147,40 @@ public final class com/davils/kxml/serialization/annotation/XmlEntry$Companion {
 	public static final field DEFAULT_VALUE Ljava/lang/String;
 }
 
-public abstract interface com/davils/kxml/serialization/annotation/XmlNames : java/lang/annotation/Annotation {
+public final synthetic class com/davils/kxml/serialization/annotation/XmlEntry$Impl : com/davils/kxml/serialization/annotation/XmlEntry {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final synthetic fun key ()Ljava/lang/String;
+	public final synthetic fun value ()Ljava/lang/String;
+}
+
+public abstract interface annotation class com/davils/kxml/serialization/annotation/XmlNames : java/lang/annotation/Annotation {
 	public abstract fun names ()[Ljava/lang/String;
 }
 
-public abstract interface com/davils/kxml/serialization/annotation/XmlNamespace : java/lang/annotation/Annotation {
+public final synthetic class com/davils/kxml/serialization/annotation/XmlNames$Impl : com/davils/kxml/serialization/annotation/XmlNames {
+	public fun <init> ([Ljava/lang/String;)V
+	public final synthetic fun names ()[Ljava/lang/String;
+}
+
+public abstract interface annotation class com/davils/kxml/serialization/annotation/XmlNamespace : java/lang/annotation/Annotation {
 	public abstract fun prefix ()Ljava/lang/String;
 	public abstract fun uri ()Ljava/lang/String;
 }
 
-public abstract interface com/davils/kxml/serialization/annotation/XmlWrapped : java/lang/annotation/Annotation {
+public final synthetic class com/davils/kxml/serialization/annotation/XmlNamespace$Impl : com/davils/kxml/serialization/annotation/XmlNamespace {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final synthetic fun prefix ()Ljava/lang/String;
+	public final synthetic fun uri ()Ljava/lang/String;
+}
+
+public abstract interface annotation class com/davils/kxml/serialization/annotation/XmlWrapped : java/lang/annotation/Annotation {
 	public abstract fun item ()Ljava/lang/String;
+}
+
+public final synthetic class com/davils/kxml/serialization/annotation/XmlWrapped$Impl : com/davils/kxml/serialization/annotation/XmlWrapped {
+	public fun <init> (Ljava/lang/String;)V
+	public final synthetic fun item ()Ljava/lang/String;
 }
 

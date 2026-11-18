@@ -1,0 +1,216 @@
+// Klib ABI Dump
+// Targets: [wasmJs]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <com.davils:kxml-serialization>
+open annotation class com.davils.kxml.serialization.annotation/XmlAsAttribute : kotlin/Annotation { // com.davils.kxml.serialization.annotation/XmlAsAttribute|null[0]
+    constructor <init>() // com.davils.kxml.serialization.annotation/XmlAsAttribute.<init>|<init>(){}[0]
+}
+
+open annotation class com.davils.kxml.serialization.annotation/XmlAsText : kotlin/Annotation { // com.davils.kxml.serialization.annotation/XmlAsText|null[0]
+    constructor <init>() // com.davils.kxml.serialization.annotation/XmlAsText.<init>|<init>(){}[0]
+}
+
+open annotation class com.davils.kxml.serialization.annotation/XmlEntry : kotlin/Annotation { // com.davils.kxml.serialization.annotation/XmlEntry|null[0]
+    constructor <init>(kotlin/String = ..., kotlin/String = ...) // com.davils.kxml.serialization.annotation/XmlEntry.<init>|<init>(kotlin.String;kotlin.String){}[0]
+
+    final val key // com.davils.kxml.serialization.annotation/XmlEntry.key|{}key[0]
+        final fun <get-key>(): kotlin/String // com.davils.kxml.serialization.annotation/XmlEntry.key.<get-key>|<get-key>(){}[0]
+    final val value // com.davils.kxml.serialization.annotation/XmlEntry.value|{}value[0]
+        final fun <get-value>(): kotlin/String // com.davils.kxml.serialization.annotation/XmlEntry.value.<get-value>|<get-value>(){}[0]
+
+    final object Companion { // com.davils.kxml.serialization.annotation/XmlEntry.Companion|null[0]
+        final const val DEFAULT_KEY // com.davils.kxml.serialization.annotation/XmlEntry.Companion.DEFAULT_KEY|{}DEFAULT_KEY[0]
+            final fun <get-DEFAULT_KEY>(): kotlin/String // com.davils.kxml.serialization.annotation/XmlEntry.Companion.DEFAULT_KEY.<get-DEFAULT_KEY>|<get-DEFAULT_KEY>(){}[0]
+        final const val DEFAULT_VALUE // com.davils.kxml.serialization.annotation/XmlEntry.Companion.DEFAULT_VALUE|{}DEFAULT_VALUE[0]
+            final fun <get-DEFAULT_VALUE>(): kotlin/String // com.davils.kxml.serialization.annotation/XmlEntry.Companion.DEFAULT_VALUE.<get-DEFAULT_VALUE>|<get-DEFAULT_VALUE>(){}[0]
+    }
+}
+
+open annotation class com.davils.kxml.serialization.annotation/XmlNames : kotlin/Annotation { // com.davils.kxml.serialization.annotation/XmlNames|null[0]
+    constructor <init>(kotlin/Array<out kotlin/String>...) // com.davils.kxml.serialization.annotation/XmlNames.<init>|<init>(kotlin.Array<out|kotlin.String>...){}[0]
+
+    final val names // com.davils.kxml.serialization.annotation/XmlNames.names|{}names[0]
+        final fun <get-names>(): kotlin/Array<out kotlin/String> // com.davils.kxml.serialization.annotation/XmlNames.names.<get-names>|<get-names>(){}[0]
+}
+
+open annotation class com.davils.kxml.serialization.annotation/XmlNamespace : kotlin/Annotation { // com.davils.kxml.serialization.annotation/XmlNamespace|null[0]
+    constructor <init>(kotlin/String, kotlin/String = ...) // com.davils.kxml.serialization.annotation/XmlNamespace.<init>|<init>(kotlin.String;kotlin.String){}[0]
+
+    final val prefix // com.davils.kxml.serialization.annotation/XmlNamespace.prefix|{}prefix[0]
+        final fun <get-prefix>(): kotlin/String // com.davils.kxml.serialization.annotation/XmlNamespace.prefix.<get-prefix>|<get-prefix>(){}[0]
+    final val uri // com.davils.kxml.serialization.annotation/XmlNamespace.uri|{}uri[0]
+        final fun <get-uri>(): kotlin/String // com.davils.kxml.serialization.annotation/XmlNamespace.uri.<get-uri>|<get-uri>(){}[0]
+}
+
+open annotation class com.davils.kxml.serialization.annotation/XmlWrapped : kotlin/Annotation { // com.davils.kxml.serialization.annotation/XmlWrapped|null[0]
+    constructor <init>(kotlin/String) // com.davils.kxml.serialization.annotation/XmlWrapped.<init>|<init>(kotlin.String){}[0]
+
+    final val item // com.davils.kxml.serialization.annotation/XmlWrapped.item|{}item[0]
+        final fun <get-item>(): kotlin/String // com.davils.kxml.serialization.annotation/XmlWrapped.item.<get-item>|<get-item>(){}[0]
+}
+
+final enum class com.davils.kxml.serialization/XmlNamespaceMatching : kotlin/Enum<com.davils.kxml.serialization/XmlNamespaceMatching> { // com.davils.kxml.serialization/XmlNamespaceMatching|null[0]
+    enum entry Exact // com.davils.kxml.serialization/XmlNamespaceMatching.Exact|null[0]
+    enum entry LocalName // com.davils.kxml.serialization/XmlNamespaceMatching.LocalName|null[0]
+
+    final val entries // com.davils.kxml.serialization/XmlNamespaceMatching.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<com.davils.kxml.serialization/XmlNamespaceMatching> // com.davils.kxml.serialization/XmlNamespaceMatching.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): com.davils.kxml.serialization/XmlNamespaceMatching // com.davils.kxml.serialization/XmlNamespaceMatching.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<com.davils.kxml.serialization/XmlNamespaceMatching> // com.davils.kxml.serialization/XmlNamespaceMatching.values|values#static(){}[0]
+}
+
+final enum class com.davils.kxml.serialization/XmlPolymorphism : kotlin/Enum<com.davils.kxml.serialization/XmlPolymorphism> { // com.davils.kxml.serialization/XmlPolymorphism|null[0]
+    enum entry Attribute // com.davils.kxml.serialization/XmlPolymorphism.Attribute|null[0]
+    enum entry Element // com.davils.kxml.serialization/XmlPolymorphism.Element|null[0]
+
+    final val entries // com.davils.kxml.serialization/XmlPolymorphism.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<com.davils.kxml.serialization/XmlPolymorphism> // com.davils.kxml.serialization/XmlPolymorphism.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): com.davils.kxml.serialization/XmlPolymorphism // com.davils.kxml.serialization/XmlPolymorphism.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<com.davils.kxml.serialization/XmlPolymorphism> // com.davils.kxml.serialization/XmlPolymorphism.values|values#static(){}[0]
+}
+
+abstract fun interface com.davils.kxml.serialization/XmlNamingStrategy { // com.davils.kxml.serialization/XmlNamingStrategy|null[0]
+    abstract fun nameOf(kotlinx.serialization.descriptors/SerialDescriptor, kotlin/Int, kotlin/String): kotlin/String // com.davils.kxml.serialization/XmlNamingStrategy.nameOf|nameOf(kotlinx.serialization.descriptors.SerialDescriptor;kotlin.Int;kotlin.String){}[0]
+
+    final object Companion { // com.davils.kxml.serialization/XmlNamingStrategy.Companion|null[0]
+        final val Identity // com.davils.kxml.serialization/XmlNamingStrategy.Companion.Identity|{}Identity[0]
+            final fun <get-Identity>(): com.davils.kxml.serialization/XmlNamingStrategy // com.davils.kxml.serialization/XmlNamingStrategy.Companion.Identity.<get-Identity>|<get-Identity>(){}[0]
+        final val KebabCase // com.davils.kxml.serialization/XmlNamingStrategy.Companion.KebabCase|{}KebabCase[0]
+            final fun <get-KebabCase>(): com.davils.kxml.serialization/XmlNamingStrategy // com.davils.kxml.serialization/XmlNamingStrategy.Companion.KebabCase.<get-KebabCase>|<get-KebabCase>(){}[0]
+        final val PascalCase // com.davils.kxml.serialization/XmlNamingStrategy.Companion.PascalCase|{}PascalCase[0]
+            final fun <get-PascalCase>(): com.davils.kxml.serialization/XmlNamingStrategy // com.davils.kxml.serialization/XmlNamingStrategy.Companion.PascalCase.<get-PascalCase>|<get-PascalCase>(){}[0]
+    }
+}
+
+sealed interface <#A: out kotlin/Any?> com.davils.kxml.serialization/XmlDecoding { // com.davils.kxml.serialization/XmlDecoding|null[0]
+    abstract val diagnostics // com.davils.kxml.serialization/XmlDecoding.diagnostics|{}diagnostics[0]
+        abstract fun <get-diagnostics>(): kotlin.collections/List<com.davils.kxml.core.diagnostic/XmlDiagnostic> // com.davils.kxml.serialization/XmlDecoding.diagnostics.<get-diagnostics>|<get-diagnostics>(){}[0]
+
+    final class <#A1: out kotlin/Any?> Decoded : com.davils.kxml.serialization/XmlDecoding<#A1> { // com.davils.kxml.serialization/XmlDecoding.Decoded|null[0]
+        final val diagnostics // com.davils.kxml.serialization/XmlDecoding.Decoded.diagnostics|{}diagnostics[0]
+            final fun <get-diagnostics>(): kotlin.collections/List<com.davils.kxml.core.diagnostic/XmlDiagnostic> // com.davils.kxml.serialization/XmlDecoding.Decoded.diagnostics.<get-diagnostics>|<get-diagnostics>(){}[0]
+        final val value // com.davils.kxml.serialization/XmlDecoding.Decoded.value|{}value[0]
+            final fun <get-value>(): #A1 // com.davils.kxml.serialization/XmlDecoding.Decoded.value.<get-value>|<get-value>(){}[0]
+
+        final fun equals(kotlin/Any?): kotlin/Boolean // com.davils.kxml.serialization/XmlDecoding.Decoded.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // com.davils.kxml.serialization/XmlDecoding.Decoded.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // com.davils.kxml.serialization/XmlDecoding.Decoded.toString|toString(){}[0]
+    }
+
+    final class Failed : com.davils.kxml.serialization/XmlDecoding<kotlin/Nothing> { // com.davils.kxml.serialization/XmlDecoding.Failed|null[0]
+        final val diagnostics // com.davils.kxml.serialization/XmlDecoding.Failed.diagnostics|{}diagnostics[0]
+            final fun <get-diagnostics>(): kotlin.collections/List<com.davils.kxml.core.diagnostic/XmlDiagnostic> // com.davils.kxml.serialization/XmlDecoding.Failed.diagnostics.<get-diagnostics>|<get-diagnostics>(){}[0]
+
+        final fun equals(kotlin/Any?): kotlin/Boolean // com.davils.kxml.serialization/XmlDecoding.Failed.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // com.davils.kxml.serialization/XmlDecoding.Failed.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // com.davils.kxml.serialization/XmlDecoding.Failed.toString|toString(){}[0]
+    }
+}
+
+final class com.davils.kxml.serialization/XmlDecodingException : kotlinx.serialization/SerializationException { // com.davils.kxml.serialization/XmlDecodingException|null[0]
+    final val diagnostics // com.davils.kxml.serialization/XmlDecodingException.diagnostics|{}diagnostics[0]
+        final fun <get-diagnostics>(): kotlin.collections/List<com.davils.kxml.core.diagnostic/XmlDiagnostic> // com.davils.kxml.serialization/XmlDecodingException.diagnostics.<get-diagnostics>|<get-diagnostics>(){}[0]
+}
+
+final class com.davils.kxml.serialization/XmlFormat : kotlinx.serialization/StringFormat { // com.davils.kxml.serialization/XmlFormat|null[0]
+    final val configuration // com.davils.kxml.serialization/XmlFormat.configuration|{}configuration[0]
+        final fun <get-configuration>(): com.davils.kxml.serialization/XmlFormatConfiguration // com.davils.kxml.serialization/XmlFormat.configuration.<get-configuration>|<get-configuration>(){}[0]
+    final val serializersModule // com.davils.kxml.serialization/XmlFormat.serializersModule|{}serializersModule[0]
+        final fun <get-serializersModule>(): kotlinx.serialization.modules/SerializersModule // com.davils.kxml.serialization/XmlFormat.serializersModule.<get-serializersModule>|<get-serializersModule>(){}[0]
+
+    final fun <#A1: kotlin/Any?> decodeFromElement(kotlinx.serialization/DeserializationStrategy<#A1>, com.davils.kxml.core.node/XmlNode.Element): #A1 // com.davils.kxml.serialization/XmlFormat.decodeFromElement|decodeFromElement(kotlinx.serialization.DeserializationStrategy<0:0>;com.davils.kxml.core.node.XmlNode.Element){0§<kotlin.Any?>}[0]
+    final fun <#A1: kotlin/Any?> decodeFromString(kotlinx.serialization/DeserializationStrategy<#A1>, kotlin/String): #A1 // com.davils.kxml.serialization/XmlFormat.decodeFromString|decodeFromString(kotlinx.serialization.DeserializationStrategy<0:0>;kotlin.String){0§<kotlin.Any?>}[0]
+    final fun <#A1: kotlin/Any?> decodeOrFailure(kotlinx.serialization/DeserializationStrategy<#A1>, com.davils.kxml.core.node/XmlNode.Element): com.davils.kxml.serialization/XmlDecoding<#A1> // com.davils.kxml.serialization/XmlFormat.decodeOrFailure|decodeOrFailure(kotlinx.serialization.DeserializationStrategy<0:0>;com.davils.kxml.core.node.XmlNode.Element){0§<kotlin.Any?>}[0]
+    final fun <#A1: kotlin/Any?> decodeOrFailure(kotlinx.serialization/DeserializationStrategy<#A1>, kotlin/String): com.davils.kxml.serialization/XmlDecoding<#A1> // com.davils.kxml.serialization/XmlFormat.decodeOrFailure|decodeOrFailure(kotlinx.serialization.DeserializationStrategy<0:0>;kotlin.String){0§<kotlin.Any?>}[0]
+    final fun <#A1: kotlin/Any?> encodeToElement(kotlinx.serialization/SerializationStrategy<#A1>, #A1): com.davils.kxml.core.node/XmlNode.Element // com.davils.kxml.serialization/XmlFormat.encodeToElement|encodeToElement(kotlinx.serialization.SerializationStrategy<0:0>;0:0){0§<kotlin.Any?>}[0]
+    final fun <#A1: kotlin/Any?> encodeToString(kotlinx.serialization/SerializationStrategy<#A1>, #A1): kotlin/String // com.davils.kxml.serialization/XmlFormat.encodeToString|encodeToString(kotlinx.serialization.SerializationStrategy<0:0>;0:0){0§<kotlin.Any?>}[0]
+    final fun toString(): kotlin/String // com.davils.kxml.serialization/XmlFormat.toString|toString(){}[0]
+
+    final object Companion { // com.davils.kxml.serialization/XmlFormat.Companion|null[0]
+        final val Default // com.davils.kxml.serialization/XmlFormat.Companion.Default|{}Default[0]
+            final fun <get-Default>(): com.davils.kxml.serialization/XmlFormat // com.davils.kxml.serialization/XmlFormat.Companion.Default.<get-Default>|<get-Default>(){}[0]
+    }
+}
+
+final class com.davils.kxml.serialization/XmlFormatBuilder : com.davils.kore.core.dsl/ValidatingBuilder<com.davils.kxml.serialization/XmlFormatConfiguration> { // com.davils.kxml.serialization/XmlFormatBuilder|null[0]
+    final var classDiscriminator // com.davils.kxml.serialization/XmlFormatBuilder.classDiscriminator|{}classDiscriminator[0]
+        final fun <get-classDiscriminator>(): com.davils.kxml.core.name/XmlName // com.davils.kxml.serialization/XmlFormatBuilder.classDiscriminator.<get-classDiscriminator>|<get-classDiscriminator>(){}[0]
+        final fun <set-classDiscriminator>(com.davils.kxml.core.name/XmlName) // com.davils.kxml.serialization/XmlFormatBuilder.classDiscriminator.<set-classDiscriminator>|<set-classDiscriminator>(com.davils.kxml.core.name.XmlName){}[0]
+    final var isDeclarationWritten // com.davils.kxml.serialization/XmlFormatBuilder.isDeclarationWritten|{}isDeclarationWritten[0]
+        final fun <get-isDeclarationWritten>(): kotlin/Boolean // com.davils.kxml.serialization/XmlFormatBuilder.isDeclarationWritten.<get-isDeclarationWritten>|<get-isDeclarationWritten>(){}[0]
+        final fun <set-isDeclarationWritten>(kotlin/Boolean) // com.davils.kxml.serialization/XmlFormatBuilder.isDeclarationWritten.<set-isDeclarationWritten>|<set-isDeclarationWritten>(kotlin.Boolean){}[0]
+    final var isDefaultEncoded // com.davils.kxml.serialization/XmlFormatBuilder.isDefaultEncoded|{}isDefaultEncoded[0]
+        final fun <get-isDefaultEncoded>(): kotlin/Boolean // com.davils.kxml.serialization/XmlFormatBuilder.isDefaultEncoded.<get-isDefaultEncoded>|<get-isDefaultEncoded>(){}[0]
+        final fun <set-isDefaultEncoded>(kotlin/Boolean) // com.davils.kxml.serialization/XmlFormatBuilder.isDefaultEncoded.<set-isDefaultEncoded>|<set-isDefaultEncoded>(kotlin.Boolean){}[0]
+    final var isUnknownElementIgnored // com.davils.kxml.serialization/XmlFormatBuilder.isUnknownElementIgnored|{}isUnknownElementIgnored[0]
+        final fun <get-isUnknownElementIgnored>(): kotlin/Boolean // com.davils.kxml.serialization/XmlFormatBuilder.isUnknownElementIgnored.<get-isUnknownElementIgnored>|<get-isUnknownElementIgnored>(){}[0]
+        final fun <set-isUnknownElementIgnored>(kotlin/Boolean) // com.davils.kxml.serialization/XmlFormatBuilder.isUnknownElementIgnored.<set-isUnknownElementIgnored>|<set-isUnknownElementIgnored>(kotlin.Boolean){}[0]
+    final var namespace // com.davils.kxml.serialization/XmlFormatBuilder.namespace|{}namespace[0]
+        final fun <get-namespace>(): kotlin/String? // com.davils.kxml.serialization/XmlFormatBuilder.namespace.<get-namespace>|<get-namespace>(){}[0]
+        final fun <set-namespace>(kotlin/String?) // com.davils.kxml.serialization/XmlFormatBuilder.namespace.<set-namespace>|<set-namespace>(kotlin.String?){}[0]
+    final var namespaceMatching // com.davils.kxml.serialization/XmlFormatBuilder.namespaceMatching|{}namespaceMatching[0]
+        final fun <get-namespaceMatching>(): com.davils.kxml.serialization/XmlNamespaceMatching // com.davils.kxml.serialization/XmlFormatBuilder.namespaceMatching.<get-namespaceMatching>|<get-namespaceMatching>(){}[0]
+        final fun <set-namespaceMatching>(com.davils.kxml.serialization/XmlNamespaceMatching) // com.davils.kxml.serialization/XmlFormatBuilder.namespaceMatching.<set-namespaceMatching>|<set-namespaceMatching>(com.davils.kxml.serialization.XmlNamespaceMatching){}[0]
+    final var namingStrategy // com.davils.kxml.serialization/XmlFormatBuilder.namingStrategy|{}namingStrategy[0]
+        final fun <get-namingStrategy>(): com.davils.kxml.serialization/XmlNamingStrategy // com.davils.kxml.serialization/XmlFormatBuilder.namingStrategy.<get-namingStrategy>|<get-namingStrategy>(){}[0]
+        final fun <set-namingStrategy>(com.davils.kxml.serialization/XmlNamingStrategy) // com.davils.kxml.serialization/XmlFormatBuilder.namingStrategy.<set-namingStrategy>|<set-namingStrategy>(com.davils.kxml.serialization.XmlNamingStrategy){}[0]
+    final var polymorphism // com.davils.kxml.serialization/XmlFormatBuilder.polymorphism|{}polymorphism[0]
+        final fun <get-polymorphism>(): com.davils.kxml.serialization/XmlPolymorphism // com.davils.kxml.serialization/XmlFormatBuilder.polymorphism.<get-polymorphism>|<get-polymorphism>(){}[0]
+        final fun <set-polymorphism>(com.davils.kxml.serialization/XmlPolymorphism) // com.davils.kxml.serialization/XmlFormatBuilder.polymorphism.<set-polymorphism>|<set-polymorphism>(com.davils.kxml.serialization.XmlPolymorphism){}[0]
+    final var serializersModule // com.davils.kxml.serialization/XmlFormatBuilder.serializersModule|{}serializersModule[0]
+        final fun <get-serializersModule>(): kotlinx.serialization.modules/SerializersModule // com.davils.kxml.serialization/XmlFormatBuilder.serializersModule.<get-serializersModule>|<get-serializersModule>(){}[0]
+        final fun <set-serializersModule>(kotlinx.serialization.modules/SerializersModule) // com.davils.kxml.serialization/XmlFormatBuilder.serializersModule.<set-serializersModule>|<set-serializersModule>(kotlinx.serialization.modules.SerializersModule){}[0]
+    final var xml // com.davils.kxml.serialization/XmlFormatBuilder.xml|{}xml[0]
+        final fun <get-xml>(): com.davils.kxml.core/Xml // com.davils.kxml.serialization/XmlFormatBuilder.xml.<get-xml>|<get-xml>(){}[0]
+        final fun <set-xml>(com.davils.kxml.core/Xml) // com.davils.kxml.serialization/XmlFormatBuilder.xml.<set-xml>|<set-xml>(com.davils.kxml.core.Xml){}[0]
+
+    final fun xml(kotlin/Function1<com.davils.kxml.core/XmlBuilder, kotlin/Unit>) // com.davils.kxml.serialization/XmlFormatBuilder.xml|xml(kotlin.Function1<com.davils.kxml.core.XmlBuilder,kotlin.Unit>){}[0]
+
+    final object Companion { // com.davils.kxml.serialization/XmlFormatBuilder.Companion|null[0]
+        final const val DEFAULT_DISCRIMINATOR // com.davils.kxml.serialization/XmlFormatBuilder.Companion.DEFAULT_DISCRIMINATOR|{}DEFAULT_DISCRIMINATOR[0]
+            final fun <get-DEFAULT_DISCRIMINATOR>(): kotlin/String // com.davils.kxml.serialization/XmlFormatBuilder.Companion.DEFAULT_DISCRIMINATOR.<get-DEFAULT_DISCRIMINATOR>|<get-DEFAULT_DISCRIMINATOR>(){}[0]
+    }
+}
+
+final class com.davils.kxml.serialization/XmlFormatConfiguration : com.davils.kore.core.validation/Validatable { // com.davils.kxml.serialization/XmlFormatConfiguration|null[0]
+    final val classDiscriminator // com.davils.kxml.serialization/XmlFormatConfiguration.classDiscriminator|{}classDiscriminator[0]
+        final fun <get-classDiscriminator>(): com.davils.kxml.core.name/XmlName // com.davils.kxml.serialization/XmlFormatConfiguration.classDiscriminator.<get-classDiscriminator>|<get-classDiscriminator>(){}[0]
+    final val isDeclarationWritten // com.davils.kxml.serialization/XmlFormatConfiguration.isDeclarationWritten|{}isDeclarationWritten[0]
+        final fun <get-isDeclarationWritten>(): kotlin/Boolean // com.davils.kxml.serialization/XmlFormatConfiguration.isDeclarationWritten.<get-isDeclarationWritten>|<get-isDeclarationWritten>(){}[0]
+    final val isDefaultEncoded // com.davils.kxml.serialization/XmlFormatConfiguration.isDefaultEncoded|{}isDefaultEncoded[0]
+        final fun <get-isDefaultEncoded>(): kotlin/Boolean // com.davils.kxml.serialization/XmlFormatConfiguration.isDefaultEncoded.<get-isDefaultEncoded>|<get-isDefaultEncoded>(){}[0]
+    final val isUnknownElementIgnored // com.davils.kxml.serialization/XmlFormatConfiguration.isUnknownElementIgnored|{}isUnknownElementIgnored[0]
+        final fun <get-isUnknownElementIgnored>(): kotlin/Boolean // com.davils.kxml.serialization/XmlFormatConfiguration.isUnknownElementIgnored.<get-isUnknownElementIgnored>|<get-isUnknownElementIgnored>(){}[0]
+    final val namespace // com.davils.kxml.serialization/XmlFormatConfiguration.namespace|{}namespace[0]
+        final fun <get-namespace>(): kotlin/String? // com.davils.kxml.serialization/XmlFormatConfiguration.namespace.<get-namespace>|<get-namespace>(){}[0]
+    final val namespaceMatching // com.davils.kxml.serialization/XmlFormatConfiguration.namespaceMatching|{}namespaceMatching[0]
+        final fun <get-namespaceMatching>(): com.davils.kxml.serialization/XmlNamespaceMatching // com.davils.kxml.serialization/XmlFormatConfiguration.namespaceMatching.<get-namespaceMatching>|<get-namespaceMatching>(){}[0]
+    final val namingStrategy // com.davils.kxml.serialization/XmlFormatConfiguration.namingStrategy|{}namingStrategy[0]
+        final fun <get-namingStrategy>(): com.davils.kxml.serialization/XmlNamingStrategy // com.davils.kxml.serialization/XmlFormatConfiguration.namingStrategy.<get-namingStrategy>|<get-namingStrategy>(){}[0]
+    final val polymorphism // com.davils.kxml.serialization/XmlFormatConfiguration.polymorphism|{}polymorphism[0]
+        final fun <get-polymorphism>(): com.davils.kxml.serialization/XmlPolymorphism // com.davils.kxml.serialization/XmlFormatConfiguration.polymorphism.<get-polymorphism>|<get-polymorphism>(){}[0]
+    final val serializersModule // com.davils.kxml.serialization/XmlFormatConfiguration.serializersModule|{}serializersModule[0]
+        final fun <get-serializersModule>(): kotlinx.serialization.modules/SerializersModule // com.davils.kxml.serialization/XmlFormatConfiguration.serializersModule.<get-serializersModule>|<get-serializersModule>(){}[0]
+    final val xml // com.davils.kxml.serialization/XmlFormatConfiguration.xml|{}xml[0]
+        final fun <get-xml>(): com.davils.kxml.core/Xml // com.davils.kxml.serialization/XmlFormatConfiguration.xml.<get-xml>|<get-xml>(){}[0]
+
+    final fun (com.davils.kore.core.validation/ValidationScope).validate() // com.davils.kxml.serialization/XmlFormatConfiguration.validate|validate@com.davils.kore.core.validation.ValidationScope(){}[0]
+    final fun toString(): kotlin/String // com.davils.kxml.serialization/XmlFormatConfiguration.toString|toString(){}[0]
+}
+
+final object com.davils.kxml.serialization/XmlFormatViolationCodes { // com.davils.kxml.serialization/XmlFormatViolationCodes|null[0]
+    final val EMPTY_NAMESPACE // com.davils.kxml.serialization/XmlFormatViolationCodes.EMPTY_NAMESPACE|{}EMPTY_NAMESPACE[0]
+        final fun <get-EMPTY_NAMESPACE>(): com.davils.kore.core.validation.violation/ViolationCode // com.davils.kxml.serialization/XmlFormatViolationCodes.EMPTY_NAMESPACE.<get-EMPTY_NAMESPACE>|<get-EMPTY_NAMESPACE>(){}[0]
+}
+
+final fun com.davils.kxml.serialization/xmlFormat(kotlin/Function1<com.davils.kxml.serialization/XmlFormatBuilder, kotlin/Unit> = ...): com.davils.kxml.serialization/XmlFormat // com.davils.kxml.serialization/xmlFormat|xmlFormat(kotlin.Function1<com.davils.kxml.serialization.XmlFormatBuilder,kotlin.Unit>){}[0]
+final inline fun <#A: reified kotlin/Any?> (com.davils.kxml.serialization/XmlFormat).com.davils.kxml.serialization/decodeFromElement(com.davils.kxml.core.node/XmlNode.Element): #A // com.davils.kxml.serialization/decodeFromElement|decodeFromElement@com.davils.kxml.serialization.XmlFormat(com.davils.kxml.core.node.XmlNode.Element){0§<kotlin.Any?>}[0]
+final inline fun <#A: reified kotlin/Any?> (com.davils.kxml.serialization/XmlFormat).com.davils.kxml.serialization/decodeOrFailure(com.davils.kxml.core.node/XmlNode.Element): com.davils.kxml.serialization/XmlDecoding<#A> // com.davils.kxml.serialization/decodeOrFailure|decodeOrFailure@com.davils.kxml.serialization.XmlFormat(com.davils.kxml.core.node.XmlNode.Element){0§<kotlin.Any?>}[0]
+final inline fun <#A: reified kotlin/Any?> (com.davils.kxml.serialization/XmlFormat).com.davils.kxml.serialization/decodeOrFailure(kotlin/String): com.davils.kxml.serialization/XmlDecoding<#A> // com.davils.kxml.serialization/decodeOrFailure|decodeOrFailure@com.davils.kxml.serialization.XmlFormat(kotlin.String){0§<kotlin.Any?>}[0]
+final inline fun <#A: reified kotlin/Any?> (com.davils.kxml.serialization/XmlFormat).com.davils.kxml.serialization/encodeToElement(#A): com.davils.kxml.core.node/XmlNode.Element // com.davils.kxml.serialization/encodeToElement|encodeToElement@com.davils.kxml.serialization.XmlFormat(0:0){0§<kotlin.Any?>}[0]
