@@ -2,7 +2,7 @@
 
 Binding rules for every agent and every person working in this repository. kxml is the XML library of Davils: a
 hardened, namespace-aware XML 1.0 reader and writer and a kotlinx.serialization format on top of it, for Kotlin on the
-JVM. It is built on [Kore](https://github.com/davils-com/kore), follows the rules of Kore and is published under the
+JVM and on WebAssembly (`wasmJs`). It is built on [Kore](https://github.com/davils-com/kore), follows the rules of Kore and is published under the
 Apache License 2.0, with security first.
 
 ## Repository
@@ -14,13 +14,28 @@ Apache License 2.0, with security first.
 | `build-logic` | - | One convention plugin per Kreate concern, composed by `kxml.kotlin-library` for the modules and `kxml.root` for the root project; they hold nothing but `plugins { }` and `kreate { }` |
 
 The root package of a module is `com.davils.kxml.<module without kxml->`, such as `com.davils.kxml.core`, and its
-Java module has the same name. Both modules declare it in `src/main/java/module-info.java` and export only packages
-with public API. The one exception is `com.davils.kxml.core.internal`, which `kxml-core` exports to
+Java module has the same name. Both modules declare it in `src/jvmMain/java/module-info.java` and export only
+packages with public API. The one exception is `com.davils.kxml.core.internal`, which `kxml-core` exports to
 `com.davils.kxml.serialization` alone.
 
 kxml uses Kore wherever Kore has the building block: validation and violation codes, `ValidatingBuilder` and
 `@DavilsDsl`, `TextRange` and `LineMap`, `Limits.MAX_DISPLAY_LENGTH` and the `Davils*` annotations. Never write a
 second version of something Kore has; what kxml needs from Kore and Kore does not offer yet is added to Kore.
+
+## Targets
+
+Every module is a Kotlin Multiplatform library with two targets, `jvm` and `wasmJs`, like Kore 2.0. The Wasm tests run
+under Node.js; the published klib runs in the browser as well.
+
+- Code lives in `src/commonMain/kotlin` unless it needs the JVM. What only the JVM can offer lives in
+  `src/jvmMain/kotlin`; a member of a common class that needs a JDK type becomes an extension function there.
+- A platform difference hides behind an `internal expect fun` in `<Role>.kt` with its `actual` in `<Role>.jvm.kt` and
+  `<Role>.wasmJs.kt`, such as `UnicodeCategories` of `SafeDisplay`. kxml declares no `expect` or `actual` class:
+  they are a Beta language feature.
+- JavaScript interop is written with `js("...")` or `@JsFun` in `src/wasmJsMain/kotlin` only, behind a file-level
+  `@file:OptIn(ExperimentalWasmJsInterop::class)`.
+- Text is walked by code point with the internal helpers of `CodePoints.kt`, never with `Character`, `String.format`
+  or `java.nio`; sources are decoded by `SourceDecoding` and `Utf16` in common code.
 
 ## Verify
 
@@ -36,8 +51,8 @@ on every finding. The gate reads OSV.dev and deps.dev and Trivy downloads its da
 network. The build runs on JDK 25; `gradle/gradle-daemon-jvm.properties` pins the daemon to it and toolchains are
 never downloaded.
 
-To build against a local checkout of Kore that is not released yet, substitute it for the published artifact without
-changing a file:
+To build against a local checkout of Kore, such as a branch that is not published yet, substitute it for the published
+artifact without changing a file:
 
 ```bash
 ./gradlew --include-build ../kore check
@@ -77,7 +92,7 @@ a baseline. Build scripts and `build-logic` follow the same rules, although Dete
   `equals` and `hashCode` compare a private `values` list and whose `toString` escapes; `value class` stays allowed.
 - **Explicit return types** on public functions with an expression body or a result; a block body that returns
   nothing omits `: Unit`, which the compiler rejects as redundant.
-- **Kotlin first**, Java only where Kotlin offers no equivalent. Experimental Kotlin and kotlinx.serialization API is
+- **Kotlin first**, Java only where Kotlin offers no equivalent, and only in `jvmMain`. Experimental Kotlin and kotlinx.serialization API is
   allowed only through a local `@OptIn` and never appears in a public signature.
 - **Nothing global.** No mutable singletons, no static configuration, no threads or timers of the library's own.
   Detekt does not enforce this rule; reviews do.
@@ -117,8 +132,10 @@ it. kxml is built so that a mistake of a caller fails closed.
 
 - Kotest `FunSpec` only, Kotest assertions only, no mocking library; fakes come from a `fixture`.
 - One `context` per behaviour or function; test names read as sentences.
-- Tests live in `src/unitTest/kotlin`, in the package of the code they test, even when that package holds a single
-  test. A fixture lives in the `fixture` folder of the only subpackage that uses it, or in the shared `fixture` folder
+- Tests live in `src/commonUnitTest/kotlin`, which runs on the JVM and on Wasm, in the package of the code they test,
+  even when that package holds a single test. A test that needs the JVM, through a JDK type or `@JvmInline`, which
+  only compiles in the JVM test sources, lives in `src/jvmUnitTest/kotlin`; a test of common code stays common
+  wherever it can. A fixture lives in the `fixture` folder of the only subpackage that uses it, or in the shared `fixture` folder
   of the area; a `fixture` folder holds at least two files, so a lone fixture lives next to the tests that use it.
   `src/test` is rejected by the build.
 - Property tests with adversarial generators for every parser and every security invariant.
@@ -127,7 +144,7 @@ it. kxml is built so that a mistake of a caller fails closed.
 ## Build
 
 - Every module applies exactly one plugin, `id("kxml.kotlin-library")`, and declares nothing but its description
-  and its dependencies. Detekt, Kover, Kotest, Trivy, the compiler and publishing are configured only in
+  and its dependencies, through the configurations of the source sets such as `commonMainApi`. Detekt, Kover, Kotest, Trivy, the compiler and publishing are configured only in
   `build-logic`, through Kreate.
 - `build-logic` holds no Kotlin classes, no tasks of its own and no Gradle API calls beyond reading the version
   catalog. What Kreate cannot express yet is added to Kreate, never programmed here.
@@ -140,7 +157,8 @@ it. kxml is built so that a mistake of a caller fails closed.
   | `kxml.git-hooks` | The Git hooks |
   | `kxml.trivy` | Every Trivy scan |
   | `kxml.assurance` | The assurance gate and its `ignore` rules |
-  | `kxml.platform` | The JDK, the Kotlin compiler and the Java module name |
+  | `kxml.platform` | The JDK, the Kotlin compiler, the targets and the Java module name |
+  | `kxml.web-tools` | Node.js and Yarn for the Wasm target, from the repositories of the settings |
   | `kxml.serialization` | The kotlinx.serialization compiler plugin |
   | `kxml.testing` | Kotest and the test suites |
   | `kxml.detekt` | Detekt and its reports |
@@ -160,8 +178,10 @@ it. kxml is built so that a mistake of a caller fails closed.
   `kxml-serialization`, on `kotlinx-serialization-core`. Libraries of JetBrains and of Davils may be added when they
   are needed; every other dependency needs the approval of a maintainer.
 - Only `repo.davils.com` serves `com.davils` and its subgroups, through `exclusiveContent`. Everything else comes
-  from Maven Central, except the Gradle plugins `kotlin-dsl` and `kotlinx-benchmark-plugin`, which only the Gradle
-  Plugin Portal has. Nothing is ever resolved from `mavenLocal()`.
+  from Maven Central, except the Gradle plugins `kotlin-dsl`, `kotlinx-benchmark-plugin` and
+  `kotest-framework-plugin-gradle`, which only the Gradle Plugin Portal has, and Node.js and Yarn, which come from
+  `nodejs.org` and the GitHub releases of Yarn. `gradle/verification-metadata.xml` names the Node.js archive of every
+  platform the pipeline runs on. Nothing is ever resolved from `mavenLocal()`.
 - After a dependency changes, refresh the locks and the verification metadata and review what changed:
 
   ```bash
