@@ -22,9 +22,11 @@ kreate {
     project {
         apiValidation {
             enabled = true
+            klib = true
 
             semver {
                 enabled = true
+            klib = true
                 tagPrefix = ""
                 requireBreakingCommit = true
                 runOnCheck = true
