@@ -33,5 +33,5 @@ internal data class Annotated(
     @XmlAsText
     val text: String,
     @XmlNames("Version", "Revision")
-    val version: VersionId? = null,
+    val version: String? = null,
 )

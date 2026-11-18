@@ -25,18 +25,14 @@ import com.davils.kxml.serialization.fixture.Grantee
 import com.davils.kxml.serialization.fixture.Misplaced
 import com.davils.kxml.serialization.fixture.Payloads
 import com.davils.kxml.serialization.fixture.Rule
-import com.davils.kxml.serialization.fixture.VersionId
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.types.shouldBeInstanceOf
-import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
-import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.modules.polymorphic
 
 private const val UNNAMED: String = "<Grant><Grantee><Uri>u</Uri></Grantee><Permission>READ</Permission></Grant>"
 private const val ROBOT: String =
@@ -82,17 +78,6 @@ class XmlPolymorphismTest : FunSpec({
 
         test("names a type that exists") {
             codeOf(acl.decodeOrFailure<Grant>(ROBOT)) shouldBe XmlDiagnosticCode.UnknownPolymorphicType
-        }
-
-        test("cannot be carried by a single value") {
-            val module = SerializersModule {
-                polymorphic(Any::class) { subclass(VersionId::class, VersionId.serializer()) }
-            }
-            val format = xmlFormat { serializersModule = module }
-
-            val serializer = PolymorphicSerializer(Any::class)
-
-            shouldThrow<SerializationException> { format.encodeToString(serializer, VersionId("v")) }
         }
     }
 

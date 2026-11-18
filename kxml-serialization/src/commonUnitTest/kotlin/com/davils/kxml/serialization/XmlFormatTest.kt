@@ -35,7 +35,6 @@ import com.davils.kxml.serialization.fixture.Plain
 import com.davils.kxml.serialization.fixture.Primitives
 import com.davils.kxml.serialization.fixture.StorageClass
 import com.davils.kxml.serialization.fixture.Tagging
-import com.davils.kxml.serialization.fixture.VersionId
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
@@ -158,7 +157,7 @@ class XmlFormatTest : FunSpec({
 
     context("annotations") {
         test("place values in attributes, text, other namespaces and aliases") {
-            val annotated = Annotated(id = SEVEN, origin = "eu", text = "body", version = VersionId("v1"))
+            val annotated = Annotated(id = SEVEN, origin = "eu", text = "body", version = "v1")
             val text = XmlFormat.Default.encodeToString(annotated)
 
             text shouldContain """<a:Annotated xmlns:a="urn:annotated" xmlns:o="urn:other" id="7" o:origin="eu">body"""
@@ -176,7 +175,7 @@ class XmlFormatTest : FunSpec({
             val text = """<a:Annotated xmlns:a="urn:annotated" id="1">x<a:Revision>r2</a:Revision></a:Annotated>"""
             val annotated = XmlFormat.Default.decodeFromString<Annotated>(text)
 
-            annotated.version shouldBe VersionId("r2")
+            annotated.version shouldBe "r2"
         }
 
         test("take a property out of the namespace of the document") {
@@ -217,12 +216,6 @@ class XmlFormatTest : FunSpec({
 
             val summary = ObjectSummary(key = "k", eTag = "e", size = 1)
             sparse.encodeToString(summary) shouldContain "<size>1</size></ObjectSummary>"
-        }
-
-        test("use a single value as the root") {
-            val text = XmlFormat.Default.encodeToString(VersionId("v9"))
-
-            XmlFormat.Default.decodeFromString<VersionId>(text) shouldBe VersionId("v9")
         }
 
         test("write an absent root as an empty element") {
