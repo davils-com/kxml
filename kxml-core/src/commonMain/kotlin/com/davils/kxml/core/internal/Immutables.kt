@@ -17,14 +17,21 @@
 package com.davils.kxml.core.internal
 
 import com.davils.kore.core.annotation.DavilsInternal
-import java.util.List.copyOf as listCopyOf
 
 /**
- * Returns an unmodifiable copy of this collection that no cast can change, for the public values of kxml.
+ * Returns an unmodifiable copy of this collection that neither a cast nor a later change of the collection can alter,
+ * for the public values of kxml.
  *
  * @receiver the elements to copy.
  * @return the elements in the same order.
  * @since 1.0.0
  */
 @DavilsInternal
-public fun <T : Any> Collection<T>.immutableList(): List<T> = listCopyOf(this)
+public fun <T : Any> Collection<T>.immutableList(): List<T> {
+    val elements = toList()
+    return object : AbstractList<T>() {
+        override val size: Int get() = elements.size
+
+        override fun get(index: Int): T = elements[index]
+    }
+}
