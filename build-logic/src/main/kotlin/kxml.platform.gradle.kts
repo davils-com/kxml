@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import com.davils.kreate.platform.WebEnvironment
 import org.jetbrains.kotlin.gradle.dsl.JvmDefaultMode
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
@@ -35,6 +36,13 @@ kreate {
             languageVersion = KotlinVersion.KOTLIN_2_4
             apiVersion = KotlinVersion.KOTLIN_2_4
             jvmDefault = JvmDefaultMode.NO_COMPATIBILITY
+        }
+
+        multiplatform {
+            targets {
+                jvm = true
+                wasmJs = setOf(WebEnvironment.NODE)
+            }
         }
 
         jvm {
