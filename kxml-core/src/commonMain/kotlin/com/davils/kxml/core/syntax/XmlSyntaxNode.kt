@@ -143,11 +143,29 @@ public class XmlSyntaxNode internal constructor(
 
     override fun toString(): String = "$kind@$range"
 
-    private fun childAt(offset: Int): XmlSyntaxElement? =
-        children.firstOrNull { child -> offset >= child.range.start && offset < child.range.end }
+    private fun childAt(offset: Int): XmlSyntaxElement? {
+        val child = children.getOrNull(firstEndingAfter(offset))
+        return child?.takeIf { found -> found.range.start <= offset }
+    }
 
-    private fun childCovering(range: TextRange): XmlSyntaxNode? =
-        childNodes.firstOrNull { child -> range.start >= child.range.start && range.end <= child.range.end }
+    private fun childCovering(range: TextRange): XmlSyntaxNode? {
+        val first = firstEndingAfter(range.end - 1)
+        val candidates = children.subList(fromIndex = first, toIndex = children.size)
+        val starting = candidates.asSequence().takeWhile { child -> child.range.start <= range.start }
+        return starting.filterIsInstance<XmlSyntaxNode>().firstOrNull()
+    }
+
+    private fun firstEndingAfter(offset: Int): Int {
+        var low = 0
+        var high = children.size
+        while (low < high) {
+            val middle = low + high ushr 1
+            val isBefore = children[middle].range.end <= offset
+            low = (middle + 1).takeIf { isBefore } ?: low
+            high = high.takeIf { isBefore } ?: middle
+        }
+        return low
+    }
 
     private fun childrenOf(): List<XmlSyntaxElement> {
         var position = offset

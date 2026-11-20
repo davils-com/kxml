@@ -23,8 +23,10 @@ import com.davils.kxml.core.XmlDoctype
 import com.davils.kxml.core.XmlParseResult
 import com.davils.kxml.core.diagnostic.XmlDiagnosticCode
 import com.davils.kxml.core.fixture.CRLF
+import com.davils.kxml.core.fixture.GROWTH_FACTOR
 import com.davils.kxml.core.fixture.LF
 import com.davils.kxml.core.fixture.shouldBeShownSafely
+import com.davils.kxml.core.fixture.shouldGrowLinearly
 import com.davils.kxml.core.limit.XmlLimits
 import com.davils.kxml.core.xml
 import io.kotest.core.spec.style.FunSpec
@@ -43,6 +45,7 @@ import io.kotest.property.arbitrary.map
 import io.kotest.property.checkAll
 
 private const val CASES: Int = 500
+private const val WIDE: Int = 200
 private const val MOST_FRAGMENTS: Int = 40
 private const val MARK: String = "\uFEFF"
 private const val DECLARATION: String = """<?xml version='1.0' encoding="UTF-8"?>"""
@@ -77,6 +80,8 @@ private fun XmlSyntaxTree.isContiguous(): Boolean {
     }
     return isGapless && expected == text.length
 }
+
+private fun wide(size: Int): String = "<r>" + "<a>t</a>".repeat(size) + "</r>"
 
 class XmlSyntaxTreeTest : FunSpec({
     context("the tree of a well-formed document") {
@@ -245,6 +250,23 @@ class XmlSyntaxTreeTest : FunSpec({
             tree.root.descendants.count { node -> node.kind == XmlSyntaxKind.ELEMENT } shouldBe depth
             tree.root.tokens.count() shouldBe depth * TOKENS_PER_LEVEL
             tree.green shouldBe XmlSyntaxTree.parse(text, xml { limits = XmlLimits.Relaxed }).green
+        }
+    }
+
+    context("the lookups of a syntax tree") {
+        test("find nodes and tokens in a wide element in logarithmic time") {
+            val small = wide(WIDE)
+            val large = wide(WIDE * GROWTH_FACTOR)
+            val trees = mapOf(small to XmlSyntaxTree.parse(small), large to XmlSyntaxTree.parse(large))
+
+            shouldGrowLinearly(small = small, large = large) { text ->
+                val root = trees.getValue(text).root
+                val element = root.coveringNode(TextRange(start = 0, end = text.length))
+                element.childNodes.forEach { child ->
+                    root.coveringNode(child.range).range shouldBe child.range
+                    root.tokenAt(child.range.start).shouldNotBeNull()
+                }
+            }
         }
     }
 })
