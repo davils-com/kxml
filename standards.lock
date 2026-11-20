@@ -2,6 +2,19 @@
     "schemaVersion": 1,
     "standards": [
         {
+            "id": "document:w3c-xml-conformance-test-suite",
+            "reviewedOn": "2026-11-20",
+            "note": "xmlts20130923 of 2013-09-23 is the newest archive the page links. Its licenses allow running it but not vendoring a modified copy, so XmlConformanceTest downloads the archive, checks its SHA-256 and runs the cases from build/.",
+            "snapshot": {
+                "title": "document:w3c-xml-conformance-test-suite",
+                "withdrawn": false,
+                "replacedBy": [],
+                "updatedBy": [],
+                "errata": {},
+                "fingerprint": "sha256:76468f8dc03555a64273e99854fc913d4eb77d7135dec68b2cae8d040c2056da"
+            }
+        },
+        {
             "id": "iso:iec-10646",
             "reviewedOn": "2026-11-20",
             "note": "ISO/IEC 10646:2020 with amendments 1:2023 and 2:2025, which add characters. The decoders of UTF-8, UTF-16 and UTF-32 depend on the encoding forms, not on assigned characters, and the characters and names of XML are fixed ranges of code points.",

@@ -1,0 +1,573 @@
+# Cases of the W3C XML Conformance Test Suite that kxml does not pass yet: the id, then the reason.
+# The conformance test fails when a listed case passes, so a fixed case must leave this list.
+not-wf-sa-054 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-056 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-057 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-058 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-059 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-060 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-061 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-062 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-063 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-064 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-065 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-066 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-067 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-068 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-069 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-078 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-079 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-080 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-082 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-084 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-085 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-086 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-087 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-089 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-091 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-107 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-113 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-114 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-121 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-122 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-123 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-124 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-125 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-126 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-127 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-128 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-129 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-130 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-131 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-132 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-133 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-134 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-135 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-136 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-137 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-138 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-139 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-149 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-158 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-160 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-161 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-162 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-164 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-165 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-175 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-180 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-183 dtd: the internal subset of the document type declaration is not read
+not-wf-sa-184 dtd: the internal subset of the document type declaration is not read
+not-wf-not-sa-001 dtd: the internal subset of the document type declaration is not read
+not-wf-not-sa-002 dtd: the internal subset of the document type declaration is not read
+not-wf-not-sa-003 dtd: the internal subset of the document type declaration is not read
+not-wf-not-sa-004 dtd: the internal subset of the document type declaration is not read
+not-wf-not-sa-006 dtd: the internal subset of the document type declaration is not read
+not-wf-not-sa-007 dtd: the internal subset of the document type declaration is not read
+not-wf-not-sa-008 dtd: the internal subset of the document type declaration is not read
+not-wf-not-sa-009 dtd: the internal subset of the document type declaration is not read
+valid-sa-023 dtd: the internal subset of the document type declaration is not read
+valid-sa-024 dtd: the internal subset of the document type declaration is not read
+valid-sa-042 dtd: the internal subset of the document type declaration is not read
+valid-sa-053 dtd: the internal subset of the document type declaration is not read
+valid-sa-056 dtd: the internal subset of the document type declaration is not read
+valid-sa-066 dtd: the internal subset of the document type declaration is not read
+valid-sa-068 dtd: the internal subset of the document type declaration is not read
+valid-sa-085 dtd: the internal subset of the document type declaration is not read
+valid-sa-086 dtd: the internal subset of the document type declaration is not read
+valid-sa-087 dtd: the internal subset of the document type declaration is not read
+valid-sa-088 dtd: the internal subset of the document type declaration is not read
+valid-sa-089 dtd: the internal subset of the document type declaration is not read
+valid-sa-108 dtd: the internal subset of the document type declaration is not read
+valid-sa-110 dtd: the internal subset of the document type declaration is not read
+valid-sa-114 dtd: the internal subset of the document type declaration is not read
+valid-sa-115 dtd: the internal subset of the document type declaration is not read
+valid-sa-117 dtd: the internal subset of the document type declaration is not read
+valid-sa-118 dtd: the internal subset of the document type declaration is not read
+valid-not-sa-031 dtd: the internal subset of the document type declaration is not read
+valid-ext-sa-001 dtd: the internal subset of the document type declaration is not read
+valid-ext-sa-002 dtd: the internal subset of the document type declaration is not read
+valid-ext-sa-003 dtd: the internal subset of the document type declaration is not read
+valid-ext-sa-004 dtd: the internal subset of the document type declaration is not read
+valid-ext-sa-005 dtd: the internal subset of the document type declaration is not read
+valid-ext-sa-006 dtd: the internal subset of the document type declaration is not read
+valid-ext-sa-007 dtd: the internal subset of the document type declaration is not read
+valid-ext-sa-008 dtd: the internal subset of the document type declaration is not read
+valid-ext-sa-009 dtd: the internal subset of the document type declaration is not read
+valid-ext-sa-011 dtd: the internal subset of the document type declaration is not read
+valid-ext-sa-012 dtd: the internal subset of the document type declaration is not read
+valid-ext-sa-013 dtd: the internal subset of the document type declaration is not read
+valid-ext-sa-014 dtd: the internal subset of the document type declaration is not read
+pr-xml-little dtd: the internal subset of the document type declaration is not read
+pr-xml-utf-16 dtd: the internal subset of the document type declaration is not read
+pr-xml-utf-8 dtd: the internal subset of the document type declaration is not read
+ext01 dtd: the internal subset of the document type declaration is not read
+ext02 dtd: the internal subset of the document type declaration is not read
+not-sa02 dtd: the internal subset of the document type declaration is not read
+not-sa03 dtd: the internal subset of the document type declaration is not read
+not-sa04 dtd: the internal subset of the document type declaration is not read
+sa02 dtd: the internal subset of the document type declaration is not read
+sa03 dtd: the internal subset of the document type declaration is not read
+sa04 dtd: the internal subset of the document type declaration is not read
+v-pe00 dtd: the internal subset of the document type declaration is not read
+v-pe03 dtd: the internal subset of the document type declaration is not read
+v-pe02 dtd: the internal subset of the document type declaration is not read
+inv-not-sa02 dtd: the internal subset of the document type declaration is not read
+empty dtd: the internal subset of the document type declaration is not read
+attlist01 dtd: the internal subset of the document type declaration is not read
+attlist02 dtd: the internal subset of the document type declaration is not read
+attlist03 dtd: the internal subset of the document type declaration is not read
+attlist04 dtd: the internal subset of the document type declaration is not read
+attlist05 dtd: the internal subset of the document type declaration is not read
+attlist06 dtd: the internal subset of the document type declaration is not read
+attlist07 dtd: the internal subset of the document type declaration is not read
+attlist08 dtd: the internal subset of the document type declaration is not read
+attlist09 dtd: the internal subset of the document type declaration is not read
+cond01 dtd: the internal subset of the document type declaration is not read
+cond02 dtd: the internal subset of the document type declaration is not read
+content01 dtd: the internal subset of the document type declaration is not read
+content02 dtd: the internal subset of the document type declaration is not read
+content03 dtd: the internal subset of the document type declaration is not read
+decl01 dtd: the internal subset of the document type declaration is not read
+nwf-dtd00 dtd: the internal subset of the document type declaration is not read
+nwf-dtd01 dtd: the internal subset of the document type declaration is not read
+dtd02 dtd: the internal subset of the document type declaration is not read
+dtd03 dtd: the internal subset of the document type declaration is not read
+dtd04 dtd: the internal subset of the document type declaration is not read
+dtd05 dtd: the internal subset of the document type declaration is not read
+dtd07 dtd: the internal subset of the document type declaration is not read
+pi dtd: the internal subset of the document type declaration is not read
+pubid01 dtd: the internal subset of the document type declaration is not read
+pubid02 dtd: the internal subset of the document type declaration is not read
+pubid03 dtd: the internal subset of the document type declaration is not read
+pubid04 dtd: the internal subset of the document type declaration is not read
+pubid05 dtd: the internal subset of the document type declaration is not read
+sgml04 dtd: the internal subset of the document type declaration is not read
+sgml05 dtd: the internal subset of the document type declaration is not read
+sgml06 dtd: the internal subset of the document type declaration is not read
+sgml07 dtd: the internal subset of the document type declaration is not read
+sgml08 dtd: the internal subset of the document type declaration is not read
+sgml09 dtd: the internal subset of the document type declaration is not read
+sgml10 dtd: the internal subset of the document type declaration is not read
+sgml11 dtd: the internal subset of the document type declaration is not read
+sgml12 dtd: the internal subset of the document type declaration is not read
+sgml13 dtd: the internal subset of the document type declaration is not read
+o-p43pass1 dtd: the internal subset of the document type declaration is not read
+o-p68pass1 dtd: the internal subset of the document type declaration is not read
+o-p09fail1 dtd: the internal subset of the document type declaration is not read
+o-p09fail2 dtd: the internal subset of the document type declaration is not read
+o-p09fail3 dtd: the internal subset of the document type declaration is not read
+o-p12fail1 dtd: the internal subset of the document type declaration is not read
+o-p12fail2 dtd: the internal subset of the document type declaration is not read
+o-p12fail3 dtd: the internal subset of the document type declaration is not read
+o-p12fail4 dtd: the internal subset of the document type declaration is not read
+o-p12fail5 dtd: the internal subset of the document type declaration is not read
+o-p12fail6 dtd: the internal subset of the document type declaration is not read
+o-p12fail7 dtd: the internal subset of the document type declaration is not read
+o-p29fail1 dtd: the internal subset of the document type declaration is not read
+o-p30fail1 dtd: the internal subset of the document type declaration is not read
+o-p31fail1 dtd: the internal subset of the document type declaration is not read
+o-p45fail1 dtd: the internal subset of the document type declaration is not read
+o-p45fail2 dtd: the internal subset of the document type declaration is not read
+o-p45fail3 dtd: the internal subset of the document type declaration is not read
+o-p45fail4 dtd: the internal subset of the document type declaration is not read
+o-p46fail1 dtd: the internal subset of the document type declaration is not read
+o-p46fail2 dtd: the internal subset of the document type declaration is not read
+o-p46fail3 dtd: the internal subset of the document type declaration is not read
+o-p46fail4 dtd: the internal subset of the document type declaration is not read
+o-p46fail5 dtd: the internal subset of the document type declaration is not read
+o-p46fail6 dtd: the internal subset of the document type declaration is not read
+o-p47fail1 dtd: the internal subset of the document type declaration is not read
+o-p47fail2 dtd: the internal subset of the document type declaration is not read
+o-p47fail3 dtd: the internal subset of the document type declaration is not read
+o-p47fail4 dtd: the internal subset of the document type declaration is not read
+o-p48fail1 dtd: the internal subset of the document type declaration is not read
+o-p48fail2 dtd: the internal subset of the document type declaration is not read
+o-p51fail1 dtd: the internal subset of the document type declaration is not read
+o-p51fail2 dtd: the internal subset of the document type declaration is not read
+o-p51fail3 dtd: the internal subset of the document type declaration is not read
+o-p51fail4 dtd: the internal subset of the document type declaration is not read
+o-p51fail5 dtd: the internal subset of the document type declaration is not read
+o-p51fail6 dtd: the internal subset of the document type declaration is not read
+o-p51fail7 dtd: the internal subset of the document type declaration is not read
+o-p52fail1 dtd: the internal subset of the document type declaration is not read
+o-p52fail2 dtd: the internal subset of the document type declaration is not read
+o-p53fail1 dtd: the internal subset of the document type declaration is not read
+o-p53fail2 dtd: the internal subset of the document type declaration is not read
+o-p53fail3 dtd: the internal subset of the document type declaration is not read
+o-p53fail4 dtd: the internal subset of the document type declaration is not read
+o-p53fail5 dtd: the internal subset of the document type declaration is not read
+o-p54fail1 dtd: the internal subset of the document type declaration is not read
+o-p55fail1 dtd: the internal subset of the document type declaration is not read
+o-p56fail1 dtd: the internal subset of the document type declaration is not read
+o-p56fail2 dtd: the internal subset of the document type declaration is not read
+o-p56fail3 dtd: the internal subset of the document type declaration is not read
+o-p56fail4 dtd: the internal subset of the document type declaration is not read
+o-p56fail5 dtd: the internal subset of the document type declaration is not read
+o-p57fail1 dtd: the internal subset of the document type declaration is not read
+o-p58fail1 dtd: the internal subset of the document type declaration is not read
+o-p58fail2 dtd: the internal subset of the document type declaration is not read
+o-p58fail3 dtd: the internal subset of the document type declaration is not read
+o-p58fail4 dtd: the internal subset of the document type declaration is not read
+o-p58fail5 dtd: the internal subset of the document type declaration is not read
+o-p58fail6 dtd: the internal subset of the document type declaration is not read
+o-p58fail7 dtd: the internal subset of the document type declaration is not read
+o-p58fail8 dtd: the internal subset of the document type declaration is not read
+o-p59fail1 dtd: the internal subset of the document type declaration is not read
+o-p59fail2 dtd: the internal subset of the document type declaration is not read
+o-p59fail3 dtd: the internal subset of the document type declaration is not read
+o-p60fail1 dtd: the internal subset of the document type declaration is not read
+o-p60fail2 dtd: the internal subset of the document type declaration is not read
+o-p60fail3 dtd: the internal subset of the document type declaration is not read
+o-p60fail4 dtd: the internal subset of the document type declaration is not read
+o-p60fail5 dtd: the internal subset of the document type declaration is not read
+o-p61fail1 dtd: the internal subset of the document type declaration is not read
+o-p62fail1 dtd: the internal subset of the document type declaration is not read
+o-p62fail2 dtd: the internal subset of the document type declaration is not read
+o-p63fail1 dtd: the internal subset of the document type declaration is not read
+o-p63fail2 dtd: the internal subset of the document type declaration is not read
+o-p64fail1 dtd: the internal subset of the document type declaration is not read
+o-p64fail2 dtd: the internal subset of the document type declaration is not read
+o-p69fail1 dtd: the internal subset of the document type declaration is not read
+o-p69fail2 dtd: the internal subset of the document type declaration is not read
+o-p69fail3 dtd: the internal subset of the document type declaration is not read
+o-p70fail1 dtd: the internal subset of the document type declaration is not read
+o-p71fail1 dtd: the internal subset of the document type declaration is not read
+o-p71fail2 dtd: the internal subset of the document type declaration is not read
+o-p71fail3 dtd: the internal subset of the document type declaration is not read
+o-p71fail4 dtd: the internal subset of the document type declaration is not read
+o-p72fail1 dtd: the internal subset of the document type declaration is not read
+o-p72fail2 dtd: the internal subset of the document type declaration is not read
+o-p72fail3 dtd: the internal subset of the document type declaration is not read
+o-p72fail4 dtd: the internal subset of the document type declaration is not read
+o-p73fail1 dtd: the internal subset of the document type declaration is not read
+o-p73fail2 dtd: the internal subset of the document type declaration is not read
+o-p73fail3 dtd: the internal subset of the document type declaration is not read
+o-p73fail4 dtd: the internal subset of the document type declaration is not read
+o-p73fail5 dtd: the internal subset of the document type declaration is not read
+o-p74fail1 dtd: the internal subset of the document type declaration is not read
+o-p74fail2 dtd: the internal subset of the document type declaration is not read
+o-p74fail3 dtd: the internal subset of the document type declaration is not read
+o-p75fail1 dtd: the internal subset of the document type declaration is not read
+o-p75fail2 dtd: the internal subset of the document type declaration is not read
+o-p75fail3 dtd: the internal subset of the document type declaration is not read
+o-p75fail4 dtd: the internal subset of the document type declaration is not read
+o-p75fail5 dtd: the internal subset of the document type declaration is not read
+o-p75fail6 dtd: the internal subset of the document type declaration is not read
+o-p76fail1 dtd: the internal subset of the document type declaration is not read
+o-p76fail2 dtd: the internal subset of the document type declaration is not read
+o-p76fail3 dtd: the internal subset of the document type declaration is not read
+o-p76fail4 dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P28-ibm28n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P28-ibm28n02.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P28-ibm28n03.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P29-ibm29n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P29-ibm29n02.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P29-ibm29n03.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P29-ibm29n07.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P30-ibm30n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P31-ibm31n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P45-ibm45n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P45-ibm45n02.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P45-ibm45n03.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P45-ibm45n04.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P45-ibm45n05.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P45-ibm45n06.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P45-ibm45n07.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P45-ibm45n08.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P45-ibm45n09.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P46-ibm46n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P46-ibm46n02.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P46-ibm46n03.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P46-ibm46n04.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P46-ibm46n05.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P47-ibm47n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P47-ibm47n02.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P47-ibm47n03.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P47-ibm47n04.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P47-ibm47n05.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P47-ibm47n06.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P48-ibm48n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P48-ibm48n02.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P48-ibm48n03.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P48-ibm48n04.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P48-ibm48n05.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P48-ibm48n06.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P48-ibm48n07.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P49-ibm49n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P49-ibm49n02.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P49-ibm49n03.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P49-ibm49n04.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P49-ibm49n05.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P49-ibm49n06.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P50-ibm50n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P50-ibm50n02.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P50-ibm50n03.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P50-ibm50n04.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P50-ibm50n05.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P50-ibm50n06.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P51-ibm51n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P51-ibm51n02.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P51-ibm51n03.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P51-ibm51n04.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P51-ibm51n05.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P51-ibm51n07.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P52-ibm52n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P52-ibm52n02.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P52-ibm52n03.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P52-ibm52n04.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P52-ibm52n05.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P52-ibm52n06.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P53-ibm53n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P53-ibm53n02.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P53-ibm53n03.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P53-ibm53n04.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P53-ibm53n05.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P53-ibm53n06.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P53-ibm53n07.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P53-ibm53n08.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P54-ibm54n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P54-ibm54n02.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P55-ibm55n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P55-ibm55n02.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P55-ibm55n03.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P56-ibm56n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P56-ibm56n02.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P56-ibm56n03.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P56-ibm56n04.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P56-ibm56n05.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P56-ibm56n06.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P56-ibm56n07.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P57-ibm57n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P58-ibm58n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P58-ibm58n02.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P58-ibm58n03.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P58-ibm58n04.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P58-ibm58n05.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P58-ibm58n06.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P58-ibm58n07.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P58-ibm58n08.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P59-ibm59n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P59-ibm59n02.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P59-ibm59n03.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P59-ibm59n04.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P59-ibm59n05.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P59-ibm59n06.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P60-ibm60n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P60-ibm60n02.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P60-ibm60n03.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P60-ibm60n04.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P60-ibm60n05.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P60-ibm60n06.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P60-ibm60n08.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P61-ibm61n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P62-ibm62n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P62-ibm62n02.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P62-ibm62n03.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P62-ibm62n04.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P62-ibm62n05.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P62-ibm62n06.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P62-ibm62n07.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P62-ibm62n08.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P63-ibm63n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P63-ibm63n02.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P63-ibm63n03.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P63-ibm63n04.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P63-ibm63n05.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P63-ibm63n06.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P63-ibm63n07.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P64-ibm64n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P64-ibm64n02.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P64-ibm64n03.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P65-ibm65n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P65-ibm65n02.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P66-ibm66n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P66-ibm66n03.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P66-ibm66n05.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P66-ibm66n07.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P66-ibm66n09.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P66-ibm66n11.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P68-ibm68n07.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P69-ibm69n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P69-ibm69n02.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P69-ibm69n03.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P69-ibm69n04.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P69-ibm69n06.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P69-ibm69n07.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P71-ibm70n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P72-ibm72n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P72-ibm72n02.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P72-ibm72n03.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P72-ibm72n04.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P72-ibm72n05.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P72-ibm72n06.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P72-ibm72n07.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P72-ibm72n08.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P72-ibm72n09.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P73-ibm73n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P73-ibm73n03.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P74-ibm74n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P75-ibm75n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P75-ibm75n02.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P75-ibm75n03.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P75-ibm75n04.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P75-ibm75n05.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P75-ibm75n06.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P75-ibm75n07.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P75-ibm75n08.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P75-ibm75n09.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P75-ibm75n10.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P75-ibm75n11.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P75-ibm75n12.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P75-ibm75n13.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P76-ibm76n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P76-ibm76n02.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P76-ibm76n03.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P76-ibm76n04.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P76-ibm76n05.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P76-ibm76n06.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P76-ibm76n07.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P77-ibm77n03.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P77-ibm77n04.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P79-ibm79n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P79-ibm79n02.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P82-ibm82n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P82-ibm82n02.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P82-ibm82n03.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P82-ibm82n04.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P82-ibm82n05.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P82-ibm82n06.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P82-ibm82n07.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P82-ibm82n08.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P83-ibm83n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P83-ibm83n03.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P83-ibm83n04.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P83-ibm83n05.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P83-ibm83n06.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P85-ibm85n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P85-ibm85n02.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P88-ibm88n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P88-ibm88n02.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P89-ibm89n01.xml dtd: the internal subset of the document type declaration is not read
+ibm-not-wf-P89-ibm89n02.xml dtd: the internal subset of the document type declaration is not read
+ibm-valid-P09-ibm09v01.xml dtd: the internal subset of the document type declaration is not read
+ibm-valid-P09-ibm09v02.xml dtd: the internal subset of the document type declaration is not read
+ibm-valid-P09-ibm09v03.xml dtd: the internal subset of the document type declaration is not read
+ibm-valid-P09-ibm09v04.xml dtd: the internal subset of the document type declaration is not read
+ibm-valid-P09-ibm09v05.xml dtd: the internal subset of the document type declaration is not read
+ibm-valid-P10-ibm10v01.xml dtd: the internal subset of the document type declaration is not read
+ibm-valid-P10-ibm10v02.xml dtd: the internal subset of the document type declaration is not read
+ibm-valid-P10-ibm10v03.xml dtd: the internal subset of the document type declaration is not read
+ibm-valid-P10-ibm10v04.xml dtd: the internal subset of the document type declaration is not read
+ibm-valid-P10-ibm10v05.xml dtd: the internal subset of the document type declaration is not read
+ibm-valid-P10-ibm10v06.xml dtd: the internal subset of the document type declaration is not read
+ibm-valid-P10-ibm10v07.xml dtd: the internal subset of the document type declaration is not read
+ibm-valid-P10-ibm10v08.xml dtd: the internal subset of the document type declaration is not read
+ibm-valid-P28-ibm28v02.xml dtd: the internal subset of the document type declaration is not read
+ibm-valid-P29-ibm29v01.xml dtd: the internal subset of the document type declaration is not read
+ibm-valid-P29-ibm29v02.xml dtd: the internal subset of the document type declaration is not read
+ibm-valid-P32-ibm32v02.xml dtd: the internal subset of the document type declaration is not read
+ibm-valid-P43-ibm43v01.xml dtd: the internal subset of the document type declaration is not read
+ibm-valid-P67-ibm67v01.xml dtd: the internal subset of the document type declaration is not read
+ibm-valid-P78-ibm78v01.xml dtd: the internal subset of the document type declaration is not read
+ibm-1-1-valid-P46-ibm46i01.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-valid-P46-ibm46i02.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P02-ibm02n10.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P02-ibm02n32.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P02-ibm02n33.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P02-ibm02n34.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P02-ibm02n35.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P02-ibm02n36.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P02-ibm02n37.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P02-ibm02n38.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P02-ibm02n39.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P02-ibm02n40.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P02-ibm02n41.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P02-ibm02n42.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P02-ibm02n43.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P02-ibm02n44.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P02-ibm02n45.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P02-ibm02n46.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P02-ibm02n47.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P02-ibm02n48.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P02-ibm02n49.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P02-ibm02n50.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P02-ibm02n51.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P02-ibm02n52.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P02-ibm02n53.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P02-ibm02n54.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P02-ibm02n55.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P02-ibm02n56.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P02-ibm02n57.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P02-ibm02n59.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P02-ibm02n60.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P02-ibm02n61.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P02-ibm02n62.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P02-ibm02n63.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P77-ibm77n02.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P77-ibm77n03.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P77-ibm77n14.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-not-wf-P77-ibm77n21.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-valid-P02-ibm02v02.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-valid-P02-ibm02v04.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-valid-P02-ibm02v05.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-valid-P03-ibm03v01.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-valid-P03-ibm03v02.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-valid-P03-ibm03v03.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-valid-P03-ibm03v04.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-valid-P03-ibm03v05.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-valid-P03-ibm03v06.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-valid-P03-ibm03v07.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-valid-P77-ibm77v04.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-valid-P77-ibm77v05.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-valid-P77-ibm77v06.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-valid-P77-ibm77v10.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-valid-P77-ibm77v11.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-valid-P77-ibm77v12.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-valid-P77-ibm77v16.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-valid-P77-ibm77v17.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-valid-P77-ibm77v18.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-valid-P77-ibm77v22.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-valid-P77-ibm77v23.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-valid-P77-ibm77v24.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-valid-P77-ibm77v28.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-valid-P77-ibm77v29.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-valid-P77-ibm77v30.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+rmt-e2e-15a dtd: the internal subset of the document type declaration is not read
+rmt-e2e-15e dtd: the internal subset of the document type declaration is not read
+rmt-e2e-15f dtd: the internal subset of the document type declaration is not read
+rmt-e2e-15h dtd: the internal subset of the document type declaration is not read
+rmt-e2e-18 dtd: the internal subset of the document type declaration is not read
+rmt-e2e-19 dtd: the internal subset of the document type declaration is not read
+rmt-e2e-50 xml-1.1: XML 1.1 is read with the rules of XML 1.0
+rmt-001 xml-1.1: XML 1.1 is read with the rules of XML 1.0
+rmt-002 xml-1.1: XML 1.1 is read with the rules of XML 1.0
+rmt-006 xml-1.1: XML 1.1 is read with the rules of XML 1.0
+rmt-011 xml-1.1: XML 1.1 is read with the rules of XML 1.0
+rmt-013 xml-1.1: XML 1.1 is read with the rules of XML 1.0
+rmt-034 xml-1.1: XML 1.1 is read with the rules of XML 1.0
+rmt-035 xml-1.1: XML 1.1 is read with the rules of XML 1.0
+rmt-036 xml-1.1: XML 1.1 is read with the rules of XML 1.0
+rmt-037 xml-1.1: XML 1.1 is read with the rules of XML 1.0
+rmt-041 xml-1.1: XML 1.1 is read with the rules of XML 1.0
+rmt-043 xml-1.1: XML 1.1 is read with the rules of XML 1.0
+rmt-050 xml-1.1: XML 1.1 is read with the rules of XML 1.0
+rmt-051 xml-1.1: XML 1.1 is read with the rules of XML 1.0
+rmt-052 xml-1.1: XML 1.1 is read with the rules of XML 1.0
+rmt-053 xml-1.1: XML 1.1 is read with the rules of XML 1.0
+rmt-054 xml-1.1: XML 1.1 is read with the rules of XML 1.0
+rmt-ns10-012 dtd: the internal subset of the document type declaration is not read
+rmt-ns10-043 dtd: the internal subset of the document type declaration is not read
+rmt-ns10-044 dtd: the internal subset of the document type declaration is not read
+rmt-ns11-003 xml-1.1: XML 1.1 is read with the rules of XML 1.0
+rmt-ns11-004 xml-1.1: XML 1.1 is read with the rules of XML 1.0
+rmt-e3e-12 dtd: the internal subset of the document type declaration is not read
+rmt-e3e-13 dtd: the internal subset of the document type declaration is not read
+invalid-bo-1 dtd: the internal subset of the document type declaration is not read
+invalid-bo-2 dtd: the internal subset of the document type declaration is not read
+invalid-bo-3 dtd: the internal subset of the document type declaration is not read
+invalid-bo-4 dtd: the internal subset of the document type declaration is not read
+invalid-bo-5 dtd: the internal subset of the document type declaration is not read
+invalid-bo-6 dtd: the internal subset of the document type declaration is not read
+invalid-sa-140 dtd: the internal subset of the document type declaration is not read
+invalid-sa-141 dtd: the internal subset of the document type declaration is not read

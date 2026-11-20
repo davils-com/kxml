@@ -33,6 +33,10 @@ kreate {
             w3c("xml") {
                 note = "XML 1.0 Fifth Edition: the reader, the composer and the writer of kxml-core."
             }
+            document("W3C XML Conformance Test Suite") {
+                note = "The cases XmlConformanceTest downloads as xmlts20130923.tar.gz, pinned by its SHA-256, and runs on the JVM."
+                url = "https://www.w3.org/XML/Test/"
+            }
             w3c("xml-names") {
                 note = "Namespaces in XML 1.0: the namespace resolution of the reader and the prefixes the writer declares."
             }

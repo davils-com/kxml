@@ -149,6 +149,11 @@ it. kxml is built so that a mistake of a caller fails closed.
   wherever it can. A fixture lives in the `fixture` folder of the only subpackage that uses it, or in the shared `fixture` folder
   of the area; a `fixture` folder holds at least two files, so a lone fixture lives next to the tests that use it.
   `src/test` is rejected by the build.
+- The W3C XML Conformance Test Suite runs on the JVM in `XmlConformanceTest`. Its licenses do not allow a copy in
+  the repository, so the test downloads `xmlts20130923.tar.gz` from w3.org, refuses it unless its SHA-256 matches the
+  pinned one and extracts it into `build/xmlconf` with bounds on size and paths. `known-failures.txt` lists every case
+  kxml does not pass yet with its reason; the test fails when a listed case passes, so a fixed case leaves the list,
+  and it writes the outcome of every case to `build/reports/xmlconf.txt`.
 - Property tests with adversarial generators for every parser and every security invariant.
 - Every change ships with its tests; a fixed weakness ships with a test that would have caught it.
 
