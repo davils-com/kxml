@@ -41,7 +41,14 @@ The following are **in scope**:
   not well-formed or means something else,
 - untrusted text that reaches a message, a `toString` or the message of `XmlDecodingException` unescaped, so it can
   forge log lines or control a terminal,
-- a decoded value that appears in a message or a `toString`.
+- a decoded value that appears in a message or a `toString`,
+- an XPath evaluation, a canonicalization, a patch, a diff, a merge or a redaction in `kxml-document` that does work
+  or builds output beyond the query, output, patch, diff and merge limits of `XmlLimits` without stopping with an
+  `XmlDocumentLimitException`, or that grows faster than linearly with its input where its documentation does not
+  say so,
+- a patch that changes anything outside the node its selector locates, or a merge, patch or diff whose result the
+  writer turns into a document that means something else,
+- a redaction that returns `Redacted` while a value one of its rules selects is still in the result.
 
 The following are **not** vulnerabilities in kxml:
 
@@ -77,6 +84,23 @@ The following are **not** vulnerabilities in kxml:
   escape it, never the other way round for the categories that matter.
 - The limits bound the work of one call. An application that reads many documents at once bounds their number
   itself.
+- XPath 1.0 in `kxml-document` has no extension functions and binds variables only to strings, numbers and booleans.
+  An evaluation is bounded by `maximumQuerySteps`, `maximumQueryResults` and `maximumQueryStringLength`; node-sets
+  are kept sparse and compared through sorted sets, so no expression makes the work grow faster than its charge.
+- A patch charges the size of the document once per operation to `maximumQuerySteps`, so its work grows with the
+  number of operations times the size of the document, and checks every document it produces against the depth,
+  element and attribute limits of a reader. A diff whose alignment would exceed `maximumDiffWork` replaces whole
+  elements instead, so its patch stays correct and only grows coarser.
+- A merge matches elements by their expanded names and key attributes through ordered indexes, charges its work to
+  `maximumQuerySteps` and the paths of its origins to `maximumOutputLength`.
+- The patterns of a redaction run on the regular expression engine of the platform, which backtracks. They come from
+  the caller and only see values up to `maximumQueryStringLength`, but a pattern with nested quantifiers can still
+  take exponential time on a short value; a caller uses patterns without catastrophic backtracking. A redaction of a
+  syntax tree that cannot prove its result is refused as `Undecidable` instead of passed through: a value that comes
+  from an attribute default of the DTD, a nested entity or a pattern that matches its own replacement.
+- Canonicalization follows the recommendations of the W3C. The canonicalizers of the JDK differ in the attributes of
+  the XML namespace they inherit into a subset and in the prefixes of an inclusive namespace list; a signature made
+  by one and checked by the other can fail for those documents.
 - `@DavilsInternal` is a compile-time opt-in, not an access boundary. Kotlin `internal` is public in JVM bytecode:
   Java code and reflection reach internal declarations through their mangled names. On the module path the
   `module-info` of each module exports only packages with public API and never an `internal` package; on the class
