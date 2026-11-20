@@ -21,8 +21,12 @@ import com.davils.kore.core.annotation.DavilsInternal
 import com.davils.kore.core.collection.OrderedSet
 import com.davils.kxml.document.navigation.NodeSet
 
-internal class KeyCollector(capacity: Int, private val bounds: EvaluationBounds) {
-    private val nodes: NodeSet = NodeSet(capacity)
+private const val NODES_PER_WORD_SHIFT: Int = 6
+
+internal class KeyCollector(private val capacity: Int, private val bounds: EvaluationBounds) {
+    private val densest: Int = (capacity ushr NODES_PER_WORD_SHIFT) + 1
+    private val sparse: OrderedSet<Int> = OrderedSet()
+    private var dense: NodeSet? = null
     private val namespaces: OrderedSet<Long> = OrderedSet()
     private var count: Int = 0
 
@@ -42,7 +46,8 @@ internal class KeyCollector(capacity: Int, private val bounds: EvaluationBounds)
         var filled = 0
         val pending = namespaces.sorted().iterator()
         var namespace = pending.nextOrNull()
-        nodes.nodes().forEach { ordinal ->
+        val ordinals = sparse.sorted().asSequence() + dense?.nodes().orEmpty()
+        ordinals.forEach { ordinal ->
             val key = NodeKeys.keyOf(ordinal)
             while (namespace != null && namespace < key) {
                 keys[filled] = namespace
@@ -63,9 +68,26 @@ internal class KeyCollector(capacity: Int, private val bounds: EvaluationBounds)
     private fun addNew(key: Long): Boolean {
         if (NodeKeys.isNamespace(key)) return namespaces.add(key)
         val ordinal = NodeKeys.ordinalOf(key)
+        return dense?.let { nodes -> addedDense(nodes, ordinal) } ?: addedSparse(ordinal)
+    }
+
+    private fun addedDense(nodes: NodeSet, ordinal: Int): Boolean {
         val isNew = ordinal !in nodes
         nodes.add(ordinal)
         return isNew
+    }
+
+    private fun addedSparse(ordinal: Int): Boolean {
+        val isNew = sparse.add(ordinal)
+        if (sparse.size > densest) densified()
+        return isNew
+    }
+
+    private fun densified() {
+        val nodes = NodeSet(capacity)
+        sparse.forEach(nodes::add)
+        sparse.clear()
+        dense = nodes
     }
 
     private fun Iterator<Long>.nextOrNull(): Long? {

@@ -197,6 +197,15 @@ class XPathEvaluationTest : FunSpec({
             shouldGrowLinearly(small, large) { text -> query.evaluate(documents.getValue(text)) }
         }
 
+        test("grows linearly when a predicate takes a step from every node") {
+            val query = XPath.parse("count(//a[b] | //b[a])")
+            val small = flat(GROWTH_SIZE)
+            val large = flat(GROWTH_SIZE * GROWTH_FACTOR)
+            val documents = mapOf(small to documentOf(small), large to documentOf(large))
+
+            shouldGrowLinearly(small, large) { text -> query.evaluate(documents.getValue(text)) }
+        }
+
         test("grows linearly for descendants of descendants") {
             val query = XPath.parse("count(//a//b)")
             val small = chain(DEPTH)
