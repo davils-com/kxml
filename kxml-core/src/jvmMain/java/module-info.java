@@ -30,4 +30,5 @@ module com.davils.kxml.core {
     exports com.davils.kxml.core.syntax;
     exports com.davils.kxml.core.syntax.ast;
     exports com.davils.kxml.core.syntax.edit;
+    exports com.davils.kxml.core.syntax.format;
 }

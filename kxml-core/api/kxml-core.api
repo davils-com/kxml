@@ -874,3 +874,37 @@ public final class com/davils/kxml/core/syntax/edit/XmlEditor {
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class com/davils/kxml/core/syntax/format/XmlFormatRefusal : java/lang/Enum {
+	public static final field MeaningChanged Lcom/davils/kxml/core/syntax/format/XmlFormatRefusal;
+	public static final field OutputTooLong Lcom/davils/kxml/core/syntax/format/XmlFormatRefusal;
+	public static final field SyntaxErrors Lcom/davils/kxml/core/syntax/format/XmlFormatRefusal;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/davils/kxml/core/syntax/format/XmlFormatRefusal;
+	public static fun values ()[Lcom/davils/kxml/core/syntax/format/XmlFormatRefusal;
+}
+
+public abstract interface class com/davils/kxml/core/syntax/format/XmlFormatResult {
+}
+
+public final class com/davils/kxml/core/syntax/format/XmlFormatResult$Formatted : com/davils/kxml/core/syntax/format/XmlFormatResult {
+	public final fun getEdits ()Ljava/util/List;
+	public final fun getTree ()Lcom/davils/kxml/core/syntax/XmlSyntaxTree;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/core/syntax/format/XmlFormatResult$Refused : com/davils/kxml/core/syntax/format/XmlFormatResult {
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getReason ()Lcom/davils/kxml/core/syntax/format/XmlFormatRefusal;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/core/syntax/format/XmlFormatter {
+	public fun <init> ()V
+	public fun <init> (Lcom/davils/kxml/core/emit/XmlEmitOptions;)V
+	public synthetic fun <init> (Lcom/davils/kxml/core/emit/XmlEmitOptions;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun format (Lcom/davils/kxml/core/syntax/XmlSyntaxTree;)Lcom/davils/kxml/core/syntax/format/XmlFormatResult;
+	public final fun getOptions ()Lcom/davils/kxml/core/emit/XmlEmitOptions;
+	public fun toString ()Ljava/lang/String;
+}
+

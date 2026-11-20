@@ -141,6 +141,18 @@ final enum class com.davils.kxml.core.syntax.edit/XmlEditRefusal : kotlin/Enum<c
     final fun values(): kotlin/Array<com.davils.kxml.core.syntax.edit/XmlEditRefusal> // com.davils.kxml.core.syntax.edit/XmlEditRefusal.values|values#static(){}[0]
 }
 
+final enum class com.davils.kxml.core.syntax.format/XmlFormatRefusal : kotlin/Enum<com.davils.kxml.core.syntax.format/XmlFormatRefusal> { // com.davils.kxml.core.syntax.format/XmlFormatRefusal|null[0]
+    enum entry MeaningChanged // com.davils.kxml.core.syntax.format/XmlFormatRefusal.MeaningChanged|null[0]
+    enum entry OutputTooLong // com.davils.kxml.core.syntax.format/XmlFormatRefusal.OutputTooLong|null[0]
+    enum entry SyntaxErrors // com.davils.kxml.core.syntax.format/XmlFormatRefusal.SyntaxErrors|null[0]
+
+    final val entries // com.davils.kxml.core.syntax.format/XmlFormatRefusal.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<com.davils.kxml.core.syntax.format/XmlFormatRefusal> // com.davils.kxml.core.syntax.format/XmlFormatRefusal.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): com.davils.kxml.core.syntax.format/XmlFormatRefusal // com.davils.kxml.core.syntax.format/XmlFormatRefusal.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<com.davils.kxml.core.syntax.format/XmlFormatRefusal> // com.davils.kxml.core.syntax.format/XmlFormatRefusal.values|values#static(){}[0]
+}
+
 final enum class com.davils.kxml.core.syntax/XmlSyntaxKind : kotlin/Enum<com.davils.kxml.core.syntax/XmlSyntaxKind> { // com.davils.kxml.core.syntax/XmlSyntaxKind|null[0]
     enum entry ATTLIST_DECLARATION // com.davils.kxml.core.syntax/XmlSyntaxKind.ATTLIST_DECLARATION|null[0]
     enum entry ATTRIBUTE // com.davils.kxml.core.syntax/XmlSyntaxKind.ATTRIBUTE|null[0]
@@ -251,6 +263,26 @@ sealed interface com.davils.kxml.core.syntax.edit/XmlEditResult { // com.davils.
         final fun equals(kotlin/Any?): kotlin/Boolean // com.davils.kxml.core.syntax.edit/XmlEditResult.Refused.equals|equals(kotlin.Any?){}[0]
         final fun hashCode(): kotlin/Int // com.davils.kxml.core.syntax.edit/XmlEditResult.Refused.hashCode|hashCode(){}[0]
         final fun toString(): kotlin/String // com.davils.kxml.core.syntax.edit/XmlEditResult.Refused.toString|toString(){}[0]
+    }
+}
+
+sealed interface com.davils.kxml.core.syntax.format/XmlFormatResult { // com.davils.kxml.core.syntax.format/XmlFormatResult|null[0]
+    final class Formatted : com.davils.kxml.core.syntax.format/XmlFormatResult { // com.davils.kxml.core.syntax.format/XmlFormatResult.Formatted|null[0]
+        final val edits // com.davils.kxml.core.syntax.format/XmlFormatResult.Formatted.edits|{}edits[0]
+            final fun <get-edits>(): kotlin.collections/List<com.davils.kore.core.text/TextEdit> // com.davils.kxml.core.syntax.format/XmlFormatResult.Formatted.edits.<get-edits>|<get-edits>(){}[0]
+        final val tree // com.davils.kxml.core.syntax.format/XmlFormatResult.Formatted.tree|{}tree[0]
+            final fun <get-tree>(): com.davils.kxml.core.syntax/XmlSyntaxTree // com.davils.kxml.core.syntax.format/XmlFormatResult.Formatted.tree.<get-tree>|<get-tree>(){}[0]
+
+        final fun toString(): kotlin/String // com.davils.kxml.core.syntax.format/XmlFormatResult.Formatted.toString|toString(){}[0]
+    }
+
+    final class Refused : com.davils.kxml.core.syntax.format/XmlFormatResult { // com.davils.kxml.core.syntax.format/XmlFormatResult.Refused|null[0]
+        final val reason // com.davils.kxml.core.syntax.format/XmlFormatResult.Refused.reason|{}reason[0]
+            final fun <get-reason>(): com.davils.kxml.core.syntax.format/XmlFormatRefusal // com.davils.kxml.core.syntax.format/XmlFormatResult.Refused.reason.<get-reason>|<get-reason>(){}[0]
+
+        final fun equals(kotlin/Any?): kotlin/Boolean // com.davils.kxml.core.syntax.format/XmlFormatResult.Refused.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // com.davils.kxml.core.syntax.format/XmlFormatResult.Refused.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // com.davils.kxml.core.syntax.format/XmlFormatResult.Refused.toString|toString(){}[0]
     }
 }
 
@@ -899,6 +931,16 @@ final class com.davils.kxml.core.syntax.edit/XmlEditor { // com.davils.kxml.core
     final fun setAttribute(com.davils.kxml.core.syntax.ast/XmlElementSyntax, kotlin/String, kotlin/String): com.davils.kxml.core.syntax.edit/XmlEditResult // com.davils.kxml.core.syntax.edit/XmlEditor.setAttribute|setAttribute(com.davils.kxml.core.syntax.ast.XmlElementSyntax;kotlin.String;kotlin.String){}[0]
     final fun setText(com.davils.kxml.core.syntax.ast/XmlElementSyntax, kotlin/String): com.davils.kxml.core.syntax.edit/XmlEditResult // com.davils.kxml.core.syntax.edit/XmlEditor.setText|setText(com.davils.kxml.core.syntax.ast.XmlElementSyntax;kotlin.String){}[0]
     final fun toString(): kotlin/String // com.davils.kxml.core.syntax.edit/XmlEditor.toString|toString(){}[0]
+}
+
+final class com.davils.kxml.core.syntax.format/XmlFormatter { // com.davils.kxml.core.syntax.format/XmlFormatter|null[0]
+    constructor <init>(com.davils.kxml.core.emit/XmlEmitOptions = ...) // com.davils.kxml.core.syntax.format/XmlFormatter.<init>|<init>(com.davils.kxml.core.emit.XmlEmitOptions){}[0]
+
+    final val options // com.davils.kxml.core.syntax.format/XmlFormatter.options|{}options[0]
+        final fun <get-options>(): com.davils.kxml.core.emit/XmlEmitOptions // com.davils.kxml.core.syntax.format/XmlFormatter.options.<get-options>|<get-options>(){}[0]
+
+    final fun format(com.davils.kxml.core.syntax/XmlSyntaxTree): com.davils.kxml.core.syntax.format/XmlFormatResult // com.davils.kxml.core.syntax.format/XmlFormatter.format|format(com.davils.kxml.core.syntax.XmlSyntaxTree){}[0]
+    final fun toString(): kotlin/String // com.davils.kxml.core.syntax.format/XmlFormatter.toString|toString(){}[0]
 }
 
 final class com.davils.kxml.core.syntax/XmlSyntaxNode : com.davils.kxml.core.syntax/XmlSyntaxElement { // com.davils.kxml.core.syntax/XmlSyntaxNode|null[0]

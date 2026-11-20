@@ -21,9 +21,10 @@ import com.davils.kore.core.text.TextRange
 import com.davils.kore.testing.HostileFragments
 import com.davils.kxml.core.XmlDoctype
 import com.davils.kxml.core.diagnostic.XmlDiagnosticCode
+import com.davils.kxml.core.syntax.fixture.documents
+import com.davils.kxml.core.syntax.fixture.shouldEqualFullParse
 import com.davils.kxml.core.xml
 import io.kotest.assertions.throwables.shouldThrow
-import io.kotest.assertions.withClue
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeSameInstanceAs
@@ -31,14 +32,10 @@ import io.kotest.property.Arb
 import io.kotest.property.arbitrary.bind
 import io.kotest.property.arbitrary.element
 import io.kotest.property.arbitrary.int
-import io.kotest.property.arbitrary.list
 import io.kotest.property.checkAll
 
 private const val CASES: Int = 1_000
-private const val MOST_STEPS: Int = 40
-private const val CODES: Int = 12
 private const val LONGEST_EDIT: Int = 12
-private const val NEWLINE: String = "\n"
 private const val ELEMENTS_OF_NESTED: Long = 5L
 private const val FIRST_CHILD: Int = 1
 private const val LAST_CHILD: Int = 3
@@ -50,10 +47,6 @@ private val markup: List<String> = listOf(
 )
 
 private val replacements: List<String> = markup + HostileFragments.all
-
-private val documents = Arb.bind(Arb.list(Arb.int(0..<CODES), 0..MOST_STEPS), Arb.int(0..2)) { codes, version ->
-    documentOf(codes, version)
-}
 
 private val edits = Arb.bind(
     genA = documents,
@@ -71,44 +64,6 @@ private fun editOf(document: String, at: Int, length: Int, replacement: String):
     val start = at.mod(document.length + 1)
     val end = minOf(a = start + length, b = document.length)
     return document to TextEdit(TextRange(start = start, end = end), replacement)
-}
-
-private fun StringBuilder.close(name: String) {
-    append("</")
-    append(name)
-    append('>')
-}
-
-private fun documentOf(codes: List<Int>, version: Int): String {
-    val open = ArrayDeque<String>()
-    val body = StringBuilder()
-    codes.forEach { code -> step(code, open, body) }
-    while (open.isNotEmpty()) body.close(open.removeLast())
-    val declaration = listOf("", "<?xml version='1.0'?>", """<?xml version="1.1"?>""" + NEWLINE)[version]
-    return "$declaration<r xmlns:p='urn:p'>$body</r>"
-}
-
-private fun step(code: Int, open: ArrayDeque<String>, body: StringBuilder) {
-    val piece = listOf(
-        "<a x='1'>", "", "t &amp; u", "<![CDATA[<c>]]>", "<!-- c -->", "<?pi d?>", "<c y=\"&lt;\"/>",
-        "<p:d p:z='2'>", "\n  ", "&#x41;", "<b>", "\r\n",
-    )[code]
-    val opened = piece.removePrefix("<")
-    val name = opened.substringBefore(' ').substringBefore('>')
-    val isOpening = code == 0 || code == 7 || code == 10
-    val isClosing = code == 1 && open.isNotEmpty()
-    if (isClosing) body.close(open.removeLast())
-    body.append(piece)
-    if (isOpening) open.addLast(name)
-}
-
-private fun shouldEqualFullParse(edited: XmlSyntaxTree) {
-    val full = XmlSyntaxTree.parse(edited.text, edited.xml)
-    withClue(edited.text) {
-        edited.green shouldBe full.green
-        edited.diagnostics shouldBe full.diagnostics
-        edited.root.text shouldBe edited.text
-    }
 }
 
 private fun childrenOfRoot(tree: XmlSyntaxTree): List<Any> {

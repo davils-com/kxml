@@ -55,6 +55,11 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
   every character they do not touch, entity references included: `setAttribute`, `removeAttribute`, `setText`,
   `appendElement`, `removeElement` and `rename`. Each returns an `XmlEditResult`, the edited tree with its
   `TextEdit`s, parsed again through `XmlSyntaxTree.edit`, or the `XmlEditRefusal` that refused it.
+- `XmlFormatter` in the new package `com.davils.kxml.core.syntax.format` indents element-only content by the
+  `XmlEmitOptions` it is given and puts the nodes around the root on lines of their own. It changes whitespace only,
+  never touches mixed content, text, references, CDATA sections or anything under `xml:space="preserve"`, and before
+  it returns it reads both texts and refuses with `XmlFormatRefusal.MeaningChanged` unless they give the same
+  document apart from whitespace in element-only content.
 - `XmlDoctype.Internal` reads the internal subset of a document type declaration: general and parameter entities,
   attribute lists with their defaults and the normalization of their types, element types, notations and unparsed
   entities. Entities are expanded in content and in attribute values, defaults are added before namespaces are
