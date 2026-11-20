@@ -90,6 +90,8 @@ private fun namespaced(children: Int): String {
 private val ietf: Map<String, String> = mapOf("ietf" to "http://www.ietf.org")
 private val example: Map<String, String> = mapOf("n1" to "http://example.net")
 
+private const val EMPTY_A: String = "<a></a>"
+
 private fun canonical(text: String, method: XmlCanonicalization, prefixes: Set<String> = emptySet()): String {
     val bytes = XmlCanonicalizer(method, inclusivePrefixes = prefixes).canonicalize(documentOf(text))
     return bytes.decodeToString()
@@ -296,6 +298,15 @@ class XmlCanonicalizerTest : FunSpec({
     }
 
     context("a canonicalizer") {
+        test("counts only attributes in the subset and ignores listed prefixes that never occur") {
+            val unused = documentOf("<p:a xmlns:p='urn:p' xmlns:q='urn:q' q:x='1'/>")
+            val elementsOnly = subsetOf(unused, "//. | //namespace::*", XmlCanonicalization.Exclusive10)
+
+            elementsOnly shouldBe """<p:a xmlns:p="urn:p"></p:a>"""
+            canonical("<a xmlns:p='urn:p'/>", XmlCanonicalization.Exclusive10, setOf("zz")) shouldBe EMPTY_A
+            canonical("<a/>", XmlCanonicalization.Exclusive10, setOf("#default")) shouldBe EMPTY_A
+        }
+
         test("is described by its method and its prefixes") {
             val canonicalizer = XmlCanonicalizer(XmlCanonicalization.Exclusive10, inclusivePrefixes = setOf("a", "b"))
 
