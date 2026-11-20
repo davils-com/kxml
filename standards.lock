@@ -1,0 +1,78 @@
+{
+    "schemaVersion": 1,
+    "standards": [
+        {
+            "id": "rfc:2781",
+            "reviewedOn": "2026-11-20",
+            "note": "No errata. The decoder refuses unpaired surrogates and an odd number of bytes in both byte orders, as XmlSourceTest pins.",
+            "snapshot": {
+                "title": "UTF-16, an encoding of ISO 10646",
+                "status": "INFORMATIONAL",
+                "published": "February 2000",
+                "withdrawn": false,
+                "replacedBy": [],
+                "updatedBy": [],
+                "errata": {}
+            }
+        },
+        {
+            "id": "rfc:3629",
+            "reviewedOn": "2026-11-20",
+            "note": "No errata. The decoder refuses overlong forms, encoded surrogates and code points above U+10FFFF, as XmlSourceTest pins.",
+            "snapshot": {
+                "title": "UTF-8, a transformation format of ISO 10646",
+                "status": "INTERNET STANDARD",
+                "published": "November 2003",
+                "withdrawn": false,
+                "replacedBy": [],
+                "updatedBy": [],
+                "errata": {}
+            }
+        },
+        {
+            "id": "unicode:ucd",
+            "reviewedOn": "2026-11-20",
+            "note": "Unicode 18.0.0. The characters and names of XML are fixed ranges of code points; the escaping of SafeText follows the tables of the platform, as SECURITY.md says.",
+            "snapshot": {
+                "title": "Unicode Character Database",
+                "revision": "18.0.0",
+                "withdrawn": false,
+                "replacedBy": [],
+                "updatedBy": [],
+                "errata": {}
+            }
+        },
+        {
+            "id": "w3c:xml",
+            "reviewedOn": "2026-11-20",
+            "note": "XML 1.0 Fifth Edition of 2008-11-26 is the current Recommendation. kxml-core checks the well-formedness of documents without a DTD; it refuses a document type declaration by default and skips one under XmlDoctype.Ignore without reading its internal subset. Kreate does not read W3C errata yet, so none were reviewed here.",
+            "snapshot": {
+                "title": "Extensible Markup Language (XML) 1.0 (Fifth Edition)",
+                "status": "Recommendation",
+                "revision": "2008-11-26",
+                "published": "2008-11-26",
+                "withdrawn": false,
+                "replacedBy": [],
+                "updatedBy": [],
+                "errata": {}
+            }
+        },
+        {
+            "id": "w3c:xml-names",
+            "reviewedOn": "2026-11-20",
+            "note": "Namespaces in XML 1.0 Third Edition. The series names Namespaces in XML 1.1 as newer; kxml-core reads 1.0 and refuses undeclaring a prefix, which only 1.1 allows. Kreate does not read W3C errata yet, so none were reviewed here.",
+            "snapshot": {
+                "title": "Namespaces in XML 1.0 (Third Edition)",
+                "status": "Recommendation",
+                "revision": "2009-12-08",
+                "published": "2009-12-08",
+                "withdrawn": false,
+                "replacedBy": [],
+                "updatedBy": [
+                    "w3c:xml-names11"
+                ],
+                "errata": {}
+            }
+        }
+    ]
+}

@@ -24,6 +24,8 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
 - `XmlLimits` gives every limit a hard ceiling, `HARD_INPUT_LENGTH`, `HARD_DEPTH`, `HARD_ELEMENTS`, `HARD_ATTRIBUTES`
   and `HARD_NAME_LENGTH`, which no preset and no configuration exceeds; the limits validate themselves when they are
   created.
+- The standards kxml implements are declared and reviewed in `standards.lock`, and the assurance gate reports a new
+  version, a replacement or an undeclared standard.
 
 ### Changed
 

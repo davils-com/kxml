@@ -21,6 +21,7 @@ plugins {
     id("kxml.git-hooks")
     id("kxml.trivy")
     id("kxml.assurance")
+    id("kxml.standards")
     id("kxml.changelog")
     id("kxml.license-header")
     id("kxml.web-tools")
