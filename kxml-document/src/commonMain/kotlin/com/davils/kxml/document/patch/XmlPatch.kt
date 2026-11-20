@@ -66,7 +66,9 @@ public class XmlPatch(operations: List<XmlPatchOperation>, public val limits: Xm
      * @param document the target document.
      * @return the patched document, or the error of the first operation that failed.
      * @throws XmlDocumentLimitException if the application needs more work than [XmlLimits.maximumQuerySteps] or
-     * exceeds another query limit.
+     * exceeds another query limit, or if [document] or a document an operation produces nests deeper than
+     * [XmlLimits.maximumDepth], holds more elements than [XmlLimits.maximumElements] or an element with more attributes
+     * than [XmlLimits.maximumAttributes], as a document read under the same limits could not.
      * @since 1.0.0
      */
     public fun apply(document: XmlDocument): XmlPatchResult = PatchApplier(limits).applied(document, operations)

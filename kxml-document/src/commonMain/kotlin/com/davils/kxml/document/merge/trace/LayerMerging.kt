@@ -43,7 +43,7 @@ internal class LayerMerging(private val options: XmlMergeOptions, private val la
     }
 
     private fun replacedContent(base: TracedNode.Element, overlay: XmlNode.Element, scope: Map<String, String>) {
-        val mapped = ContentNamespaces(scope, base.name).mapped(overlay.children)
+        val mapped = ContentNamespaces(scope, base.name, charge = {}).mapped(overlay.children)
         base.children = mapped.mapTo(mutableListOf()) { node -> TracedNode.of(node, layer) }
         base.origin = layer
     }
@@ -79,7 +79,7 @@ internal class LayerMerging(private val options: XmlMergeOptions, private val la
     }
 
     private fun appended(base: TracedNode.Element, element: XmlNode.Element, scope: Map<String, String>) {
-        val namespaces = ContentNamespaces(scope, base.name)
+        val namespaces = ContentNamespaces(scope, base.name, charge = {})
         val mapped = namespaces.mapped(listOf(element)).single()
         val last = base.children.indexOfLast { child -> child is TracedNode.Element }
         val indent = base.children.getOrNull(last - 1)?.takeIf { last > 0 && isBlankText(it) }

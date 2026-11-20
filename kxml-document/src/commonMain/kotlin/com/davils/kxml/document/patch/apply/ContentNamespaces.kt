@@ -24,7 +24,11 @@ import com.davils.kxml.document.c14n.render.CodePointOrder
 private const val DEFAULT_PREFIX: String = ""
 private const val GENERATED_PREFIX: String = "ns"
 
-internal class ContentNamespaces(private val scope: Map<String, String>, private val context: XmlName?) {
+internal class ContentNamespaces(
+    private val scope: Map<String, String>,
+    private val context: XmlName?,
+    private val charge: (Int) -> Unit,
+) {
     fun mapped(nodes: List<XmlNode>): List<XmlNode> = nodes.map { node -> mappedNode(node, scope, context) }
 
     fun attributeName(name: XmlName): Pair<XmlName, XmlNamespaceBinding?> {
@@ -40,6 +44,7 @@ internal class ContentNamespaces(private val scope: Map<String, String>, private
 
     private fun mappedElement(element: XmlNode.Element, outer: Map<String, String>, parent: XmlName?): XmlNode.Element {
         val declared = element.namespaces
+        charge(outer.size + declared.size)
         val mapping = Mapping(outer + declared.asScope(), parent)
         val name = mapping.name(element.name, isElement = true)
         val attributes = element.attributes.map { attribute ->
@@ -61,7 +66,10 @@ internal class ContentNamespaces(private val scope: Map<String, String>, private
     private inner class Mapping(private val outer: Map<String, String>, private val parent: XmlName?) {
         val added: MutableList<XmlNamespaceBinding> = mutableListOf()
 
-        fun scope(): Map<String, String> = outer + added.asScope()
+        fun scope(): Map<String, String> {
+            charge(outer.size + added.size)
+            return outer + added.asScope()
+        }
 
         fun name(name: XmlName, isElement: Boolean): XmlName {
             val uri = name.namespace ?: return unqualified(name, isElement)

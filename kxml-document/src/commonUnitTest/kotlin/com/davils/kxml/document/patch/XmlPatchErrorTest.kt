@@ -15,6 +15,7 @@
  */
 package com.davils.kxml.document.patch
 
+import com.davils.kxml.core.limit.XmlLimits
 import com.davils.kxml.core.limit.xmlLimits
 import com.davils.kxml.core.name.XmlName
 import com.davils.kxml.core.node.XmlDocument
@@ -66,6 +67,7 @@ private val failures: Map<String, XmlPatchErrorCode> = mapOf(
     "<add sel='doc' pos='before'>text</add>" to XmlPatchErrorCode.InvalidXmlPrologOperation,
     "<add sel='doc/@a'><x/></add>" to XmlPatchErrorCode.InvalidNodeTypes,
     "<add sel='doc/@a' pos='after'><x/></add>" to XmlPatchErrorCode.InvalidNodeTypes,
+    "<add sel='doc' type='@xmlns'>urn:evil</add>" to XmlPatchErrorCode.InvalidAttributeValue,
     "<add sel='doc' type='@a'>3</add>" to XmlPatchErrorCode.InvalidAttributeValue,
     "<add sel='doc' type='@q:b'>3</add>" to XmlPatchErrorCode.InvalidNamespacePrefix,
     "<add sel='doc' type='namespace::p'>urn:q</add>" to XmlPatchErrorCode.InvalidNamespacePrefix,
@@ -105,6 +107,14 @@ private val refusals: Map<String, XmlPatchErrorCode> = mapOf(
 
 private const val HOSTILE_CASES: Int = 100
 private const val SELECTOR: String = "/a"
+
+private fun appliedTo(text: String, limits: XmlLimits, vararg operations: XmlPatchOperation): XmlPatchResult =
+    XmlPatch(operations.toList(), limits).apply(documentOf(text))
+
+private fun limitOf(text: String, limits: XmlLimits, vararg operations: XmlPatchOperation): String {
+    val error = shouldThrow<XmlDocumentLimitException> { appliedTo(text, limits, *operations) }
+    return error.limit
+}
 
 class XmlPatchErrorTest : FunSpec({
     context("an operation") {
@@ -175,6 +185,21 @@ class XmlPatchErrorTest : FunSpec({
             read.patch.operations.size shouldBe 1
             shouldThrow<XmlDocumentLimitException> { XmlPatch.read(diff, limits) }
             shouldThrow<XmlDocumentLimitException> { XmlPatch(listOf(single, single), limits) }
+        }
+
+        test("never produces a document deeper or larger than a reader would accept") {
+            val child = XmlPatchOperation.Add(SELECTOR, content = listOf(xmlElement(XmlName("b"))))
+            val nested = listOf(xmlElement(XmlName("b")) { element(XmlName("c")) })
+            val grandchild = XmlPatchOperation.Add(SELECTOR, content = nested)
+            val shallow = xmlLimits { maximumDepth = 2 }
+            val few = xmlLimits { maximumElements = 2 }
+            val attribute = XmlPatchOperation.AddAttribute(selector = SELECTOR, name = "y", value = "2")
+
+            appliedTo("<a/>", shallow, child).shouldBeInstanceOf<XmlPatchResult.Applied>()
+            appliedTo("<a/>", few, child).shouldBeInstanceOf<XmlPatchResult.Applied>()
+            limitOf("<a/>", shallow, grandchild) shouldBe "maximumDepth"
+            limitOf("<a x='1'/>", xmlLimits { maximumAttributes = 1 }, attribute) shouldBe "maximumAttributes"
+            limitOf("<a/>", few, child, child) shouldBe "maximumElements"
         }
 
         test("is applied within maximumQuerySteps") {

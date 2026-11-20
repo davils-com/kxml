@@ -52,7 +52,7 @@ internal class Additions(private val context: OperationContext) {
     fun attributeAdded(target: Target, operation: XmlPatchOperation.AddAttribute): XmlDocument {
         val element = elementOf(target)
         val written = qualifiedName(operation.name, operation.namespaces)
-        val namespaces = ContentNamespaces(context.scopeOf(element), model.name(element))
+        val namespaces = ContentNamespaces(context.scopeOf(element), model.name(element), context.charge)
         val (name, declaration) = namespaces.attributeName(written)
         return context.editor.element(element) { found ->
             val attribute = attributeOf(found, name, operation.value)
@@ -90,7 +90,7 @@ internal class Additions(private val context: OperationContext) {
     }
 
     private fun mappedInto(parent: Int, operation: XmlPatchOperation.Add): List<XmlNode> {
-        val namespaces = ContentNamespaces(context.scopeOf(parent), model.name(parent))
+        val namespaces = ContentNamespaces(context.scopeOf(parent), model.name(parent), context.charge)
         return namespaces.mapped(operation.content)
     }
 
@@ -107,6 +107,8 @@ internal class Additions(private val context: OperationContext) {
 
     private fun qualifiedName(name: String, namespaces: Map<String, String>): XmlName {
         val prefix = name.substringBefore(COLON, missingDelimiterValue = "")
+        val isDeclaration = name == XmlNamespaces.XMLNS_PREFIX
+        if (isDeclaration) throw PatchFailure(XmlPatchErrorCode.InvalidAttributeValue, "xmlns declares a namespace")
         if (prefix.isEmpty()) return XmlName(name)
         val uri = XmlNamespaces.XML.takeIf { prefix == XmlNamespaces.XML_PREFIX } ?: namespaces[prefix]
             ?: throw PatchFailure(XmlPatchErrorCode.InvalidNamespacePrefix, "the prefix is not declared")

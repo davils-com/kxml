@@ -50,7 +50,11 @@ internal class Replacements(private val context: OperationContext) {
         val single = operation.content.singleOrNull()
         val replacement = single?.takeIf(kind::isInstance) ?: mismatch()
         val parent = model.parent(node)
-        val content = ContentNamespaces(context.scopeOf(parent), model.name(parent)).mapped(listOf(replacement))
+        val content = ContentNamespaces(
+            context.scopeOf(parent),
+            model.name(parent),
+            context.charge,
+        ).mapped(listOf(replacement))
         val at = model.indexOf(node)
         return context.editor.children(parent) { children -> children.replaced(at..at, content) }
     }

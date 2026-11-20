@@ -44,6 +44,7 @@ internal class PatchApplier(private val limits: XmlLimits) {
                 current = appliedOne(current, operation)
                 index += 1
             }
+            DocumentModel.of(current).requireShapeWithin(limits)
             XmlPatchResult.Applied(current)
         } catch (failure: PatchFailure) {
             XmlPatchResult.Failed(XmlPatchError(code = failure.code, operation = index, message = failure.reason))
@@ -53,6 +54,7 @@ internal class PatchApplier(private val limits: XmlLimits) {
     private fun appliedOne(document: XmlDocument, operation: XmlPatchOperation): XmlDocument {
         val model = DocumentModel.of(document)
         bounds.charge(model.size.toLong())
+        model.requireShapeWithin(limits)
         val evaluator = Evaluator(model = model, limits = limits, variables = emptyMap(), bounds = bounds)
         val target = located(evaluator, operation)
         val context = OperationContext(model = model, editor = TreeEditor(document, model, bounds), charge = ::charged)
