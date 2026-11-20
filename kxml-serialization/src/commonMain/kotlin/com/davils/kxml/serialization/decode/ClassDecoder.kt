@@ -35,7 +35,7 @@ internal class ClassDecoder(
 
     private val shapes: List<PropertyShape> = context.shapes.of(descriptor)
 
-    private val values: Map<Int, XmlValue> = valuesOf(shapes)
+    private val values: List<XmlValue?> = valuesOf(shapes)
 
     private val order: ArrayDeque<Int> = ArrayDeque(shapes.filter(::isDecoded).map(PropertyShape::index))
 
@@ -46,16 +46,17 @@ internal class ClassDecoder(
     override fun decodeElementIndex(descriptor: SerialDescriptor): Int =
         order.removeFirstOrNull() ?: CompositeDecoder.DECODE_DONE
 
-    override fun valueAt(index: Int): XmlValue = values[index] ?: XmlValue.Absent(element.range)
+    override fun valueAt(index: Int): XmlValue = values.getOrNull(index) ?: XmlValue.Absent(element.range)
 
     private fun elementOf(value: XmlValue): XmlNode.Element {
         val holder = value as? XmlValue.Element ?: context.mismatch(value.range, "an element")
         return holder.element
     }
 
-    private fun valuesOf(shapes: List<PropertyShape>): Map<Int, XmlValue> {
-        val found = HashMap<Int, XmlValue>()
-        shapes.forEach { shape -> valueOf(shape)?.let { found[shape.index] = it } }
+    private fun valuesOf(shapes: List<PropertyShape>): List<XmlValue?> {
+        val slots = shapes.maxOfOrNull(PropertyShape::index)?.plus(1) ?: 0
+        val found = MutableList<XmlValue?>(slots) { null }
+        shapes.forEach { shape -> found[shape.index] = valueOf(shape) }
         return found
     }
 
@@ -102,7 +103,10 @@ internal class ClassDecoder(
     private fun isNamed(child: XmlNode.Element, shape: PropertyShape): Boolean =
         context.matches(actual = child.name, expected = shape.name, aliases = shape.aliases)
 
-    private fun isDecoded(shape: PropertyShape): Boolean = shape.index in values || shape.isImplicitlyNull
+    private fun isDecoded(shape: PropertyShape): Boolean {
+        val isFound = values.getOrNull(shape.index) != null
+        return isFound || shape.isImplicitlyNull
+    }
 
     private fun checkUnknown() {
         unknownElements().forEach { child ->
