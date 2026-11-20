@@ -21,8 +21,10 @@ import com.davils.kxml.core.node.xmlText
 import com.davils.kxml.document.XmlDocumentLimitException
 import com.davils.kxml.document.c14n.XmlCanonicalization
 import com.davils.kxml.document.c14n.XmlCanonicalizer
+import com.davils.kxml.document.fixture.GROWTH_FACTOR
 import com.davils.kxml.document.fixture.documentOf
 import com.davils.kxml.document.fixture.documentTexts
+import com.davils.kxml.document.fixture.shouldGrowLinearly
 import com.davils.kxml.document.patch.XmlPatch
 import com.davils.kxml.document.patch.XmlPatchOperation
 import com.davils.kxml.document.patch.XmlPatchPosition
@@ -69,6 +71,16 @@ private fun shouldTurnInto(old: String, new: String, diff: XmlDiff = XmlDiff()):
     val reapplied = written.apply(documentOf(old)).shouldBeInstanceOf<XmlPatchResult.Applied>()
     canonicalOf(reapplied.document) shouldBe canonicalOf(documentOf(new))
     return patch
+}
+
+private const val DIFF_GROWTH: Int = 100
+
+private fun changedPair(size: Int): Pair<String, Pair<XmlDocument, XmlDocument>> {
+    val old = (0..<size).joinToString(separator = "") { index -> "<a i='$index'>x</a>" }
+    val new = (0..<size).joinToString(
+        separator = "",
+    ) { index -> "<a i='$index'>${"y".takeIf { index % 2 == 0 } ?: "x"}</a>" }
+    return "$size" to (documentOf("<r>$old</r>") to documentOf("<r>$new</r>"))
 }
 
 class XmlDiffTest : FunSpec({
@@ -184,6 +196,18 @@ class XmlDiffTest : FunSpec({
             diff.hashCode() shouldBe XmlDiff(xmlLimits { maximumDiffWork = VISITS }).hashCode()
             diff.toString() shouldBe "XmlDiff(work=6)"
             diff.equals("x") shouldBe false
+        }
+    }
+    context("the work of a diff") {
+        test("grows linearly with the siblings it aligns") {
+            val small = changedPair(DIFF_GROWTH)
+            val large = changedPair(DIFF_GROWTH * GROWTH_FACTOR)
+            val pairs = mapOf(small.first to small.second, large.first to large.second)
+
+            shouldGrowLinearly(small = small.first, large = large.first) { key ->
+                val (old, new) = pairs.getValue(key)
+                XmlDiff().diff(old = old, new = new)
+            }
         }
     }
 })

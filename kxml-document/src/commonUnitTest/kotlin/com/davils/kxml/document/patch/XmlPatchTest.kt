@@ -18,7 +18,9 @@ package com.davils.kxml.document.patch
 import com.davils.kxml.core.node.XmlDocument
 import com.davils.kxml.document.c14n.XmlCanonicalization
 import com.davils.kxml.document.c14n.XmlCanonicalizer
+import com.davils.kxml.document.fixture.GROWTH_FACTOR
 import com.davils.kxml.document.fixture.documentOf
+import com.davils.kxml.document.fixture.shouldGrowLinearly
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
@@ -60,6 +62,10 @@ private fun shouldPatch(target: String, operations: String, expected: String) {
     val applied = patched(target, operations).shouldBeInstanceOf<XmlPatchResult.Applied>()
     canonicalOf(applied.document) shouldBe canonicalOf(documentOf(expected))
 }
+
+private const val PATCH_GROWTH: Int = 200
+
+private fun flatDocument(size: Int): String = "<r xmlns:q='urn:q'>" + "<a q:x='1'>t</a>".repeat(size) + "</r>"
 
 class XmlPatchTest : FunSpec({
     context("the additions of appendix A of RFC 5261") {
@@ -198,6 +204,21 @@ class XmlPatchTest : FunSpec({
 
             canonicalOf(applied.document) shouldBe canonicalOf(documentOf(expected))
             applied.toString() shouldBe "Applied"
+        }
+    }
+    context("the work of a patch") {
+        test("grows linearly with the document it changes") {
+            val small = flatDocument(PATCH_GROWTH)
+            val large = flatDocument(PATCH_GROWTH * GROWTH_FACTOR)
+            val documents = mapOf(small to documentOf(small), large to documentOf(large))
+            val patch = XmlPatch(
+                listOf(
+                    XmlPatchOperation.Remove("/r/a[last()]"),
+                    XmlPatchOperation.Add("/r", content = listOf(documentOf("<p:b xmlns:p='urn:p'><c/></p:b>").root)),
+                ),
+            )
+
+            shouldGrowLinearly(small = small, large = large) { text -> patch.apply(documents.getValue(text)) }
         }
     }
 })

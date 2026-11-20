@@ -107,6 +107,8 @@ private val refusals: Map<String, XmlPatchErrorCode> = mapOf(
 
 private const val HOSTILE_CASES: Int = 100
 private const val SELECTOR: String = "/a"
+private const val URN_P: String = "urn:p"
+private const val URN_Q: String = "urn:q"
 
 private fun appliedTo(text: String, limits: XmlLimits, vararg operations: XmlPatchOperation): XmlPatchResult =
     XmlPatch(operations.toList(), limits).apply(documentOf(text))
@@ -146,7 +148,7 @@ class XmlPatchErrorTest : FunSpec({
                 operations = "<add sel='*'><x/><q:y xmlns:q='urn:q' q:a='1'/></add>",
             )
             val document = result.shouldBeInstanceOf<XmlPatchResult.Applied>().document
-            val qualified = XPath.parse("count(/*/q:y/@q:a)", namespaces = mapOf("q" to "urn:q"))
+            val qualified = XPath.parse("count(/*/q:y/@q:a)", namespaces = mapOf("q" to URN_Q))
 
             XPath.parse("count(/*/x)").evaluate(document) shouldBe XPathValue.Number(1.0)
             qualified.evaluate(document) shouldBe XPathValue.Number(1.0)
@@ -211,6 +213,22 @@ class XmlPatchErrorTest : FunSpec({
     }
 
     context("operations built in code") {
+        test("hold their namespaces as a read-only map") {
+            val plain = mapOf("p" to URN_P)
+            val namespaces = XmlPatchOperation.Remove(SELECTOR, namespaces = plain).namespaces
+            val entry = namespaces.entries.single()
+
+            namespaces shouldBe plain
+            namespaces.hashCode() shouldBe plain.hashCode()
+            namespaces.containsKey("p") shouldBe true
+            namespaces["q"] shouldBe null
+            entry shouldBe plain.entries.single()
+            entry.hashCode() shouldBe plain.entries.single().hashCode()
+            entry.equals("p") shouldBe false
+            entry.equals(mapOf("q" to URN_P).entries.single()) shouldBe false
+            entry.equals(mapOf("p" to URN_Q).entries.single()) shouldBe false
+        }
+
         test("compare by kind, selector, namespaces and content") {
             val add = XmlPatchOperation.Add("doc", listOf(xmlElement(XmlName("x"))), XmlPatchPosition.Prepend)
 
@@ -222,8 +240,8 @@ class XmlPatchErrorTest : FunSpec({
             add.toString() shouldBe "Add(doc)"
             val attribute = XmlPatchOperation.AddAttribute(selector = "doc", name = "a", value = "1")
             attribute shouldBe XmlPatchOperation.AddAttribute(selector = "doc", name = "a", value = "1")
-            val namespace = XmlPatchOperation.AddNamespace(selector = "doc", prefix = "p", uri = "urn:p")
-            namespace shouldNotBe XmlPatchOperation.AddNamespace(selector = "doc", prefix = "p", uri = "urn:q")
+            val namespace = XmlPatchOperation.AddNamespace(selector = "doc", prefix = "p", uri = URN_P)
+            namespace shouldNotBe XmlPatchOperation.AddNamespace(selector = "doc", prefix = "p", uri = URN_Q)
             XmlPatchOperation.Remove("doc", XmlPatchWhitespace.Both).whitespace shouldBe XmlPatchWhitespace.Both
             XmlPatchOperation.Replace("doc", listOf(xmlText("x"), xmlComment("c"))).content.size shouldBe 2
             XmlPatch(listOf(add)) shouldBe XmlPatch(listOf(add))

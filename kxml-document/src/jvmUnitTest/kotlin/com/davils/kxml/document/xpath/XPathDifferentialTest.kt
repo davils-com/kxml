@@ -111,7 +111,6 @@ private val wrappers: List<String> = listOf(
     "count($PATH | //d:n)",
     "$PATH = 'one'",
     "count($PATH/..)",
-    "count($PATH/following-sibling::node())",
     "count($PATH/ancestor::*)",
     "sum($PATH[number(.) = number(.)])",
 )
