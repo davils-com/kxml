@@ -1,0 +1,83 @@
+public final class com/davils/kxml/document/XmlDocumentLimitException : java/lang/IllegalStateException {
+	public final fun getLimit ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/document/xpath/XPath {
+	public static final field Companion Lcom/davils/kxml/document/xpath/XPath$Companion;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun evaluate (Lcom/davils/kxml/core/node/XmlDocument;Ljava/util/Map;)Lcom/davils/kxml/document/xpath/XPathValue;
+	public static synthetic fun evaluate$default (Lcom/davils/kxml/document/xpath/XPath;Lcom/davils/kxml/core/node/XmlDocument;Ljava/util/Map;ILjava/lang/Object;)Lcom/davils/kxml/document/xpath/XPathValue;
+	public final fun getExpression ()Ljava/lang/String;
+	public final fun getLimits ()Lcom/davils/kxml/core/limit/XmlLimits;
+	public final fun getNamespaces ()Ljava/util/Map;
+	public fun hashCode ()I
+	public final fun isNodeSet ()Z
+	public final fun select (Lcom/davils/kxml/core/node/XmlDocument;Ljava/util/Map;)Ljava/util/List;
+	public static synthetic fun select$default (Lcom/davils/kxml/document/xpath/XPath;Lcom/davils/kxml/core/node/XmlDocument;Ljava/util/Map;ILjava/lang/Object;)Ljava/util/List;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/document/xpath/XPath$Companion {
+	public final fun parse (Ljava/lang/String;Ljava/util/Map;Lcom/davils/kxml/core/limit/XmlLimits;)Lcom/davils/kxml/document/xpath/XPath;
+	public static synthetic fun parse$default (Lcom/davils/kxml/document/xpath/XPath$Companion;Ljava/lang/String;Ljava/util/Map;Lcom/davils/kxml/core/limit/XmlLimits;ILjava/lang/Object;)Lcom/davils/kxml/document/xpath/XPath;
+	public final fun parseOrNull (Ljava/lang/String;Ljava/util/Map;Lcom/davils/kxml/core/limit/XmlLimits;)Lcom/davils/kxml/document/xpath/XPath;
+	public static synthetic fun parseOrNull$default (Lcom/davils/kxml/document/xpath/XPath$Companion;Ljava/lang/String;Ljava/util/Map;Lcom/davils/kxml/core/limit/XmlLimits;ILjava/lang/Object;)Lcom/davils/kxml/document/xpath/XPath;
+}
+
+public final class com/davils/kxml/document/xpath/XPathNode {
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getKind ()Lcom/davils/kxml/document/xpath/XPathNodeKind;
+	public final fun getName ()Lcom/davils/kxml/core/name/XmlName;
+	public final fun getRange ()Lcom/davils/kore/core/text/TextRange;
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/document/xpath/XPathNodeKind : java/lang/Enum {
+	public static final field Attribute Lcom/davils/kxml/document/xpath/XPathNodeKind;
+	public static final field Comment Lcom/davils/kxml/document/xpath/XPathNodeKind;
+	public static final field Element Lcom/davils/kxml/document/xpath/XPathNodeKind;
+	public static final field Namespace Lcom/davils/kxml/document/xpath/XPathNodeKind;
+	public static final field ProcessingInstruction Lcom/davils/kxml/document/xpath/XPathNodeKind;
+	public static final field Root Lcom/davils/kxml/document/xpath/XPathNodeKind;
+	public static final field Text Lcom/davils/kxml/document/xpath/XPathNodeKind;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/davils/kxml/document/xpath/XPathNodeKind;
+	public static fun values ()[Lcom/davils/kxml/document/xpath/XPathNodeKind;
+}
+
+public abstract interface class com/davils/kxml/document/xpath/XPathValue {
+}
+
+public final class com/davils/kxml/document/xpath/XPathValue$NodeSet : com/davils/kxml/document/xpath/XPathValue {
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getNodes ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/document/xpath/XPathValue$Number : com/davils/kxml/document/xpath/XPathValue {
+	public fun <init> (D)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()D
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/document/xpath/XPathValue$Text : com/davils/kxml/document/xpath/XPathValue {
+	public fun <init> (Ljava/lang/String;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/document/xpath/XPathValue$Truth : com/davils/kxml/document/xpath/XPathValue {
+	public fun <init> (Z)V
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public final fun isTrue ()Z
+	public fun toString ()Ljava/lang/String;
+}
+

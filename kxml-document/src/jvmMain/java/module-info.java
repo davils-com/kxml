@@ -17,4 +17,7 @@
 module com.davils.kxml.document {
     requires transitive kotlin.stdlib;
     requires transitive com.davils.kxml.core;
+
+    exports com.davils.kxml.document;
+    exports com.davils.kxml.document.xpath;
 }

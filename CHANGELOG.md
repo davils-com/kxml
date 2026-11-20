@@ -27,6 +27,12 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
   schema instance namespace, such as `xsi:schemaLocation`, counts as an unknown property.
 - `kxml-document`, the third module, holds the tools for whole documents on top of `kxml-core`. It starts with a
   read-only model of a document in document order, the base of the tools that follow.
+- `XPath` evaluates XPath 1.0 on a document: every axis, the namespace nodes, the 27 functions of the core library,
+  variables bound to strings, numbers and booleans, and no extension functions. `id` finds elements by `xml:id`.
+  Strings are compared, measured and cut by code point and numbers are written through `ShortestDecimal` of Kore. An
+  evaluation is bounded by `maximumQuerySteps`, `maximumQueryResults` and `maximumQueryStringLength` and stops with
+  an `XmlDocumentLimitException`; node-sets are compared through a sorted set and strings searched in linear time, so
+  no input makes an evaluation quadratic. A differential test compares the results with `javax.xml.xpath`.
 - All modules are Kotlin Multiplatform libraries with a `jvm` and a `wasmJs` target. Sources are decoded in common
   code, and untrusted text is escaped by `SafeText` of Kore.
 - Sources of bytes are detected as Appendix F of XML 1.0 describes it and decoded strictly from UTF-8, UTF-16 and

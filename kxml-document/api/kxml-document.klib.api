@@ -6,3 +6,104 @@
 // - Show declarations: true
 
 // Library unique name: <com.davils:kxml-document>
+final enum class com.davils.kxml.document.xpath/XPathNodeKind : kotlin/Enum<com.davils.kxml.document.xpath/XPathNodeKind> { // com.davils.kxml.document.xpath/XPathNodeKind|null[0]
+    enum entry Attribute // com.davils.kxml.document.xpath/XPathNodeKind.Attribute|null[0]
+    enum entry Comment // com.davils.kxml.document.xpath/XPathNodeKind.Comment|null[0]
+    enum entry Element // com.davils.kxml.document.xpath/XPathNodeKind.Element|null[0]
+    enum entry Namespace // com.davils.kxml.document.xpath/XPathNodeKind.Namespace|null[0]
+    enum entry ProcessingInstruction // com.davils.kxml.document.xpath/XPathNodeKind.ProcessingInstruction|null[0]
+    enum entry Root // com.davils.kxml.document.xpath/XPathNodeKind.Root|null[0]
+    enum entry Text // com.davils.kxml.document.xpath/XPathNodeKind.Text|null[0]
+
+    final val entries // com.davils.kxml.document.xpath/XPathNodeKind.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<com.davils.kxml.document.xpath/XPathNodeKind> // com.davils.kxml.document.xpath/XPathNodeKind.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): com.davils.kxml.document.xpath/XPathNodeKind // com.davils.kxml.document.xpath/XPathNodeKind.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<com.davils.kxml.document.xpath/XPathNodeKind> // com.davils.kxml.document.xpath/XPathNodeKind.values|values#static(){}[0]
+}
+
+sealed interface com.davils.kxml.document.xpath/XPathValue { // com.davils.kxml.document.xpath/XPathValue|null[0]
+    final class NodeSet : com.davils.kxml.document.xpath/XPathValue { // com.davils.kxml.document.xpath/XPathValue.NodeSet|null[0]
+        final val nodes // com.davils.kxml.document.xpath/XPathValue.NodeSet.nodes|{}nodes[0]
+            final fun <get-nodes>(): kotlin.collections/List<com.davils.kxml.document.xpath/XPathNode> // com.davils.kxml.document.xpath/XPathValue.NodeSet.nodes.<get-nodes>|<get-nodes>(){}[0]
+
+        final fun equals(kotlin/Any?): kotlin/Boolean // com.davils.kxml.document.xpath/XPathValue.NodeSet.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // com.davils.kxml.document.xpath/XPathValue.NodeSet.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // com.davils.kxml.document.xpath/XPathValue.NodeSet.toString|toString(){}[0]
+    }
+
+    final class Number : com.davils.kxml.document.xpath/XPathValue { // com.davils.kxml.document.xpath/XPathValue.Number|null[0]
+        constructor <init>(kotlin/Double) // com.davils.kxml.document.xpath/XPathValue.Number.<init>|<init>(kotlin.Double){}[0]
+
+        final val value // com.davils.kxml.document.xpath/XPathValue.Number.value|{}value[0]
+            final fun <get-value>(): kotlin/Double // com.davils.kxml.document.xpath/XPathValue.Number.value.<get-value>|<get-value>(){}[0]
+
+        final fun equals(kotlin/Any?): kotlin/Boolean // com.davils.kxml.document.xpath/XPathValue.Number.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // com.davils.kxml.document.xpath/XPathValue.Number.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // com.davils.kxml.document.xpath/XPathValue.Number.toString|toString(){}[0]
+    }
+
+    final class Text : com.davils.kxml.document.xpath/XPathValue { // com.davils.kxml.document.xpath/XPathValue.Text|null[0]
+        constructor <init>(kotlin/String) // com.davils.kxml.document.xpath/XPathValue.Text.<init>|<init>(kotlin.String){}[0]
+
+        final val value // com.davils.kxml.document.xpath/XPathValue.Text.value|{}value[0]
+            final fun <get-value>(): kotlin/String // com.davils.kxml.document.xpath/XPathValue.Text.value.<get-value>|<get-value>(){}[0]
+
+        final fun equals(kotlin/Any?): kotlin/Boolean // com.davils.kxml.document.xpath/XPathValue.Text.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // com.davils.kxml.document.xpath/XPathValue.Text.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // com.davils.kxml.document.xpath/XPathValue.Text.toString|toString(){}[0]
+    }
+
+    final class Truth : com.davils.kxml.document.xpath/XPathValue { // com.davils.kxml.document.xpath/XPathValue.Truth|null[0]
+        constructor <init>(kotlin/Boolean) // com.davils.kxml.document.xpath/XPathValue.Truth.<init>|<init>(kotlin.Boolean){}[0]
+
+        final val isTrue // com.davils.kxml.document.xpath/XPathValue.Truth.isTrue|{}isTrue[0]
+            final fun <get-isTrue>(): kotlin/Boolean // com.davils.kxml.document.xpath/XPathValue.Truth.isTrue.<get-isTrue>|<get-isTrue>(){}[0]
+
+        final fun equals(kotlin/Any?): kotlin/Boolean // com.davils.kxml.document.xpath/XPathValue.Truth.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // com.davils.kxml.document.xpath/XPathValue.Truth.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // com.davils.kxml.document.xpath/XPathValue.Truth.toString|toString(){}[0]
+    }
+}
+
+final class com.davils.kxml.document.xpath/XPath { // com.davils.kxml.document.xpath/XPath|null[0]
+    final val expression // com.davils.kxml.document.xpath/XPath.expression|{}expression[0]
+        final fun <get-expression>(): kotlin/String // com.davils.kxml.document.xpath/XPath.expression.<get-expression>|<get-expression>(){}[0]
+    final val isNodeSet // com.davils.kxml.document.xpath/XPath.isNodeSet|{}isNodeSet[0]
+        final fun <get-isNodeSet>(): kotlin/Boolean // com.davils.kxml.document.xpath/XPath.isNodeSet.<get-isNodeSet>|<get-isNodeSet>(){}[0]
+    final val limits // com.davils.kxml.document.xpath/XPath.limits|{}limits[0]
+        final fun <get-limits>(): com.davils.kxml.core.limit/XmlLimits // com.davils.kxml.document.xpath/XPath.limits.<get-limits>|<get-limits>(){}[0]
+    final val namespaces // com.davils.kxml.document.xpath/XPath.namespaces|{}namespaces[0]
+        final fun <get-namespaces>(): kotlin.collections/Map<kotlin/String, kotlin/String> // com.davils.kxml.document.xpath/XPath.namespaces.<get-namespaces>|<get-namespaces>(){}[0]
+
+    final fun equals(kotlin/Any?): kotlin/Boolean // com.davils.kxml.document.xpath/XPath.equals|equals(kotlin.Any?){}[0]
+    final fun evaluate(com.davils.kxml.core.node/XmlDocument, kotlin.collections/Map<com.davils.kxml.core.name/XmlName, com.davils.kxml.document.xpath/XPathValue> = ...): com.davils.kxml.document.xpath/XPathValue // com.davils.kxml.document.xpath/XPath.evaluate|evaluate(com.davils.kxml.core.node.XmlDocument;kotlin.collections.Map<com.davils.kxml.core.name.XmlName,com.davils.kxml.document.xpath.XPathValue>){}[0]
+    final fun hashCode(): kotlin/Int // com.davils.kxml.document.xpath/XPath.hashCode|hashCode(){}[0]
+    final fun select(com.davils.kxml.core.node/XmlDocument, kotlin.collections/Map<com.davils.kxml.core.name/XmlName, com.davils.kxml.document.xpath/XPathValue> = ...): kotlin.collections/List<com.davils.kxml.document.xpath/XPathNode> // com.davils.kxml.document.xpath/XPath.select|select(com.davils.kxml.core.node.XmlDocument;kotlin.collections.Map<com.davils.kxml.core.name.XmlName,com.davils.kxml.document.xpath.XPathValue>){}[0]
+    final fun toString(): kotlin/String // com.davils.kxml.document.xpath/XPath.toString|toString(){}[0]
+
+    final object Companion { // com.davils.kxml.document.xpath/XPath.Companion|null[0]
+        final fun parse(kotlin/String, kotlin.collections/Map<kotlin/String, kotlin/String> = ..., com.davils.kxml.core.limit/XmlLimits = ...): com.davils.kxml.document.xpath/XPath // com.davils.kxml.document.xpath/XPath.Companion.parse|parse(kotlin.String;kotlin.collections.Map<kotlin.String,kotlin.String>;com.davils.kxml.core.limit.XmlLimits){}[0]
+        final fun parseOrNull(kotlin/String, kotlin.collections/Map<kotlin/String, kotlin/String> = ..., com.davils.kxml.core.limit/XmlLimits = ...): com.davils.kxml.document.xpath/XPath? // com.davils.kxml.document.xpath/XPath.Companion.parseOrNull|parseOrNull(kotlin.String;kotlin.collections.Map<kotlin.String,kotlin.String>;com.davils.kxml.core.limit.XmlLimits){}[0]
+    }
+}
+
+final class com.davils.kxml.document.xpath/XPathNode { // com.davils.kxml.document.xpath/XPathNode|null[0]
+    final val kind // com.davils.kxml.document.xpath/XPathNode.kind|{}kind[0]
+        final fun <get-kind>(): com.davils.kxml.document.xpath/XPathNodeKind // com.davils.kxml.document.xpath/XPathNode.kind.<get-kind>|<get-kind>(){}[0]
+    final val name // com.davils.kxml.document.xpath/XPathNode.name|{}name[0]
+        final fun <get-name>(): com.davils.kxml.core.name/XmlName? // com.davils.kxml.document.xpath/XPathNode.name.<get-name>|<get-name>(){}[0]
+    final val range // com.davils.kxml.document.xpath/XPathNode.range|{}range[0]
+        final fun <get-range>(): com.davils.kore.core.text/TextRange? // com.davils.kxml.document.xpath/XPathNode.range.<get-range>|<get-range>(){}[0]
+    final val value // com.davils.kxml.document.xpath/XPathNode.value|{}value[0]
+        final fun <get-value>(): kotlin/String // com.davils.kxml.document.xpath/XPathNode.value.<get-value>|<get-value>(){}[0]
+
+    final fun equals(kotlin/Any?): kotlin/Boolean // com.davils.kxml.document.xpath/XPathNode.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // com.davils.kxml.document.xpath/XPathNode.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // com.davils.kxml.document.xpath/XPathNode.toString|toString(){}[0]
+}
+
+final class com.davils.kxml.document/XmlDocumentLimitException : kotlin/IllegalStateException { // com.davils.kxml.document/XmlDocumentLimitException|null[0]
+    final val limit // com.davils.kxml.document/XmlDocumentLimitException.limit|{}limit[0]
+        final fun <get-limit>(): kotlin/String // com.davils.kxml.document/XmlDocumentLimitException.limit.<get-limit>|<get-limit>(){}[0]
+}

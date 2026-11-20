@@ -253,6 +253,23 @@
                 "updatedBy": [],
                 "errata": {}
             }
+        },
+        {
+            "id": "w3c:xpath-10",
+            "reviewedOn": "2026-11-20",
+            "note": "XPath 1.0 Recommendation of 1999-11-16 with its errata; kxml-document implements the expression language, the data model of section 5 and the 27 core functions, with id() over xml:id only.",
+            "snapshot": {
+                "title": "XML Path Language (XPath) Version 1.0",
+                "status": "Recommendation",
+                "revision": "1999-11-16",
+                "published": "1999-11-16",
+                "withdrawn": false,
+                "replacedBy": [],
+                "updatedBy": [
+                    "w3c:xpath-31"
+                ],
+                "errata": {}
+            }
         }
     ]
 }

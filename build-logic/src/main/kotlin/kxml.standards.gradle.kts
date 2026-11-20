@@ -74,6 +74,9 @@ kreate {
                 note = "XmlCatalog and XmlCatalogResolver: the catalog entries, their resolution and the normalization of identifiers."
                 url = "https://groups.oasis-open.org/higherlogic/ws/public/download/14809/xml-catalogs.html"
             }
+            w3c("xpath-10") {
+                note = "XPath 1.0 in kxml-document: XPath, its parser, its evaluation on the data model of section 5 and the core function library."
+            }
             unicode {
                 note = "The safe display of text follows the Unicode tables of the platform."
             }

@@ -114,6 +114,18 @@ when (val decoding = format.decodeOrFailure<Order>("<Order/>")) {
 }
 ```
 
+### XPath
+
+```kotlin
+val parsed = xml { }.parse("<shop xmlns='urn:shop'><book id='b1'>Kotlin</book></shop>") as XmlParseResult.Parsed
+val books = XPath.parse("/s:shop/s:book[@id = 'b1']", namespaces = mapOf("s" to "urn:shop"))
+books.select(parsed.document).map(XPathNode::value)                    // ["Kotlin"]
+XPath.parse("count(//*)").evaluate(parsed.document)                    // XPathValue.Number(2.0)
+```
+
+`XPath` of `kxml-document` evaluates XPath 1.0 with its core function library. Every evaluation is bounded by the
+query limits of `XmlLimits` and stops with an `XmlDocumentLimitException` instead of running on.
+
 ## Security
 
 Every document may come from an attacker. The reader checks the document against `XmlLimits` before the work grows

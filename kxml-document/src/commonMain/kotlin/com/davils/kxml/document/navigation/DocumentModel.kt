@@ -62,6 +62,20 @@ internal class DocumentModel internal constructor(
         return next.takeIf { isSibling }
     }
 
+    fun previousSibling(node: Int): Int? {
+        val parent = parents[node]
+        var candidate = node - 1
+        val hasPrevious = parent >= 0 &&
+            kinds[node] != NodeKind.Attribute &&
+            candidate != parent &&
+            kinds[candidate] != NodeKind.Attribute
+        if (!hasPrevious) return null
+        while (parents[candidate] != parent) candidate = parents[candidate]
+        return candidate
+    }
+
+    fun value(node: Int): String? = values[node]
+
     fun children(node: Int): Sequence<Int> = generateSequence(firstChild(node), ::nextSibling)
 
     fun isDescendant(node: Int, ancestor: Int): Boolean = node > ancestor && node < ends[ancestor]

@@ -1,0 +1,75 @@
+/*
+ * Copyright 2026 Davils
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+@file:OptIn(DavilsInternal::class)
+
+package com.davils.kxml.document.xpath.evaluate
+
+import com.davils.kore.core.annotation.DavilsInternal
+import com.davils.kore.core.collection.OrderedSet
+import com.davils.kxml.document.navigation.NodeSet
+
+internal class KeyCollector(capacity: Int, private val bounds: EvaluationBounds) {
+    private val nodes: NodeSet = NodeSet(capacity)
+    private val namespaces: OrderedSet<Long> = OrderedSet()
+    private var count: Int = 0
+
+    fun add(key: Long) {
+        val isNew = addNew(key)
+        if (!isNew) return
+        count += 1
+        bounds.results(count)
+    }
+
+    fun addAll(keys: LongArray) {
+        keys.forEach(::add)
+    }
+
+    fun keys(): LongArray {
+        val keys = LongArray(count)
+        var filled = 0
+        val pending = namespaces.sorted().iterator()
+        var namespace = pending.nextOrNull()
+        nodes.nodes().forEach { ordinal ->
+            val key = NodeKeys.keyOf(ordinal)
+            while (namespace != null && namespace < key) {
+                keys[filled] = namespace
+                filled += 1
+                namespace = pending.nextOrNull()
+            }
+            keys[filled] = key
+            filled += 1
+        }
+        while (namespace != null) {
+            keys[filled] = namespace
+            filled += 1
+            namespace = pending.nextOrNull()
+        }
+        return keys
+    }
+
+    private fun addNew(key: Long): Boolean {
+        if (NodeKeys.isNamespace(key)) return namespaces.add(key)
+        val ordinal = NodeKeys.ordinalOf(key)
+        val isNew = ordinal !in nodes
+        nodes.add(ordinal)
+        return isNew
+    }
+
+    private fun Iterator<Long>.nextOrNull(): Long? {
+        if (!hasNext()) return null
+        return next()
+    }
+}
