@@ -23,6 +23,7 @@ import com.davils.kxml.core.syntax.XmlSyntaxTree
 import com.davils.kxml.document.fixture.GROWTH_FACTOR
 import com.davils.kxml.document.fixture.documentOf
 import com.davils.kxml.document.fixture.documentTexts
+import com.davils.kxml.document.fixture.numberOf
 import com.davils.kxml.document.fixture.shouldGrowLinearly
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.collections.shouldContainExactly
@@ -110,6 +111,12 @@ class DocumentModelTest : FunSpec({
             model.isDescendant(node = ROOT_ELEMENT, ancestor = CHILD_TEXT) shouldBe false
             model.isElement(PROLOG_COMMENT) shouldBe false
             model.nextSibling(model.root).shouldBeNull()
+        }
+
+        test("leaves out an empty CDATA section, since a text node holds at least one character") {
+            numberOf("count(/a/node())", text = "<a><![CDATA[]]></a>") shouldBe 0.0
+            numberOf("count(/a/node())", text = "<a><![CDATA[]]><b/><![CDATA[]]></a>") shouldBe 1.0
+            numberOf("count(/a/text())", text = "<a>x<![CDATA[]]></a>") shouldBe 1.0
         }
 
         test("joins text without ranges in a document built in code") {

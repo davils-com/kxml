@@ -139,7 +139,11 @@ internal class ModelBuilder {
     }
 
     private fun flush(text: TextRun) {
-        val parent = text.parent ?: return
+        val parent = text.parent?.takeIf { text.value.isNotEmpty() }
+        if (parent == null) {
+            text.clear()
+            return
+        }
         val placement = Placement(parent = parent, index = text.first)
         val value = text.value
         val ordinal = leaf(kind = NodeKind.Text, placement = placement, name = null, value = value, range = text.range)
