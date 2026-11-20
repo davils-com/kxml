@@ -28,11 +28,13 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 
 private const val SMALL: Int = 4
+private const val EMPTY_ABC: String = "<abc/>"
+private const val NESTED: String = "<a><b/></a>"
 
 class XmlLimitsTest : FunSpec({
     context("a document beyond its limits") {
         test("is refused when the input is too long") {
-            xml { limits { maximumInputLength = SMALL } }.refusal("<abc/>") shouldBe XmlDiagnosticCode.InputTooLong
+            xml { limits { maximumInputLength = SMALL } }.refusal(EMPTY_ABC) shouldBe XmlDiagnosticCode.InputTooLong
         }
 
         test("is refused when it nests too deep") {
@@ -60,6 +62,20 @@ class XmlLimitsTest : FunSpec({
 
         test("is refused when a name is too long") {
             xml { limits { maximumNameLength = SMALL } }.refusal("<abcde/>") shouldBe XmlDiagnosticCode.NameTooLong
+        }
+    }
+
+    context("a document at its limits") {
+        test("is read when it reaches every limit exactly") {
+            xml { limits { maximumInputLength = EMPTY_ABC.length } }.root(EMPTY_ABC).name.local shouldBe "abc"
+            xml { limits { maximumDepth = 2 } }.root(NESTED).children.size shouldBe 1
+            xml { limits { maximumElements = 2 } }.root(NESTED).children.size shouldBe 1
+            xml { limits { maximumAttributes = 1 } }.root("<a x='1'/>").attributes.size shouldBe 1
+            val small = xml { limits { maximumTextLength = SMALL } }
+            small.root("<a>1234</a>").text shouldBe "1234"
+            small.root("<a x='1234'/>").attributes.size shouldBe 1
+            small.root("<a><!--1234--></a>").children.size shouldBe 1
+            xml { limits { maximumNameLength = SMALL } }.root("<abcd/>").name.local shouldBe "abcd"
         }
     }
 
@@ -178,7 +194,7 @@ class XmlLimitsTest : FunSpec({
     context("a document within its limits") {
         test("is read") {
             val shallow = xml { limits { maximumDepth = 2 } }
-            val root = shallow.root("<a><b/></a>")
+            val root = shallow.root(NESTED)
 
             root.elements.size shouldBe 1
         }
