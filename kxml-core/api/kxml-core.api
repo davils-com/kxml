@@ -307,6 +307,7 @@ public final class com/davils/kxml/core/limit/XmlLimits : com/davils/kore/core/v
 	public static final field HARD_EXTERNAL_RESOURCES I
 	public static final field HARD_INPUT_LENGTH I
 	public static final field HARD_NAME_LENGTH I
+	public static final field HARD_PATCH_OPERATIONS I
 	public static final field HARD_QUERY_LENGTH I
 	public static final field HARD_QUERY_NESTING I
 	public static final field HARD_QUERY_RESULTS I
@@ -326,6 +327,7 @@ public final class com/davils/kxml/core/limit/XmlLimits : com/davils/kore/core/v
 	public final fun getMaximumInputLength ()I
 	public final fun getMaximumNameLength ()I
 	public final fun getMaximumOutputLength ()I
+	public final fun getMaximumPatchOperations ()I
 	public final fun getMaximumQueryLength ()I
 	public final fun getMaximumQueryNesting ()I
 	public final fun getMaximumQueryResults ()I
@@ -357,6 +359,7 @@ public final class com/davils/kxml/core/limit/XmlLimitsBuilder : com/davils/kore
 	public static final field DEFAULT_EXTERNAL_RESOURCES I
 	public static final field DEFAULT_INPUT_LENGTH I
 	public static final field DEFAULT_NAME_LENGTH I
+	public static final field DEFAULT_PATCH_OPERATIONS I
 	public static final field DEFAULT_QUERY_LENGTH I
 	public static final field DEFAULT_QUERY_NESTING I
 	public static final field DEFAULT_QUERY_RESULTS I
@@ -378,6 +381,7 @@ public final class com/davils/kxml/core/limit/XmlLimitsBuilder : com/davils/kore
 	public final fun getMaximumInputLength ()I
 	public final fun getMaximumNameLength ()I
 	public final fun getMaximumOutputLength ()I
+	public final fun getMaximumPatchOperations ()I
 	public final fun getMaximumQueryLength ()I
 	public final fun getMaximumQueryNesting ()I
 	public final fun getMaximumQueryResults ()I
@@ -398,6 +402,7 @@ public final class com/davils/kxml/core/limit/XmlLimitsBuilder : com/davils/kore
 	public final fun setMaximumInputLength (I)V
 	public final fun setMaximumNameLength (I)V
 	public final fun setMaximumOutputLength (I)V
+	public final fun setMaximumPatchOperations (I)V
 	public final fun setMaximumQueryLength (I)V
 	public final fun setMaximumQueryNesting (I)V
 	public final fun setMaximumQueryResults (I)V

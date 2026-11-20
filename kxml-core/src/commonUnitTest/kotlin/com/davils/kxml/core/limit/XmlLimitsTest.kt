@@ -86,6 +86,7 @@ class XmlLimitsTest : FunSpec({
                 maximumQuerySteps = XmlLimits.HARD_QUERY_STEPS
                 maximumQueryResults = XmlLimits.HARD_QUERY_RESULTS
                 maximumQueryStringLength = XmlLimits.HARD_INPUT_LENGTH
+                maximumPatchOperations = XmlLimits.HARD_PATCH_OPERATIONS
             }
 
             ceilings.maximumElements shouldBe XmlLimits.HARD_ELEMENTS
@@ -100,6 +101,7 @@ class XmlLimitsTest : FunSpec({
             ceilings.maximumQuerySteps shouldBe XmlLimits.HARD_QUERY_STEPS
             ceilings.maximumQueryResults shouldBe XmlLimits.HARD_QUERY_RESULTS
             ceilings.toString() shouldContain "queryString=${XmlLimits.HARD_INPUT_LENGTH}"
+            ceilings.maximumPatchOperations shouldBe XmlLimits.HARD_PATCH_OPERATIONS
             xmlLimits(base = ceilings) { } shouldBe ceilings
         }
 
@@ -124,6 +126,9 @@ class XmlLimitsTest : FunSpec({
             shouldThrow<ValidationException> {
                 xmlLimits { maximumQueryStringLength = XmlLimits.HARD_INPUT_LENGTH + 1 }
             }
+            shouldThrow<ValidationException> {
+                xmlLimits { maximumPatchOperations = XmlLimits.HARD_PATCH_OPERATIONS + 1 }
+            }
         }
 
         test("refuse every limit below 1") {
@@ -142,6 +147,7 @@ class XmlLimitsTest : FunSpec({
             shouldThrow<ValidationException> { xmlLimits { maximumQuerySteps = 0 } }
             shouldThrow<ValidationException> { xmlLimits { maximumQueryResults = 0 } }
             shouldThrow<ValidationException> { xmlLimits { maximumQueryStringLength = 0 } }
+            shouldThrow<ValidationException> { xmlLimits { maximumPatchOperations = 0 } }
         }
 
         test("keep the relaxed preset finite and within every ceiling") {

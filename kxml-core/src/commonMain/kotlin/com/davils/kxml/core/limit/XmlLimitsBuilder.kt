@@ -184,6 +184,14 @@ public class XmlLimitsBuilder internal constructor() : ValidatingBuilder<XmlLimi
      */
     public var maximumQueryStringLength: Int = DEFAULT_QUERY_STRING_LENGTH
 
+    /**
+     * The most operations of one XML patch; [DEFAULT_PATCH_OPERATIONS] by default, at most
+     * [XmlLimits.HARD_PATCH_OPERATIONS].
+     *
+     * @since 1.0.0
+     */
+    public var maximumPatchOperations: Int = DEFAULT_PATCH_OPERATIONS
+
     internal fun from(limits: XmlLimits) {
         maximumInputLength = limits.maximumInputLength
         maximumDepth = limits.maximumDepth
@@ -205,6 +213,7 @@ public class XmlLimitsBuilder internal constructor() : ValidatingBuilder<XmlLimi
         maximumQuerySteps = limits.maximumQuerySteps
         maximumQueryResults = limits.maximumQueryResults
         maximumQueryStringLength = limits.maximumQueryStringLength
+        maximumPatchOperations = limits.maximumPatchOperations
     }
 
     override fun assemble(): XmlLimits = XmlLimits(this)
@@ -347,5 +356,12 @@ public class XmlLimitsBuilder internal constructor() : ValidatingBuilder<XmlLimi
          * @since 1.0.0
          */
         public const val DEFAULT_QUERY_STRING_LENGTH: Int = 16 * 1024 * 1024
+
+        /**
+         * The default of [maximumPatchOperations]: 10,000 operations.
+         *
+         * @since 1.0.0
+         */
+        public const val DEFAULT_PATCH_OPERATIONS: Int = 10_000
     }
 }

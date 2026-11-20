@@ -209,6 +209,14 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
      */
     public val maximumQueryStringLength: Int = builder.maximumQueryStringLength
 
+    /**
+     * The most operations of one XML patch of RFC 5261 that `kxml-document` reads or applies: 10,000 by default, at
+     * most [HARD_PATCH_OPERATIONS]. Applying a patch also counts its work against [maximumQuerySteps].
+     *
+     * @since 1.0.0
+     */
+    public val maximumPatchOperations: Int = builder.maximumPatchOperations
+
     init {
         validateOrThrow(SUBJECT)
     }
@@ -303,6 +311,11 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
                 value = maximumQueryStringLength.toLong(),
                 ceiling = HARD_INPUT_LENGTH.toLong(),
             ),
+            Bound(
+                property = ::maximumPatchOperations,
+                value = maximumPatchOperations.toLong(),
+                ceiling = HARD_PATCH_OPERATIONS.toLong(),
+            ),
         )
 
     private val values: List<Long> get() = bounds.map(Bound::value)
@@ -348,7 +361,8 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
             "externalResources=$maximumExternalResources, externalLength=$maximumExternalLength, " +
             "catalogFiles=$maximumCatalogFiles, catalogDepth=$maximumCatalogDepth, output=$maximumOutputLength, " +
             "queryLength=$maximumQueryLength, queryNesting=$maximumQueryNesting, querySteps=$maximumQuerySteps, " +
-            "queryResults=$maximumQueryResults, queryString=$maximumQueryStringLength)"
+            "queryResults=$maximumQueryResults, queryString=$maximumQueryStringLength, " +
+            "patchOperations=$maximumPatchOperations)"
 
     private fun ValidationScope.bounded(bound: Bound) {
         val value = bound.value
@@ -482,6 +496,13 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
          */
         public const val HARD_QUERY_RESULTS: Int = 100_000_000
 
+        /**
+         * The ceiling of [maximumPatchOperations]: 1,000,000 operations.
+         *
+         * @since 1.0.0
+         */
+        public const val HARD_PATCH_OPERATIONS: Int = 1_000_000
+
         private const val SUBJECT: String = "xml limits"
         private const val RELAXED_ELEMENTS: Long = 50_000_000L
         private const val RELAXED_ATTRIBUTES: Int = 100_000
@@ -495,6 +516,7 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
         private const val RELAXED_CATALOG_DEPTH: Int = 32
         private const val RELAXED_QUERY_STEPS: Long = 1_000_000_000L
         private const val RELAXED_QUERY_RESULTS: Int = 50_000_000
+        private const val RELAXED_PATCH_OPERATIONS: Int = 100_000
 
         /**
          * The default limits, for documents from sources that are not trusted: the `DEFAULT_*` values of
@@ -512,7 +534,7 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
          * levels of entities, 1,000 external resources and [HARD_INPUT_LENGTH] code units of each, 256 catalog files
          * and chains of 32 of them, [HARD_INPUT_LENGTH] code units of output, XPath expressions of [HARD_QUERY_LENGTH]
          * code units nested [HARD_QUERY_NESTING] levels deep, and evaluations of 1,000,000,000 steps, 50,000,000 nodes
-         * in a node-set and strings of [HARD_INPUT_LENGTH] code units.
+         * in a node-set and strings of [HARD_INPUT_LENGTH] code units, and patches of 100,000 operations.
          *
          * Every limit stays finite and at most its hard ceiling, so even a trusted source cannot exhaust the memory
          * without bound.
@@ -543,6 +565,7 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
             builder.maximumQuerySteps = RELAXED_QUERY_STEPS
             builder.maximumQueryResults = RELAXED_QUERY_RESULTS
             builder.maximumQueryStringLength = HARD_INPUT_LENGTH
+            builder.maximumPatchOperations = RELAXED_PATCH_OPERATIONS
             return builder.build()
         }
     }

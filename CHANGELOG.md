@@ -126,7 +126,7 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
   before it builds a longer one.
 - `XmlLimits` bounds XPath with `maximumQueryLength`, `maximumQueryNesting`, `maximumQuerySteps`,
   `maximumQueryResults` and `maximumQueryStringLength`, each with a hard ceiling, for the expressions of
-  `kxml-document`.
+  `kxml-document`, and XML patches with `maximumPatchOperations`.
 - `XmlCharacters` tells which code points the productions `Char`, `S`, `NameStartChar`, `NameChar` and `NCName` allow,
   for grammars built on XML names, such as XPath.
 - The W3C XML Conformance Test Suite runs in the build: `XmlConformanceTest` downloads the pinned archive, reads it
