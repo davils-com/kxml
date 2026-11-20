@@ -50,8 +50,10 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
   as a whole, so the patch stays correct and only grows coarser.
 - `XmlMerger` merges layers of documents, such as defaults and overrides, onto the first one: attributes override,
   elements match by their expanded name and the key attributes of `XmlMergeOptions`, text content replaces, and a
-  deletion marker removes an element. `XmlMerged` holds the merged document and the layer every node comes from, by
-  its path, and a merge takes at most `maximumMergeLayers` layers.
+  deletion marker removes an element. `XmlMerged` holds the merged document, the `paths` of its nodes and, by
+  `originOf`, the layer every node comes from. A merge takes at most `maximumMergeLayers` layers, each within the
+  depth, element and attribute limits of a reader, charges its work to `maximumQuerySteps` and its paths to
+  `maximumOutputLength`, and matches elements by comparison, never by hash code, so its work grows linearly.
 - `XmlRedaction`, built with `xmlRedaction`, replaces secrets in a document: the content and attributes of elements
   an `XPath` or a predicate selects, attribute values by name, texts and attribute values that match a pattern, and
   comments. A syntax tree is redacted in place, so its layout survives, and the declaration of an entity a secret

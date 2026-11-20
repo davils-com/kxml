@@ -80,7 +80,7 @@ public final class com/davils/kxml/document/merge/XmlMergeOptions {
 
 public final class com/davils/kxml/document/merge/XmlMerged {
 	public final fun getDocument ()Lcom/davils/kxml/core/node/XmlDocument;
-	public final fun getOrigins ()Ljava/util/Map;
+	public final fun getPaths ()Ljava/util/List;
 	public final fun originOf (Ljava/lang/String;)Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 }

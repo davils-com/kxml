@@ -21,10 +21,12 @@ import com.davils.kxml.core.node.XmlDocument
 import com.davils.kxml.document.XmlDocumentLimitException
 import com.davils.kxml.document.c14n.XmlCanonicalization
 import com.davils.kxml.document.c14n.XmlCanonicalizer
+import com.davils.kxml.document.fixture.GROWTH_FACTOR
 import com.davils.kxml.document.fixture.documentOf
 import com.davils.kxml.document.fixture.hostileText
 import com.davils.kxml.document.fixture.shouldBeSafeToShow
 import com.davils.kxml.document.fixture.shouldBeShownSafely
+import com.davils.kxml.document.fixture.shouldGrowLinearly
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.nulls.shouldBeNull
@@ -33,6 +35,9 @@ import io.kotest.matchers.shouldNotBe
 import io.kotest.property.checkAll
 
 private const val CASES: Int = 100
+private const val GROWTH_SIZE: Int = 200
+private const val FEW_STEPS: Long = 5L
+private const val SHORT_PATHS: Int = 20
 private const val BASE: String = "base"
 private const val LOG_TEXT: String = "/config[1]/log[1]/text()[1]"
 private const val UNKEYED: Int = 3
@@ -44,7 +49,8 @@ private const val DEFAULTS: String =
 private val server: XmlName = XmlName("server")
 private val id: XmlName = XmlName("id")
 private val delete: XmlName = XmlName("delete")
-private val keyed: XmlMerger = XmlMerger(XmlMergeOptions(keys = mapOf(server to listOf(id)), deletionMarker = delete))
+private val options: XmlMergeOptions = XmlMergeOptions(keys = mapOf(server to listOf(id)), deletionMarker = delete)
+private val keyed: XmlMerger = XmlMerger(options)
 private val canonicalizer: XmlCanonicalizer = XmlCanonicalizer(XmlCanonicalization.Canonical10WithComments)
 
 private fun canonicalOf(document: XmlDocument): String = canonicalizer.canonicalize(document).decodeToString()
@@ -54,6 +60,24 @@ private fun merged(vararg layers: Pair<String, String>, merger: XmlMerger = keye
 
 private fun shouldMergeTo(merged: XmlMerged, expected: String) {
     canonicalOf(merged.document) shouldBe canonicalOf(documentOf(expected))
+}
+
+private fun growthLayers(size: Int): Pair<String, List<XmlLayer>> {
+    val servers = (0..<size).joinToString(
+        separator = "",
+    ) { index -> "<server id='s$index' port='1'/><log>$index</log>" }
+    val changes = (0..<size).joinToString(separator = "") { index ->
+        "<server id='s$index' port='2'/>".takeIf { index % 2 == 0 } ?: "<server id='s$index' delete='true'/>"
+    }
+    val added = (size..<size * 2).joinToString(separator = "") { index -> "<server id='s$index'/>" }
+    val base = XmlLayer(BASE, documentOf("<config>$servers</config>"))
+    val overlay = XmlLayer(PRODUCTION, documentOf("<config>$changes$added</config>"))
+    return "$size" to listOf(base, overlay)
+}
+
+private fun limitOf(merger: XmlMerger, vararg layers: Pair<String, String>): String {
+    val error = shouldThrow<XmlDocumentLimitException> { merged(*layers, merger = merger) }
+    return error.limit
 }
 
 class XmlMergerTest : FunSpec({
@@ -140,6 +164,41 @@ class XmlMergerTest : FunSpec({
         }
     }
 
+    context("the work of a merge") {
+        test("grows linearly with keyed, unkeyed and deleted elements") {
+            val small = growthLayers(GROWTH_SIZE)
+            val large = growthLayers(GROWTH_SIZE * GROWTH_FACTOR)
+            val layers = mapOf(small.first to small.second, large.first to large.second)
+
+            shouldGrowLinearly(small = small.first, large = large.first) { key -> keyed.merge(layers.getValue(key)) }
+        }
+
+        test("stops at its steps, its paths and layers deeper than a reader accepts") {
+            val steps = XmlMerger(options, xmlLimits { maximumQuerySteps = FEW_STEPS })
+            val output = XmlMerger(options, xmlLimits { maximumOutputLength = SHORT_PATHS })
+            val shallow = XmlMerger(options, xmlLimits { maximumDepth = 1 })
+
+            limitOf(steps, BASE to DEFAULTS) shouldBe "maximumQuerySteps"
+            limitOf(output, BASE to DEFAULTS) shouldBe "maximumOutputLength"
+            limitOf(shallow, BASE to "<a/>", PRODUCTION to "<a><b/></a>") shouldBe "maximumDepth"
+            merged(BASE to "<a/>", merger = shallow).paths shouldBe listOf("/a[1]")
+        }
+
+        test("lists the path of every node in document order") {
+            val result = merged(BASE to "<a x='1'><b/>t<!--c--><b/></a>", PRODUCTION to "<a y='2'/>")
+
+            result.paths shouldBe listOf(
+                "/a[1]",
+                "/a[1]/@x",
+                "/a[1]/@y",
+                "/a[1]/b[1]",
+                "/a[1]/text()[1]",
+                "/a[1]/comment()[1]",
+                "/a[1]/b[2]",
+            )
+        }
+    }
+
     context("the layers of a merge") {
         test("must share the document element and stay within the limit") {
             shouldThrow<IllegalArgumentException> { keyed.merge(emptyList()) }
@@ -171,7 +230,6 @@ class XmlMergerTest : FunSpec({
 
     context("options and mergers") {
         test("compare by their content") {
-            val options = XmlMergeOptions(keys = mapOf(server to listOf(id)), deletionMarker = delete)
 
             options shouldBe XmlMergeOptions(keys = mapOf(server to listOf(id)), deletionMarker = delete)
             val same = XmlMergeOptions(keys = mapOf(server to listOf(id)), deletionMarker = delete)
@@ -186,7 +244,7 @@ class XmlMergerTest : FunSpec({
             keyed shouldNotBe XmlMerger()
             keyed.equals(options) shouldBe false
             keyed.toString() shouldBe "XmlMerger(XmlMergeOptions(keys=1, deletion=delete))"
-            merged(BASE to "<a/>").toString() shouldBe "XmlMerged(origins=1)"
+            merged(BASE to "<a/>").toString() shouldBe "XmlMerged(paths=1)"
         }
     }
 })

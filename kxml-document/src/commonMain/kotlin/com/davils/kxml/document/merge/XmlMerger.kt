@@ -26,6 +26,9 @@ import com.davils.kxml.document.XmlDocumentLimitException
 import com.davils.kxml.document.merge.trace.LayerMerging
 import com.davils.kxml.document.merge.trace.OriginWriter
 import com.davils.kxml.document.merge.trace.TracedNode
+import com.davils.kxml.document.navigation.DocumentModel
+import com.davils.kxml.document.patch.apply.requireShapeWithin
+import com.davils.kxml.document.xpath.evaluate.EvaluationBounds
 
 private const val LAYERS_LIMIT: String = "maximumMergeLayers"
 
@@ -43,8 +46,11 @@ private const val LAYERS_LIMIT: String = "maximumMergeLayers"
  * The names of nodes a layer contributes are mapped onto the namespace declarations in scope, as an XML patch maps
  * added content.
  *
- * The work grows with the nodes of all layers; the number of layers is bounded by [XmlLimits.maximumMergeLayers] of
- * [limits]. A merger is immutable and safe to share between threads.
+ * The work grows with the nodes of all layers and is charged to [XmlLimits.maximumQuerySteps] of [limits]; the number
+ * of layers is bounded by [XmlLimits.maximumMergeLayers], every layer must stay within [XmlLimits.maximumDepth],
+ * [XmlLimits.maximumElements] and [XmlLimits.maximumAttributes], as a document a reader accepts does, and the paths
+ * of the origins together within [XmlLimits.maximumOutputLength]. Elements are matched by comparison, never by hash
+ * code. A merger is immutable and safe to share between threads.
  *
  * @property options how elements of a layer match those below it.
  * @property limits the limits of a merge.
@@ -60,19 +66,27 @@ public class XmlMerger(
      * @param layers the layers, at least one.
      * @return the merged document and the origin of every node.
      * @throws IllegalArgumentException if [layers] is empty or a document element differs from the one of the base.
-     * @throws XmlDocumentLimitException if there are more layers than [XmlLimits.maximumMergeLayers].
+     * @throws XmlDocumentLimitException if there are more layers than [XmlLimits.maximumMergeLayers], a layer exceeds
+     *   [XmlLimits.maximumDepth], [XmlLimits.maximumElements] or [XmlLimits.maximumAttributes], the merge needs more
+     *   work than [XmlLimits.maximumQuerySteps] or its paths are longer than [XmlLimits.maximumOutputLength].
      * @since 1.0.0
      */
     public fun merge(layers: List<XmlLayer>): XmlMerged {
         require(layers.isNotEmpty()) { "A merge needs at least one layer" }
         if (layers.size > limits.maximumMergeLayers) throw XmlDocumentLimitException(LAYERS_LIMIT)
         val base = layers.first().document
-        val root = TracedNode.of(base.root, layers.first().name) as TracedNode.Element
-        layers.drop(1).forEach { layer ->
+        val bounds = EvaluationBounds(limits)
+        layers.forEach { layer ->
             require(layer.document.root.name == base.root.name) {
                 "The layer ${SafeText.quoted(layer.name)} has another document element than the base"
             }
-            LayerMerging(options, layer.name).merged(root, layer.document.root, xmlScope)
+            val model = DocumentModel.of(layer.document)
+            bounds.charge(model.size.toLong())
+            model.requireShapeWithin(limits)
+        }
+        val root = TracedNode.of(base.root, layers.first().name) as TracedNode.Element
+        layers.drop(1).forEach { layer ->
+            LayerMerging(options, layer.name, bounds).merged(root, layer.document.root, xmlScope)
         }
         val document = XmlDocument(
             root = root.toNode(),
@@ -81,7 +95,7 @@ public class XmlMerger(
             epilog = base.epilog,
             doctype = base.doctype,
         )
-        return XmlMerged(document, OriginWriter.originsOf(root))
+        return XmlMerged(document, OriginWriter(limits).originsOf(root))
     }
 
     /**

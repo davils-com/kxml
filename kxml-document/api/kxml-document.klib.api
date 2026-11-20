@@ -262,8 +262,8 @@ final class com.davils.kxml.document.merge/XmlMergeOptions { // com.davils.kxml.
 final class com.davils.kxml.document.merge/XmlMerged { // com.davils.kxml.document.merge/XmlMerged|null[0]
     final val document // com.davils.kxml.document.merge/XmlMerged.document|{}document[0]
         final fun <get-document>(): com.davils.kxml.core.node/XmlDocument // com.davils.kxml.document.merge/XmlMerged.document.<get-document>|<get-document>(){}[0]
-    final val origins // com.davils.kxml.document.merge/XmlMerged.origins|{}origins[0]
-        final fun <get-origins>(): kotlin.collections/Map<kotlin/String, kotlin/String> // com.davils.kxml.document.merge/XmlMerged.origins.<get-origins>|<get-origins>(){}[0]
+    final val paths // com.davils.kxml.document.merge/XmlMerged.paths|{}paths[0]
+        final fun <get-paths>(): kotlin.collections/List<kotlin/String> // com.davils.kxml.document.merge/XmlMerged.paths.<get-paths>|<get-paths>(){}[0]
 
     final fun originOf(kotlin/String): kotlin/String? // com.davils.kxml.document.merge/XmlMerged.originOf|originOf(kotlin.String){}[0]
     final fun toString(): kotlin/String // com.davils.kxml.document.merge/XmlMerged.toString|toString(){}[0]
