@@ -66,6 +66,14 @@ private val refusals: Map<String, Pair<String, XmlDiagnosticCode>> = mapOf(
     "a character reference without digits" to ("<a>&#x;</a>" to XmlDiagnosticCode.InvalidReference),
     "a character reference with letters" to ("<a>&#12a;</a>" to XmlDiagnosticCode.InvalidReference),
     "a character reference out of range" to ("<a>&#x110000;</a>" to XmlDiagnosticCode.InvalidReference),
+    "a character reference with digits outside ASCII" to (
+        "<a>&#\u0666\u0665;</a>" to XmlDiagnosticCode.InvalidReference
+        ),
+    "a hexadecimal reference with digits outside ASCII" to (
+        "<a>&#x\uFF14\uFF11;</a>" to XmlDiagnosticCode.InvalidReference
+        ),
+    "an entity reference that starts with a digit" to ("<a>&1x;</a>" to XmlDiagnosticCode.InvalidReference),
+    "an entity reference with whitespace" to ("<a>& lt;</a>" to XmlDiagnosticCode.InvalidReference),
     "a control character" to ("<a>\u0001</a>" to XmlDiagnosticCode.InvalidCharacter),
     "a lone surrogate" to ("<a>\uD800</a>" to XmlDiagnosticCode.InvalidCharacter),
     "an unclosed comment" to ("<a><!-- c</a>" to XmlDiagnosticCode.UnexpectedEnd),

@@ -42,3 +42,5 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
   duplicate check of attribute names no longer compares every pair.
 - A document type declaration after the root element is refused also under `XmlDoctype.Ignore`, `<!DOCTYPE` needs
   whitespace before the name, and a processing instruction inside a skipped internal subset is skipped as a whole.
+- An entity reference must name an XML name, and a character reference accepts only ASCII digits, so
+  `&#\u0666\u0665;` no longer reads as `A`.

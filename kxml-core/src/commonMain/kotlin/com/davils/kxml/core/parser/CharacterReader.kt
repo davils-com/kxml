@@ -42,6 +42,8 @@ private const val HEX_PREFIX: String = "#x"
 private const val HEX_RADIX: Int = 16
 private const val DECIMAL_RADIX: Int = 10
 private const val MAXIMUM_REFERENCE: Int = 32
+private const val DECIMAL_DIGITS: String = "0123456789"
+private const val HEX_DIGITS: String = "0123456789abcdefABCDEF"
 
 private val predefined: Map<String, String> = mapOf(
     "lt" to "<",
@@ -169,17 +171,23 @@ internal class CharacterReader(private val cursor: Cursor, private val budget: P
         return character ?: entityOf(body, range)
     }
 
-    private fun entityOf(name: String, range: TextRange): String = predefined[name] ?: failure(
-        XmlDiagnosticCode.UndefinedEntity,
-        range,
-        "The entity &$name; is not one of the five XML predefines",
-    )
+    private fun entityOf(name: String, range: TextRange): String {
+        if (!XmlCharacters.isName(name)) {
+            failure(XmlDiagnosticCode.InvalidReference, range, "An entity reference must name an entity")
+        }
+        return predefined[name] ?: failure(
+            XmlDiagnosticCode.UndefinedEntity,
+            range,
+            "The entity &$name; is not one of the five XML predefines",
+        )
+    }
 
     private fun characterOf(body: String, range: TextRange): String {
         val isHex = body.startsWith(HEX_PREFIX)
         val radix = HEX_RADIX.takeIf { isHex } ?: DECIMAL_RADIX
         val digits = body.removePrefix(HEX_PREFIX).removePrefix(CHARACTER_PREFIX)
-        val isDigits = digits.isNotEmpty() && digits.all { digit -> digit.digitToIntOrNull(radix) != null }
+        val allowed = HEX_DIGITS.takeIf { isHex } ?: DECIMAL_DIGITS
+        val isDigits = digits.isNotEmpty() && digits.all { digit -> digit in allowed }
         val code = digits.takeIf { isDigits }?.toIntOrNull(radix)
         if (code == null || !XmlCharacters.isCharacter(code)) {
             failure(
