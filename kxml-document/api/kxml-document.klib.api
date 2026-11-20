@@ -203,6 +203,56 @@ final class com.davils.kxml.document.diff/XmlDiff { // com.davils.kxml.document.
     final fun toString(): kotlin/String // com.davils.kxml.document.diff/XmlDiff.toString|toString(){}[0]
 }
 
+final class com.davils.kxml.document.merge/XmlLayer { // com.davils.kxml.document.merge/XmlLayer|null[0]
+    constructor <init>(kotlin/String, com.davils.kxml.core.node/XmlDocument) // com.davils.kxml.document.merge/XmlLayer.<init>|<init>(kotlin.String;com.davils.kxml.core.node.XmlDocument){}[0]
+
+    final val document // com.davils.kxml.document.merge/XmlLayer.document|{}document[0]
+        final fun <get-document>(): com.davils.kxml.core.node/XmlDocument // com.davils.kxml.document.merge/XmlLayer.document.<get-document>|<get-document>(){}[0]
+    final val name // com.davils.kxml.document.merge/XmlLayer.name|{}name[0]
+        final fun <get-name>(): kotlin/String // com.davils.kxml.document.merge/XmlLayer.name.<get-name>|<get-name>(){}[0]
+
+    final fun equals(kotlin/Any?): kotlin/Boolean // com.davils.kxml.document.merge/XmlLayer.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // com.davils.kxml.document.merge/XmlLayer.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // com.davils.kxml.document.merge/XmlLayer.toString|toString(){}[0]
+}
+
+final class com.davils.kxml.document.merge/XmlMergeOptions { // com.davils.kxml.document.merge/XmlMergeOptions|null[0]
+    constructor <init>(kotlin.collections/Map<com.davils.kxml.core.name/XmlName, kotlin.collections/List<com.davils.kxml.core.name/XmlName>> = ..., com.davils.kxml.core.name/XmlName? = ...) // com.davils.kxml.document.merge/XmlMergeOptions.<init>|<init>(kotlin.collections.Map<com.davils.kxml.core.name.XmlName,kotlin.collections.List<com.davils.kxml.core.name.XmlName>>;com.davils.kxml.core.name.XmlName?){}[0]
+
+    final val deletionMarker // com.davils.kxml.document.merge/XmlMergeOptions.deletionMarker|{}deletionMarker[0]
+        final fun <get-deletionMarker>(): com.davils.kxml.core.name/XmlName? // com.davils.kxml.document.merge/XmlMergeOptions.deletionMarker.<get-deletionMarker>|<get-deletionMarker>(){}[0]
+    final val keys // com.davils.kxml.document.merge/XmlMergeOptions.keys|{}keys[0]
+        final fun <get-keys>(): kotlin.collections/Map<com.davils.kxml.core.name/XmlName, kotlin.collections/List<com.davils.kxml.core.name/XmlName>> // com.davils.kxml.document.merge/XmlMergeOptions.keys.<get-keys>|<get-keys>(){}[0]
+
+    final fun equals(kotlin/Any?): kotlin/Boolean // com.davils.kxml.document.merge/XmlMergeOptions.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // com.davils.kxml.document.merge/XmlMergeOptions.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // com.davils.kxml.document.merge/XmlMergeOptions.toString|toString(){}[0]
+}
+
+final class com.davils.kxml.document.merge/XmlMerged { // com.davils.kxml.document.merge/XmlMerged|null[0]
+    final val document // com.davils.kxml.document.merge/XmlMerged.document|{}document[0]
+        final fun <get-document>(): com.davils.kxml.core.node/XmlDocument // com.davils.kxml.document.merge/XmlMerged.document.<get-document>|<get-document>(){}[0]
+    final val origins // com.davils.kxml.document.merge/XmlMerged.origins|{}origins[0]
+        final fun <get-origins>(): kotlin.collections/Map<kotlin/String, kotlin/String> // com.davils.kxml.document.merge/XmlMerged.origins.<get-origins>|<get-origins>(){}[0]
+
+    final fun originOf(kotlin/String): kotlin/String? // com.davils.kxml.document.merge/XmlMerged.originOf|originOf(kotlin.String){}[0]
+    final fun toString(): kotlin/String // com.davils.kxml.document.merge/XmlMerged.toString|toString(){}[0]
+}
+
+final class com.davils.kxml.document.merge/XmlMerger { // com.davils.kxml.document.merge/XmlMerger|null[0]
+    constructor <init>(com.davils.kxml.document.merge/XmlMergeOptions = ..., com.davils.kxml.core.limit/XmlLimits = ...) // com.davils.kxml.document.merge/XmlMerger.<init>|<init>(com.davils.kxml.document.merge.XmlMergeOptions;com.davils.kxml.core.limit.XmlLimits){}[0]
+
+    final val limits // com.davils.kxml.document.merge/XmlMerger.limits|{}limits[0]
+        final fun <get-limits>(): com.davils.kxml.core.limit/XmlLimits // com.davils.kxml.document.merge/XmlMerger.limits.<get-limits>|<get-limits>(){}[0]
+    final val options // com.davils.kxml.document.merge/XmlMerger.options|{}options[0]
+        final fun <get-options>(): com.davils.kxml.document.merge/XmlMergeOptions // com.davils.kxml.document.merge/XmlMerger.options.<get-options>|<get-options>(){}[0]
+
+    final fun equals(kotlin/Any?): kotlin/Boolean // com.davils.kxml.document.merge/XmlMerger.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // com.davils.kxml.document.merge/XmlMerger.hashCode|hashCode(){}[0]
+    final fun merge(kotlin.collections/List<com.davils.kxml.document.merge/XmlLayer>): com.davils.kxml.document.merge/XmlMerged // com.davils.kxml.document.merge/XmlMerger.merge|merge(kotlin.collections.List<com.davils.kxml.document.merge.XmlLayer>){}[0]
+    final fun toString(): kotlin/String // com.davils.kxml.document.merge/XmlMerger.toString|toString(){}[0]
+}
+
 final class com.davils.kxml.document.patch/XmlPatch { // com.davils.kxml.document.patch/XmlPatch|null[0]
     constructor <init>(kotlin.collections/List<com.davils.kxml.document.patch/XmlPatchOperation>, com.davils.kxml.core.limit/XmlLimits = ...) // com.davils.kxml.document.patch/XmlPatch.<init>|<init>(kotlin.collections.List<com.davils.kxml.document.patch.XmlPatchOperation>;com.davils.kxml.core.limit.XmlLimits){}[0]
 

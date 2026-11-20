@@ -48,6 +48,10 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
   within `maximumDiffWork`, the operations use positional selectors in an order that keeps them valid, and an element
   whose alignment would exceed the work, whose namespace declarations changed or whose texts would join is replaced
   as a whole, so the patch stays correct and only grows coarser.
+- `XmlMerger` merges layers of documents, such as defaults and overrides, onto the first one: attributes override,
+  elements match by their expanded name and the key attributes of `XmlMergeOptions`, text content replaces, and a
+  deletion marker removes an element. `XmlMerged` holds the merged document and the layer every node comes from, by
+  its path, and a merge takes at most `maximumMergeLayers` layers.
 - All modules are Kotlin Multiplatform libraries with a `jvm` and a `wasmJs` target. Sources are decoded in common
   code, and untrusted text is escaped by `SafeText` of Kore.
 - Sources of bytes are detected as Appendix F of XML 1.0 describes it and decoded strictly from UTF-8, UTF-16 and

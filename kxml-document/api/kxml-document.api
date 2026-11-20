@@ -51,6 +51,45 @@ public final class com/davils/kxml/document/diff/XmlDiff {
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class com/davils/kxml/document/merge/XmlLayer {
+	public fun <init> (Ljava/lang/String;Lcom/davils/kxml/core/node/XmlDocument;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDocument ()Lcom/davils/kxml/core/node/XmlDocument;
+	public final fun getName ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/document/merge/XmlMergeOptions {
+	public fun <init> ()V
+	public fun <init> (Ljava/util/Map;Lcom/davils/kxml/core/name/XmlName;)V
+	public synthetic fun <init> (Ljava/util/Map;Lcom/davils/kxml/core/name/XmlName;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDeletionMarker ()Lcom/davils/kxml/core/name/XmlName;
+	public final fun getKeys ()Ljava/util/Map;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/document/merge/XmlMerged {
+	public final fun getDocument ()Lcom/davils/kxml/core/node/XmlDocument;
+	public final fun getOrigins ()Ljava/util/Map;
+	public final fun originOf (Ljava/lang/String;)Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/document/merge/XmlMerger {
+	public fun <init> ()V
+	public fun <init> (Lcom/davils/kxml/document/merge/XmlMergeOptions;Lcom/davils/kxml/core/limit/XmlLimits;)V
+	public synthetic fun <init> (Lcom/davils/kxml/document/merge/XmlMergeOptions;Lcom/davils/kxml/core/limit/XmlLimits;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getLimits ()Lcom/davils/kxml/core/limit/XmlLimits;
+	public final fun getOptions ()Lcom/davils/kxml/document/merge/XmlMergeOptions;
+	public fun hashCode ()I
+	public final fun merge (Ljava/util/List;)Lcom/davils/kxml/document/merge/XmlMerged;
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class com/davils/kxml/document/patch/XmlPatch {
 	public static final field Companion Lcom/davils/kxml/document/patch/XmlPatch$Companion;
 	public fun <init> (Ljava/util/List;Lcom/davils/kxml/core/limit/XmlLimits;)V
