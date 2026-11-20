@@ -44,6 +44,13 @@ kreate {
             expires = "2027-05-16"
         }
 
+        ignore("STANDARD_UNDECLARED") {
+            reason = "The inventory reads the encoding label ISO-10646-UCS-4 as iso:10646; the standard is declared as " +
+                "iso:iec-10646, the id Kreate gives ISO/IEC 10646."
+            module = "iso:10646"
+            expires = "2027-05-20"
+        }
+
         baseline {
             maxSeverity = Severity.LOW
             failOnStale = true

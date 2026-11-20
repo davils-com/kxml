@@ -42,6 +42,18 @@ kreate {
             rfc(2781) {
                 note = "The strict UTF-16 decoder of XML sources in kxml-core."
             }
+            rfc(20) {
+                note = "The strict US-ASCII decoder of XML sources in kxml-core, which refuses every byte above 0x7F."
+            }
+            iso("ISO/IEC 10646") {
+                note = "The universal coded character set behind UTF-8, UTF-16 and UTF-32 and the label ISO-10646-UCS-4."
+            }
+            iso("ISO/IEC 8859-1") {
+                note = "The ISO-8859-1 decoder of XML sources in kxml-core."
+            }
+            rfc(7303) {
+                note = "The precedence of a byte order mark over the charset of a source over the declared encoding."
+            }
             unicode {
                 note = "The safe display of text follows the Unicode tables of the platform."
             }

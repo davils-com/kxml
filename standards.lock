@@ -2,6 +2,61 @@
     "schemaVersion": 1,
     "standards": [
         {
+            "id": "iso:iec-10646",
+            "reviewedOn": "2026-11-20",
+            "note": "ISO/IEC 10646:2020 with amendments 1:2023 and 2:2025, which add characters. The decoders of UTF-8, UTF-16 and UTF-32 depend on the encoding forms, not on assigned characters, and the characters and names of XML are fixed ranges of code points.",
+            "snapshot": {
+                "title": "Information technology — Universal coded character set (UCS)",
+                "status": "90.92",
+                "revision": "ISO/IEC 10646:2020",
+                "published": "2020-12-21",
+                "withdrawn": false,
+                "replacedBy": [],
+                "updatedBy": [
+                    "ISO/IEC 10646:2020/Amd 1:2023",
+                    "ISO/IEC 10646:2020/Amd 2:2025"
+                ],
+                "errata": {}
+            }
+        },
+        {
+            "id": "iso:iec-8859-1",
+            "reviewedOn": "2026-11-20",
+            "note": "ISO/IEC 8859-1:1998 is current. The decoder maps every byte to the code point of the same value, so it cannot fail; XML then refuses the characters it does not allow.",
+            "snapshot": {
+                "title": "Information technology — 8-bit single-byte coded graphic character sets — Part 1: Latin alphabet No. 1",
+                "status": "90.93",
+                "revision": "ISO/IEC 8859-1:1998",
+                "published": "1998-04-16",
+                "withdrawn": false,
+                "replacedBy": [],
+                "updatedBy": [],
+                "errata": {}
+            }
+        },
+        {
+            "id": "rfc:20",
+            "reviewedOn": "2026-11-20",
+            "note": "Errata 3284, 4217, 5106, 6087, 6652, 6879 and 9019 are editorial: names, slashes, parentheses and the styling of graphics. None changes the 7-bit code; the decoder refuses every byte above 0x7F, as XmlSourceTest pins.",
+            "snapshot": {
+                "title": "ASCII format for network interchange",
+                "status": "INTERNET STANDARD",
+                "published": "October 1969",
+                "withdrawn": false,
+                "replacedBy": [],
+                "updatedBy": [],
+                "errata": {
+                    "3284": "HELD",
+                    "4217": "VERIFIED",
+                    "5106": "HELD",
+                    "6087": "HELD",
+                    "6652": "VERIFIED",
+                    "6879": "VERIFIED",
+                    "9019": "REPORTED"
+                }
+            }
+        },
+        {
             "id": "rfc:2781",
             "reviewedOn": "2026-11-20",
             "note": "No errata. The decoder refuses unpaired surrogates and an odd number of bytes in both byte orders, as XmlSourceTest pins.",
@@ -27,6 +82,22 @@
                 "replacedBy": [],
                 "updatedBy": [],
                 "errata": {}
+            }
+        },
+        {
+            "id": "rfc:7303",
+            "reviewedOn": "2026-11-20",
+            "note": "Held erratum 4578 only narrows the change controller of the +xml suffix to its registration. kxml takes a byte order mark over the charset of a source over the declared encoding, as section 3 orders it and XmlSourceTest pins.",
+            "snapshot": {
+                "title": "XML Media Types",
+                "status": "PROPOSED STANDARD",
+                "published": "July 2014",
+                "withdrawn": false,
+                "replacedBy": [],
+                "updatedBy": [],
+                "errata": {
+                    "4578": "HELD"
+                }
             }
         },
         {
