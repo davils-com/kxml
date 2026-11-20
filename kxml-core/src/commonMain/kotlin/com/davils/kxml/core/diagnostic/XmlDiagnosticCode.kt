@@ -162,6 +162,35 @@ public enum class XmlDiagnosticCode(public val value: String, public val severit
     UndefinedEntity("kxml.reference.undefined-entity", Severity.Error),
 
     /**
+     * A reference to an entity from within its own replacement text, directly or through other entities.
+     *
+     * @since 1.0.0
+     */
+    RecursiveEntity("kxml.reference.recursive-entity", Severity.Error),
+
+    /**
+     * A reference in content to an unparsed entity, or a reference to an external entity in an attribute value.
+     *
+     * @since 1.0.0
+     */
+    MisusedEntity("kxml.reference.misused-entity", Severity.Error),
+
+    /**
+     * A reference to an external entity or an external subset that no resolver of the caller resolves; kxml never
+     * loads anything on its own and refuses rather than skips what it cannot read.
+     *
+     * @since 1.0.0
+     */
+    UnresolvedEntity("kxml.reference.unresolved-entity", Severity.Error),
+
+    /**
+     * An entity whose replacement text opens an element it does not close or closes one it did not open.
+     *
+     * @since 1.0.0
+     */
+    UnbalancedEntity("kxml.reference.unbalanced-entity", Severity.Error),
+
+    /**
      * A document type declaration under [XmlDoctype.Refuse][com.davils.kxml.core.XmlDoctype.Refuse].
      *
      * @since 1.0.0
@@ -169,12 +198,12 @@ public enum class XmlDiagnosticCode(public val value: String, public val severit
     RefusedDoctype("kxml.doctype.refused", Severity.Error),
 
     /**
-     * A document type declaration that was skipped under [XmlDoctype.Ignore][com.davils.kxml.core.XmlDoctype.Ignore]; a
-     * warning.
+     * A markup declaration of a document type declaration that does not follow its grammar, such as an entity
+     * declaration without a value or a content model with mixed separators.
      *
      * @since 1.0.0
      */
-    IgnoredDoctype("kxml.doctype.ignored", Severity.Warning),
+    InvalidMarkupDeclaration("kxml.doctype.invalid-declaration", Severity.Error),
 
     /**
      * A document type declaration after the root element or after another one.
@@ -247,6 +276,37 @@ public enum class XmlDiagnosticCode(public val value: String, public val severit
      * @since 1.0.0
      */
     TooDeep("kxml.limit.depth", Severity.Error),
+
+    /**
+     * More entity declarations than
+     * [XmlLimits.maximumEntityDeclarations][com.davils.kxml.core.limit.XmlLimits.maximumEntityDeclarations].
+     *
+     * @since 1.0.0
+     */
+    TooManyEntityDeclarations("kxml.limit.entity-declarations", Severity.Error),
+
+    /**
+     * More attribute definitions than
+     * [XmlLimits.maximumAttributeDeclarations][com.davils.kxml.core.limit.XmlLimits.maximumAttributeDeclarations].
+     *
+     * @since 1.0.0
+     */
+    TooManyAttributeDeclarations("kxml.limit.attribute-declarations", Severity.Error),
+
+    /**
+     * More characters of entity replacement text than
+     * [XmlLimits.maximumEntityExpansion][com.davils.kxml.core.limit.XmlLimits.maximumEntityExpansion].
+     *
+     * @since 1.0.0
+     */
+    EntityExpansionTooLarge("kxml.limit.entity-expansion", Severity.Error),
+
+    /**
+     * Entities nested deeper than [XmlLimits.maximumEntityDepth][com.davils.kxml.core.limit.XmlLimits.maximumEntityDepth].
+     *
+     * @since 1.0.0
+     */
+    EntityTooDeep("kxml.limit.entity-depth", Severity.Error),
 
     /**
      * More elements than [XmlLimits.maximumElements][com.davils.kxml.core.limit.XmlLimits.maximumElements].

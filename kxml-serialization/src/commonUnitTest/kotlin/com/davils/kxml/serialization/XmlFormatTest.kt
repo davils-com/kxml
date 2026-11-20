@@ -222,13 +222,13 @@ class XmlFormatTest : FunSpec({
             XmlFormat.Default.encodeToString<Owner?>(null) shouldContain "<Owner/>"
         }
 
-        test("keep the warnings of the reader") {
-            val tolerant = xmlFormat { xml { doctype = XmlDoctype.Ignore } }
-            val decoding = tolerant.decodeOrFailure<CommonPrefix>(TYPED_PREFIX)
+        test("read a document type when the reader may read it") {
+            val reading = xmlFormat { xml { doctype = XmlDoctype.Internal } }
+            val decoding = reading.decodeOrFailure<CommonPrefix>(TYPED_PREFIX)
             val decoded = decoding.shouldBeInstanceOf<XmlDecoding.Decoded<CommonPrefix>>()
 
             decoded.value shouldBe CommonPrefix("p")
-            decoded.diagnostics.size shouldBe 1
+            decoded.diagnostics.size shouldBe 0
         }
 
         test("decode an element") {

@@ -22,12 +22,14 @@ import com.davils.kore.core.collection.immutableList
 /**
  * A whole document: the root element, the declaration and the comments and processing instructions around the root.
  *
- * Two documents are equal when their roots, declarations, prologs and epilogs are equal. An instance is immutable.
+ * Two documents are equal when their roots, declarations, prologs, epilogs and document types are equal. An instance
+ * is immutable.
  *
  * @property root the root element.
  * @property declaration the XML declaration, or `null` for none.
  * @param prolog the comments and processing instructions before the root element.
  * @param epilog the comments and processing instructions after the root element.
+ * @property doctype the document type declaration the document was read with, or `null` for none.
  * @throws IllegalArgumentException if [prolog] or [epilog] holds anything but comments and processing instructions.
  * @since 1.0.0
  */
@@ -37,6 +39,7 @@ public class XmlDocument(
     public val declaration: XmlDeclaration? = null,
     prolog: List<XmlNode> = emptyList(),
     epilog: List<XmlNode> = emptyList(),
+    public val doctype: XmlDoctypeDeclaration? = null,
 ) {
     /**
      * The comments and processing instructions before the root element.
@@ -59,10 +62,10 @@ public class XmlDocument(
         }
     }
 
-    private val values: List<Any?> get() = listOf(root, declaration, prolog, epilog)
+    private val values: List<Any?> get() = listOf(root, declaration, prolog, epilog, doctype)
 
     /**
-     * Compares the root, the declaration, the prolog and the epilog.
+     * Compares the root, the declaration, the prolog, the epilog and the document type.
      *
      * @param other the value to compare with.
      * @return whether [other] is an equal document.
@@ -71,7 +74,7 @@ public class XmlDocument(
     override fun equals(other: Any?): Boolean = other is XmlDocument && values == other.values
 
     /**
-     * Returns a hash code derived from the root, the declaration, the prolog and the epilog.
+     * Returns a hash code derived from the root, the declaration, the prolog, the epilog and the document type.
      *
      * @return the hash code.
      * @since 1.0.0

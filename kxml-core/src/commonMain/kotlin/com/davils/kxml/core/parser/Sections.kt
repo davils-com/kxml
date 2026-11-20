@@ -25,7 +25,7 @@ import com.davils.kxml.core.internal.unicodeNameOf
 private const val NONE: Int = -1
 
 internal object Sections {
-    fun normalized(text: String, from: Int, to: Int, dialect: Dialect): String {
+    fun normalized(text: String, from: Int, to: Int, dialect: Dialect, isRaw: Boolean): String {
         val raw = text.substring(startIndex = from, endIndex = to)
         val invalid = invalidOffset(raw, dialect)
         if (invalid != NONE) {
@@ -35,6 +35,7 @@ internal object Sections {
                 "The character ${unicodeNameOf(raw.codePointAt(invalid))} is not allowed in XML",
             )
         }
+        if (!isRaw) return raw
         return dialect.normalizedLineEnds(raw)
     }
 

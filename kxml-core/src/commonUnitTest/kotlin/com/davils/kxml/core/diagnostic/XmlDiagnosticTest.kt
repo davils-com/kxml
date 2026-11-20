@@ -32,7 +32,7 @@ private val start: TextRange = TextRange.at(0)
 class XmlDiagnosticTest : FunSpec({
     context("diagnostics") {
         test("take the severity of their code unless told otherwise") {
-            XmlDiagnostic(XmlDiagnosticCode.IgnoredDoctype, start, "m").severity shouldBe Severity.Warning
+            XmlDiagnostic(XmlDiagnosticCode.EncodingOverridden, start, "m").severity shouldBe Severity.Warning
             XmlDiagnostic(XmlDiagnosticCode.TooDeep, start, "m").severity shouldBe Severity.Error
         }
 

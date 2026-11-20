@@ -20,35 +20,66 @@ import com.davils.kore.core.text.TextRange
 import com.davils.kxml.core.internal.codePointAt
 import com.davils.kxml.core.name.XmlCharacters
 
-internal class Cursor(val text: String) {
-    var offset: Int = 0
-        private set
+private const val NEXT_LINE: Char = '\u0085'
+private const val LINE_SEPARATOR: Char = '\u2028'
 
-    val isAtEnd: Boolean get() = offset >= text.length
+internal class Cursor(text: String) {
+    private val frames = ArrayDeque<CursorFrame>()
+    private var frame = CursorFrame(text = text, anchor = null, name = null, isReplacement = false)
 
-    fun peek(): Char = text[offset]
+    val text: String get() = frame.text
 
-    fun codePoint(): Int = text.codePointAt(offset)
+    val offset: Int get() = frame.offset
 
-    fun startsWith(prefix: String): Boolean = text.startsWith(prefix, offset)
+    val depth: Int get() = frames.size
 
-    fun indexOf(marker: String, from: Int = offset): Int = text.indexOf(marker, from)
+    val isReplacement: Boolean get() = frame.isReplacement
+
+    val isAtEnd: Boolean get() = frame.offset >= frame.text.length
+
+    var isLineSeparatorSpace: Boolean = false
+
+    val outermostAnchor: TextRange? get() = frames.getOrNull(1)?.anchor ?: frame.anchor.takeIf { frames.isNotEmpty() }
+
+    val names: List<String> get() = frames.mapNotNull(CursorFrame::name) + listOfNotNull(frame.name)
+
+    fun push(text: String, anchor: TextRange, name: String, isReplacement: Boolean) {
+        frames.addLast(frame)
+        frame = CursorFrame(text = text, anchor = anchor, name = name, isReplacement = isReplacement)
+    }
+
+    fun pop() {
+        frame = frames.removeLast()
+    }
+
+    fun peek(): Char = frame.text[frame.offset]
+
+    fun codePoint(): Int = frame.text.codePointAt(frame.offset)
+
+    fun startsWith(prefix: String): Boolean = frame.text.startsWith(prefix, frame.offset)
+
+    fun indexOf(marker: String, from: Int = frame.offset): Int = frame.text.indexOf(marker, from)
 
     fun advance(count: Int = 1) {
-        offset += count
+        frame.moveTo(frame.offset + count)
     }
 
     fun moveTo(target: Int) {
-        offset = target
+        frame.moveTo(target)
     }
 
     fun skipWhitespace(): Boolean {
-        val start = offset
-        while (!isAtEnd && XmlCharacters.isWhitespace(peek())) offset++
-        return offset > start
+        val start = frame.offset
+        while (!isAtEnd && isSpace(peek())) advance()
+        return frame.offset > start
     }
 
-    fun rangeFrom(start: Int): TextRange = TextRange(start, offset)
+    private fun isSpace(char: Char): Boolean {
+        val isSeparator = isLineSeparatorSpace && !frame.isReplacement && (char == NEXT_LINE || char == LINE_SEPARATOR)
+        return XmlCharacters.isWhitespace(char) || isSeparator
+    }
 
-    fun rest(start: Int): TextRange = TextRange(start, text.length)
+    fun rangeFrom(start: Int): TextRange = outermostAnchor ?: TextRange(start, frame.offset)
+
+    fun rest(start: Int): TextRange = outermostAnchor ?: TextRange(start, frame.text.length)
 }

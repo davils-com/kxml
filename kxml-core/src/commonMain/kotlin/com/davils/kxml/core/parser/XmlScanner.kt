@@ -22,6 +22,13 @@ import com.davils.kxml.core.XmlDoctype
 import com.davils.kxml.core.XmlEvent
 import com.davils.kxml.core.diagnostic.XmlDiagnostic
 import com.davils.kxml.core.diagnostic.XmlDiagnosticCode
+import com.davils.kxml.core.dtd.AttributeDefaults
+import com.davils.kxml.core.dtd.AttributeExpansion
+import com.davils.kxml.core.dtd.DoctypeReader
+import com.davils.kxml.core.dtd.Dtd
+import com.davils.kxml.core.dtd.DtdLexer
+import com.davils.kxml.core.dtd.EntityContext
+import com.davils.kxml.core.dtd.ExpansionBudget
 import com.davils.kxml.core.source.XmlEncoding
 import com.davils.kxml.core.syntax.XmlSyntaxKind
 
@@ -34,20 +41,31 @@ private const val MARKUP: String = "<!"
 private const val START: String = "<"
 private const val ANYTHING: String = ""
 private const val BYTE_ORDER_MARK: String = "\uFEFF"
+private const val REFERENCE_DELIMITERS: Int = 2
 
 internal class XmlScanner(
     text: String,
     private val configuration: XmlConfiguration,
     private val encoding: XmlEncoding?,
-    private val sink: SyntaxSink,
+    sink: SyntaxSink,
 ) {
     private val cursor = Cursor(text)
+    private val syntax = FramedSink(sink, cursor)
     private val dialect = Dialect()
     private val budget = ParseBudget(configuration.limits)
-    private val characters = CharacterReader(cursor = cursor, budget = budget, sink = sink, dialect = dialect)
-    private val tags = TagReader(cursor = cursor, budget = budget, characters = characters, sink = sink)
-    private val markup = MarkupReader(cursor = cursor, budget = budget, tags = tags, sink = sink, dialect = dialect)
-    private val declarations = DeclarationReader(cursor, characters, sink)
+    private val expansion = ExpansionBudget(configuration.limits)
+    private val entities = EntityContext(expansion)
+    private val characters = CharacterReader(
+        cursor = cursor,
+        budget = budget,
+        sink = syntax,
+        dialect = dialect,
+        entities = entities,
+    )
+    private val entered = ArrayDeque<Int>()
+    private val tags = TagReader(cursor = cursor, budget = budget, characters = characters, sink = syntax)
+    private val markup = MarkupReader(cursor = cursor, budget = budget, tags = tags, sink = syntax, dialect = dialect)
+    private val declarations = DeclarationReader(cursor, characters, syntax)
     private val resolver = NamespaceResolver(dialect)
     private val open = ArrayDeque<OpenElement>()
     private val pending = ArrayDeque<XmlEvent>()
@@ -55,6 +73,8 @@ internal class XmlScanner(
     private var hasRoot = false
     private var hasDoctype = false
     private var isStarted = false
+    private var isStandalone = false
+    private var dtd: Dtd? = null
 
     private val contentReaders: List<Pair<String, () -> XmlEvent>> = listOf(
         END_TAG to ::endTag,
@@ -84,23 +104,28 @@ internal class XmlScanner(
 
     private fun start(): XmlEvent? {
         isStarted = true
-        sink.startNode(XmlSyntaxKind.DOCUMENT)
+        syntax.startNode(XmlSyntaxKind.DOCUMENT)
         if (cursor.startsWith(BYTE_ORDER_MARK)) {
             cursor.advance(BYTE_ORDER_MARK.length)
-            sink.token(kind = XmlSyntaxKind.BYTE_ORDER_MARK, start = 0, end = cursor.offset)
+            syntax.token(kind = XmlSyntaxKind.BYTE_ORDER_MARK, start = 0, end = cursor.offset)
         }
         if (!declarations.isAhead()) return next()
         val declaration = declarations.read(encoding)
         dialect.adopt(declaration.declaration.version)
+        cursor.isLineSeparatorSpace = dialect.isVersion11
+        isStandalone = declaration.declaration.isStandalone == true
+        entities.isStandalone = isStandalone
         return declaration
     }
 
     private fun produce(): XmlEvent? {
-        if (open.isNotEmpty()) return content()
-        return outside()
+        var event: XmlEvent? = null
+        while (event == null && open.isNotEmpty()) event = content()
+        return event ?: outside()
     }
 
-    private fun content(): XmlEvent {
+    private fun content(): XmlEvent? {
+        while (cursor.isAtEnd && cursor.depth > 0) leaveEntity()
         if (cursor.isAtEnd) {
             failure(
                 XmlDiagnosticCode.UnclosedElement,
@@ -108,12 +133,39 @@ internal class XmlScanner(
                 "The element <${open.last().qualified}> is not closed",
             )
         }
+        if (characters.isExpandableReference()) return enterEntity()
         val (_, reader) = contentReaders.first { (prefix, _) -> cursor.startsWith(prefix) }
         return reader()
     }
 
+    private fun enterEntity(): XmlEvent? {
+        val start = cursor.offset
+        val name = characters.referencedName().orEmpty()
+        cursor.advance(name.length + REFERENCE_DELIMITERS)
+        syntax.token(kind = XmlSyntaxKind.ENTITY_REFERENCE, start = start, end = cursor.offset)
+        val range = cursor.rangeFrom(start)
+        val entity = entities.general(name = name, range = range, expanding = cursor.names, isInAttribute = false)
+        val replacement = entity.replacement.orEmpty()
+        expansion.charge(length = replacement.length, depth = cursor.depth, range = range)
+        entered.addLast(open.size)
+        cursor.push(text = replacement, anchor = range, name = name, isReplacement = true)
+        return null
+    }
+
+    private fun leaveEntity() {
+        val depth = entered.removeLast()
+        if (open.size != depth) {
+            failure(
+                XmlDiagnosticCode.UnbalancedEntity,
+                cursor.rangeFrom(cursor.offset),
+                "The entity &${cursor.names.last()}; leaves an element open",
+            )
+        }
+        cursor.pop()
+    }
+
     private fun outside(): XmlEvent? {
-        cursor.skipWhitespace(sink)
+        cursor.skipWhitespace(syntax)
         if (cursor.isAtEnd) return finish()
         val (_, reader) = outsideReaders.first { (prefix, _) -> cursor.startsWith(prefix) }
         return reader()
@@ -127,7 +179,7 @@ internal class XmlScanner(
                 "There is no root element",
             )
         }
-        sink.finishNode()
+        syntax.finishNode()
         return null
     }
 
@@ -168,18 +220,25 @@ internal class XmlScanner(
                 "A document type may only stand once, before the root element",
             )
         }
-        markup.skipDoctype()
         hasDoctype = true
-        noticed += XmlDiagnostic(
-            XmlDiagnosticCode.IgnoredDoctype,
-            cursor.rangeFrom(start),
-            "The document type declaration was ignored",
+        val lexer = DtdLexer(cursor = cursor, sink = syntax, dialect = dialect, budget = budget)
+        val reader = DoctypeReader(
+            lexer = lexer,
+            markup = markup,
+            limits = configuration.limits,
+            entities = entities,
+            expansion = AttributeExpansion(entities, dialect),
+            isStandalone = isStandalone,
         )
-        return next()
+        val read = reader.read()
+        dtd = read
+        entities.dtd = read
+        return XmlEvent.DocumentType(read.declaration(), cursor.rangeFrom(start))
     }
 
     private fun startTag(): XmlEvent {
-        val tag = tags.startTag()
+        val read = tags.startTag()
+        val tag = dtd?.let { declared -> AttributeDefaults.applied(read, declared) } ?: read
         budget.enter(open.size + 1, tag.range)
         val resolved = resolver.open(tag)
         val event = XmlEvent.StartElement(
@@ -204,6 +263,13 @@ internal class XmlScanner(
 
     private fun endTag(): XmlEvent {
         val tag = tags.endTag()
+        if (cursor.depth > 0 && open.size <= entered.last()) {
+            failure(
+                XmlDiagnosticCode.UnbalancedEntity,
+                tag.range,
+                "The entity &${cursor.names.last()}; closes an element it did not open",
+            )
+        }
         val top = open.removeLast()
         if (tag.qualified != top.qualified) {
             failure(
@@ -213,7 +279,7 @@ internal class XmlScanner(
             )
         }
         resolver.close()
-        sink.finishNode()
+        syntax.finishNode()
         return XmlEvent.EndElement(top.name, tag.range)
     }
 }

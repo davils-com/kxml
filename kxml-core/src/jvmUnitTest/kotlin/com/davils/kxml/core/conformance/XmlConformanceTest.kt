@@ -20,6 +20,7 @@ import com.davils.kxml.core.XmlDoctype
 import com.davils.kxml.core.XmlParseResult
 import com.davils.kxml.core.conformance.fixture.ConformanceSuite
 import com.davils.kxml.core.conformance.fixture.SuiteCase
+import com.davils.kxml.core.limit.XmlLimits
 import com.davils.kxml.core.source.XmlSource
 import com.davils.kxml.core.xml
 import io.kotest.core.spec.style.FunSpec
@@ -27,7 +28,10 @@ import io.kotest.matchers.collections.shouldBeEmpty
 import java.nio.file.Files
 import java.nio.file.Path
 
-private val reader = xml { doctype = XmlDoctype.Ignore }
+private val reader = xml {
+    doctype = XmlDoctype.Internal
+    limits = XmlLimits.Relaxed
+}
 
 private fun knownFailures(): Map<String, String> {
     val resource = XmlConformanceTest::class.java.getResource("/conformance/known-failures.txt")

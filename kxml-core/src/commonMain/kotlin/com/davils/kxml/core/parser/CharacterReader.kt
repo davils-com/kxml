@@ -19,7 +19,10 @@ package com.davils.kxml.core.parser
 import com.davils.kore.core.text.TextRange
 import com.davils.kxml.core.XmlEvent
 import com.davils.kxml.core.diagnostic.XmlDiagnosticCode
+import com.davils.kxml.core.dtd.AttributeExpansion
+import com.davils.kxml.core.dtd.EntityContext
 import com.davils.kxml.core.internal.charCountOf
+import com.davils.kxml.core.internal.codePointAt
 import com.davils.kxml.core.internal.textOf
 import com.davils.kxml.core.internal.unicodeNameOf
 import com.davils.kxml.core.name.XmlCharacters
@@ -41,10 +44,10 @@ private const val LINE_SEPARATOR: Char = '\u2028'
 private const val SEMICOLON: String = ";"
 private const val CDATA_END: String = "]]>"
 private const val CHARACTER_PREFIX: String = "#"
+private const val HASH: Char = '#'
 private const val HEX_PREFIX: String = "#x"
 private const val HEX_RADIX: Int = 16
 private const val DECIMAL_RADIX: Int = 10
-private const val MAXIMUM_REFERENCE: Int = 32
 private const val DECIMAL_DIGITS: String = "0123456789"
 private const val HEX_DIGITS: String = "0123456789abcdefABCDEF"
 
@@ -61,7 +64,10 @@ internal class CharacterReader(
     private val budget: ParseBudget,
     private val sink: SyntaxSink,
     private val dialect: Dialect,
+    entities: EntityContext,
 ) {
+    private val expansion = AttributeExpansion(entities, dialect)
+
     private val handlers: Map<Char, (Boolean) -> String?> = mapOf(
         CARRIAGE_RETURN to ::carriageReturn,
         LINE_FEED to ::whitespace,
@@ -75,7 +81,7 @@ internal class CharacterReader(
         val start = cursor.offset
         val value = StringBuilder()
         var run = start
-        while (!cursor.isAtEnd && cursor.peek() != LESS_THAN) {
+        while (!cursor.isAtEnd && cursor.peek() != LESS_THAN && !isExpandableReference()) {
             run = appendNext(value, Piece(isAttribute = false, stop = LESS_THAN, run = run))
             budget.text(value.length, cursor.rangeFrom(start))
         }
@@ -136,7 +142,7 @@ internal class CharacterReader(
         val start = cursor.offset
         val runKind = XmlSyntaxKind.ATTRIBUTE_TEXT.takeIf { piece.isAttribute } ?: XmlSyntaxKind.TEXT
         sink.token(kind = runKind, start = piece.run, end = start)
-        value.append(reference())
+        value.append(reference(piece.isAttribute))
         val isCharacter = cursor.text.startsWith(CHARACTER_PREFIX, start + 1)
         val kind = XmlSyntaxKind.CHARACTER_REFERENCE.takeIf { isCharacter } ?: XmlSyntaxKind.ENTITY_REFERENCE
         sink.token(kind = kind, start = start, end = cursor.offset)
@@ -170,13 +176,14 @@ internal class CharacterReader(
 
     private fun carriageReturn(isAttribute: Boolean): String {
         cursor.advance()
-        val isPaired = !cursor.isAtEnd && dialect.isPairedWithReturn(cursor.peek())
+        val isPaired = !cursor.isReplacement && !cursor.isAtEnd && dialect.isPairedWithReturn(cursor.peek())
         if (isPaired) cursor.advance()
-        return SPACE.takeIf { isAttribute } ?: NEWLINE
+        val kept = CARRIAGE_RETURN.toString().takeIf { cursor.isReplacement } ?: NEWLINE
+        return SPACE.takeIf { isAttribute } ?: kept
     }
 
     private fun lineSeparator(isAttribute: Boolean): String? {
-        if (!dialect.isLineSeparator(cursor.peek())) return null
+        if (cursor.isReplacement || !dialect.isLineSeparator(cursor.peek())) return null
         cursor.advance()
         return SPACE.takeIf { isAttribute } ?: NEWLINE
     }
@@ -194,30 +201,56 @@ internal class CharacterReader(
         return null
     }
 
-    private fun reference(): String {
-        val start = cursor.offset
-        val searched = minOf(a = cursor.text.length, b = start + MAXIMUM_REFERENCE + 1)
-        val end = cursor.text.substring(startIndex = start, endIndex = searched).indexOf(SEMICOLON) + start
-        val isTerminated = end > start + 1
-        if (!isTerminated) {
-            failure(XmlDiagnosticCode.InvalidReference, TextRange.of(start, 1), "A reference must end with ;")
-        }
-        val body = cursor.text.substring(startIndex = start + 1, endIndex = end)
-        cursor.moveTo(end + 1)
-        val range = TextRange(start, end + 1)
-        val character = body.takeIf { it.startsWith(CHARACTER_PREFIX) }?.let { characterOf(it, range) }
-        return character ?: entityOf(body, range)
+    fun isExpandableReference(): Boolean {
+        val name = referencedName() ?: return false
+        return name !in predefined
     }
 
-    private fun entityOf(name: String, range: TextRange): String {
+    fun referencedName(): String? {
+        val isEntity = cursor.peek() == AMPERSAND && cursor.text.getOrNull(cursor.offset + 1) != HASH
+        if (!isEntity) return null
+        var end = cursor.offset + 1
+        while (end < cursor.text.length && XmlCharacters.isNameCharacter(cursor.text.codePointAt(end))) {
+            end += charCountOf(cursor.text.codePointAt(end))
+        }
+        val isTerminated = cursor.text.getOrNull(end) == SEMICOLON[0]
+        val name = cursor.text.substring(startIndex = cursor.offset + 1, endIndex = end)
+        return name.takeIf { isTerminated && XmlCharacters.isName(it) }
+    }
+
+    private fun reference(isAttribute: Boolean): String {
+        val start = cursor.offset
+        cursor.advance()
+        val isCharacter = !cursor.isAtEnd && cursor.peek() == HASH
+        val nameStart = cursor.offset
+        while (!cursor.isAtEnd && isReferenceCharacter(cursor.codePoint(), isCharacter)) {
+            cursor.advance(charCountOf(cursor.codePoint()))
+        }
+        budget.name(cursor.offset - nameStart, cursor.rangeFrom(start))
+        if (cursor.isAtEnd || cursor.peek() != SEMICOLON[0] || cursor.offset == nameStart) {
+            failure(XmlDiagnosticCode.InvalidReference, cursor.rangeFrom(start), "A reference must end with ;")
+        }
+        val body = cursor.text.substring(startIndex = nameStart, endIndex = cursor.offset)
+        cursor.advance()
+        val range = cursor.rangeFrom(start)
+        if (isCharacter) return characterOf(body, range)
+        return entityOf(body, range, isAttribute)
+    }
+
+    private fun isReferenceCharacter(code: Int, isCharacter: Boolean): Boolean {
+        val isDigitOrMark = isCharacter && (code == HASH.code || code.toChar().isLetterOrDigit())
+        val isName = !isCharacter && XmlCharacters.isNameCharacter(code)
+        return isDigitOrMark || isName
+    }
+
+    private fun entityOf(name: String, range: TextRange, isAttribute: Boolean): String {
         if (!XmlCharacters.isName(name)) {
             failure(XmlDiagnosticCode.InvalidReference, range, "An entity reference must name an entity")
         }
-        return predefined[name] ?: failure(
-            XmlDiagnosticCode.UndefinedEntity,
-            range,
-            "The entity &$name; is not one of the five XML predefines",
-        )
+        val known = predefined[name]
+        if (known != null) return known
+        if (!isAttribute) failure(XmlDiagnosticCode.UndefinedEntity, range, "The entity &$name; is not declared")
+        return expansion.expand(name, range, cursor.names)
     }
 
     private fun characterOf(body: String, range: TextRange): String {

@@ -29,17 +29,7 @@ private const val CDATA_OPEN: String = "<![CDATA["
 private const val CDATA_CLOSE: String = "]]>"
 private const val INSTRUCTION_OPEN: String = "<?"
 private const val INSTRUCTION_CLOSE: String = "?>"
-private const val DOCTYPE_OPEN: String = "<!DOCTYPE"
-private const val DOCTYPE_CLOSE: String = ">"
 private const val RESERVED_TARGET: String = "xml"
-
-private val depthChanges: Map<Char, Int> = mapOf('[' to 1, ']' to -1)
-private val skippedSections: List<Pair<String, String>> = listOf(
-    "\"" to "\"",
-    "'" to "'",
-    COMMENT_OPEN to COMMENT_CLOSE,
-    INSTRUCTION_OPEN to INSTRUCTION_CLOSE,
-)
 
 internal class MarkupReader(
     private val cursor: Cursor,
@@ -116,55 +106,15 @@ internal class MarkupReader(
         return XmlEvent.ProcessingInstruction(target, data, cursor.rangeFrom(start))
     }
 
-    fun skipDoctype() {
-        val start = cursor.offset
-        sink.startNode(XmlSyntaxKind.DOCTYPE)
-        cursor.advance(DOCTYPE_OPEN.length)
-        sink.token(kind = XmlSyntaxKind.DOCTYPE_OPEN, start = start, end = cursor.offset)
-        if (!cursor.skipWhitespace(sink)) {
-            failure(
-                XmlDiagnosticCode.UnexpectedContent,
-                TextRange.at(cursor.offset),
-                "A document type needs whitespace before its name",
-            )
-        }
-        val content = cursor.offset
-        var depth = 0
-        while (depth > 0 || !cursor.startsWith(DOCTYPE_CLOSE)) {
-            if (cursor.isAtEnd) {
-                failure(XmlDiagnosticCode.UnexpectedEnd, cursor.rangeFrom(start), "The document type is not closed")
-            }
-            depth += skipUnit(start)
-        }
-        sink.token(kind = XmlSyntaxKind.DOCTYPE_TEXT, start = content, end = cursor.offset)
-        cursor.advance(DOCTYPE_CLOSE.length)
-        sink.token(kind = XmlSyntaxKind.GREATER_THAN, start = cursor.offset - DOCTYPE_CLOSE.length, end = cursor.offset)
-        sink.finishNode()
-    }
-
-    private fun skipUnit(start: Int): Int {
-        val change = depthChanges[cursor.peek()] ?: 0
-        val skipped = skippedSections.firstOrNull { (opening, _) -> cursor.startsWith(opening) }
-        val end = skipped?.let { (opening, closing) -> endOf(opening, closing, start) } ?: cursor.offset.inc()
-        cursor.moveTo(end)
-        return change
-    }
-
-    private fun endOf(opening: String, closing: String, start: Int): Int {
-        val index = cursor.indexOf(closing, cursor.offset + opening.length)
-        if (index < 0) {
-            failure(
-                XmlDiagnosticCode.UnexpectedEnd,
-                cursor.rest(start),
-                "The document type is not closed",
-            )
-        }
-        return index + closing.length
-    }
-
     private fun section(from: Int, to: Int, start: Int): String {
         budget.text(to - from, TextRange(start, to))
-        return Sections.normalized(text = cursor.text, from = from, to = to, dialect = dialect)
+        return Sections.normalized(
+            text = cursor.text,
+            from = from,
+            to = to,
+            dialect = dialect,
+            isRaw = !cursor.isReplacement,
+        )
     }
 
     private fun checkTarget(target: String, start: Int) {

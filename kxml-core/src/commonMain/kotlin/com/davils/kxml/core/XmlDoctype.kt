@@ -19,25 +19,29 @@ package com.davils.kxml.core
 /**
  * How the reader treats a document type declaration, `<!DOCTYPE ...>`.
  *
- * kxml never reads the internal subset, never loads an external one and never expands an entity it declares, so
- * neither choice opens the document to entity expansion or external entities.
+ * kxml never loads anything on its own: an external subset or an external entity is read only through a resolver the
+ * caller hands to the reader, and without one a reference that needs it ends reading. Every expansion of an entity
+ * is charged to [XmlLimits.maximumEntityExpansion][com.davils.kxml.core.limit.XmlLimits.maximumEntityExpansion] while
+ * it is done, so a billion laughs document fails at its budget.
  *
  * @since 1.0.0
  */
 public enum class XmlDoctype {
     /**
-     * Stops the reader with [RefusedDoctype][com.davils.kxml.core.diagnostic.XmlDiagnosticCode.RefusedDoctype].
+     * Stops the reader with [RefusedDoctype][com.davils.kxml.core.diagnostic.XmlDiagnosticCode.RefusedDoctype]. The
+     * default: a document type declaration changes what a document means through its entities and attribute defaults,
+     * which a document from outside rarely needs and a signed document must not get.
      *
      * @since 1.0.0
      */
     Refuse,
 
     /**
-     * Skips the declaration and reports
-     * [IgnoredDoctype][com.davils.kxml.core.diagnostic.XmlDiagnosticCode.IgnoredDoctype] as a warning; a reference to
-     * an entity it declares stays an error.
+     * Reads the internal subset: its entities are expanded within the limits, its attribute defaults are added and
+     * its attribute types normalize the values, as a non-validating processor of XML 1.0 does. Element declarations
+     * are checked to be well formed but not validated.
      *
      * @since 1.0.0
      */
-    Ignore,
+    Internal,
 }

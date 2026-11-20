@@ -75,6 +75,37 @@ public class XmlLimitsBuilder internal constructor() : ValidatingBuilder<XmlLimi
      */
     public var maximumNameLength: Int = DEFAULT_NAME_LENGTH
 
+    /**
+     * The most entity declarations; [DEFAULT_ENTITY_DECLARATIONS] by default, at most
+     * [XmlLimits.HARD_ENTITY_DECLARATIONS].
+     *
+     * @since 1.0.0
+     */
+    public var maximumEntityDeclarations: Int = DEFAULT_ENTITY_DECLARATIONS
+
+    /**
+     * The most attribute definitions; [DEFAULT_ATTRIBUTE_DECLARATIONS] by default, at most
+     * [XmlLimits.HARD_ATTRIBUTE_DECLARATIONS].
+     *
+     * @since 1.0.0
+     */
+    public var maximumAttributeDeclarations: Int = DEFAULT_ATTRIBUTE_DECLARATIONS
+
+    /**
+     * The most characters of entity expansion; [DEFAULT_ENTITY_EXPANSION] by default, at most
+     * [XmlLimits.HARD_ENTITY_EXPANSION].
+     *
+     * @since 1.0.0
+     */
+    public var maximumEntityExpansion: Long = DEFAULT_ENTITY_EXPANSION
+
+    /**
+     * The deepest nesting of entities; [DEFAULT_ENTITY_DEPTH] by default, at most [XmlLimits.HARD_ENTITY_DEPTH].
+     *
+     * @since 1.0.0
+     */
+    public var maximumEntityDepth: Int = DEFAULT_ENTITY_DEPTH
+
     internal fun from(limits: XmlLimits) {
         maximumInputLength = limits.maximumInputLength
         maximumDepth = limits.maximumDepth
@@ -82,6 +113,10 @@ public class XmlLimitsBuilder internal constructor() : ValidatingBuilder<XmlLimi
         maximumAttributes = limits.maximumAttributes
         maximumTextLength = limits.maximumTextLength
         maximumNameLength = limits.maximumNameLength
+        maximumEntityDeclarations = limits.maximumEntityDeclarations
+        maximumAttributeDeclarations = limits.maximumAttributeDeclarations
+        maximumEntityExpansion = limits.maximumEntityExpansion
+        maximumEntityDepth = limits.maximumEntityDepth
     }
 
     override fun assemble(): XmlLimits = XmlLimits(this)
@@ -133,5 +168,33 @@ public class XmlLimitsBuilder internal constructor() : ValidatingBuilder<XmlLimi
          * @since 1.0.0
          */
         public const val DEFAULT_NAME_LENGTH: Int = 1_024
+
+        /**
+         * The default of [maximumEntityDeclarations]: 10,000.
+         *
+         * @since 1.0.0
+         */
+        public const val DEFAULT_ENTITY_DECLARATIONS: Int = 10_000
+
+        /**
+         * The default of [maximumAttributeDeclarations]: 10,000.
+         *
+         * @since 1.0.0
+         */
+        public const val DEFAULT_ATTRIBUTE_DECLARATIONS: Int = 10_000
+
+        /**
+         * The default of [maximumEntityExpansion]: 1,000,000 characters.
+         *
+         * @since 1.0.0
+         */
+        public const val DEFAULT_ENTITY_EXPANSION: Long = 1_000_000L
+
+        /**
+         * The default of [maximumEntityDepth]: 16 levels.
+         *
+         * @since 1.0.0
+         */
+        public const val DEFAULT_ENTITY_DEPTH: Int = 16
     }
 }

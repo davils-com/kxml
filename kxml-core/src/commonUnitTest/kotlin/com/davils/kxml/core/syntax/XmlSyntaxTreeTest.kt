@@ -53,7 +53,7 @@ private const val TOKENS_PER_LEVEL: Int = 6
 private const val LAST_LINE: Int = 3
 private const val SECRET: String = "s3cr3t"
 
-private val ignoring: Xml = xml { doctype = XmlDoctype.Ignore }
+private val internal: Xml = xml { doctype = XmlDoctype.Internal }
 
 private val markup: List<String> = listOf(
     "<a>", "</a>", "<b x='1'>", "</b>", "<c/>", "/>", ">", "<", "&amp;", "&#x41;", "&#65;", "&", ";", "&lt",
@@ -187,16 +187,18 @@ class XmlSyntaxTreeTest : FunSpec({
             error.text shouldBe "</a> tail"
         }
 
-        test("reads a document type it may ignore and refuses one by default") {
+        test("reads a document type with an internal subset when it may and refuses one by default") {
             val text = "<!DOCTYPE a [<!ENTITY e 'v'>]><a/>"
-            val ignored = XmlSyntaxTree.parse(text, ignoring)
+            val ignored = XmlSyntaxTree.parse(text, internal)
             val refused = XmlSyntaxTree.parse(text)
 
             val doctype = ignored.root.childNodes.first()
             val error = refused.root.tokens.single()
 
             doctype.kind shouldBe XmlSyntaxKind.DOCTYPE
-            ignored.diagnostics.single().code shouldBe XmlDiagnosticCode.IgnoredDoctype
+            ignored.diagnostics shouldBe emptyList()
+            doctype.child(XmlSyntaxKind.INTERNAL_SUBSET)?.child(XmlSyntaxKind.ENTITY_DECLARATION)?.text shouldBe
+                "<!ENTITY e 'v'>"
             error.kind shouldBe XmlSyntaxKind.ERROR
             refused.diagnostics.single().code shouldBe XmlDiagnosticCode.RefusedDoctype
         }
@@ -214,8 +216,8 @@ class XmlSyntaxTreeTest : FunSpec({
     context("any text") {
         test("gives a tree whose tokens cover the text without gaps and the diagnostics of the reader") {
             checkAll(CASES, texts) { text ->
-                val tree = XmlSyntaxTree.parse(text, ignoring)
-                val parsed = ignoring.parse(text)
+                val tree = XmlSyntaxTree.parse(text, internal)
+                val parsed = internal.parse(text)
                 val isStripped = text.startsWith(MARK)
 
                 tree.root.text shouldBe text

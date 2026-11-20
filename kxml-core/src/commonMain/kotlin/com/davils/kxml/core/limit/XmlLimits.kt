@@ -96,6 +96,38 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
      */
     public val maximumNameLength: Int = builder.maximumNameLength
 
+    /**
+     * The most entities a document type declaration may declare, general and parameter entities together: 10,000 by
+     * default, at most [HARD_ENTITY_DECLARATIONS].
+     *
+     * @since 1.0.0
+     */
+    public val maximumEntityDeclarations: Int = builder.maximumEntityDeclarations
+
+    /**
+     * The most attribute definitions a document type declaration may hold over all its attribute-list declarations:
+     * 10,000 by default, at most [HARD_ATTRIBUTE_DECLARATIONS].
+     *
+     * @since 1.0.0
+     */
+    public val maximumAttributeDeclarations: Int = builder.maximumAttributeDeclarations
+
+    /**
+     * The most characters of replacement text the expansion of entities may produce in one document, counted while
+     * the entities are expanded; every reference charges at least one character, so a billion laughs document and
+     * one with a quadratic blowup fail at this budget: 1,000,000 by default, at most [HARD_ENTITY_EXPANSION].
+     *
+     * @since 1.0.0
+     */
+    public val maximumEntityExpansion: Long = builder.maximumEntityExpansion
+
+    /**
+     * The deepest nesting of entity references within replacement texts: 16 by default, at most [HARD_ENTITY_DEPTH].
+     *
+     * @since 1.0.0
+     */
+    public val maximumEntityDepth: Int = builder.maximumEntityDepth
+
     init {
         validateOrThrow(SUBJECT)
     }
@@ -123,6 +155,26 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
                 property = ::maximumNameLength,
                 value = maximumNameLength.toLong(),
                 ceiling = HARD_NAME_LENGTH.toLong(),
+            ),
+            Bound(
+                property = ::maximumEntityDeclarations,
+                value = maximumEntityDeclarations.toLong(),
+                ceiling = HARD_ENTITY_DECLARATIONS.toLong(),
+            ),
+            Bound(
+                property = ::maximumAttributeDeclarations,
+                value = maximumAttributeDeclarations.toLong(),
+                ceiling = HARD_ATTRIBUTE_DECLARATIONS.toLong(),
+            ),
+            Bound(
+                property = ::maximumEntityExpansion,
+                value = maximumEntityExpansion,
+                ceiling = HARD_ENTITY_EXPANSION,
+            ),
+            Bound(
+                property = ::maximumEntityDepth,
+                value = maximumEntityDepth.toLong(),
+                ceiling = HARD_ENTITY_DEPTH.toLong(),
             ),
         )
 
@@ -163,7 +215,9 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
      */
     override fun toString(): String =
         "XmlLimits(input=$maximumInputLength, depth=$maximumDepth, elements=$maximumElements, " +
-            "attributes=$maximumAttributes, text=$maximumTextLength, name=$maximumNameLength)"
+            "attributes=$maximumAttributes, text=$maximumTextLength, name=$maximumNameLength, " +
+            "entities=$maximumEntityDeclarations, attributeDeclarations=$maximumAttributeDeclarations, " +
+            "entityExpansion=$maximumEntityExpansion, entityDepth=$maximumEntityDepth)"
 
     private fun ValidationScope.bounded(bound: Bound) {
         val value = bound.value
@@ -220,10 +274,42 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
          */
         public const val HARD_NAME_LENGTH: Int = 1_024 * 1_024
 
+        /**
+         * The ceiling of [maximumEntityDeclarations]: 1,000,000 entities.
+         *
+         * @since 1.0.0
+         */
+        public const val HARD_ENTITY_DECLARATIONS: Int = 1_000_000
+
+        /**
+         * The ceiling of [maximumAttributeDeclarations]: 10,000,000 attribute definitions.
+         *
+         * @since 1.0.0
+         */
+        public const val HARD_ATTRIBUTE_DECLARATIONS: Int = 10_000_000
+
+        /**
+         * The ceiling of [maximumEntityExpansion]: 100,000,000 characters of replacement text.
+         *
+         * @since 1.0.0
+         */
+        public const val HARD_ENTITY_EXPANSION: Long = 100_000_000L
+
+        /**
+         * The ceiling of [maximumEntityDepth]: 256 levels of entities.
+         *
+         * @since 1.0.0
+         */
+        public const val HARD_ENTITY_DEPTH: Int = 256
+
         private const val SUBJECT: String = "xml limits"
         private const val RELAXED_ELEMENTS: Long = 50_000_000L
         private const val RELAXED_ATTRIBUTES: Int = 100_000
         private const val RELAXED_NAME_LENGTH: Int = 65_536
+        private const val RELAXED_ENTITY_DECLARATIONS: Int = 100_000
+        private const val RELAXED_ATTRIBUTE_DECLARATIONS: Int = 1_000_000
+        private const val RELAXED_ENTITY_EXPANSION: Long = 10_000_000L
+        private const val RELAXED_ENTITY_DEPTH: Int = 64
 
         /**
          * The default limits, for documents from sources that are not trusted: the `DEFAULT_*` values of
@@ -236,8 +322,9 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
 
         /**
          * Raised limits for large documents from trusted sources: [HARD_INPUT_LENGTH] code units of input and of
-         * text, [HARD_DEPTH] levels, 50,000,000 elements, 100,000 attributes on an element and 65,536 code units of a
-         * name.
+         * text, [HARD_DEPTH] levels, 50,000,000 elements, 100,000 attributes on an element, 65,536 code units of a
+         * name, 100,000 entities, 1,000,000 attribute definitions, 10,000,000 characters of entity expansion and 64
+         * levels of entities.
          *
          * Every limit stays finite and at most its hard ceiling, so even a trusted source cannot exhaust the memory
          * without bound.
@@ -254,6 +341,10 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
             builder.maximumAttributes = RELAXED_ATTRIBUTES
             builder.maximumTextLength = HARD_INPUT_LENGTH
             builder.maximumNameLength = RELAXED_NAME_LENGTH
+            builder.maximumEntityDeclarations = RELAXED_ENTITY_DECLARATIONS
+            builder.maximumAttributeDeclarations = RELAXED_ATTRIBUTE_DECLARATIONS
+            builder.maximumEntityExpansion = RELAXED_ENTITY_EXPANSION
+            builder.maximumEntityDepth = RELAXED_ENTITY_DEPTH
             return builder.build()
         }
     }

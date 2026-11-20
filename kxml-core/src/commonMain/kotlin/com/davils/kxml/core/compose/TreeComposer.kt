@@ -21,6 +21,7 @@ import com.davils.kxml.core.XmlEvent
 import com.davils.kxml.core.XmlReader
 import com.davils.kxml.core.XmlWhitespace
 import com.davils.kxml.core.node.XmlDeclaration
+import com.davils.kxml.core.node.XmlDoctypeDeclaration
 import com.davils.kxml.core.node.XmlDocument
 import com.davils.kxml.core.node.XmlNode
 
@@ -30,24 +31,32 @@ internal class TreeComposer(private val whitespace: XmlWhitespace) {
     private val epilog = mutableListOf<XmlNode>()
     private var root: XmlNode.Element? = null
     private var declaration: XmlDeclaration? = null
+    private val text = StringBuilder()
+    private var textRange: TextRange? = null
+    private var doctype: XmlDoctypeDeclaration? = null
 
     fun compose(reader: XmlReader): XmlDocument? {
         generateSequence(reader::next).forEach(::accept)
+        flush()
         val composed = root ?: return null
         return XmlDocument(
             root = composed,
             declaration = declaration,
             prolog = prolog.toList(),
             epilog = epilog.toList(),
+            doctype = doctype,
         )
     }
 
     private fun accept(event: XmlEvent) {
+        if (event is XmlEvent.Text) return collect(event)
+        flush()
         when (event) {
             is XmlEvent.Declaration -> declaration = event.declaration
+            is XmlEvent.DocumentType -> doctype = event.declaration
             is XmlEvent.StartElement -> stack.addLast(OpenNode(event))
             is XmlEvent.EndElement -> close(stack.removeLast(), event)
-            is XmlEvent.Text -> add(XmlNode.Text(event.value, event.range))
+            is XmlEvent.Text -> collect(event)
             is XmlEvent.CData -> add(XmlNode.CData(event.value, event.range))
             is XmlEvent.Comment -> add(XmlNode.Comment(event.value, event.range))
             is XmlEvent.ProcessingInstruction -> add(instructionOf(event))
@@ -67,6 +76,19 @@ internal class TreeComposer(private val whitespace: XmlWhitespace) {
             range = TextRange(start = start.range.start, end = end.range.end),
         )
         add(element)
+    }
+
+    private fun collect(event: XmlEvent.Text) {
+        text.append(event.value)
+        val start = textRange?.start ?: event.range.start
+        textRange = TextRange(start = start, end = event.range.end)
+    }
+
+    private fun flush() {
+        val range = textRange ?: return
+        add(XmlNode.Text(text.toString(), range))
+        text.clear()
+        textRange = null
     }
 
     private fun add(node: XmlNode) {

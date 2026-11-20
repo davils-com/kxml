@@ -37,8 +37,8 @@ private val refusals: Map<String, Pair<String, XmlDiagnosticCode>> = mapOf(
     "an end tag without a name" to ("<a></" to XmlDiagnosticCode.InvalidName),
     "an end tag with an attribute" to ("<a></a x>" to XmlDiagnosticCode.UnexpectedContent),
     "< after text in a value" to ("<a x='b<'/>" to XmlDiagnosticCode.InvalidAttribute),
-    "a reference that is too long" to (
-        "<a>&${"a".repeat(LONG_REFERENCE)};</a>" to XmlDiagnosticCode.InvalidReference
+    "a reference with a long name to an entity nothing declares" to (
+        "<a>&${"a".repeat(LONG_REFERENCE)};</a>" to XmlDiagnosticCode.UndefinedEntity
         ),
     "a bare declaration" to ("<?xml" to XmlDiagnosticCode.MisplacedDeclaration),
     "a declaration cut short" to ("<?xml version" to XmlDiagnosticCode.InvalidDeclaration),
@@ -114,6 +114,8 @@ private val refusals: Map<String, Pair<String, XmlDiagnosticCode>> = mapOf(
 
 private const val LONG_REFERENCE: Int = 40
 
+private val internal: Xml = xml { doctype = XmlDoctype.Internal }
+
 class XmlWellFormednessTest : FunSpec({
     context("documents that are not well formed") {
         refusals.forEach { (case, expectation) ->
@@ -149,42 +151,35 @@ class XmlWellFormednessTest : FunSpec({
             declaration?.isStandalone shouldBe false
         }
 
-        test("read a document type when it may be ignored") {
+        test("read a document type with an internal subset when it may be read") {
             val text = """<!DOCTYPE a [ <!ENTITY e "x>y"> <!-- ] > --> ]> <a/>"""
-            val result = xml { doctype = XmlDoctype.Ignore }.parse(text)
+            val document = internal.document(text)
 
-            result.diagnostics.single().code shouldBe XmlDiagnosticCode.IgnoredDoctype
+            document.doctype?.name shouldBe "a"
         }
 
-        test("refuse a second document type even when it may be ignored") {
-            xml { doctype = XmlDoctype.Ignore }.refusal("<!DOCTYPE a><!DOCTYPE a><a/>") shouldBe
-                XmlDiagnosticCode.MisplacedDoctype
+        test("refuse a second document type") {
+            internal.refusal("<!DOCTYPE a><!DOCTYPE a><a/>") shouldBe XmlDiagnosticCode.MisplacedDoctype
         }
 
-        test("refuse a document type after the root even when it may be ignored") {
-            xml { doctype = XmlDoctype.Ignore }.refusal("<a/><!DOCTYPE a>") shouldBe
-                XmlDiagnosticCode.MisplacedDoctype
+        test("refuse a document type after the root") {
+            internal.refusal("<a/><!DOCTYPE a>") shouldBe XmlDiagnosticCode.MisplacedDoctype
         }
 
         test("refuse a document type without whitespace before its name") {
-            xml { doctype = XmlDoctype.Ignore }.refusal("<!DOCTYPEa><a/>") shouldBe
-                XmlDiagnosticCode.UnexpectedContent
+            internal.refusal("<!DOCTYPEa><a/>") shouldBe XmlDiagnosticCode.InvalidMarkupDeclaration
         }
 
-        test("skip an instruction with brackets and quotes inside an ignored subset") {
+        test("read an instruction with brackets and quotes inside the internal subset") {
             val text = """<!DOCTYPE a [ <?pi ] " ' > ?> ]><a/>"""
-            val result = xml { doctype = XmlDoctype.Ignore }.parse(text)
 
-            result.diagnostics.single().code shouldBe XmlDiagnosticCode.IgnoredDoctype
+            internal.parse(text).diagnostics shouldBe emptyList()
         }
 
         test("refuse an unclosed document type") {
-            xml { doctype = XmlDoctype.Ignore }.refusal(
-                "<!DOCTYPE a [",
-            ) shouldBe XmlDiagnosticCode.UnexpectedEnd
-            xml { doctype = XmlDoctype.Ignore }.refusal(
-                "<!DOCTYPE a \"x",
-            ) shouldBe XmlDiagnosticCode.UnexpectedEnd
+            internal.refusal("<!DOCTYPE a [") shouldBe XmlDiagnosticCode.UnexpectedEnd
+            internal.refusal("<!DOCTYPE a SYSTEM \"x") shouldBe XmlDiagnosticCode.UnexpectedEnd
+            internal.refusal("<!DOCTYPE a \"x") shouldBe XmlDiagnosticCode.InvalidMarkupDeclaration
         }
 
         test("read an instruction whose target only starts like a declaration") {

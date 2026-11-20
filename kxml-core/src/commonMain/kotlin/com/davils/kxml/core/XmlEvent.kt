@@ -24,6 +24,7 @@ import com.davils.kxml.core.name.XmlName
 import com.davils.kxml.core.name.XmlNamespaceBinding
 import com.davils.kxml.core.node.XmlAttribute
 import com.davils.kxml.core.node.XmlDeclaration
+import com.davils.kxml.core.node.XmlDoctypeDeclaration
 
 /**
  * One step of a document as the reader meets it; [Xml.events] returns them in document order.
@@ -153,6 +154,27 @@ public sealed interface XmlEvent {
 
         @OptIn(DavilsInternal::class)
         override fun toString(): String = "CData(${SafeText.quoted(value)})"
+    }
+
+    /**
+     * A document type declaration that was read: its name, its external identifiers, its notations and its unparsed
+     * entities. Entities and attribute defaults it declares are applied to the events that follow.
+     *
+     * @property declaration the information the declaration gives.
+     * @property range the characters of the declaration.
+     * @since 1.0.0
+     */
+    public class DocumentType internal constructor(
+        public val declaration: XmlDoctypeDeclaration,
+        override val range: TextRange,
+    ) : XmlEvent {
+        private val values: List<Any> get() = listOf(declaration, range)
+
+        override fun equals(other: Any?): Boolean = other is DocumentType && values == other.values
+
+        override fun hashCode(): Int = values.hashCode()
+
+        override fun toString(): String = "DocumentType($declaration)"
     }
 
     /**

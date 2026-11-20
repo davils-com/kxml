@@ -13,9 +13,9 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
 
 ### Added
 
-- `kxml-core`: a namespace-aware XML 1.0 and 1.1 reader that never expands entities or loads external resources, refuses
-  document type declarations by default and checks every document against `XmlLimits`; an event stream, an immutable
-  node tree, diagnostics with stable codes and positions, and a writer with configurable layout.
+- `kxml-core`: a namespace-aware XML 1.0 and 1.1 reader that never loads external resources, refuses document type
+  declarations by default and checks every document against `XmlLimits`; an event stream, an immutable node tree,
+  diagnostics with stable codes and positions, and a writer with configurable layout.
 - `kxml-serialization`: a kotlinx.serialization `StringFormat` for XML with attributes, text content, namespaces,
   wrapped and repeated lists, maps, polymorphism by attribute or element, naming strategies and decoding with
   diagnostics instead of exceptions.
@@ -39,6 +39,23 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
 - `XmlSyntaxTree` is the lossless syntax tree of a text: every character belongs to exactly one token, so the text of
   its root is the text again, and the rest of a text that stops being well formed becomes one `ERROR` token. It is
   read by the same rules and limits as `Xml.parse`, and every walk over it is iterative.
+- `XmlDoctype.Internal` reads the internal subset of a document type declaration: general and parameter entities,
+  attribute lists with their defaults and the normalization of their types, element types, notations and unparsed
+  entities. Entities are expanded in content and in attribute values, defaults are added before namespaces are
+  resolved, and parameter entities between declarations are expanded as section 2.8 of XML 1.0 describes it. After an
+  undeclared or external parameter entity, later declarations are not processed, as section 5.1 requires. The
+  declaration comes as `XmlEvent.DocumentType` and as `XmlDocument.doctype`, an `XmlDoctypeDeclaration` with its
+  identifiers, `XmlNotation`s and `XmlUnparsedEntity`s; the syntax tree holds every declaration as a node of its own.
+- `XmlLimits` bounds the internal subset with `maximumEntityDeclarations`, `maximumAttributeDeclarations`,
+  `maximumEntityExpansion`, the characters all expansions of a document may produce, where every reference costs at
+  least one, and `maximumEntityDepth`, each with a hard ceiling.
+- The diagnostic codes `kxml.doctype.invalid-declaration`, `kxml.reference.recursive-entity`,
+  `kxml.reference.misused-entity`, `kxml.reference.unresolved-entity`, `kxml.reference.unbalanced-entity`,
+  `kxml.limit.entity-declarations`, `kxml.limit.attribute-declarations`, `kxml.limit.entity-expansion` and
+  `kxml.limit.entity-depth`.
+- The W3C XML Conformance Test Suite runs in the build: `XmlConformanceTest` downloads the pinned archive, and every
+  case kxml does not pass is listed with its reason. Of 2,227 cases, 2,119 pass; the rest need an external subset
+  or an external entity, which kxml only reads through a resolver, or contradict another case of the suite.
 - The standards kxml implements are declared and reviewed in `standards.lock`, and the assurance gate reports a new
   version, a replacement or an undeclared standard.
 
@@ -47,6 +64,8 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
 - Compared with the internal original, types lost their project prefix (`XmlName` instead of `KideXmlName`), public
   data classes became regular immutable classes, events and results have internal constructors, and every
   `toString` and exception message escapes the text it shows.
+- `XmlDoctype.Ignore`, which skipped the declaration and with it the declarations a document relies on, is replaced
+  by `XmlDoctype.Internal`; `XmlDoctype.Refuse` stays the default, and `kxml.doctype.ignored` is gone.
 - `XmlLimits.Trusted`, which left every limit but the depth unbounded, is replaced by `XmlLimits.Relaxed`, whose
   limits are raised but finite.
 - The escaping of untrusted text and the immutable lists are those of Kore; `com.davils.kxml.core.internal` is no
@@ -57,8 +76,13 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
 - Attribute names, namespace prefixes and the attributes compared by `XmlNode.Element.equals` are indexed in a total
   order instead of by hash codes, so names with colliding hash codes cannot make reading quadratic, and the
   duplicate check of attribute names no longer compares every pair.
-- A document type declaration after the root element is refused also under `XmlDoctype.Ignore`, `<!DOCTYPE` needs
-  whitespace before the name, and a processing instruction inside a skipped internal subset is skipped as a whole.
+- A document type declaration after the root element is refused, and `<!DOCTYPE` needs whitespace before the name.
+- Every expansion of an entity charges a budget while it is done, so a billion laughs document, a quadratic blowup
+  and entities nested past `maximumEntityDepth` end with a diagnostic, and the work of expanding stays linear in what
+  the budget allows. Expansion runs on an explicit stack, an entity that refers to itself is refused, an entity
+  must close every element it opens, and `<` never reaches an attribute value through an entity.
+- An external entity, an external subset and an external parameter entity are never loaded; a reference to an
+  external entity is refused with `kxml.reference.unresolved-entity` instead of being dropped.
 - An entity reference must name an XML name, and a character reference accepts only ASCII digits, so
   `&#\u0666\u0665;` no longer reads as `A`.
 - UTF-16 without a byte order mark is only read when the document starts with `<?`, as Appendix F detects it, and

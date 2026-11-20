@@ -187,11 +187,61 @@ public enum class XmlSyntaxKind(public val isToken: Boolean, public val isTrivia
     DOCTYPE_OPEN(isToken = true),
 
     /**
-     * The text of a document type declaration between its keyword and its closing `>`.
+     * The `<!ENTITY`, `<!ATTLIST`, `<!ELEMENT` or `<!NOTATION` that opens a markup declaration.
      *
      * @since 1.0.0
      */
-    DOCTYPE_TEXT(isToken = true),
+    DECLARATION_OPEN(isToken = true),
+
+    /**
+     * A keyword of a declaration, such as `SYSTEM`, `PUBLIC`, `NDATA`, `EMPTY`, `#PCDATA`, `CDATA` or `#IMPLIED`.
+     *
+     * @since 1.0.0
+     */
+    KEYWORD(isToken = true),
+
+    /**
+     * A quoted literal of a declaration with its quotes: a system or public identifier, an entity value or a
+     * default value.
+     *
+     * @since 1.0.0
+     */
+    LITERAL(isToken = true),
+
+    /**
+     * The `%` that marks the declaration of a parameter entity.
+     *
+     * @since 1.0.0
+     */
+    PERCENT(isToken = true),
+
+    /**
+     * A reference to a parameter entity, such as `%name;`.
+     *
+     * @since 1.0.0
+     */
+    PARAMETER_REFERENCE(isToken = true),
+
+    /**
+     * A parenthesis, a separator or an occurrence indicator of a content model or an enumeration.
+     *
+     * @since 1.0.0
+     */
+    PUNCTUATION(isToken = true),
+
+    /**
+     * The `[` that opens the internal subset of a document type declaration.
+     *
+     * @since 1.0.0
+     */
+    SUBSET_OPEN(isToken = true),
+
+    /**
+     * The `]` that closes the internal subset of a document type declaration.
+     *
+     * @since 1.0.0
+     */
+    SUBSET_CLOSE(isToken = true),
 
     /**
      * Text the reader could not read: everything from the first error to the end of the text.
@@ -220,6 +270,48 @@ public enum class XmlSyntaxKind(public val isToken: Boolean, public val isTrivia
      * @since 1.0.0
      */
     DOCTYPE(isToken = false),
+
+    /**
+     * The internal subset of a document type declaration with its brackets.
+     *
+     * @since 1.0.0
+     */
+    INTERNAL_SUBSET(isToken = false),
+
+    /**
+     * An entity declaration, `<!ENTITY ...>`.
+     *
+     * @since 1.0.0
+     */
+    ENTITY_DECLARATION(isToken = false),
+
+    /**
+     * An attribute-list declaration, `<!ATTLIST ...>`.
+     *
+     * @since 1.0.0
+     */
+    ATTLIST_DECLARATION(isToken = false),
+
+    /**
+     * One attribute of an attribute-list declaration: its name, its type and its default.
+     *
+     * @since 1.0.0
+     */
+    ATTRIBUTE_DEFINITION(isToken = false),
+
+    /**
+     * An element type declaration, `<!ELEMENT ...>`.
+     *
+     * @since 1.0.0
+     */
+    ELEMENT_DECLARATION(isToken = false),
+
+    /**
+     * A notation declaration, `<!NOTATION ...>`.
+     *
+     * @since 1.0.0
+     */
+    NOTATION_DECLARATION(isToken = false),
 
     /**
      * An element: its start tag, its content and its end tag, or an empty element tag.
