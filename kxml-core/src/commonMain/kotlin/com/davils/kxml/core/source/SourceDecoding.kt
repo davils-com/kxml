@@ -20,7 +20,7 @@ import com.davils.kore.core.text.TextRange
 import com.davils.kxml.core.diagnostic.XmlDiagnostic
 import com.davils.kxml.core.diagnostic.XmlDiagnosticCode
 
-private const val BYTE_ORDER_MARK: String = "﻿"
+private const val BYTE_ORDER_MARK: String = "\uFEFF"
 private const val PEEK_LENGTH: Int = 1_024
 
 internal object SourceDecoding {
