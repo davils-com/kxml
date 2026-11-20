@@ -34,7 +34,8 @@ public class XmlRedactionBuilder internal constructor() : ValidatingBuilder<XmlR
     /**
      * The text that replaces a redacted value or the matched part of a text; `***` by default. It must be text XML
      * allows, without `--`, `?>` or a leading or trailing `-`, since it may stand in a comment or a processing
-     * instruction.
+     * instruction, and must not be empty, so that a redaction stays visible and cannot join two dashes of a
+     * comment.
      *
      * @since 1.0.0
      */

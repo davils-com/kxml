@@ -73,17 +73,6 @@ class XmlRedactionTest : FunSpec({
             canonicalOf(redacted) shouldNotContain SECRET
         }
 
-        test("leaves secret elements and texts empty when the replacement is empty") {
-            val emptied = xmlRedaction {
-                replacement = ""
-                path("//password")
-                value(Regex("\\d{3}-\\d{4}"))
-            }
-            val redacted = emptied.redact(documentOf("<a><password>s</password><b>555-1234</b><c>x</c></a>"))
-
-            canonicalOf(redacted) shouldBe canonicalOf(documentOf("<a><password/><b/><c>x</c></a>"))
-        }
-
         test("loses the content and the attributes of a secret element") {
             val rules = xmlRedaction { element { name -> name.local == "user" } }
             val redacted = rules.redact(documentOf("<!--c--><a><user id='1'><b>x</b></user></a>"))
@@ -172,6 +161,7 @@ class XmlRedactionTest : FunSpec({
             }
             shouldThrow<ValidationException> { xmlRedaction { replacement = "a--b" } }
             shouldThrow<ValidationException> { xmlRedaction { replacement = "-x" } }
+            shouldThrow<ValidationException> { xmlRedaction { replacement = "" } }
             shouldThrow<ValidationException> { xmlRedaction { replacement = "\u0001" } }
             val single = xmlLimits { maximumRedactionRules = 1 }
             xmlRedaction {

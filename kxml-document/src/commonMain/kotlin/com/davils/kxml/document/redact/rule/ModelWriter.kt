@@ -32,7 +32,7 @@ internal class ModelWriter(
 ) {
     private val writers: Map<NodeKind, (Int) -> XmlNode?> = mapOf(
         NodeKind.Element to ::elementOf,
-        NodeKind.Text to ::textOf,
+        NodeKind.Text to { node -> xmlText(valueOf(node)) },
         NodeKind.Comment to { node -> xmlComment(valueOf(node)) },
         NodeKind.ProcessingInstruction to { node ->
             xmlInstruction(
@@ -59,18 +59,13 @@ internal class ModelWriter(
     private fun elementOf(node: Int): XmlNode.Element = xmlElement(nameOf(node)) {
         model.declaredNamespaces(node).forEach { binding -> namespace(prefix = binding.prefix, uri = binding.uri) }
         model.attributes(node).forEach { attribute -> attribute(model.attributeName(attribute), valueOf(attribute)) }
-        if (plan.isWhole(node) && replacement.isNotEmpty()) text(replacement)
+        if (plan.isWhole(node)) text(replacement)
         if (!plan.isWhole(node)) model.children(node).forEach { child -> nodeOf(child)?.let(::node) }
     }
 
     private fun valueOf(node: Int): String {
         if (plan.isRedacted(node)) return replacement
         return plan.values[node] ?: model.value(node).orEmpty()
-    }
-
-    private fun textOf(node: Int): XmlNode? {
-        val value = valueOf(node)
-        return value.takeIf(String::isNotEmpty)?.let(::xmlText)
     }
 
     private fun nameOf(node: Int): XmlName = checkNotNull(model.name(node))

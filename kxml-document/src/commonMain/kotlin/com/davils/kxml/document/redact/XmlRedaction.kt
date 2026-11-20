@@ -144,13 +144,14 @@ public class XmlRedaction internal constructor(builder: XmlRedactionBuilder) : V
             }
         }
         val isText = replacement.codePointsOf().all(XmlCharacters::isCharacter)
-        val isSafe = forbiddenInReplacement.none(replacement::contains) &&
+        val isSafe = replacement.isNotEmpty() &&
+            forbiddenInReplacement.none(replacement::contains) &&
             !replacement.startsWith('-') &&
             !replacement.endsWith('-')
         if (!isText || !isSafe) {
             fail(
                 ::replacement,
-                "must be text a comment and an instruction can hold",
+                "must be text a comment and an instruction can hold, and not empty",
                 XmlDocumentViolationCodes.INVALID_REPLACEMENT,
             )
         }
