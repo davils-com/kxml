@@ -154,6 +154,14 @@ class EntityTest : FunSpec({
             }
         }
 
+        test("may hold an escaped < as erratum E08 of XML 1.1 explains") {
+            internal
+                .root("<!DOCTYPE a [<!ENTITY x '&#38;lt;'>]><a v='&x;'/>")
+                .attributes
+                .single()
+                .value shouldBe "<"
+        }
+
         test("are refused when they hold < or are external") {
             val less = "<!DOCTYPE a [<!ENTITY e '&#60;'>]><a v='&e;'/>"
             val external = "<!DOCTYPE a [<!ENTITY e SYSTEM 'e.xml'>]><a v='&e;'/>"

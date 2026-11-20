@@ -189,6 +189,16 @@ class XmlWellFormednessTest : FunSpec({
             document.prolog.size shouldBe 1
         }
 
+        test("reserve only the instruction target xml, as erratum S01 of XML 1.0 has it") {
+            val text = "<xmlfoo:a xmlns:xmlfoo='urn:x' xmlattr='1'><?xml-model m?></xmlfoo:a>"
+            val root = Xml.Default.document(text).root
+
+            root.name.local shouldBe "a"
+            val attribute = root.attributes.single()
+            attribute.name.local shouldBe "xmlattr"
+            Xml.Default.refusal("<a><?XmL x?></a>") shouldBe XmlDiagnosticCode.ReservedProcessingInstruction
+        }
+
         test("keep ]]> inside an attribute value") {
             val root = Xml.Default.document("<a x=']]>'/>").root
 
