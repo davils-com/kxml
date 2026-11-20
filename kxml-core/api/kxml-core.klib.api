@@ -1204,6 +1204,14 @@ sealed class com.davils.kxml.core.node/XmlNode { // com.davils.kxml.core.node/Xm
     }
 }
 
+final object com.davils.kxml.core.name/XmlCharacters { // com.davils.kxml.core.name/XmlCharacters|null[0]
+    final fun isCharacter(kotlin/Int): kotlin/Boolean // com.davils.kxml.core.name/XmlCharacters.isCharacter|isCharacter(kotlin.Int){}[0]
+    final fun isNameCharacter(kotlin/Int): kotlin/Boolean // com.davils.kxml.core.name/XmlCharacters.isNameCharacter|isNameCharacter(kotlin.Int){}[0]
+    final fun isNameStart(kotlin/Int): kotlin/Boolean // com.davils.kxml.core.name/XmlCharacters.isNameStart|isNameStart(kotlin.Int){}[0]
+    final fun isNcName(kotlin/String): kotlin/Boolean // com.davils.kxml.core.name/XmlCharacters.isNcName|isNcName(kotlin.String){}[0]
+    final fun isWhitespace(kotlin/Char): kotlin/Boolean // com.davils.kxml.core.name/XmlCharacters.isWhitespace|isWhitespace(kotlin.Char){}[0]
+}
+
 final object com.davils.kxml.core.name/XmlNamespaces { // com.davils.kxml.core.name/XmlNamespaces|null[0]
     final const val XML // com.davils.kxml.core.name/XmlNamespaces.XML|{}XML[0]
         final fun <get-XML>(): kotlin/String // com.davils.kxml.core.name/XmlNamespaces.XML.<get-XML>|<get-XML>(){}[0]

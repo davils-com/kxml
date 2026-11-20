@@ -115,6 +115,8 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
 - `XmlLimits` bounds XPath with `maximumQueryLength`, `maximumQueryNesting`, `maximumQuerySteps`,
   `maximumQueryResults` and `maximumQueryStringLength`, each with a hard ceiling, for the expressions of
   `kxml-document`.
+- `XmlCharacters` tells which code points the productions `Char`, `S`, `NameStartChar`, `NameChar` and `NCName` allow,
+  for grammars built on XML names, such as XPath.
 - The W3C XML Conformance Test Suite runs in the build: `XmlConformanceTest` downloads the pinned archive, reads it
   with a resolver confined to the suite, and lists every case kxml does not pass with its reason. Of 2,227 cases,
   2,225 pass. Of the other two, one expects an undeclared entity to be skipped, which kxml refuses, and one of XML

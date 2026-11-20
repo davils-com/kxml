@@ -414,6 +414,15 @@ public final class com/davils/kxml/core/limit/XmlLimitsDslKt {
 	public static synthetic fun xmlLimits$default (Lcom/davils/kxml/core/limit/XmlLimits;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lcom/davils/kxml/core/limit/XmlLimits;
 }
 
+public final class com/davils/kxml/core/name/XmlCharacters {
+	public static final field INSTANCE Lcom/davils/kxml/core/name/XmlCharacters;
+	public final fun isCharacter (I)Z
+	public final fun isNameCharacter (I)Z
+	public final fun isNameStart (I)Z
+	public final fun isNcName (Ljava/lang/String;)Z
+	public final fun isWhitespace (C)Z
+}
+
 public final class com/davils/kxml/core/name/XmlName {
 	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
