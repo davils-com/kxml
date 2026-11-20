@@ -23,7 +23,7 @@ import com.davils.kore.core.text.TextRange
 import com.davils.kxml.core.diagnostic.XmlDiagnosticCode
 import com.davils.kxml.core.parser.failure
 
-internal class EntityContext(val budget: ExpansionBudget) {
+internal class EntityContext(val budget: ExpansionBudget, private val resources: ExternalResources) {
     var dtd: Dtd? = null
     var isStandalone: Boolean = false
 
@@ -35,8 +35,11 @@ internal class EntityContext(val budget: ExpansionBudget) {
         if (entity.isExternal && isInAttribute) {
             failure(XmlDiagnosticCode.MisusedEntity, range, "An attribute value cannot refer to the external &$name;")
         }
-        if (entity.isExternal) {
+        if (entity.isExternal && !resources.isEnabled) {
             failure(XmlDiagnosticCode.UnresolvedEntity, range, "No resolver reads the external entity &$name;")
+        }
+        if (entity.isExternallyDeclared && isStandalone) {
+            failure(XmlDiagnosticCode.UndefinedEntity, range, "A standalone document cannot use the external &$name;")
         }
         if (name in expanding) failure(XmlDiagnosticCode.RecursiveEntity, range, "The entity &$name; refers to itself")
         return entity

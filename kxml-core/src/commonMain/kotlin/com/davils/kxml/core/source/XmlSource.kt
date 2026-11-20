@@ -20,7 +20,8 @@ import com.davils.kore.core.annotation.DavilsInternal
 import com.davils.kore.core.text.SafeText
 
 /**
- * A document to read, as text or as bytes, with an optional name for messages.
+ * A document or an external resource to read, as text or as bytes, with an optional name for messages and an optional
+ * URI to resolve relative references against.
  *
  * Bytes are decoded strictly, as Appendix F of XML 1.0 detects them: UTF-8, UTF-16 and UTF-32 in either byte order,
  * with or without a byte order mark, and, for bytes without a mark that start like ASCII, US-ASCII and ISO-8859-1 when
@@ -38,6 +39,7 @@ public class XmlSource private constructor(
     internal val bytes: ByteArray,
     name: String?,
     internal val charset: String?,
+    uri: String?,
 ) {
     /**
      * A name for messages, such as a file name, or `null`; treated as input and escaped wherever it is shown.
@@ -45,6 +47,15 @@ public class XmlSource private constructor(
      * @since 1.0.0
      */
     public val name: String? = name
+
+    /**
+     * The URI the source was retrieved from, or `null`. A resolver gets it as the base URI of every external resource
+     * this source declares, so it can resolve a relative system identifier; kxml never loads it on its own. Treated
+     * as input and escaped wherever it is shown.
+     *
+     * @since 1.0.0
+     */
+    public val uri: String? = uri
 
     internal val length: Int get() = text?.length ?: bytes.size
 
@@ -71,11 +82,12 @@ public class XmlSource private constructor(
          *
          * @param text the complete document.
          * @param name a name for messages, or `null`.
+         * @param uri the URI the text was retrieved from, or `null`.
          * @return the source.
          * @since 1.0.0
          */
-        public fun of(text: String, name: String? = null): XmlSource =
-            XmlSource(text = text, bytes = ByteArray(0), name = name, charset = null)
+        public fun of(text: String, name: String? = null, uri: String? = null): XmlSource =
+            XmlSource(text = text, bytes = ByteArray(0), name = name, charset = null, uri = uri)
 
         /**
          * Creates a source of bytes, decoded as the class describes.
@@ -91,10 +103,15 @@ public class XmlSource private constructor(
          * @param bytes the complete document; copied.
          * @param name a name for messages, or `null`.
          * @param charset the charset the bytes were labelled with outside the document, or `null`.
+         * @param uri the URI the bytes were retrieved from, or `null`.
          * @return the source.
          * @since 1.0.0
          */
-        public fun of(bytes: ByteArray, name: String? = null, charset: String? = null): XmlSource =
-            XmlSource(text = null, bytes = bytes.copyOf(), name = name, charset = charset)
+        public fun of(
+            bytes: ByteArray,
+            name: String? = null,
+            charset: String? = null,
+            uri: String? = null,
+        ): XmlSource = XmlSource(text = null, bytes = bytes.copyOf(), name = name, charset = charset, uri = uri)
     }
 }

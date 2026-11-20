@@ -22,6 +22,7 @@ import com.davils.kxml.core.emit.XmlEmitOptions
 import com.davils.kxml.core.emit.XmlEmitOptionsBuilder
 import com.davils.kxml.core.limit.XmlLimits
 import com.davils.kxml.core.limit.XmlLimitsBuilder
+import com.davils.kxml.core.resolve.XmlResolver
 
 /**
  * Collects the settings of an [XmlConfiguration]; used through [xml].
@@ -40,6 +41,14 @@ public class XmlBuilder internal constructor() : ValidatingBuilder<XmlConfigurat
      * @since 1.0.0
      */
     public var doctype: XmlDoctype = XmlDoctype.Refuse
+
+    /**
+     * The resolver of external resources, which [XmlDoctype.External] needs and every other [doctype] refuses; `null`
+     * by default.
+     *
+     * @since 1.0.0
+     */
+    public var resolver: XmlResolver? = null
 
     /**
      * Which whitespace the tree keeps; [XmlWhitespace.Keep] by default.

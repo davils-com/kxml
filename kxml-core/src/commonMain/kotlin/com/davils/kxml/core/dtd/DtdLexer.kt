@@ -39,6 +39,10 @@ internal class DtdLexer(
     val dialect: Dialect,
     val budget: ParseBudget,
 ) {
+    var base: Int = NO_BASE
+
+    var expand: ((ReferenceContext) -> Unit)? = null
+
     fun isKeyword(word: String): Boolean {
         val next = cursor.text.getOrNull(cursor.offset + word.length)
         val isEnd = next == null || !XmlCharacters.isNameCharacter(next.code)
@@ -59,7 +63,34 @@ internal class DtdLexer(
         sink.token(kind = XmlSyntaxKind.PUNCTUATION, start = start, end = cursor.offset)
     }
 
-    fun space(): Boolean = cursor.skipWhitespace(sink)
+    fun space(): Boolean {
+        var hasSpace = cursor.skipWhitespace(sink)
+        while (isExpandable()) {
+            expandOrLeave()
+            hasSpace = cursor.skipWhitespace(sink) || hasSpace
+        }
+        return hasSpace
+    }
+
+    fun isParameterReferenceAhead(): Boolean {
+        val next = cursor.text.getOrNull(cursor.offset + 1)
+        val isNameAhead = next != null && XmlCharacters.isNameStart(next.code)
+        return cursor.startsWith(PERCENT) && isNameAhead
+    }
+
+    private fun isExpandable(): Boolean {
+        val isInside = base != NO_BASE && cursor.isExternal && expand != null
+        val isEnded = cursor.isAtEnd && cursor.depth > base
+        return isInside && (isEnded || isParameterReferenceAhead())
+    }
+
+    private fun expandOrLeave() {
+        if (cursor.isAtEnd) {
+            cursor.pop()
+            return
+        }
+        expand?.invoke(ReferenceContext.InsideDeclaration)
+    }
 
     fun requiredSpace(what: String) {
         val start = cursor.offset
@@ -146,8 +177,10 @@ internal class DtdLexer(
         return dialect.normalizedLineEnds(raw)
     }
 
-    private companion object {
-        const val CLOSE: Char = '>'
-        const val CHARACTER_TABLE_END: Int = 128
+    companion object {
+        const val NO_BASE: Int = -1
+        private const val CLOSE: Char = '>'
+        private const val PERCENT: String = "%"
+        private const val CHARACTER_TABLE_END: Int = 128
     }
 }

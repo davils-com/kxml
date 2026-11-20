@@ -62,6 +62,7 @@ internal class XmlPipeline(private val configuration: XmlConfiguration) {
         val isRefused = decoded.diagnostics.any { diagnostic -> diagnostic.severity == Severity.Error }
         val scanner = XmlScanner(
             text = decoded.text,
+            baseUri = source.uri,
             configuration = configuration,
             encoding = decoded.encoding,
             sink = NoSyntax,

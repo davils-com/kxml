@@ -45,4 +45,11 @@ public object XmlViolationCodes {
      * @since 1.0.0
      */
     public val INVALID_INDENT: ViolationCode = ViolationCode("kxml.config.invalid-indent")
+
+    /**
+     * [XmlDoctype.External] without a resolver, or a resolver with another [XmlDoctype], which would never consult it.
+     *
+     * @since 1.0.0
+     */
+    public val RESOLVER_MISMATCH: ViolationCode = ViolationCode("kxml.config.resolver-mismatch")
 }

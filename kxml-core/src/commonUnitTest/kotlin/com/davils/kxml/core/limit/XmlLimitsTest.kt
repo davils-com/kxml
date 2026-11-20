@@ -25,6 +25,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.longs.shouldBeLessThanOrEqual
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
 
 private const val SMALL: Int = 4
 
@@ -71,10 +72,18 @@ class XmlLimitsTest : FunSpec({
                 maximumAttributes = XmlLimits.HARD_ATTRIBUTES
                 maximumTextLength = XmlLimits.HARD_INPUT_LENGTH
                 maximumNameLength = XmlLimits.HARD_NAME_LENGTH
+                maximumEntityDeclarations = XmlLimits.HARD_ENTITY_DECLARATIONS
+                maximumAttributeDeclarations = XmlLimits.HARD_ATTRIBUTE_DECLARATIONS
+                maximumEntityExpansion = XmlLimits.HARD_ENTITY_EXPANSION
+                maximumEntityDepth = XmlLimits.HARD_ENTITY_DEPTH
+                maximumExternalResources = XmlLimits.HARD_EXTERNAL_RESOURCES
+                maximumExternalLength = XmlLimits.HARD_INPUT_LENGTH
             }
 
             ceilings.maximumElements shouldBe XmlLimits.HARD_ELEMENTS
             ceilings.maximumNameLength shouldBe XmlLimits.HARD_NAME_LENGTH
+            ceilings.maximumExternalResources shouldBe XmlLimits.HARD_EXTERNAL_RESOURCES
+            ceilings.toString() shouldContain "externalLength=${XmlLimits.HARD_INPUT_LENGTH}"
         }
 
         test("refuse every limit past its ceiling") {
@@ -84,6 +93,10 @@ class XmlLimitsTest : FunSpec({
             shouldThrow<ValidationException> { xmlLimits { maximumAttributes = XmlLimits.HARD_ATTRIBUTES + 1 } }
             shouldThrow<ValidationException> { xmlLimits { maximumTextLength = XmlLimits.HARD_INPUT_LENGTH + 1 } }
             shouldThrow<ValidationException> { xmlLimits { maximumNameLength = XmlLimits.HARD_NAME_LENGTH + 1 } }
+            shouldThrow<ValidationException> {
+                xmlLimits { maximumExternalResources = XmlLimits.HARD_EXTERNAL_RESOURCES + 1 }
+            }
+            shouldThrow<ValidationException> { xmlLimits { maximumExternalLength = XmlLimits.HARD_INPUT_LENGTH + 1 } }
         }
 
         test("refuse every limit below 1") {
@@ -92,6 +105,8 @@ class XmlLimitsTest : FunSpec({
             shouldThrow<ValidationException> { xmlLimits { maximumAttributes = 0 } }
             shouldThrow<ValidationException> { xmlLimits { maximumTextLength = 0 } }
             shouldThrow<ValidationException> { xmlLimits { maximumNameLength = 0 } }
+            shouldThrow<ValidationException> { xmlLimits { maximumExternalResources = 0 } }
+            shouldThrow<ValidationException> { xmlLimits { maximumExternalLength = 0 } }
         }
 
         test("keep the relaxed preset finite and within every ceiling") {

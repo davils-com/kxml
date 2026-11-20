@@ -176,8 +176,9 @@ public enum class XmlDiagnosticCode(public val value: String, public val severit
     MisusedEntity("kxml.reference.misused-entity", Severity.Error),
 
     /**
-     * A reference to an external entity or an external subset that no resolver of the caller resolves; kxml never
-     * loads anything on its own and refuses rather than skips what it cannot read.
+     * A reference to an external entity or an external subset that no resolver of the caller resolves, because the
+     * reader has none or the resolver refuses it; kxml never loads anything on its own and refuses rather than skips
+     * what it cannot read.
      *
      * @since 1.0.0
      */
@@ -307,6 +308,22 @@ public enum class XmlDiagnosticCode(public val value: String, public val severit
      * @since 1.0.0
      */
     EntityTooDeep("kxml.limit.entity-depth", Severity.Error),
+
+    /**
+     * More external resources than
+     * [XmlLimits.maximumExternalResources][com.davils.kxml.core.limit.XmlLimits.maximumExternalResources].
+     *
+     * @since 1.0.0
+     */
+    TooManyExternalResources("kxml.limit.external-resources", Severity.Error),
+
+    /**
+     * An external resource longer than
+     * [XmlLimits.maximumExternalLength][com.davils.kxml.core.limit.XmlLimits.maximumExternalLength].
+     *
+     * @since 1.0.0
+     */
+    ExternalResourceTooLong("kxml.limit.external-length", Severity.Error),
 
     /**
      * More elements than [XmlLimits.maximumElements][com.davils.kxml.core.limit.XmlLimits.maximumElements].

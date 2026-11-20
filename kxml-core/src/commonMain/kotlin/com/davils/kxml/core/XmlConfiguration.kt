@@ -20,6 +20,7 @@ import com.davils.kore.core.validation.Validatable
 import com.davils.kore.core.validation.ValidationScope
 import com.davils.kxml.core.emit.XmlEmitOptions
 import com.davils.kxml.core.limit.XmlLimits
+import com.davils.kxml.core.resolve.XmlResolver
 import com.davils.kore.core.validation.validate as report
 
 /**
@@ -36,6 +37,13 @@ public class XmlConfiguration internal constructor(builder: XmlBuilder) : Valida
      * @since 1.0.0
      */
     public val doctype: XmlDoctype = builder.doctype
+
+    /**
+     * The resolver of external resources under [XmlDoctype.External], or `null`.
+     *
+     * @since 1.0.0
+     */
+    public val resolver: XmlResolver? = builder.resolver
 
     /**
      * Which whitespace the tree keeps.
@@ -59,21 +67,36 @@ public class XmlConfiguration internal constructor(builder: XmlBuilder) : Valida
     public val emitter: XmlEmitOptions = builder.emitter
 
     /**
-     * Reports the violations of [limits] and [emitter] under their names.
+     * Reports the violations of [limits] and [emitter] under their names, and
+     * [RESOLVER_MISMATCH][XmlViolationCodes.RESOLVER_MISMATCH] when [doctype] is [XmlDoctype.External] without a
+     * [resolver] or another value with one.
      *
      * @since 1.0.0
      */
     override fun ValidationScope.validate() {
+        val isExternal = doctype == XmlDoctype.External
+        if (isExternal != (resolver != null)) {
+            fail(::resolver, "is needed by and only by XmlDoctype.External", XmlViolationCodes.RESOLVER_MISMATCH)
+        }
         within(::limits) { include(limits.report("limits").violations) }
         within(::emitter) { include(emitter.report("emitter").violations) }
     }
 
     /**
-     * Returns every setting, such as `XmlConfiguration(doctype=Refuse, ...)`.
+     * Returns every setting, such as `XmlConfiguration(doctype=Refuse, resolver=none, ...)`; a resolver is shown only
+     * as `set`.
      *
      * @return a text for diagnostics.
      * @since 1.0.0
      */
-    override fun toString(): String =
-        "XmlConfiguration(doctype=$doctype, whitespace=$whitespace, limits=$limits, emitter=$emitter)"
+    override fun toString(): String {
+        val shownResolver = RESOLVER_SET.takeIf { resolver != null } ?: RESOLVER_NONE
+        return "XmlConfiguration(doctype=$doctype, resolver=$shownResolver, whitespace=$whitespace, " +
+            "limits=$limits, emitter=$emitter)"
+    }
+
+    private companion object {
+        const val RESOLVER_SET: String = "set"
+        const val RESOLVER_NONE: String = "none"
+    }
 }

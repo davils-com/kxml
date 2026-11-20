@@ -23,6 +23,8 @@ internal class EntityDefinition(
     val publicId: String?,
     val systemId: String?,
     val notation: String?,
+    val baseUri: String?,
+    val isExternallyDeclared: Boolean,
 ) {
     val isExternal: Boolean get() = replacement == null
 

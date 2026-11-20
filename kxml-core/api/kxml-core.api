@@ -20,11 +20,13 @@ public final class com/davils/kxml/core/XmlBuilder : com/davils/kore/core/dsl/Va
 	public final fun getDoctype ()Lcom/davils/kxml/core/XmlDoctype;
 	public final fun getEmitter ()Lcom/davils/kxml/core/emit/XmlEmitOptions;
 	public final fun getLimits ()Lcom/davils/kxml/core/limit/XmlLimits;
+	public final fun getResolver ()Lcom/davils/kxml/core/resolve/XmlResolver;
 	public final fun getWhitespace ()Lcom/davils/kxml/core/XmlWhitespace;
 	public final fun limits (Lkotlin/jvm/functions/Function1;)V
 	public final fun setDoctype (Lcom/davils/kxml/core/XmlDoctype;)V
 	public final fun setEmitter (Lcom/davils/kxml/core/emit/XmlEmitOptions;)V
 	public final fun setLimits (Lcom/davils/kxml/core/limit/XmlLimits;)V
+	public final fun setResolver (Lcom/davils/kxml/core/resolve/XmlResolver;)V
 	public final fun setWhitespace (Lcom/davils/kxml/core/XmlWhitespace;)V
 }
 
@@ -32,12 +34,14 @@ public final class com/davils/kxml/core/XmlConfiguration : com/davils/kore/core/
 	public final fun getDoctype ()Lcom/davils/kxml/core/XmlDoctype;
 	public final fun getEmitter ()Lcom/davils/kxml/core/emit/XmlEmitOptions;
 	public final fun getLimits ()Lcom/davils/kxml/core/limit/XmlLimits;
+	public final fun getResolver ()Lcom/davils/kxml/core/resolve/XmlResolver;
 	public final fun getWhitespace ()Lcom/davils/kxml/core/XmlWhitespace;
 	public fun toString ()Ljava/lang/String;
 	public fun validate (Lcom/davils/kore/core/validation/ValidationScope;)V
 }
 
 public final class com/davils/kxml/core/XmlDoctype : java/lang/Enum {
+	public static final field External Lcom/davils/kxml/core/XmlDoctype;
 	public static final field Internal Lcom/davils/kxml/core/XmlDoctype;
 	public static final field Refuse Lcom/davils/kxml/core/XmlDoctype;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
@@ -157,6 +161,7 @@ public final class com/davils/kxml/core/XmlViolationCodes {
 	public final fun getABOVE_HARD_LIMIT-J_S2PC0 ()Ljava/lang/String;
 	public final fun getINVALID_INDENT-J_S2PC0 ()Ljava/lang/String;
 	public final fun getNOT_POSITIVE-J_S2PC0 ()Ljava/lang/String;
+	public final fun getRESOLVER_MISMATCH-J_S2PC0 ()Ljava/lang/String;
 }
 
 public final class com/davils/kxml/core/XmlWhitespace : java/lang/Enum {
@@ -193,6 +198,7 @@ public final class com/davils/kxml/core/diagnostic/XmlDiagnosticCode : java/lang
 	public static final field EncodingOverridden Lcom/davils/kxml/core/diagnostic/XmlDiagnosticCode;
 	public static final field EntityExpansionTooLarge Lcom/davils/kxml/core/diagnostic/XmlDiagnosticCode;
 	public static final field EntityTooDeep Lcom/davils/kxml/core/diagnostic/XmlDiagnosticCode;
+	public static final field ExternalResourceTooLong Lcom/davils/kxml/core/diagnostic/XmlDiagnosticCode;
 	public static final field InputTooLong Lcom/davils/kxml/core/diagnostic/XmlDiagnosticCode;
 	public static final field InvalidAttribute Lcom/davils/kxml/core/diagnostic/XmlDiagnosticCode;
 	public static final field InvalidCharacter Lcom/davils/kxml/core/diagnostic/XmlDiagnosticCode;
@@ -222,6 +228,7 @@ public final class com/davils/kxml/core/diagnostic/XmlDiagnosticCode : java/lang
 	public static final field TooManyAttributes Lcom/davils/kxml/core/diagnostic/XmlDiagnosticCode;
 	public static final field TooManyElements Lcom/davils/kxml/core/diagnostic/XmlDiagnosticCode;
 	public static final field TooManyEntityDeclarations Lcom/davils/kxml/core/diagnostic/XmlDiagnosticCode;
+	public static final field TooManyExternalResources Lcom/davils/kxml/core/diagnostic/XmlDiagnosticCode;
 	public static final field TypeMismatch Lcom/davils/kxml/core/diagnostic/XmlDiagnosticCode;
 	public static final field UnbalancedEntity Lcom/davils/kxml/core/diagnostic/XmlDiagnosticCode;
 	public static final field UnclosedElement Lcom/davils/kxml/core/diagnostic/XmlDiagnosticCode;
@@ -294,6 +301,7 @@ public final class com/davils/kxml/core/limit/XmlLimits : com/davils/kore/core/v
 	public static final field HARD_ENTITY_DECLARATIONS I
 	public static final field HARD_ENTITY_DEPTH I
 	public static final field HARD_ENTITY_EXPANSION J
+	public static final field HARD_EXTERNAL_RESOURCES I
 	public static final field HARD_INPUT_LENGTH I
 	public static final field HARD_NAME_LENGTH I
 	public fun equals (Ljava/lang/Object;)Z
@@ -304,6 +312,8 @@ public final class com/davils/kxml/core/limit/XmlLimits : com/davils/kore/core/v
 	public final fun getMaximumEntityDeclarations ()I
 	public final fun getMaximumEntityDepth ()I
 	public final fun getMaximumEntityExpansion ()J
+	public final fun getMaximumExternalLength ()I
+	public final fun getMaximumExternalResources ()I
 	public final fun getMaximumInputLength ()I
 	public final fun getMaximumNameLength ()I
 	public final fun getMaximumTextLength ()I
@@ -326,6 +336,8 @@ public final class com/davils/kxml/core/limit/XmlLimitsBuilder : com/davils/kore
 	public static final field DEFAULT_ENTITY_DECLARATIONS I
 	public static final field DEFAULT_ENTITY_DEPTH I
 	public static final field DEFAULT_ENTITY_EXPANSION J
+	public static final field DEFAULT_EXTERNAL_LENGTH I
+	public static final field DEFAULT_EXTERNAL_RESOURCES I
 	public static final field DEFAULT_INPUT_LENGTH I
 	public static final field DEFAULT_NAME_LENGTH I
 	public static final field DEFAULT_TEXT_LENGTH I
@@ -337,6 +349,8 @@ public final class com/davils/kxml/core/limit/XmlLimitsBuilder : com/davils/kore
 	public final fun getMaximumEntityDeclarations ()I
 	public final fun getMaximumEntityDepth ()I
 	public final fun getMaximumEntityExpansion ()J
+	public final fun getMaximumExternalLength ()I
+	public final fun getMaximumExternalResources ()I
 	public final fun getMaximumInputLength ()I
 	public final fun getMaximumNameLength ()I
 	public final fun getMaximumTextLength ()I
@@ -347,6 +361,8 @@ public final class com/davils/kxml/core/limit/XmlLimitsBuilder : com/davils/kore
 	public final fun setMaximumEntityDeclarations (I)V
 	public final fun setMaximumEntityDepth (I)V
 	public final fun setMaximumEntityExpansion (J)V
+	public final fun setMaximumExternalLength (I)V
+	public final fun setMaximumExternalResources (I)V
 	public final fun setMaximumInputLength (I)V
 	public final fun setMaximumNameLength (I)V
 	public final fun setMaximumTextLength (I)V
@@ -535,17 +551,42 @@ public final class com/davils/kxml/core/node/XmlUnparsedEntity {
 	public fun toString ()Ljava/lang/String;
 }
 
+public abstract interface class com/davils/kxml/core/resolve/XmlResolver {
+	public abstract fun resolve (Lcom/davils/kxml/core/resolve/XmlResourceRequest;)Lcom/davils/kxml/core/source/XmlSource;
+}
+
+public final class com/davils/kxml/core/resolve/XmlResourceKind : java/lang/Enum {
+	public static final field ExternalEntity Lcom/davils/kxml/core/resolve/XmlResourceKind;
+	public static final field ExternalSubset Lcom/davils/kxml/core/resolve/XmlResourceKind;
+	public static final field ParameterEntity Lcom/davils/kxml/core/resolve/XmlResourceKind;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/davils/kxml/core/resolve/XmlResourceKind;
+	public static fun values ()[Lcom/davils/kxml/core/resolve/XmlResourceKind;
+}
+
+public final class com/davils/kxml/core/resolve/XmlResourceRequest {
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBaseUri ()Ljava/lang/String;
+	public final fun getKind ()Lcom/davils/kxml/core/resolve/XmlResourceKind;
+	public final fun getName ()Ljava/lang/String;
+	public final fun getPublicId ()Ljava/lang/String;
+	public final fun getSystemId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class com/davils/kxml/core/source/XmlSource {
 	public static final field Companion Lcom/davils/kxml/core/source/XmlSource$Companion;
 	public final fun getName ()Ljava/lang/String;
+	public final fun getUri ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 }
 
 public final class com/davils/kxml/core/source/XmlSource$Companion {
-	public final fun of (Ljava/lang/String;Ljava/lang/String;)Lcom/davils/kxml/core/source/XmlSource;
-	public final fun of ([BLjava/lang/String;Ljava/lang/String;)Lcom/davils/kxml/core/source/XmlSource;
-	public static synthetic fun of$default (Lcom/davils/kxml/core/source/XmlSource$Companion;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/davils/kxml/core/source/XmlSource;
-	public static synthetic fun of$default (Lcom/davils/kxml/core/source/XmlSource$Companion;[BLjava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/davils/kxml/core/source/XmlSource;
+	public final fun of (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/davils/kxml/core/source/XmlSource;
+	public final fun of ([BLjava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/davils/kxml/core/source/XmlSource;
+	public static synthetic fun of$default (Lcom/davils/kxml/core/source/XmlSource$Companion;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/davils/kxml/core/source/XmlSource;
+	public static synthetic fun of$default (Lcom/davils/kxml/core/source/XmlSource$Companion;[BLjava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/davils/kxml/core/source/XmlSource;
 }
 
 public abstract interface class com/davils/kxml/core/syntax/XmlSyntaxElement {

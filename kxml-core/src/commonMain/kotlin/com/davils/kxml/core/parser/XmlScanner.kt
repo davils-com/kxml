@@ -29,6 +29,10 @@ import com.davils.kxml.core.dtd.Dtd
 import com.davils.kxml.core.dtd.DtdLexer
 import com.davils.kxml.core.dtd.EntityContext
 import com.davils.kxml.core.dtd.ExpansionBudget
+import com.davils.kxml.core.dtd.ExternalEntry
+import com.davils.kxml.core.dtd.ExternalResources
+import com.davils.kxml.core.dtd.ParameterReferences
+import com.davils.kxml.core.resolve.XmlResourceKind
 import com.davils.kxml.core.source.XmlEncoding
 import com.davils.kxml.core.syntax.XmlSyntaxKind
 
@@ -45,16 +49,18 @@ private const val REFERENCE_DELIMITERS: Int = 2
 
 internal class XmlScanner(
     text: String,
+    baseUri: String?,
     private val configuration: XmlConfiguration,
     private val encoding: XmlEncoding?,
     sink: SyntaxSink,
 ) {
-    private val cursor = Cursor(text)
+    private val cursor = Cursor(text, baseUri)
     private val syntax = FramedSink(sink, cursor)
     private val dialect = Dialect()
     private val budget = ParseBudget(configuration.limits)
     private val expansion = ExpansionBudget(configuration.limits)
-    private val entities = EntityContext(expansion)
+    private val resources = ExternalResources(configuration.resolver, configuration.limits)
+    private val entities = EntityContext(expansion, resources)
     private val characters = CharacterReader(
         cursor = cursor,
         budget = budget,
@@ -66,6 +72,13 @@ internal class XmlScanner(
     private val tags = TagReader(cursor = cursor, budget = budget, characters = characters, sink = syntax)
     private val markup = MarkupReader(cursor = cursor, budget = budget, tags = tags, sink = syntax, dialect = dialect)
     private val declarations = DeclarationReader(cursor, characters, syntax)
+    private val entry = ExternalEntry(
+        cursor = cursor,
+        declarations = declarations,
+        resources = resources,
+        budget = expansion,
+        dialect = dialect,
+    )
     private val resolver = NamespaceResolver(dialect)
     private val open = ArrayDeque<OpenElement>()
     private val pending = ArrayDeque<XmlEvent>()
@@ -145,9 +158,14 @@ internal class XmlScanner(
         syntax.token(kind = XmlSyntaxKind.ENTITY_REFERENCE, start = start, end = cursor.offset)
         val range = cursor.rangeFrom(start)
         val entity = entities.general(name = name, range = range, expanding = cursor.names, isInAttribute = false)
-        val replacement = entity.replacement.orEmpty()
-        expansion.charge(length = replacement.length, depth = cursor.depth, range = range)
         entered.addLast(open.size)
+        val replacement = entity.replacement
+        if (replacement == null) {
+            val request = entry.request(XmlResourceKind.ExternalEntity, entity)
+            entry.enter(request = request, range = range, isPadded = false)
+            return null
+        }
+        expansion.charge(length = replacement.length, depth = cursor.depth, range = range)
         cursor.push(text = replacement, anchor = range, name = name, isReplacement = true)
         return null
     }
@@ -222,13 +240,20 @@ internal class XmlScanner(
         }
         hasDoctype = true
         val lexer = DtdLexer(cursor = cursor, sink = syntax, dialect = dialect, budget = budget)
+        val references = ParameterReferences(
+            lexer = lexer,
+            entry = entry,
+            budget = expansion,
+            isStandalone = isStandalone,
+        )
         val reader = DoctypeReader(
             lexer = lexer,
             markup = markup,
             limits = configuration.limits,
             entities = entities,
             expansion = AttributeExpansion(entities, dialect),
-            isStandalone = isStandalone,
+            references = references,
+            entry = entry,
         )
         val read = reader.read()
         dtd = read

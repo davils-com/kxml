@@ -13,8 +13,8 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
 
 ### Added
 
-- `kxml-core`: a namespace-aware XML 1.0 and 1.1 reader that never loads external resources, refuses document type
-  declarations by default and checks every document against `XmlLimits`; an event stream, an immutable node tree,
+- `kxml-core`: a namespace-aware XML 1.0 and 1.1 reader that loads external resources only through a resolver of the
+  caller, refuses document type declarations by default and checks every document against `XmlLimits`; an event stream, an immutable node tree,
   diagnostics with stable codes and positions, and a writer with configurable layout.
 - `kxml-serialization`: a kotlinx.serialization `StringFormat` for XML with attributes, text content, namespaces,
   wrapped and repeated lists, maps, polymorphism by attribute or element, naming strategies and decoding with
@@ -53,9 +53,19 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
   `kxml.reference.misused-entity`, `kxml.reference.unresolved-entity`, `kxml.reference.unbalanced-entity`,
   `kxml.limit.entity-declarations`, `kxml.limit.attribute-declarations`, `kxml.limit.entity-expansion` and
   `kxml.limit.entity-depth`.
-- The W3C XML Conformance Test Suite runs in the build: `XmlConformanceTest` downloads the pinned archive, and every
-  case kxml does not pass is listed with its reason. Of 2,227 cases, 2,119 pass; the rest need an external subset
-  or an external entity, which kxml only reads through a resolver, or contradict another case of the suite.
+- `XmlDoctype.External` also reads the external subset, external parameter entities and external parsed entities,
+  each through the `XmlResolver` of the configuration, which gets an `XmlResourceRequest` with the kind, the name,
+  the identifiers and the base URI of the declaring resource and returns an `XmlSource` or `null` to refuse it.
+  Every resource is decoded on its own and may start with a text declaration; in external resources, parameter
+  entities may stand inside declarations and entity values, and conditional sections are read. `XmlSource` takes
+  the `uri` it was retrieved from as the base of what it declares. `External` needs a resolver and every other
+  `XmlDoctype` refuses one, reported as `kxml.config.resolver-mismatch`.
+- `XmlLimits` bounds external resources with `maximumExternalResources` and `maximumExternalLength`, checked before
+  a resource is decoded, reported as `kxml.limit.external-resources` and `kxml.limit.external-length`.
+- The W3C XML Conformance Test Suite runs in the build: `XmlConformanceTest` downloads the pinned archive, reads it
+  with a resolver confined to the suite, and lists every case kxml does not pass with its reason. Of 2,227 cases,
+  2,225 pass. Of the other two, one expects an undeclared entity to be skipped, which kxml refuses, and one of XML
+  1.1 contradicts another case of the suite.
 - The standards kxml implements are declared and reviewed in `standards.lock`, and the assurance gate reports a new
   version, a replacement or an undeclared standard.
 
@@ -81,8 +91,11 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
   and entities nested past `maximumEntityDepth` end with a diagnostic, and the work of expanding stays linear in what
   the budget allows. Expansion runs on an explicit stack, an entity that refers to itself is refused, an entity
   must close every element it opens, and `<` never reaches an attribute value through an entity.
-- An external entity, an external subset and an external parameter entity are never loaded; a reference to an
-  external entity is refused with `kxml.reference.unresolved-entity` instead of being dropped.
+- An external entity, an external subset and an external parameter entity are loaded only through the resolver
+  under `XmlDoctype.External`; one that is not, or that the resolver refuses, is refused with
+  `kxml.reference.unresolved-entity` instead of being dropped. Every external entity counts against the expansion
+  budget each time it is referenced, a resource is fetched at most once per document, an entity of XML 1.1 is
+  refused in a document of XML 1.0, and a standalone document cannot use an entity the external subset declares.
 - An entity reference must name an XML name, and a character reference accepts only ASCII digits, so
   `&#\u0666\u0665;` no longer reads as `A`.
 - UTF-16 without a byte order mark is only read when the document starts with `<?`, as Appendix F detects it, and

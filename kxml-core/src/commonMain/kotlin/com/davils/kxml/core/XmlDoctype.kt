@@ -44,4 +44,15 @@ public enum class XmlDoctype {
      * @since 1.0.0
      */
     Internal,
+
+    /**
+     * Reads the internal subset as [Internal] does and, through the resolver of the configuration, the external subset,
+     * external parameter entities and external parsed entities. Every resource counts against
+     * [XmlLimits.maximumExternalResources][com.davils.kxml.core.limit.XmlLimits.maximumExternalResources] and
+     * [XmlLimits.maximumExternalLength][com.davils.kxml.core.limit.XmlLimits.maximumExternalLength], is decoded on its
+     * own and may start with a text declaration; a resource the resolver refuses ends reading. Requires a resolver.
+     *
+     * @since 1.0.0
+     */
+    External,
 }

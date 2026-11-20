@@ -23,6 +23,8 @@ internal class CursorFrame(
     val anchor: TextRange?,
     val name: String?,
     val isReplacement: Boolean,
+    val isExternal: Boolean,
+    val baseUri: String?,
 ) {
     var offset: Int = 0
         private set

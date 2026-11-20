@@ -15,6 +15,7 @@ final enum class com.davils.kxml.core.diagnostic/XmlDiagnosticCode : kotlin/Enum
     enum entry EncodingOverridden // com.davils.kxml.core.diagnostic/XmlDiagnosticCode.EncodingOverridden|null[0]
     enum entry EntityExpansionTooLarge // com.davils.kxml.core.diagnostic/XmlDiagnosticCode.EntityExpansionTooLarge|null[0]
     enum entry EntityTooDeep // com.davils.kxml.core.diagnostic/XmlDiagnosticCode.EntityTooDeep|null[0]
+    enum entry ExternalResourceTooLong // com.davils.kxml.core.diagnostic/XmlDiagnosticCode.ExternalResourceTooLong|null[0]
     enum entry InputTooLong // com.davils.kxml.core.diagnostic/XmlDiagnosticCode.InputTooLong|null[0]
     enum entry InvalidAttribute // com.davils.kxml.core.diagnostic/XmlDiagnosticCode.InvalidAttribute|null[0]
     enum entry InvalidCharacter // com.davils.kxml.core.diagnostic/XmlDiagnosticCode.InvalidCharacter|null[0]
@@ -44,6 +45,7 @@ final enum class com.davils.kxml.core.diagnostic/XmlDiagnosticCode : kotlin/Enum
     enum entry TooManyAttributes // com.davils.kxml.core.diagnostic/XmlDiagnosticCode.TooManyAttributes|null[0]
     enum entry TooManyElements // com.davils.kxml.core.diagnostic/XmlDiagnosticCode.TooManyElements|null[0]
     enum entry TooManyEntityDeclarations // com.davils.kxml.core.diagnostic/XmlDiagnosticCode.TooManyEntityDeclarations|null[0]
+    enum entry TooManyExternalResources // com.davils.kxml.core.diagnostic/XmlDiagnosticCode.TooManyExternalResources|null[0]
     enum entry TypeMismatch // com.davils.kxml.core.diagnostic/XmlDiagnosticCode.TypeMismatch|null[0]
     enum entry UnbalancedEntity // com.davils.kxml.core.diagnostic/XmlDiagnosticCode.UnbalancedEntity|null[0]
     enum entry UnclosedElement // com.davils.kxml.core.diagnostic/XmlDiagnosticCode.UnclosedElement|null[0]
@@ -82,6 +84,18 @@ final enum class com.davils.kxml.core.emit/XmlLineBreak : kotlin/Enum<com.davils
 
     final fun valueOf(kotlin/String): com.davils.kxml.core.emit/XmlLineBreak // com.davils.kxml.core.emit/XmlLineBreak.valueOf|valueOf#static(kotlin.String){}[0]
     final fun values(): kotlin/Array<com.davils.kxml.core.emit/XmlLineBreak> // com.davils.kxml.core.emit/XmlLineBreak.values|values#static(){}[0]
+}
+
+final enum class com.davils.kxml.core.resolve/XmlResourceKind : kotlin/Enum<com.davils.kxml.core.resolve/XmlResourceKind> { // com.davils.kxml.core.resolve/XmlResourceKind|null[0]
+    enum entry ExternalEntity // com.davils.kxml.core.resolve/XmlResourceKind.ExternalEntity|null[0]
+    enum entry ExternalSubset // com.davils.kxml.core.resolve/XmlResourceKind.ExternalSubset|null[0]
+    enum entry ParameterEntity // com.davils.kxml.core.resolve/XmlResourceKind.ParameterEntity|null[0]
+
+    final val entries // com.davils.kxml.core.resolve/XmlResourceKind.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<com.davils.kxml.core.resolve/XmlResourceKind> // com.davils.kxml.core.resolve/XmlResourceKind.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): com.davils.kxml.core.resolve/XmlResourceKind // com.davils.kxml.core.resolve/XmlResourceKind.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<com.davils.kxml.core.resolve/XmlResourceKind> // com.davils.kxml.core.resolve/XmlResourceKind.values|values#static(){}[0]
 }
 
 final enum class com.davils.kxml.core.syntax/XmlSyntaxKind : kotlin/Enum<com.davils.kxml.core.syntax/XmlSyntaxKind> { // com.davils.kxml.core.syntax/XmlSyntaxKind|null[0]
@@ -147,6 +161,7 @@ final enum class com.davils.kxml.core.syntax/XmlSyntaxKind : kotlin/Enum<com.dav
 }
 
 final enum class com.davils.kxml.core/XmlDoctype : kotlin/Enum<com.davils.kxml.core/XmlDoctype> { // com.davils.kxml.core/XmlDoctype|null[0]
+    enum entry External // com.davils.kxml.core/XmlDoctype.External|null[0]
     enum entry Internal // com.davils.kxml.core/XmlDoctype.Internal|null[0]
     enum entry Refuse // com.davils.kxml.core/XmlDoctype.Refuse|null[0]
 
@@ -166,6 +181,10 @@ final enum class com.davils.kxml.core/XmlWhitespace : kotlin/Enum<com.davils.kxm
 
     final fun valueOf(kotlin/String): com.davils.kxml.core/XmlWhitespace // com.davils.kxml.core/XmlWhitespace.valueOf|valueOf#static(kotlin.String){}[0]
     final fun values(): kotlin/Array<com.davils.kxml.core/XmlWhitespace> // com.davils.kxml.core/XmlWhitespace.values|values#static(){}[0]
+}
+
+abstract fun interface com.davils.kxml.core.resolve/XmlResolver { // com.davils.kxml.core.resolve/XmlResolver|null[0]
+    abstract fun resolve(com.davils.kxml.core.resolve/XmlResourceRequest): com.davils.kxml.core.source/XmlSource? // com.davils.kxml.core.resolve/XmlResolver.resolve|resolve(com.davils.kxml.core.resolve.XmlResourceRequest){}[0]
 }
 
 sealed interface com.davils.kxml.core.syntax/XmlSyntaxElement { // com.davils.kxml.core.syntax/XmlSyntaxElement|null[0]
@@ -380,6 +399,10 @@ final class com.davils.kxml.core.limit/XmlLimits : com.davils.kore.core.validati
         final fun <get-maximumEntityDepth>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimits.maximumEntityDepth.<get-maximumEntityDepth>|<get-maximumEntityDepth>(){}[0]
     final val maximumEntityExpansion // com.davils.kxml.core.limit/XmlLimits.maximumEntityExpansion|{}maximumEntityExpansion[0]
         final fun <get-maximumEntityExpansion>(): kotlin/Long // com.davils.kxml.core.limit/XmlLimits.maximumEntityExpansion.<get-maximumEntityExpansion>|<get-maximumEntityExpansion>(){}[0]
+    final val maximumExternalLength // com.davils.kxml.core.limit/XmlLimits.maximumExternalLength|{}maximumExternalLength[0]
+        final fun <get-maximumExternalLength>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimits.maximumExternalLength.<get-maximumExternalLength>|<get-maximumExternalLength>(){}[0]
+    final val maximumExternalResources // com.davils.kxml.core.limit/XmlLimits.maximumExternalResources|{}maximumExternalResources[0]
+        final fun <get-maximumExternalResources>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimits.maximumExternalResources.<get-maximumExternalResources>|<get-maximumExternalResources>(){}[0]
     final val maximumInputLength // com.davils.kxml.core.limit/XmlLimits.maximumInputLength|{}maximumInputLength[0]
         final fun <get-maximumInputLength>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimits.maximumInputLength.<get-maximumInputLength>|<get-maximumInputLength>(){}[0]
     final val maximumNameLength // com.davils.kxml.core.limit/XmlLimits.maximumNameLength|{}maximumNameLength[0]
@@ -407,6 +430,8 @@ final class com.davils.kxml.core.limit/XmlLimits : com.davils.kore.core.validati
             final fun <get-HARD_ENTITY_DEPTH>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimits.Companion.HARD_ENTITY_DEPTH.<get-HARD_ENTITY_DEPTH>|<get-HARD_ENTITY_DEPTH>(){}[0]
         final const val HARD_ENTITY_EXPANSION // com.davils.kxml.core.limit/XmlLimits.Companion.HARD_ENTITY_EXPANSION|{}HARD_ENTITY_EXPANSION[0]
             final fun <get-HARD_ENTITY_EXPANSION>(): kotlin/Long // com.davils.kxml.core.limit/XmlLimits.Companion.HARD_ENTITY_EXPANSION.<get-HARD_ENTITY_EXPANSION>|<get-HARD_ENTITY_EXPANSION>(){}[0]
+        final const val HARD_EXTERNAL_RESOURCES // com.davils.kxml.core.limit/XmlLimits.Companion.HARD_EXTERNAL_RESOURCES|{}HARD_EXTERNAL_RESOURCES[0]
+            final fun <get-HARD_EXTERNAL_RESOURCES>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimits.Companion.HARD_EXTERNAL_RESOURCES.<get-HARD_EXTERNAL_RESOURCES>|<get-HARD_EXTERNAL_RESOURCES>(){}[0]
         final const val HARD_INPUT_LENGTH // com.davils.kxml.core.limit/XmlLimits.Companion.HARD_INPUT_LENGTH|{}HARD_INPUT_LENGTH[0]
             final fun <get-HARD_INPUT_LENGTH>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimits.Companion.HARD_INPUT_LENGTH.<get-HARD_INPUT_LENGTH>|<get-HARD_INPUT_LENGTH>(){}[0]
         final const val HARD_NAME_LENGTH // com.davils.kxml.core.limit/XmlLimits.Companion.HARD_NAME_LENGTH|{}HARD_NAME_LENGTH[0]
@@ -441,6 +466,12 @@ final class com.davils.kxml.core.limit/XmlLimitsBuilder : com.davils.kore.core.d
     final var maximumEntityExpansion // com.davils.kxml.core.limit/XmlLimitsBuilder.maximumEntityExpansion|{}maximumEntityExpansion[0]
         final fun <get-maximumEntityExpansion>(): kotlin/Long // com.davils.kxml.core.limit/XmlLimitsBuilder.maximumEntityExpansion.<get-maximumEntityExpansion>|<get-maximumEntityExpansion>(){}[0]
         final fun <set-maximumEntityExpansion>(kotlin/Long) // com.davils.kxml.core.limit/XmlLimitsBuilder.maximumEntityExpansion.<set-maximumEntityExpansion>|<set-maximumEntityExpansion>(kotlin.Long){}[0]
+    final var maximumExternalLength // com.davils.kxml.core.limit/XmlLimitsBuilder.maximumExternalLength|{}maximumExternalLength[0]
+        final fun <get-maximumExternalLength>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimitsBuilder.maximumExternalLength.<get-maximumExternalLength>|<get-maximumExternalLength>(){}[0]
+        final fun <set-maximumExternalLength>(kotlin/Int) // com.davils.kxml.core.limit/XmlLimitsBuilder.maximumExternalLength.<set-maximumExternalLength>|<set-maximumExternalLength>(kotlin.Int){}[0]
+    final var maximumExternalResources // com.davils.kxml.core.limit/XmlLimitsBuilder.maximumExternalResources|{}maximumExternalResources[0]
+        final fun <get-maximumExternalResources>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimitsBuilder.maximumExternalResources.<get-maximumExternalResources>|<get-maximumExternalResources>(){}[0]
+        final fun <set-maximumExternalResources>(kotlin/Int) // com.davils.kxml.core.limit/XmlLimitsBuilder.maximumExternalResources.<set-maximumExternalResources>|<set-maximumExternalResources>(kotlin.Int){}[0]
     final var maximumInputLength // com.davils.kxml.core.limit/XmlLimitsBuilder.maximumInputLength|{}maximumInputLength[0]
         final fun <get-maximumInputLength>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimitsBuilder.maximumInputLength.<get-maximumInputLength>|<get-maximumInputLength>(){}[0]
         final fun <set-maximumInputLength>(kotlin/Int) // com.davils.kxml.core.limit/XmlLimitsBuilder.maximumInputLength.<set-maximumInputLength>|<set-maximumInputLength>(kotlin.Int){}[0]
@@ -466,6 +497,10 @@ final class com.davils.kxml.core.limit/XmlLimitsBuilder : com.davils.kore.core.d
             final fun <get-DEFAULT_ENTITY_DEPTH>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimitsBuilder.Companion.DEFAULT_ENTITY_DEPTH.<get-DEFAULT_ENTITY_DEPTH>|<get-DEFAULT_ENTITY_DEPTH>(){}[0]
         final const val DEFAULT_ENTITY_EXPANSION // com.davils.kxml.core.limit/XmlLimitsBuilder.Companion.DEFAULT_ENTITY_EXPANSION|{}DEFAULT_ENTITY_EXPANSION[0]
             final fun <get-DEFAULT_ENTITY_EXPANSION>(): kotlin/Long // com.davils.kxml.core.limit/XmlLimitsBuilder.Companion.DEFAULT_ENTITY_EXPANSION.<get-DEFAULT_ENTITY_EXPANSION>|<get-DEFAULT_ENTITY_EXPANSION>(){}[0]
+        final const val DEFAULT_EXTERNAL_LENGTH // com.davils.kxml.core.limit/XmlLimitsBuilder.Companion.DEFAULT_EXTERNAL_LENGTH|{}DEFAULT_EXTERNAL_LENGTH[0]
+            final fun <get-DEFAULT_EXTERNAL_LENGTH>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimitsBuilder.Companion.DEFAULT_EXTERNAL_LENGTH.<get-DEFAULT_EXTERNAL_LENGTH>|<get-DEFAULT_EXTERNAL_LENGTH>(){}[0]
+        final const val DEFAULT_EXTERNAL_RESOURCES // com.davils.kxml.core.limit/XmlLimitsBuilder.Companion.DEFAULT_EXTERNAL_RESOURCES|{}DEFAULT_EXTERNAL_RESOURCES[0]
+            final fun <get-DEFAULT_EXTERNAL_RESOURCES>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimitsBuilder.Companion.DEFAULT_EXTERNAL_RESOURCES.<get-DEFAULT_EXTERNAL_RESOURCES>|<get-DEFAULT_EXTERNAL_RESOURCES>(){}[0]
         final const val DEFAULT_INPUT_LENGTH // com.davils.kxml.core.limit/XmlLimitsBuilder.Companion.DEFAULT_INPUT_LENGTH|{}DEFAULT_INPUT_LENGTH[0]
             final fun <get-DEFAULT_INPUT_LENGTH>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimitsBuilder.Companion.DEFAULT_INPUT_LENGTH.<get-DEFAULT_INPUT_LENGTH>|<get-DEFAULT_INPUT_LENGTH>(){}[0]
         final const val DEFAULT_NAME_LENGTH // com.davils.kxml.core.limit/XmlLimitsBuilder.Companion.DEFAULT_NAME_LENGTH|{}DEFAULT_NAME_LENGTH[0]
@@ -620,15 +655,34 @@ final class com.davils.kxml.core.node/XmlUnparsedEntity { // com.davils.kxml.cor
     final fun toString(): kotlin/String // com.davils.kxml.core.node/XmlUnparsedEntity.toString|toString(){}[0]
 }
 
+final class com.davils.kxml.core.resolve/XmlResourceRequest { // com.davils.kxml.core.resolve/XmlResourceRequest|null[0]
+    final val baseUri // com.davils.kxml.core.resolve/XmlResourceRequest.baseUri|{}baseUri[0]
+        final fun <get-baseUri>(): kotlin/String? // com.davils.kxml.core.resolve/XmlResourceRequest.baseUri.<get-baseUri>|<get-baseUri>(){}[0]
+    final val kind // com.davils.kxml.core.resolve/XmlResourceRequest.kind|{}kind[0]
+        final fun <get-kind>(): com.davils.kxml.core.resolve/XmlResourceKind // com.davils.kxml.core.resolve/XmlResourceRequest.kind.<get-kind>|<get-kind>(){}[0]
+    final val name // com.davils.kxml.core.resolve/XmlResourceRequest.name|{}name[0]
+        final fun <get-name>(): kotlin/String? // com.davils.kxml.core.resolve/XmlResourceRequest.name.<get-name>|<get-name>(){}[0]
+    final val publicId // com.davils.kxml.core.resolve/XmlResourceRequest.publicId|{}publicId[0]
+        final fun <get-publicId>(): kotlin/String? // com.davils.kxml.core.resolve/XmlResourceRequest.publicId.<get-publicId>|<get-publicId>(){}[0]
+    final val systemId // com.davils.kxml.core.resolve/XmlResourceRequest.systemId|{}systemId[0]
+        final fun <get-systemId>(): kotlin/String // com.davils.kxml.core.resolve/XmlResourceRequest.systemId.<get-systemId>|<get-systemId>(){}[0]
+
+    final fun equals(kotlin/Any?): kotlin/Boolean // com.davils.kxml.core.resolve/XmlResourceRequest.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // com.davils.kxml.core.resolve/XmlResourceRequest.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // com.davils.kxml.core.resolve/XmlResourceRequest.toString|toString(){}[0]
+}
+
 final class com.davils.kxml.core.source/XmlSource { // com.davils.kxml.core.source/XmlSource|null[0]
     final val name // com.davils.kxml.core.source/XmlSource.name|{}name[0]
         final fun <get-name>(): kotlin/String? // com.davils.kxml.core.source/XmlSource.name.<get-name>|<get-name>(){}[0]
+    final val uri // com.davils.kxml.core.source/XmlSource.uri|{}uri[0]
+        final fun <get-uri>(): kotlin/String? // com.davils.kxml.core.source/XmlSource.uri.<get-uri>|<get-uri>(){}[0]
 
     final fun toString(): kotlin/String // com.davils.kxml.core.source/XmlSource.toString|toString(){}[0]
 
     final object Companion { // com.davils.kxml.core.source/XmlSource.Companion|null[0]
-        final fun of(kotlin/ByteArray, kotlin/String? = ..., kotlin/String? = ...): com.davils.kxml.core.source/XmlSource // com.davils.kxml.core.source/XmlSource.Companion.of|of(kotlin.ByteArray;kotlin.String?;kotlin.String?){}[0]
-        final fun of(kotlin/String, kotlin/String? = ...): com.davils.kxml.core.source/XmlSource // com.davils.kxml.core.source/XmlSource.Companion.of|of(kotlin.String;kotlin.String?){}[0]
+        final fun of(kotlin/ByteArray, kotlin/String? = ..., kotlin/String? = ..., kotlin/String? = ...): com.davils.kxml.core.source/XmlSource // com.davils.kxml.core.source/XmlSource.Companion.of|of(kotlin.ByteArray;kotlin.String?;kotlin.String?;kotlin.String?){}[0]
+        final fun of(kotlin/String, kotlin/String? = ..., kotlin/String? = ...): com.davils.kxml.core.source/XmlSource // com.davils.kxml.core.source/XmlSource.Companion.of|of(kotlin.String;kotlin.String?;kotlin.String?){}[0]
     }
 }
 
@@ -724,6 +778,9 @@ final class com.davils.kxml.core/XmlBuilder : com.davils.kore.core.dsl/Validatin
     final var limits // com.davils.kxml.core/XmlBuilder.limits|{}limits[0]
         final fun <get-limits>(): com.davils.kxml.core.limit/XmlLimits // com.davils.kxml.core/XmlBuilder.limits.<get-limits>|<get-limits>(){}[0]
         final fun <set-limits>(com.davils.kxml.core.limit/XmlLimits) // com.davils.kxml.core/XmlBuilder.limits.<set-limits>|<set-limits>(com.davils.kxml.core.limit.XmlLimits){}[0]
+    final var resolver // com.davils.kxml.core/XmlBuilder.resolver|{}resolver[0]
+        final fun <get-resolver>(): com.davils.kxml.core.resolve/XmlResolver? // com.davils.kxml.core/XmlBuilder.resolver.<get-resolver>|<get-resolver>(){}[0]
+        final fun <set-resolver>(com.davils.kxml.core.resolve/XmlResolver?) // com.davils.kxml.core/XmlBuilder.resolver.<set-resolver>|<set-resolver>(com.davils.kxml.core.resolve.XmlResolver?){}[0]
     final var whitespace // com.davils.kxml.core/XmlBuilder.whitespace|{}whitespace[0]
         final fun <get-whitespace>(): com.davils.kxml.core/XmlWhitespace // com.davils.kxml.core/XmlBuilder.whitespace.<get-whitespace>|<get-whitespace>(){}[0]
         final fun <set-whitespace>(com.davils.kxml.core/XmlWhitespace) // com.davils.kxml.core/XmlBuilder.whitespace.<set-whitespace>|<set-whitespace>(com.davils.kxml.core.XmlWhitespace){}[0]
@@ -739,6 +796,8 @@ final class com.davils.kxml.core/XmlConfiguration : com.davils.kore.core.validat
         final fun <get-emitter>(): com.davils.kxml.core.emit/XmlEmitOptions // com.davils.kxml.core/XmlConfiguration.emitter.<get-emitter>|<get-emitter>(){}[0]
     final val limits // com.davils.kxml.core/XmlConfiguration.limits|{}limits[0]
         final fun <get-limits>(): com.davils.kxml.core.limit/XmlLimits // com.davils.kxml.core/XmlConfiguration.limits.<get-limits>|<get-limits>(){}[0]
+    final val resolver // com.davils.kxml.core/XmlConfiguration.resolver|{}resolver[0]
+        final fun <get-resolver>(): com.davils.kxml.core.resolve/XmlResolver? // com.davils.kxml.core/XmlConfiguration.resolver.<get-resolver>|<get-resolver>(){}[0]
     final val whitespace // com.davils.kxml.core/XmlConfiguration.whitespace|{}whitespace[0]
         final fun <get-whitespace>(): com.davils.kxml.core/XmlWhitespace // com.davils.kxml.core/XmlConfiguration.whitespace.<get-whitespace>|<get-whitespace>(){}[0]
 
@@ -854,6 +913,8 @@ final object com.davils.kxml.core/XmlViolationCodes { // com.davils.kxml.core/Xm
         final fun <get-INVALID_INDENT>(): com.davils.kore.core.validation.violation/ViolationCode // com.davils.kxml.core/XmlViolationCodes.INVALID_INDENT.<get-INVALID_INDENT>|<get-INVALID_INDENT>(){}[0]
     final val NOT_POSITIVE // com.davils.kxml.core/XmlViolationCodes.NOT_POSITIVE|{}NOT_POSITIVE[0]
         final fun <get-NOT_POSITIVE>(): com.davils.kore.core.validation.violation/ViolationCode // com.davils.kxml.core/XmlViolationCodes.NOT_POSITIVE.<get-NOT_POSITIVE>|<get-NOT_POSITIVE>(){}[0]
+    final val RESOLVER_MISMATCH // com.davils.kxml.core/XmlViolationCodes.RESOLVER_MISMATCH|{}RESOLVER_MISMATCH[0]
+        final fun <get-RESOLVER_MISMATCH>(): com.davils.kore.core.validation.violation/ViolationCode // com.davils.kxml.core/XmlViolationCodes.RESOLVER_MISMATCH.<get-RESOLVER_MISMATCH>|<get-RESOLVER_MISMATCH>(){}[0]
 }
 
 final fun com.davils.kxml.core.limit/xmlLimits(com.davils.kxml.core.limit/XmlLimits = ..., kotlin/Function1<com.davils.kxml.core.limit/XmlLimitsBuilder, kotlin/Unit>): com.davils.kxml.core.limit/XmlLimits // com.davils.kxml.core.limit/xmlLimits|xmlLimits(com.davils.kxml.core.limit.XmlLimits;kotlin.Function1<com.davils.kxml.core.limit.XmlLimitsBuilder,kotlin.Unit>){}[0]

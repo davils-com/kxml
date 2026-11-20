@@ -106,6 +106,21 @@ public class XmlLimitsBuilder internal constructor() : ValidatingBuilder<XmlLimi
      */
     public var maximumEntityDepth: Int = DEFAULT_ENTITY_DEPTH
 
+    /**
+     * The most external resources of one document; [DEFAULT_EXTERNAL_RESOURCES] by default, at most
+     * [XmlLimits.HARD_EXTERNAL_RESOURCES].
+     *
+     * @since 1.0.0
+     */
+    public var maximumExternalResources: Int = DEFAULT_EXTERNAL_RESOURCES
+
+    /**
+     * The longest external resource; [DEFAULT_EXTERNAL_LENGTH] by default, at most [XmlLimits.HARD_INPUT_LENGTH].
+     *
+     * @since 1.0.0
+     */
+    public var maximumExternalLength: Int = DEFAULT_EXTERNAL_LENGTH
+
     internal fun from(limits: XmlLimits) {
         maximumInputLength = limits.maximumInputLength
         maximumDepth = limits.maximumDepth
@@ -117,6 +132,8 @@ public class XmlLimitsBuilder internal constructor() : ValidatingBuilder<XmlLimi
         maximumAttributeDeclarations = limits.maximumAttributeDeclarations
         maximumEntityExpansion = limits.maximumEntityExpansion
         maximumEntityDepth = limits.maximumEntityDepth
+        maximumExternalResources = limits.maximumExternalResources
+        maximumExternalLength = limits.maximumExternalLength
     }
 
     override fun assemble(): XmlLimits = XmlLimits(this)
@@ -196,5 +213,19 @@ public class XmlLimitsBuilder internal constructor() : ValidatingBuilder<XmlLimi
          * @since 1.0.0
          */
         public const val DEFAULT_ENTITY_DEPTH: Int = 16
+
+        /**
+         * The default of [maximumExternalResources]: 16 resources.
+         *
+         * @since 1.0.0
+         */
+        public const val DEFAULT_EXTERNAL_RESOURCES: Int = 16
+
+        /**
+         * The default of [maximumExternalLength]: 8 Mi.
+         *
+         * @since 1.0.0
+         */
+        public const val DEFAULT_EXTERNAL_LENGTH: Int = 8_388_608
     }
 }

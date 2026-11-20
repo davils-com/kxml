@@ -38,7 +38,13 @@ internal object SyntaxParsing {
             builder.startNode(XmlSyntaxKind.DOCUMENT)
             return SyntaxParse(builder.finish(), listOf(refusal))
         }
-        val scanner = XmlScanner(text = text, configuration = configuration, encoding = null, sink = builder)
+        val scanner = XmlScanner(
+            text = text,
+            baseUri = null,
+            configuration = configuration,
+            encoding = null,
+            sink = builder,
+        )
         val failure = failureOf(scanner)
         return SyntaxParse(builder.finish(), scanner.warnings + listOfNotNull(failure))
     }

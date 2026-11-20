@@ -20,11 +20,15 @@ package com.davils.kxml.core.dtd
 
 import com.davils.kore.core.annotation.DavilsInternal
 import com.davils.kore.core.collection.OrderedMap
+import com.davils.kore.core.text.TextRange
 import com.davils.kxml.core.diagnostic.XmlDiagnosticCode
+import com.davils.kxml.core.internal.charCountOf
 import com.davils.kxml.core.limit.XmlLimits
 import com.davils.kxml.core.node.XmlNotation
 import com.davils.kxml.core.parser.MarkupReader
 import com.davils.kxml.core.parser.failure
+import com.davils.kxml.core.resolve.XmlResourceKind
+import com.davils.kxml.core.resolve.XmlResourceRequest
 import com.davils.kxml.core.syntax.XmlSyntaxKind
 
 private const val DOCTYPE: String = "<!DOCTYPE"
@@ -43,8 +47,12 @@ private const val FIXED: String = "#FIXED"
 private const val SUBSET_OPEN: String = "["
 private const val SUBSET_CLOSE: String = "]"
 private const val PERCENT: String = "%"
-private const val SEMICOLON: Char = ';'
-private const val SPACE: Char = ' '
+private const val CONDITIONAL_OPEN: String = "<!["
+private const val CONDITIONAL_CLOSE: String = "]]>"
+private const val INCLUDE: String = "INCLUDE"
+private const val IGNORE: String = "IGNORE"
+private const val OPENING: Int = 1
+private const val CLOSING: Int = -1
 private const val ENUMERATION_OPEN: Char = '('
 private const val ENUMERATION_CLOSE: Char = ')'
 private const val ALTERNATIVE: Char = '|'
@@ -56,9 +64,9 @@ internal class DoctypeReader(
     private val limits: XmlLimits,
     private val entities: EntityContext,
     private val expansion: AttributeExpansion,
-    private val isStandalone: Boolean,
+    private val references: ParameterReferences,
+    private val entry: ExternalEntry,
 ) {
-    private val budget = entities.budget
     private val cursor = lexer.cursor
     private val sink = lexer.sink
     private val models = ContentModelReader(lexer, limits.maximumDepth)
@@ -68,6 +76,7 @@ internal class DoctypeReader(
         ATTLIST to ::attributeList,
         ELEMENT to { _ -> element() },
         NOTATION to ::notation,
+        CONDITIONAL_OPEN to ::conditionalSection,
         COMMENT to { _ -> markup.comment() },
         INSTRUCTION to { _ -> markup.instruction() },
         PERCENT to ::parameterReference,
@@ -81,6 +90,7 @@ internal class DoctypeReader(
         lexer.requiredSpace("before the name of a document type")
         val dtd = Dtd(lexer.name(isQualified = true))
         entities.dtd = dtd
+        lexer.expand = { context -> references.expand(dtd, context) }
         val hasSpace = lexer.space()
         val hasExternalId = hasSpace && (lexer.isKeyword(SYSTEM) || lexer.isKeyword(PUBLIC))
         if (hasExternalId) {
@@ -92,31 +102,54 @@ internal class DoctypeReader(
         if (cursor.startsWith(SUBSET_OPEN)) internalSubset(dtd)
         lexer.close(start)
         sink.finishNode()
+        val systemId = dtd.systemId
+        if (systemId != null && entry.isEnabled) externalSubset(dtd = dtd, systemId = systemId, start = start)
         return dtd
     }
 
     private fun internalSubset(dtd: Dtd) {
         sink.startNode(XmlSyntaxKind.INTERNAL_SUBSET)
         lexer.keyword(SUBSET_OPEN, XmlSyntaxKind.SUBSET_OPEN)
-        val depth = cursor.depth
-        while (isInSubset(depth)) {
-            val (_, read) = declarations.first { (prefix, _) -> cursor.startsWith(prefix) }
-            read(dtd)
-        }
+        declarations(dtd = dtd, depth = cursor.depth, terminator = SUBSET_CLOSE)
         lexer.keyword(SUBSET_CLOSE, XmlSyntaxKind.SUBSET_CLOSE)
         sink.finishNode()
     }
 
-    private fun isInSubset(depth: Int): Boolean {
+    private fun externalSubset(dtd: Dtd, systemId: String, start: Int) {
+        val request = XmlResourceRequest(
+            kind = XmlResourceKind.ExternalSubset,
+            name = null,
+            publicId = dtd.publicId,
+            systemId = systemId,
+            baseUri = cursor.baseUri,
+        )
+        entry.enter(request = request, range = cursor.rangeFrom(start), isPadded = false)
+        declarations(dtd = dtd, depth = cursor.depth, terminator = null)
+        cursor.pop()
+    }
+
+    private fun declarations(dtd: Dtd, depth: Int, terminator: String?) {
+        while (hasDeclaration(depth, terminator)) {
+            val (_, read) = declarations.first { (prefix, _) -> cursor.startsWith(prefix) }
+            lexer.base = cursor.depth
+            read(dtd)
+            lexer.base = DtdLexer.NO_BASE
+        }
+    }
+
+    private fun hasDeclaration(depth: Int, terminator: String?): Boolean {
         lexer.space()
         while (cursor.isAtEnd && cursor.depth > depth) {
             cursor.pop()
             lexer.space()
         }
-        if (cursor.isAtEnd) {
+        val isUnclosed = cursor.isAtEnd && terminator != null
+        if (isUnclosed) {
             failure(XmlDiagnosticCode.UnexpectedEnd, cursor.rest(cursor.offset), "The document type is not closed")
         }
-        return cursor.depth > depth || !cursor.startsWith(SUBSET_CLOSE)
+        val isTerminated = cursor.depth == depth && terminator != null && cursor.startsWith(terminator)
+        val isClosed = cursor.isAtEnd || isTerminated
+        return !isClosed
     }
 
     private fun externalId(isSystemOptional: Boolean): Pair<String?, String?> {
@@ -167,6 +200,8 @@ internal class DoctypeReader(
                 publicId = null,
                 systemId = null,
                 notation = null,
+                baseUri = cursor.baseUri,
+                isExternallyDeclared = cursor.isExternal,
             )
         }
         val (publicId, systemId) = externalId(isSystemOptional = false)
@@ -177,6 +212,8 @@ internal class DoctypeReader(
             publicId = publicId,
             systemId = systemId,
             notation = notationOf(isParameter),
+            baseUri = cursor.baseUri,
+            isExternallyDeclared = cursor.isExternal,
         )
     }
 
@@ -299,30 +336,55 @@ internal class DoctypeReader(
     }
 
     private fun parameterReference(dtd: Dtd) {
+        val isRead = references.expand(dtd, ReferenceContext.BetweenDeclarations)
+        if (!isRead) dtd.isProcessing = false
+    }
+
+    private fun conditionalSection(dtd: Dtd) {
         val start = cursor.offset
-        cursor.advance()
-        val name = lexer.scanName()
-        if (cursor.isAtEnd || cursor.peek() != SEMICOLON) {
-            failure(XmlDiagnosticCode.InvalidReference, cursor.rangeFrom(start), "A reference must end with ;")
-        }
-        cursor.advance()
-        sink.token(kind = XmlSyntaxKind.PARAMETER_REFERENCE, start = start, end = cursor.offset)
-        dtd.hasParameterReferences = true
-        val entity = dtd.parameterEntities[name]
-        val replacement = entity?.replacement
-        if (replacement == null) {
-            if (entity == null && isStandalone) {
-                failure(XmlDiagnosticCode.UndefinedEntity, cursor.rangeFrom(start), "The entity %$name; is undeclared")
+        if (!cursor.isExternal) lexer.invalid(start, "A conditional section may only stand in the external subset")
+        val depth = cursor.depth
+        lexer.keyword(CONDITIONAL_OPEN, XmlSyntaxKind.DECLARATION_OPEN)
+        lexer.base = depth
+        lexer.space()
+        val isIncluded = lexer.isKeyword(INCLUDE)
+        if (!isIncluded && !lexer.isKeyword(IGNORE)) lexer.invalid(start, "INCLUDE or IGNORE was expected")
+        lexer.keyword(INCLUDE.takeIf { isIncluded } ?: IGNORE)
+        lexer.space()
+        lexer.base = DtdLexer.NO_BASE
+        lexer.keyword(SUBSET_OPEN, XmlSyntaxKind.SUBSET_OPEN)
+        if (isIncluded) declarations(dtd = dtd, depth = depth, terminator = CONDITIONAL_CLOSE)
+        if (!isIncluded) ignored(start)
+        lexer.keyword(CONDITIONAL_CLOSE, XmlSyntaxKind.SUBSET_CLOSE)
+    }
+
+    private fun ignored(start: Int) {
+        var nesting = 1
+        while (nesting > 0) {
+            if (cursor.isAtEnd) {
+                failure(XmlDiagnosticCode.UnexpectedEnd, cursor.rest(start), "The conditional section is not closed")
             }
-            dtd.isProcessing = false
-            return
+            nesting += ignoredStep(isLast = nesting == 1)
         }
-        if (name in cursor.names) {
-            failure(XmlDiagnosticCode.RecursiveEntity, cursor.rangeFrom(start), "The entity %$name; refers to itself")
+    }
+
+    private fun ignoredStep(isLast: Boolean): Int {
+        val isOpening = cursor.startsWith(CONDITIONAL_OPEN)
+        val isClosing = cursor.startsWith(CONDITIONAL_CLOSE)
+        val change = OPENING.takeIf { isOpening } ?: CLOSING.takeIf { isClosing } ?: 0
+        if (change == 0) skipIgnoredCharacter()
+        val isFinal = isClosing && isLast
+        val length = CONDITIONAL_OPEN.length.takeIf { change != 0 && !isFinal } ?: 0
+        cursor.advance(length)
+        return change
+    }
+
+    private fun skipIgnoredCharacter() {
+        val code = cursor.codePoint()
+        if (!lexer.dialect.isLiteral(code)) {
+            failure(XmlDiagnosticCode.InvalidCharacter, TextRange.at(cursor.offset), "The character is not allowed")
         }
-        budget.charge(length = replacement.length, depth = cursor.depth, range = cursor.rangeFrom(start))
-        val padded = "$SPACE$replacement$SPACE"
-        cursor.push(text = padded, anchor = cursor.rangeFrom(start), name = name, isReplacement = true)
+        cursor.advance(charCountOf(code))
     }
 
     private fun record(dtd: Dtd, definition: EntityDefinition, start: Int) {

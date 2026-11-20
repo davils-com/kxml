@@ -23,9 +23,16 @@ import com.davils.kxml.core.name.XmlCharacters
 private const val NEXT_LINE: Char = '\u0085'
 private const val LINE_SEPARATOR: Char = '\u2028'
 
-internal class Cursor(text: String) {
+internal class Cursor(text: String, baseUri: String?) {
     private val frames = ArrayDeque<CursorFrame>()
-    private var frame = CursorFrame(text = text, anchor = null, name = null, isReplacement = false)
+    private var frame = CursorFrame(
+        text = text,
+        anchor = null,
+        name = null,
+        isReplacement = false,
+        isExternal = false,
+        baseUri = baseUri,
+    )
 
     val text: String get() = frame.text
 
@@ -34,6 +41,10 @@ internal class Cursor(text: String) {
     val depth: Int get() = frames.size
 
     val isReplacement: Boolean get() = frame.isReplacement
+
+    val isExternal: Boolean get() = frame.isExternal
+
+    val baseUri: String? get() = frame.baseUri
 
     val isAtEnd: Boolean get() = frame.offset >= frame.text.length
 
@@ -44,8 +55,28 @@ internal class Cursor(text: String) {
     val names: List<String> get() = frames.mapNotNull(CursorFrame::name) + listOfNotNull(frame.name)
 
     fun push(text: String, anchor: TextRange, name: String, isReplacement: Boolean) {
+        val outer = frame
+        frames.addLast(outer)
+        frame = CursorFrame(
+            text = text,
+            anchor = anchor,
+            name = name,
+            isReplacement = isReplacement,
+            isExternal = outer.isExternal,
+            baseUri = outer.baseUri,
+        )
+    }
+
+    fun pushExternal(text: String, anchor: TextRange, name: String?, baseUri: String?) {
         frames.addLast(frame)
-        frame = CursorFrame(text = text, anchor = anchor, name = name, isReplacement = isReplacement)
+        frame = CursorFrame(
+            text = text,
+            anchor = anchor,
+            name = name,
+            isReplacement = false,
+            isExternal = true,
+            baseUri = baseUri,
+        )
     }
 
     fun pop() {

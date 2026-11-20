@@ -128,6 +128,23 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
      */
     public val maximumEntityDepth: Int = builder.maximumEntityDepth
 
+    /**
+     * The most external resources, the external subset and external entities, one document may load through its
+     * resolver; every resource counts once, however often it is referenced: 16 by default, at most
+     * [HARD_EXTERNAL_RESOURCES].
+     *
+     * @since 1.0.0
+     */
+    public val maximumExternalResources: Int = builder.maximumExternalResources
+
+    /**
+     * The longest external resource, in bytes or code units as the resolver hands it over, checked before it is
+     * decoded: 8 Mi by default, at most [HARD_INPUT_LENGTH].
+     *
+     * @since 1.0.0
+     */
+    public val maximumExternalLength: Int = builder.maximumExternalLength
+
     init {
         validateOrThrow(SUBJECT)
     }
@@ -176,6 +193,16 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
                 value = maximumEntityDepth.toLong(),
                 ceiling = HARD_ENTITY_DEPTH.toLong(),
             ),
+            Bound(
+                property = ::maximumExternalResources,
+                value = maximumExternalResources.toLong(),
+                ceiling = HARD_EXTERNAL_RESOURCES.toLong(),
+            ),
+            Bound(
+                property = ::maximumExternalLength,
+                value = maximumExternalLength.toLong(),
+                ceiling = HARD_INPUT_LENGTH.toLong(),
+            ),
         )
 
     private val values: List<Long> get() = bounds.map(Bound::value)
@@ -217,7 +244,8 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
         "XmlLimits(input=$maximumInputLength, depth=$maximumDepth, elements=$maximumElements, " +
             "attributes=$maximumAttributes, text=$maximumTextLength, name=$maximumNameLength, " +
             "entities=$maximumEntityDeclarations, attributeDeclarations=$maximumAttributeDeclarations, " +
-            "entityExpansion=$maximumEntityExpansion, entityDepth=$maximumEntityDepth)"
+            "entityExpansion=$maximumEntityExpansion, entityDepth=$maximumEntityDepth, " +
+            "externalResources=$maximumExternalResources, externalLength=$maximumExternalLength)"
 
     private fun ValidationScope.bounded(bound: Bound) {
         val value = bound.value
@@ -302,6 +330,13 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
          */
         public const val HARD_ENTITY_DEPTH: Int = 256
 
+        /**
+         * The ceiling of [maximumExternalResources]: 10,000 resources.
+         *
+         * @since 1.0.0
+         */
+        public const val HARD_EXTERNAL_RESOURCES: Int = 10_000
+
         private const val SUBJECT: String = "xml limits"
         private const val RELAXED_ELEMENTS: Long = 50_000_000L
         private const val RELAXED_ATTRIBUTES: Int = 100_000
@@ -310,6 +345,7 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
         private const val RELAXED_ATTRIBUTE_DECLARATIONS: Int = 1_000_000
         private const val RELAXED_ENTITY_EXPANSION: Long = 10_000_000L
         private const val RELAXED_ENTITY_DEPTH: Int = 64
+        private const val RELAXED_EXTERNAL_RESOURCES: Int = 1_000
 
         /**
          * The default limits, for documents from sources that are not trusted: the `DEFAULT_*` values of
@@ -323,8 +359,8 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
         /**
          * Raised limits for large documents from trusted sources: [HARD_INPUT_LENGTH] code units of input and of
          * text, [HARD_DEPTH] levels, 50,000,000 elements, 100,000 attributes on an element, 65,536 code units of a
-         * name, 100,000 entities, 1,000,000 attribute definitions, 10,000,000 characters of entity expansion and 64
-         * levels of entities.
+         * name, 100,000 entities, 1,000,000 attribute definitions, 10,000,000 characters of entity expansion, 64
+         * levels of entities, 1,000 external resources and [HARD_INPUT_LENGTH] code units of each.
          *
          * Every limit stays finite and at most its hard ceiling, so even a trusted source cannot exhaust the memory
          * without bound.
@@ -345,6 +381,8 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
             builder.maximumAttributeDeclarations = RELAXED_ATTRIBUTE_DECLARATIONS
             builder.maximumEntityExpansion = RELAXED_ENTITY_EXPANSION
             builder.maximumEntityDepth = RELAXED_ENTITY_DEPTH
+            builder.maximumExternalResources = RELAXED_EXTERNAL_RESOURCES
+            builder.maximumExternalLength = HARD_INPUT_LENGTH
             return builder.build()
         }
     }

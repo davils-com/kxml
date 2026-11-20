@@ -45,20 +45,36 @@ internal class DtdLiterals(private val lexer: DtdLexer) {
         val start = cursor.offset
         val quote = lexer.quote()
         cursor.advance()
+        val depth = cursor.depth
         val value = StringBuilder()
-        while (!cursor.isAtEnd && cursor.peek() != quote) appendValue(value)
-        if (cursor.isAtEnd) failure(XmlDiagnosticCode.UnexpectedEnd, cursor.rangeFrom(start), "The value is not closed")
+        while (!isValueEnd(quote = quote, depth = depth, start = start)) appendEntityValue(value)
         cursor.advance()
         lexer.budget.text(value.length, cursor.rangeFrom(start))
         sink.token(kind = XmlSyntaxKind.LITERAL, start = start, end = cursor.offset)
         return value.toString()
     }
 
-    private fun appendValue(value: StringBuilder) {
-        val char = cursor.peek()
-        if (char == PERCENT) {
+    private fun isValueEnd(quote: Char, depth: Int, start: Int): Boolean {
+        while (cursor.isAtEnd && cursor.depth > depth) cursor.pop()
+        if (cursor.isAtEnd) failure(XmlDiagnosticCode.UnexpectedEnd, cursor.rangeFrom(start), "The value is not closed")
+        return cursor.depth == depth && cursor.peek() == quote
+    }
+
+    private fun appendEntityValue(value: StringBuilder) {
+        val isReference = cursor.peek() == PERCENT
+        if (isReference && !cursor.isExternal) {
             lexer.invalid(cursor.offset, "A parameter entity may not be referenced inside a declaration here")
         }
+        val expand = lexer.expand
+        if (isReference && expand != null) {
+            expand(ReferenceContext.InsideLiteral)
+            return
+        }
+        appendValue(value)
+    }
+
+    private fun appendValue(value: StringBuilder) {
+        val char = cursor.peek()
         if (char == AMPERSAND) return appendReference(value)
         if (!cursor.isReplacement && (char == CARRIAGE_RETURN || lexer.dialect.isLineSeparator(char))) {
             return appendLineEnd(value)

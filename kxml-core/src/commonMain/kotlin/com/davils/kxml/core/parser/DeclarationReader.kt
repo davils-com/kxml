@@ -76,6 +76,26 @@ internal class DeclarationReader(
         return XmlEvent.Declaration(declaration, cursor.rangeFrom(start))
     }
 
+    fun readText(encoding: XmlEncoding?): String? {
+        val start = cursor.offset
+        cursor.advance(OPEN.length)
+        val version = pseudoAttribute(VERSION, start)
+        if (version != null && !versionPattern.matches(version)) {
+            failure(
+                XmlDiagnosticCode.UnsupportedVersion,
+                cursor.rangeFrom(start),
+                "kxml reads XML 1.x, but the entity declares $version",
+            )
+        }
+        val declared = pseudoAttribute(ENCODING, start) ?: invalid(start, "A text declaration needs an encoding")
+        if (!encodingPattern.matches(declared)) invalid(start, "The encoding $declared is no name")
+        checkEncoding(declared, encoding, start)
+        cursor.skipWhitespace(sink)
+        if (!cursor.startsWith(CLOSE)) invalid(start, "The text declaration must end with $CLOSE")
+        cursor.advance(CLOSE.length)
+        return version
+    }
+
     private fun pseudoAttribute(name: String, start: Int): String? {
         val mark = cursor.offset
         val hasSpace = cursor.skipWhitespace()

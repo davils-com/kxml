@@ -25,6 +25,7 @@ module com.davils.kxml.core {
     exports com.davils.kxml.core.limit;
     exports com.davils.kxml.core.name;
     exports com.davils.kxml.core.node;
+    exports com.davils.kxml.core.resolve;
     exports com.davils.kxml.core.source;
     exports com.davils.kxml.core.syntax;
 }
