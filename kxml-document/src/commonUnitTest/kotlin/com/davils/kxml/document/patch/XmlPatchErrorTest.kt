@@ -23,6 +23,9 @@ import com.davils.kxml.core.node.xmlElement
 import com.davils.kxml.core.node.xmlText
 import com.davils.kxml.document.XmlDocumentLimitException
 import com.davils.kxml.document.fixture.documentOf
+import com.davils.kxml.document.fixture.hostileText
+import com.davils.kxml.document.fixture.shouldBeShownSafely
+import com.davils.kxml.document.fixture.shouldFailSafely
 import com.davils.kxml.document.xpath.XPath
 import com.davils.kxml.document.xpath.XPathValue
 import io.kotest.assertions.throwables.shouldThrow
@@ -30,7 +33,9 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.string.shouldNotContain
 import io.kotest.matchers.types.shouldBeInstanceOf
+import io.kotest.property.checkAll
 
 private const val TARGET: String =
     "<doc xmlns:p='urn:p' a='1'><p:e p:x='2'/>  <f/>text<!--c--><?pi d?></doc><!--tail-->"
@@ -98,6 +103,9 @@ private val refusals: Map<String, XmlPatchErrorCode> = mapOf(
     "<remove sel='doc' ws='around'/>" to XmlPatchErrorCode.InvalidAttributeValue,
 )
 
+private const val HOSTILE_CASES: Int = 100
+private const val SELECTOR: String = "/a"
+
 class XmlPatchErrorTest : FunSpec({
     context("an operation") {
         test("fails with the error condition of RFC 5261") {
@@ -161,6 +169,10 @@ class XmlPatchErrorTest : FunSpec({
             val diff = documentOf("<diff><remove sel='a'/><remove sel='b'/></diff>")
             val single = XmlPatchOperation.Remove("a")
 
+            XmlPatch(listOf(single), limits).operations shouldBe listOf(single)
+            val one = XmlPatch.read(documentOf("<diff><remove sel='a'/></diff>"), limits)
+            val read = one.shouldBeInstanceOf<XmlPatchReading.Read>()
+            read.patch.operations.size shouldBe 1
             shouldThrow<XmlDocumentLimitException> { XmlPatch.read(diff, limits) }
             shouldThrow<XmlDocumentLimitException> { XmlPatch(listOf(single, single), limits) }
         }
@@ -205,6 +217,29 @@ class XmlPatchErrorTest : FunSpec({
             shouldThrow<IllegalArgumentException> {
                 XmlPatchOperation.AddNamespace(selector = "a", prefix = "xmlns", uri = "urn:x")
             }
+        }
+    }
+
+    context("the sinks of a patch") {
+        test("show hostile selectors, names and prefixes escaped and never a value") {
+            checkAll(HOSTILE_CASES, hostileText) { text ->
+                val operation = XmlPatchOperation.Remove(text)
+                operation.shouldBeShownSafely()
+                val target = documentOf("<a/>")
+                val failed = XmlPatch(listOf(operation)).apply(target)
+                failed.shouldBeShownSafely()
+                val literal = XmlPatchOperation.Remove("/a[. = '${text.filterNot { char -> char == '\'' }}']")
+                val applied = XmlPatch(listOf(literal)).apply(target)
+                applied.shouldBeShownSafely()
+                runCatching { XmlPatchOperation.AddAttribute(selector = SELECTOR, name = text, value = "v") }
+                    .shouldFailSafely()
+                runCatching { XmlPatchOperation.AddNamespace(selector = SELECTOR, prefix = text, uri = "u") }
+                    .shouldFailSafely()
+                runCatching { XmlPatchOperation.Remove(selector = SELECTOR, namespaces = mapOf(text to "u")) }
+                    .shouldFailSafely()
+            }
+            val secret = XmlPatchOperation.AddAttribute(selector = SELECTOR, name = "token", value = "hunter2")
+            secret.toString() shouldNotContain "hunter2"
         }
     }
 })

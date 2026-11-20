@@ -145,6 +145,8 @@ class XmlMergerTest : FunSpec({
             shouldThrow<IllegalArgumentException> { keyed.merge(emptyList()) }
             shouldThrow<IllegalArgumentException> { merged(BASE to "<a/>", PRODUCTION to "<b/>") }
             val limited = XmlMerger(limits = xmlLimits { maximumMergeLayers = 1 })
+            val single = limited.merge(listOf(XmlLayer(BASE, documentOf("<a/>"))))
+            single.document.root shouldBe documentOf("<a/>").root
             shouldThrow<XmlDocumentLimitException> { merged(BASE to "<a/>", PRODUCTION to "<a/>", merger = limited) }
         }
 

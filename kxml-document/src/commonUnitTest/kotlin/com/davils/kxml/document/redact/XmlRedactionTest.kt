@@ -25,12 +25,17 @@ import com.davils.kxml.document.XmlDocumentLimitException
 import com.davils.kxml.document.c14n.XmlCanonicalization
 import com.davils.kxml.document.c14n.XmlCanonicalizer
 import com.davils.kxml.document.fixture.documentOf
+import com.davils.kxml.document.fixture.hostileText
+import com.davils.kxml.document.fixture.shouldBeShownSafely
+import com.davils.kxml.document.fixture.shouldFailSafely
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldNotContain
 import io.kotest.matchers.types.shouldBeInstanceOf
+import io.kotest.property.checkAll
 
+private const val HOSTILE_CASES: Int = 100
 private const val SECRET: String = "hunter2"
 private const val CONFIG: String = "<config><user name='bob' token='$SECRET'>x</user><password>$SECRET</password>" +
     "<!-- key $SECRET --><note>call 555-1234</note><?pi $SECRET?></config>"
@@ -151,6 +156,7 @@ class XmlRedactionTest : FunSpec({
             }
             refusalOf("<a>xyz</a>", limited) shouldBe XmlRedactionRefusal.LimitExceeded
             shouldThrow<XmlDocumentLimitException> { limited.redact(documentOf("<a>xyz</a>")) }
+            canonicalOf(limited.redact(documentOf("<a>xy</a>"))) shouldBe "<a>***y</a>"
         }
     }
 
@@ -167,9 +173,14 @@ class XmlRedactionTest : FunSpec({
             shouldThrow<ValidationException> { xmlRedaction { replacement = "a--b" } }
             shouldThrow<ValidationException> { xmlRedaction { replacement = "-x" } }
             shouldThrow<ValidationException> { xmlRedaction { replacement = "\u0001" } }
+            val single = xmlLimits { maximumRedactionRules = 1 }
+            xmlRedaction {
+                limits = single
+                path("//a")
+            }.paths shouldBe listOf("//a")
             shouldThrow<ValidationException> {
                 xmlRedaction {
-                    limits = xmlLimits { maximumRedactionRules = 1 }
+                    limits = single
                     path("//a")
                     path("//b")
                 }
@@ -188,6 +199,18 @@ class XmlRedactionTest : FunSpec({
             named.toString() shouldBe """XmlRedaction(replacement="***", paths=["//p:password"])"""
             named.paths shouldBe listOf("//p:password")
             XmlRedactionResult.Refused(XmlRedactionRefusal.Undecidable).toString() shouldBe "Refused(Undecidable)"
+        }
+
+        test("shows hostile paths and replacements escaped") {
+            checkAll(HOSTILE_CASES, hostileText) { text ->
+                val literal = text.filterNot { char -> char == '\'' }
+                xmlRedaction { path("//a[. = '$literal']") }.shouldBeShownSafely()
+                val invalid = runCatching { xmlRedaction { path(text) } }
+                invalid.shouldFailSafely()
+                val replaced = runCatching { xmlRedaction { replacement = text } }
+                replaced.getOrNull()?.shouldBeShownSafely()
+                replaced.shouldFailSafely()
+            }
         }
     }
 })

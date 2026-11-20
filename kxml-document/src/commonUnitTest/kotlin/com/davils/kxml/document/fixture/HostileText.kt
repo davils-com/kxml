@@ -36,3 +36,8 @@ internal fun String.shouldBeSafeToShow() {
 internal fun Any.shouldBeShownSafely() {
     toString().shouldBeSafeToShow()
 }
+
+internal fun Result<*>.shouldFailSafely() {
+    val message = exceptionOrNull()?.message.orEmpty()
+    message.lines().forEach { line -> line.shouldBeSafeToShow() }
+}
