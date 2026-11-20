@@ -18,10 +18,11 @@ Java module has the same name. Both modules declare it in `src/jvmMain/java/modu
 packages with public API, never an `internal` package.
 
 kxml uses Kore wherever Kore has the building block: validation and violation codes, `ValidatingBuilder` and
-`@DavilsDsl`, `TextRange` and `LineMap`, `Limits`, `SafeText`, `immutableList()`, the `Davils*` annotations and, in
-the tests, `HostileFragments` and `unsafeCodePointsIn` of `kore-testing`. Never write a second version of something
-Kore has; what kxml needs from Kore and Kore does not offer yet is added to Kore. Until a release of Kore offers it,
-`OrderedIndex`, `NameMap` and `NameSet` stay in `com.davils.kxml.core.internal`.
+`@DavilsDsl`, `TextRange` and `LineMap`, `Limits`, `SafeText`, `immutableList()`, `OrderedIndex`, `OrderedMap`
+and `OrderedSet`, the `Davils*` annotations and, in the tests, `HostileFragments` and `unsafeCodePointsIn` of
+`kore-testing`. Never write a second version of something Kore has; what kxml needs from Kore and Kore does not offer
+yet is added to Kore. A work budget comes from `WorkBudget` and the shortest text of a double from `ShortestDecimal`,
+both of Kore.
 
 ## Targets
 
@@ -117,9 +118,9 @@ it. kxml is built so that a mistake of a caller fails closed.
   `XmlLimits` and `XmlLimitsBuilder`, never into a private constant, and has a hard ceiling, a `HARD_*` constant:
   no preset, `XmlLimits.Relaxed` included, is unbounded. `XmlLimits.Untrusted` is the default.
 - **No input decides the complexity.** A structure keyed by input, such as attribute names, namespace prefixes and
-  the comparison of attributes, is indexed in a total order through `OrderedIndex`, `NameMap` and `NameSet`, never by
-  hash codes alone, so colliding hash codes cannot make it quadratic on the JVM or on Wasm. No check compares every
-  pair of what the input holds.
+  the comparison of attributes, is indexed in a total order through `OrderedIndex`, `OrderedMap` and `OrderedSet` of
+  Kore, never by hash codes alone, so colliding hash codes cannot make it quadratic on the JVM or on Wasm. No check
+  compares every pair of what the input holds.
 - **Malformed input never throws.** The reader turns every problem of a document into an `XmlDiagnostic` with a
   stable `XmlDiagnosticCode` and a `TextRange`; an exception out of the reader is a bug.
 - **Escape untrusted text exactly once, at the sink.** Whatever shows text that may come from input, such as an

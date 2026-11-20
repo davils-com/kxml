@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
+@file:OptIn(DavilsInternal::class)
+
 package com.davils.kxml.core.emit
 
-import com.davils.kxml.core.internal.NameMap
+import com.davils.kore.core.annotation.DavilsInternal
+import com.davils.kore.core.collection.OrderedMap
 import com.davils.kxml.core.name.XmlName
 import com.davils.kxml.core.name.XmlNamespaceBinding
 import com.davils.kxml.core.name.XmlNamespaces
@@ -29,9 +32,9 @@ internal class WriterScope private constructor(
     private val parent: WriterScope?,
     private val isUndeclaringAllowed: Boolean,
 ) {
-    private val bindings = NameMap<String>()
+    private val bindings = OrderedMap<String, String>()
 
-    private val attributePrefixes = NameMap<String>()
+    private val attributePrefixes = OrderedMap<String, String>()
 
     val declarations: List<XmlNamespaceBinding>
         get() = bindings.entries.map { (prefix, uri) -> XmlNamespaceBinding(prefix.takeIf { it.isNotEmpty() }, uri) }
@@ -52,7 +55,7 @@ internal class WriterScope private constructor(
 
     private fun lookup(prefix: String): String? = bindings[prefix] ?: parent?.lookup(prefix)
 
-    private fun prefixesInScope(): List<String> = bindings.names + parent?.prefixesInScope().orEmpty()
+    private fun prefixesInScope(): List<String> = bindings.keys + parent?.prefixesInScope().orEmpty()
 
     private fun bindElement(name: XmlName) {
         val prefix = name.prefix ?: DEFAULT

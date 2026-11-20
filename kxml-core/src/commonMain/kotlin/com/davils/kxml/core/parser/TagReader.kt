@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
+@file:OptIn(DavilsInternal::class)
+
 package com.davils.kxml.core.parser
 
+import com.davils.kore.core.annotation.DavilsInternal
+import com.davils.kore.core.collection.OrderedSet
 import com.davils.kore.core.text.TextRange
 import com.davils.kxml.core.diagnostic.XmlDiagnosticCode
-import com.davils.kxml.core.internal.NameSet
 import com.davils.kxml.core.internal.charCountOf
 import com.davils.kxml.core.name.XmlCharacters
 import com.davils.kxml.core.syntax.XmlSyntaxKind
@@ -55,7 +58,7 @@ internal class TagReader(
         sink.token(kind = XmlSyntaxKind.LESS_THAN, start = start, end = cursor.offset)
         val name = qualifiedName()
         val attributes = mutableListOf<RawAttribute>()
-        val names = NameSet()
+        val names = OrderedSet<String>()
         while (!isTagEnd(start)) {
             attributes += attribute(names)
             budget.attributes(attributes.size, cursor.rangeFrom(start))
@@ -128,7 +131,7 @@ internal class TagReader(
         return isEnd
     }
 
-    private fun attribute(names: NameSet): RawAttribute {
+    private fun attribute(names: OrderedSet<String>): RawAttribute {
         val start = cursor.offset
         sink.startNode(XmlSyntaxKind.ATTRIBUTE)
         val name = qualifiedName()

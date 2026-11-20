@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
+@file:OptIn(DavilsInternal::class)
+
 package com.davils.kxml.core.parser
 
+import com.davils.kore.core.annotation.DavilsInternal
+import com.davils.kore.core.collection.OrderedMap
+import com.davils.kore.core.collection.OrderedSet
 import com.davils.kore.core.text.TextRange
 import com.davils.kxml.core.diagnostic.XmlDiagnosticCode
-import com.davils.kxml.core.internal.NameMap
-import com.davils.kxml.core.internal.NameSet
 import com.davils.kxml.core.name.XmlName
 import com.davils.kxml.core.name.XmlNamespaceBinding
 import com.davils.kxml.core.name.XmlNamespaces
@@ -30,7 +33,7 @@ private const val COLON: Char = ':'
 private const val DECLARATION_PREFIX: String = "xmlns:"
 
 internal class NamespaceResolver(private val dialect: Dialect) {
-    private val scopes = NameMap<ArrayDeque<String>>()
+    private val scopes = OrderedMap<String, ArrayDeque<String>>()
     private val frames = ArrayDeque<List<String>>()
 
     init {
@@ -109,7 +112,7 @@ internal class NamespaceResolver(private val dialect: Dialect) {
     }
 
     private fun checkDuplicates(attributes: List<Pair<RawAttribute, XmlAttribute>>) {
-        val seen = NameSet()
+        val seen = OrderedSet<String>()
         val duplicate = attributes.firstOrNull { (_, attribute) -> !seen.add(keyOf(attribute.name)) } ?: return
         val (raw, attribute) = duplicate
         failure(
