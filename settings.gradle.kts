@@ -127,3 +127,4 @@ rootProject.name = "kxml"
 
 include(":kxml-core")
 include(":kxml-serialization")
+include(":kxml-document")

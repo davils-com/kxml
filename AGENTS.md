@@ -11,10 +11,11 @@ of Kore and is published under the Apache License 2.0, with security first.
 |---|---|---|
 | `kxml-core` | `com.davils:kxml-core` | The reader with its pull reader, limits and diagnostics, the lossless syntax tree, the immutable node tree and the writer |
 | `kxml-serialization` | `com.davils:kxml-serialization` | The kotlinx.serialization format: elements, attributes, text, namespaces, wrapped and repeated collections, maps, polymorphism and decoding with diagnostics |
+| `kxml-document` | `com.davils:kxml-document` | Tools for whole documents on top of `kxml-core`: XPath 1.0, canonicalization, XML patches, diffs, merges and redaction |
 | `build-logic` | - | One convention plugin per Kreate concern, composed by `kxml.kotlin-library` and `kxml.serialization-library` for the modules and `kxml.root` for the root project; they hold nothing but `plugins { }` and `kreate { }` |
 
 The root package of a module is `com.davils.kxml.<module without kxml->`, such as `com.davils.kxml.core`, and its
-Java module has the same name. Both modules declare it in `src/jvmMain/java/module-info.java` and export only
+Java module has the same name. Every module declares it in `src/jvmMain/java/module-info.java` and exports only
 packages with public API, never an `internal` package.
 
 kxml uses Kore wherever Kore has the building block: validation and violation codes, `ValidatingBuilder` and

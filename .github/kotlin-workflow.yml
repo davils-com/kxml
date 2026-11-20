@@ -23,9 +23,9 @@ gradle:
 check:
   tasks: [check]
   reproducible:
-    clean-tasks: [":kxml-core:clean", ":kxml-serialization:clean"]
-    tasks: [":kxml-core:jvmJar", ":kxml-serialization:jvmJar"]
-    artifacts: ["kxml-core/build/libs/*.jar", "kxml-serialization/build/libs/*.jar"]
+    clean-tasks: [":kxml-core:clean", ":kxml-serialization:clean", ":kxml-document:clean"]
+    tasks: [":kxml-core:jvmJar", ":kxml-serialization:jvmJar", ":kxml-document:jvmJar"]
+    artifacts: ["kxml-core/build/libs/*.jar", "kxml-serialization/build/libs/*.jar", "kxml-document/build/libs/*.jar"]
 
 policy:
   # Line breaks and the default charset differ on Windows, and kxml reads and writes text, so develop, main and a tag
@@ -55,6 +55,7 @@ publish:
   tasks:
     - ":kxml-core:publishAllPublicationsToDavilsRepository"
     - ":kxml-serialization:publishAllPublicationsToDavilsRepository"
+    - ":kxml-document:publishAllPublicationsToDavilsRepository"
 
 snapshot:
   # kxml's own build makes every build without a release tag a snapshot.
@@ -83,12 +84,23 @@ release:
       - path: com/davils/kxml-serialization
         artifact: kxml-serialization
         task: ":kxml-serialization:publishKotlinMultiplatformPublicationToDavilsRepository"
+      - path: com/davils/kxml-document-jvm
+        artifact: kxml-document-jvm
+        task: ":kxml-document:publishJvmPublicationToDavilsRepository"
+      - path: com/davils/kxml-document-wasm-js
+        artifact: kxml-document-wasm-js
+        task: ":kxml-document:publishWasmJsPublicationToDavilsRepository"
+      - path: com/davils/kxml-document
+        artifact: kxml-document
+        task: ":kxml-document:publishKotlinMultiplatformPublicationToDavilsRepository"
   attest:
     subjects:
       - "kxml-core/build/libs/*.jar"
       - "kxml-core/build/libs/*.klib"
       - "kxml-serialization/build/libs/*.jar"
       - "kxml-serialization/build/libs/*.klib"
+      - "kxml-document/build/libs/*.jar"
+      - "kxml-document/build/libs/*.klib"
   github-release:
     enabled: false
 

@@ -25,7 +25,9 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
   allowed; with `isNilWritten`, the encoder writes `null` values that way, so `null` items of a list survive a round
   trip. `XmlPolymorphism.SchemaType` names the type of a polymorphic value in `xsi:type`, and no attribute of the
   schema instance namespace, such as `xsi:schemaLocation`, counts as an unknown property.
-- Both modules are Kotlin Multiplatform libraries with a `jvm` and a `wasmJs` target. Sources are decoded in common
+- `kxml-document`, the third module, holds the tools for whole documents on top of `kxml-core`. It starts with a
+  read-only model of a document in document order, the base of the tools that follow.
+- All modules are Kotlin Multiplatform libraries with a `jvm` and a `wasmJs` target. Sources are decoded in common
   code, and untrusted text is escaped by `SafeText` of Kore.
 - Sources of bytes are detected as Appendix F of XML 1.0 describes it and decoded strictly from UTF-8, UTF-16 and
   UTF-32 in either byte order, and from ISO-8859-1 and US-ASCII when the declaration names them. `XmlSource.of`

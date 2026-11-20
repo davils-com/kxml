@@ -8,11 +8,13 @@ It is built on [Kore](https://github.com/davils-com/kore) and published under th
 |---|---|---|
 | `kxml-core` | `com.davils:kxml-core` | The reader with events, limits and diagnostics, the immutable node tree and the writer |
 | `kxml-serialization` | `com.davils:kxml-serialization` | A kotlinx.serialization format for XML |
+| `kxml-document` | `com.davils:kxml-document` | Tools for whole documents on top of `kxml-core` |
 
-Both modules are Kotlin Multiplatform libraries with a `jvm` and a `wasmJs` target, like Kore 2.0. The JVM target
+All modules are Kotlin Multiplatform libraries with a `jvm` and a `wasmJs` target, like Kore 2.0. The JVM target
 requires JDK 25; the Wasm target runs in the browser and under Node.js. kxml is written for Kotlin 2.4 or newer.
-`kxml-core` depends on `kore-core`; `kxml-serialization` adds `kotlinx-serialization-core`. On the JVM both are named
-Java modules, `com.davils.kxml.core` and `com.davils.kxml.serialization`.
+`kxml-core` depends on `kore-core`; `kxml-serialization` adds `kotlinx-serialization-core`, and `kxml-document` depends
+on `kxml-core` alone. On the JVM they are named Java modules, `com.davils.kxml.core`, `com.davils.kxml.serialization`
+and `com.davils.kxml.document`.
 
 ## Installation
 
@@ -39,7 +41,7 @@ dependencies {
 ```
 
 In a multiplatform project, declare it in `commonMain`; Gradle picks the artifact of each target. A Maven build depends
-on `kxml-core-jvm` and `kxml-serialization-jvm`.
+on `kxml-core-jvm`, `kxml-serialization-jvm` and `kxml-document-jvm`.
 
 ## A short tour
 

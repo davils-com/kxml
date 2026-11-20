@@ -93,7 +93,7 @@ kreate {
 
         aggregate {
             enabled = isRoot
-            members = setOf(":", ":kxml-core", ":kxml-serialization")
+            members = setOf(":", ":kxml-core", ":kxml-serialization", ":kxml-document")
         }
 
         reports {
