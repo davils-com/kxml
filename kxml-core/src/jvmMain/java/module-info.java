@@ -29,4 +29,5 @@ module com.davils.kxml.core {
     exports com.davils.kxml.core.source;
     exports com.davils.kxml.core.syntax;
     exports com.davils.kxml.core.syntax.ast;
+    exports com.davils.kxml.core.syntax.edit;
 }

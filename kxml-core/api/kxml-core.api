@@ -832,3 +832,45 @@ public final class com/davils/kxml/core/syntax/ast/XmlElementSyntax {
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class com/davils/kxml/core/syntax/edit/XmlEditRefusal : java/lang/Enum {
+	public static final field DuplicateAttribute Lcom/davils/kxml/core/syntax/edit/XmlEditRefusal;
+	public static final field ForeignElement Lcom/davils/kxml/core/syntax/edit/XmlEditRefusal;
+	public static final field InvalidCharacter Lcom/davils/kxml/core/syntax/edit/XmlEditRefusal;
+	public static final field InvalidDocument Lcom/davils/kxml/core/syntax/edit/XmlEditRefusal;
+	public static final field InvalidName Lcom/davils/kxml/core/syntax/edit/XmlEditRefusal;
+	public static final field MissingAttribute Lcom/davils/kxml/core/syntax/edit/XmlEditRefusal;
+	public static final field NamespaceDeclaration Lcom/davils/kxml/core/syntax/edit/XmlEditRefusal;
+	public static final field RootElement Lcom/davils/kxml/core/syntax/edit/XmlEditRefusal;
+	public static final field UndeclaredPrefix Lcom/davils/kxml/core/syntax/edit/XmlEditRefusal;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/davils/kxml/core/syntax/edit/XmlEditRefusal;
+	public static fun values ()[Lcom/davils/kxml/core/syntax/edit/XmlEditRefusal;
+}
+
+public abstract interface class com/davils/kxml/core/syntax/edit/XmlEditResult {
+}
+
+public final class com/davils/kxml/core/syntax/edit/XmlEditResult$Edited : com/davils/kxml/core/syntax/edit/XmlEditResult {
+	public final fun getEdits ()Ljava/util/List;
+	public final fun getTree ()Lcom/davils/kxml/core/syntax/XmlSyntaxTree;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/core/syntax/edit/XmlEditResult$Refused : com/davils/kxml/core/syntax/edit/XmlEditResult {
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getReason ()Lcom/davils/kxml/core/syntax/edit/XmlEditRefusal;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/core/syntax/edit/XmlEditor {
+	public fun <init> (Lcom/davils/kxml/core/syntax/XmlSyntaxTree;)V
+	public final fun appendElement (Lcom/davils/kxml/core/syntax/ast/XmlElementSyntax;Ljava/lang/String;)Lcom/davils/kxml/core/syntax/edit/XmlEditResult;
+	public final fun removeAttribute (Lcom/davils/kxml/core/syntax/ast/XmlElementSyntax;Ljava/lang/String;)Lcom/davils/kxml/core/syntax/edit/XmlEditResult;
+	public final fun removeElement (Lcom/davils/kxml/core/syntax/ast/XmlElementSyntax;)Lcom/davils/kxml/core/syntax/edit/XmlEditResult;
+	public final fun rename (Lcom/davils/kxml/core/syntax/ast/XmlElementSyntax;Ljava/lang/String;)Lcom/davils/kxml/core/syntax/edit/XmlEditResult;
+	public final fun setAttribute (Lcom/davils/kxml/core/syntax/ast/XmlElementSyntax;Ljava/lang/String;Ljava/lang/String;)Lcom/davils/kxml/core/syntax/edit/XmlEditResult;
+	public final fun setText (Lcom/davils/kxml/core/syntax/ast/XmlElementSyntax;Ljava/lang/String;)Lcom/davils/kxml/core/syntax/edit/XmlEditResult;
+	public fun toString ()Ljava/lang/String;
+}
+

@@ -57,7 +57,7 @@ private const val FOREIGN: String = "foreign.xml"
 private const val UNKNOWN: String = "<unknown/>"
 private const val U_DTD: String = "u.dtd"
 private const val CASES: Int = 200
-private const val SMALL_ENTRIES: Int = 200
+private const val SMALL_ENTRIES: Int = 1_000
 
 private fun target(path: String): String = BASE + path
 

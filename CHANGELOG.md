@@ -51,6 +51,10 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
   a reader reports it. Character data and values are decoded as without a document type declaration: references to
   other entities give `null` instead of a guess. The views read the tree as it is, so they also show a document with
   errors as far as it was parsed.
+- `XmlEditor` in the new package `com.davils.kxml.core.syntax.edit` edits a syntax tree by small text edits that keep
+  every character they do not touch, entity references included: `setAttribute`, `removeAttribute`, `setText`,
+  `appendElement`, `removeElement` and `rename`. Each returns an `XmlEditResult`, the edited tree with its
+  `TextEdit`s, parsed again through `XmlSyntaxTree.edit`, or the `XmlEditRefusal` that refused it.
 - `XmlDoctype.Internal` reads the internal subset of a document type declaration: general and parameter entities,
   attribute lists with their defaults and the normalization of their types, element types, notations and unparsed
   entities. Entities are expanded in content and in attribute values, defaults are added before namespaces are
@@ -124,5 +128,8 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
   refused in a document of XML 1.0, and a standalone document cannot use an entity the external subset declares.
 - An entity reference must name an XML name, and a character reference accepts only ASCII digits, so
   `&#\u0666\u0665;` no longer reads as `A`.
+- `XmlEditor` cannot inject markup: names must be qualified XML names whose prefix is declared in scope, namespace
+  declarations are never added, changed or removed, text and attribute values are escaped for the version of the
+  document so they read back exactly, and a character the version cannot represent is refused.
 - UTF-16 without a byte order mark is only read when the document starts with `<?`, as Appendix F detects it, and
   encoding names are matched without regard to case.

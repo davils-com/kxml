@@ -123,6 +123,24 @@ final enum class com.davils.kxml.core.resolve/XmlResourceKind : kotlin/Enum<com.
     final fun values(): kotlin/Array<com.davils.kxml.core.resolve/XmlResourceKind> // com.davils.kxml.core.resolve/XmlResourceKind.values|values#static(){}[0]
 }
 
+final enum class com.davils.kxml.core.syntax.edit/XmlEditRefusal : kotlin/Enum<com.davils.kxml.core.syntax.edit/XmlEditRefusal> { // com.davils.kxml.core.syntax.edit/XmlEditRefusal|null[0]
+    enum entry DuplicateAttribute // com.davils.kxml.core.syntax.edit/XmlEditRefusal.DuplicateAttribute|null[0]
+    enum entry ForeignElement // com.davils.kxml.core.syntax.edit/XmlEditRefusal.ForeignElement|null[0]
+    enum entry InvalidCharacter // com.davils.kxml.core.syntax.edit/XmlEditRefusal.InvalidCharacter|null[0]
+    enum entry InvalidDocument // com.davils.kxml.core.syntax.edit/XmlEditRefusal.InvalidDocument|null[0]
+    enum entry InvalidName // com.davils.kxml.core.syntax.edit/XmlEditRefusal.InvalidName|null[0]
+    enum entry MissingAttribute // com.davils.kxml.core.syntax.edit/XmlEditRefusal.MissingAttribute|null[0]
+    enum entry NamespaceDeclaration // com.davils.kxml.core.syntax.edit/XmlEditRefusal.NamespaceDeclaration|null[0]
+    enum entry RootElement // com.davils.kxml.core.syntax.edit/XmlEditRefusal.RootElement|null[0]
+    enum entry UndeclaredPrefix // com.davils.kxml.core.syntax.edit/XmlEditRefusal.UndeclaredPrefix|null[0]
+
+    final val entries // com.davils.kxml.core.syntax.edit/XmlEditRefusal.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<com.davils.kxml.core.syntax.edit/XmlEditRefusal> // com.davils.kxml.core.syntax.edit/XmlEditRefusal.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): com.davils.kxml.core.syntax.edit/XmlEditRefusal // com.davils.kxml.core.syntax.edit/XmlEditRefusal.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<com.davils.kxml.core.syntax.edit/XmlEditRefusal> // com.davils.kxml.core.syntax.edit/XmlEditRefusal.values|values#static(){}[0]
+}
+
 final enum class com.davils.kxml.core.syntax/XmlSyntaxKind : kotlin/Enum<com.davils.kxml.core.syntax/XmlSyntaxKind> { // com.davils.kxml.core.syntax/XmlSyntaxKind|null[0]
     enum entry ATTLIST_DECLARATION // com.davils.kxml.core.syntax/XmlSyntaxKind.ATTLIST_DECLARATION|null[0]
     enum entry ATTRIBUTE // com.davils.kxml.core.syntax/XmlSyntaxKind.ATTRIBUTE|null[0]
@@ -214,6 +232,26 @@ abstract fun interface com.davils.kxml.core.resolve/XmlResolver { // com.davils.
 
 abstract fun interface com.davils.kxml.core.resolve/XmlResourceLoader { // com.davils.kxml.core.resolve/XmlResourceLoader|null[0]
     abstract fun load(kotlin/String): com.davils.kxml.core.source/XmlSource? // com.davils.kxml.core.resolve/XmlResourceLoader.load|load(kotlin.String){}[0]
+}
+
+sealed interface com.davils.kxml.core.syntax.edit/XmlEditResult { // com.davils.kxml.core.syntax.edit/XmlEditResult|null[0]
+    final class Edited : com.davils.kxml.core.syntax.edit/XmlEditResult { // com.davils.kxml.core.syntax.edit/XmlEditResult.Edited|null[0]
+        final val edits // com.davils.kxml.core.syntax.edit/XmlEditResult.Edited.edits|{}edits[0]
+            final fun <get-edits>(): kotlin.collections/List<com.davils.kore.core.text/TextEdit> // com.davils.kxml.core.syntax.edit/XmlEditResult.Edited.edits.<get-edits>|<get-edits>(){}[0]
+        final val tree // com.davils.kxml.core.syntax.edit/XmlEditResult.Edited.tree|{}tree[0]
+            final fun <get-tree>(): com.davils.kxml.core.syntax/XmlSyntaxTree // com.davils.kxml.core.syntax.edit/XmlEditResult.Edited.tree.<get-tree>|<get-tree>(){}[0]
+
+        final fun toString(): kotlin/String // com.davils.kxml.core.syntax.edit/XmlEditResult.Edited.toString|toString(){}[0]
+    }
+
+    final class Refused : com.davils.kxml.core.syntax.edit/XmlEditResult { // com.davils.kxml.core.syntax.edit/XmlEditResult.Refused|null[0]
+        final val reason // com.davils.kxml.core.syntax.edit/XmlEditResult.Refused.reason|{}reason[0]
+            final fun <get-reason>(): com.davils.kxml.core.syntax.edit/XmlEditRefusal // com.davils.kxml.core.syntax.edit/XmlEditResult.Refused.reason.<get-reason>|<get-reason>(){}[0]
+
+        final fun equals(kotlin/Any?): kotlin/Boolean // com.davils.kxml.core.syntax.edit/XmlEditResult.Refused.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // com.davils.kxml.core.syntax.edit/XmlEditResult.Refused.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // com.davils.kxml.core.syntax.edit/XmlEditResult.Refused.toString|toString(){}[0]
+    }
 }
 
 sealed interface com.davils.kxml.core.syntax/XmlSyntaxElement { // com.davils.kxml.core.syntax/XmlSyntaxElement|null[0]
@@ -849,6 +887,18 @@ final class com.davils.kxml.core.syntax.ast/XmlElementSyntax { // com.davils.kxm
     final fun elements(kotlin/String): kotlin.collections/List<com.davils.kxml.core.syntax.ast/XmlElementSyntax> // com.davils.kxml.core.syntax.ast/XmlElementSyntax.elements|elements(kotlin.String){}[0]
     final fun namespaceFor(kotlin/String?): kotlin/String? // com.davils.kxml.core.syntax.ast/XmlElementSyntax.namespaceFor|namespaceFor(kotlin.String?){}[0]
     final fun toString(): kotlin/String // com.davils.kxml.core.syntax.ast/XmlElementSyntax.toString|toString(){}[0]
+}
+
+final class com.davils.kxml.core.syntax.edit/XmlEditor { // com.davils.kxml.core.syntax.edit/XmlEditor|null[0]
+    constructor <init>(com.davils.kxml.core.syntax/XmlSyntaxTree) // com.davils.kxml.core.syntax.edit/XmlEditor.<init>|<init>(com.davils.kxml.core.syntax.XmlSyntaxTree){}[0]
+
+    final fun appendElement(com.davils.kxml.core.syntax.ast/XmlElementSyntax, kotlin/String): com.davils.kxml.core.syntax.edit/XmlEditResult // com.davils.kxml.core.syntax.edit/XmlEditor.appendElement|appendElement(com.davils.kxml.core.syntax.ast.XmlElementSyntax;kotlin.String){}[0]
+    final fun removeAttribute(com.davils.kxml.core.syntax.ast/XmlElementSyntax, kotlin/String): com.davils.kxml.core.syntax.edit/XmlEditResult // com.davils.kxml.core.syntax.edit/XmlEditor.removeAttribute|removeAttribute(com.davils.kxml.core.syntax.ast.XmlElementSyntax;kotlin.String){}[0]
+    final fun removeElement(com.davils.kxml.core.syntax.ast/XmlElementSyntax): com.davils.kxml.core.syntax.edit/XmlEditResult // com.davils.kxml.core.syntax.edit/XmlEditor.removeElement|removeElement(com.davils.kxml.core.syntax.ast.XmlElementSyntax){}[0]
+    final fun rename(com.davils.kxml.core.syntax.ast/XmlElementSyntax, kotlin/String): com.davils.kxml.core.syntax.edit/XmlEditResult // com.davils.kxml.core.syntax.edit/XmlEditor.rename|rename(com.davils.kxml.core.syntax.ast.XmlElementSyntax;kotlin.String){}[0]
+    final fun setAttribute(com.davils.kxml.core.syntax.ast/XmlElementSyntax, kotlin/String, kotlin/String): com.davils.kxml.core.syntax.edit/XmlEditResult // com.davils.kxml.core.syntax.edit/XmlEditor.setAttribute|setAttribute(com.davils.kxml.core.syntax.ast.XmlElementSyntax;kotlin.String;kotlin.String){}[0]
+    final fun setText(com.davils.kxml.core.syntax.ast/XmlElementSyntax, kotlin/String): com.davils.kxml.core.syntax.edit/XmlEditResult // com.davils.kxml.core.syntax.edit/XmlEditor.setText|setText(com.davils.kxml.core.syntax.ast.XmlElementSyntax;kotlin.String){}[0]
+    final fun toString(): kotlin/String // com.davils.kxml.core.syntax.edit/XmlEditor.toString|toString(){}[0]
 }
 
 final class com.davils.kxml.core.syntax/XmlSyntaxNode : com.davils.kxml.core.syntax/XmlSyntaxElement { // com.davils.kxml.core.syntax/XmlSyntaxNode|null[0]
