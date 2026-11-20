@@ -42,6 +42,7 @@ internal class EncodeContext(val configuration: XmlFormatConfiguration) {
             is Content.Structure -> ElementWriting.structured(name, content)
             is Content.Text -> xmlElement(name) { text(content.value) }
             is Content.Absent -> xmlElement(name)
+            is Content.Nil -> ElementWriting.nil(name)
             is Content.Items -> refuseRoot()
             is Content.Entries -> refuseRoot()
         }

@@ -40,7 +40,7 @@ internal open class ValueEncoder(
     }
 
     override fun encodeNull() {
-        emit(Content.Absent)
+        emit(Content.Nil.takeIf { context.configuration.isNilWritten } ?: Content.Absent)
     }
 
     override fun encodeEnum(enumDescriptor: SerialDescriptor, index: Int) {

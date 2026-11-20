@@ -36,4 +36,13 @@ public enum class XmlPolymorphism {
      * @since 1.0.0
      */
     Element,
+
+    /**
+     * The attribute `xsi:type` of the namespace `http://www.w3.org/2001/XMLSchema-instance` on the element of the value
+     * holds the serial name of the type, as XML Schema writes the type of an element; only classes can carry it. The
+     * name is written and read as it is and not resolved as a qualified name.
+     *
+     * @since 1.0.0
+     */
+    SchemaType,
 }

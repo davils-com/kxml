@@ -40,7 +40,7 @@ internal class ClassCollector(private val shapes: List<PropertyShape>) : Content
     override fun build(): Content = Content.Structure(attributes.toList(), children.toList())
 
     private fun singleOf(shape: PropertyShape, content: Content): String? {
-        if (content == Content.Absent) return null
+        if (content == Content.Absent || content == Content.Nil) return null
         val text = content as? Content.Text
             ?: throw SerializationException("The property ${shape.name} must be a single value to stand there")
         return text.value

@@ -17,7 +17,9 @@
 package com.davils.kxml.serialization.decode
 
 import com.davils.kxml.core.diagnostic.XmlDiagnosticCode
+import com.davils.kxml.core.name.XmlName
 import com.davils.kxml.core.node.XmlNode
+import com.davils.kxml.serialization.SchemaInstance
 import com.davils.kxml.serialization.XmlPolymorphism
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.InternalSerializationApi
@@ -46,12 +48,12 @@ internal class PolymorphicReading(private val context: DecodeContext) {
 
     private fun typed(element: XmlNode.Element): Pair<String, XmlNode.Element> =
         when (context.configuration.polymorphism) {
-            XmlPolymorphism.Attribute -> byAttribute(element)
+            XmlPolymorphism.Attribute -> byAttribute(element, context.configuration.classDiscriminator)
+            XmlPolymorphism.SchemaType -> byAttribute(element, SchemaInstance.type)
             XmlPolymorphism.Element -> byElement(element)
         }
 
-    private fun byAttribute(element: XmlNode.Element): Pair<String, XmlNode.Element> {
-        val discriminator = context.configuration.classDiscriminator
+    private fun byAttribute(element: XmlNode.Element, discriminator: XmlName): Pair<String, XmlNode.Element> {
         val attribute = element.attributes.firstOrNull { context.matches(actual = it.name, expected = discriminator) }
             ?: missing(element, "the attribute $discriminator")
         return attribute.value to element

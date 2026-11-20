@@ -73,6 +73,15 @@ public class XmlFormatBuilder internal constructor() : ValidatingBuilder<XmlForm
     public var isDefaultEncoded: Boolean = true
 
     /**
+     * Whether the encoder writes a `null` value as an empty element with `xsi:nil="true"` instead of leaving the
+     * element out; `false` by default. A `null` attribute or text is always left out. The decoder reads `xsi:nil`
+     * either way.
+     *
+     * @since 1.0.0
+     */
+    public var isNilWritten: Boolean = false
+
+    /**
      * Whether an XML declaration is written; `true` by default.
      *
      * @since 1.0.0

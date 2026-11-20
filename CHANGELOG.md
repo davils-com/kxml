@@ -19,6 +19,12 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
 - `kxml-serialization`: a kotlinx.serialization `StringFormat` for XML with attributes, text content, namespaces,
   wrapped and repeated lists, maps, polymorphism by attribute or element, naming strategies and decoding with
   diagnostics instead of exceptions.
+- `XmlFormat.decodeOrFailure` decodes the document of an `XmlSyntaxTree`, and `XmlFormat.decodeNextOrNull` the next
+  element of an `XmlReader`, so a stream of records is decoded one at a time; the diagnostics carry ranges into the
+  text either way. An element with `xsi:nil="true"` decodes to `null`, and is a type mismatch where `null` is not
+  allowed; with `isNilWritten`, the encoder writes `null` values that way, so `null` items of a list survive a round
+  trip. `XmlPolymorphism.SchemaType` names the type of a polymorphic value in `xsi:type`, and no attribute of the
+  schema instance namespace, such as `xsi:schemaLocation`, counts as an unknown property.
 - Both modules are Kotlin Multiplatform libraries with a `jvm` and a `wasmJs` target. Sources are decoded in common
   code, and untrusted text is escaped by `SafeText` of Kore.
 - Sources of bytes are detected as Appendix F of XML 1.0 describes it and decoded strictly from UTF-8, UTF-16 and

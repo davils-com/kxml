@@ -19,8 +19,11 @@ package com.davils.kxml.serialization.encode
 import com.davils.kxml.core.name.XmlName
 import com.davils.kxml.core.node.XmlNode
 import com.davils.kxml.core.node.xmlElement
+import com.davils.kxml.serialization.SchemaInstance
 import com.davils.kxml.serialization.shape.EntryNames
 import com.davils.kxml.serialization.shape.PropertyShape
+
+private const val NIL: String = "true"
 
 internal object ElementWriting {
     fun elementsOf(shape: PropertyShape, content: Content): List<XmlNode> {
@@ -31,11 +34,14 @@ internal object ElementWriting {
 
     fun named(name: XmlName, content: Content, entries: EntryNames): List<XmlNode> = when (content) {
         is Content.Absent -> emptyList()
+        is Content.Nil -> listOf(nil(name))
         is Content.Text -> listOf(xmlElement(name) { text(content.value) })
         is Content.Structure -> listOf(structured(name, content))
         is Content.Items -> content.items.flatMap { item -> named(name, item, entries) }
         is Content.Entries -> content.entries.map { (key, value) -> entry(name, key to value, entries) }
     }
+
+    fun nil(name: XmlName): XmlNode.Element = xmlElement(name) { attribute(SchemaInstance.nil, NIL) }
 
     fun structured(name: XmlName, content: Content.Structure): XmlNode.Element = xmlElement(name) {
         content.attributes.forEach { attribute -> attribute(attribute.name, attribute.value) }

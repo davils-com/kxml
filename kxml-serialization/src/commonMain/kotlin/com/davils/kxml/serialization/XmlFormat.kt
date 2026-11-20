@@ -18,10 +18,12 @@ package com.davils.kxml.serialization
 
 import com.davils.kore.core.validation.violation.Severity
 import com.davils.kxml.core.XmlParseResult
+import com.davils.kxml.core.XmlReader
 import com.davils.kxml.core.diagnostic.XmlDiagnostic
 import com.davils.kxml.core.node.XmlDeclaration
 import com.davils.kxml.core.node.XmlDocument
 import com.davils.kxml.core.node.XmlNode
+import com.davils.kxml.core.syntax.XmlSyntaxTree
 import com.davils.kxml.serialization.decode.DecodeContext
 import com.davils.kxml.serialization.decode.DecodeFailure
 import com.davils.kxml.serialization.encode.EncodeContext
@@ -137,6 +139,41 @@ public class XmlFormat internal constructor(public val configuration: XmlFormatC
         deserializer: DeserializationStrategy<T>,
         element: XmlNode.Element,
     ): XmlDecoding<T> = decodeElement(deserializer, element, emptyList())
+
+    /**
+     * Decodes a value from the document of a syntax tree and returns the diagnostics instead of throwing; the ranges of
+     * the diagnostics refer to [XmlSyntaxTree.text].
+     *
+     * The tree is composed with its own [XmlSyntaxTree.xml], not with [XmlFormatConfiguration.xml].
+     *
+     * @param T the type of the value.
+     * @param deserializer the deserializer of the value.
+     * @param tree the syntax tree of the document.
+     * @return [XmlDecoding.Decoded] with the value and the warnings, or [XmlDecoding.Failed] with the diagnostics.
+     * @since 1.0.0
+     */
+    public fun <T> decodeOrFailure(deserializer: DeserializationStrategy<T>, tree: XmlSyntaxTree): XmlDecoding<T> {
+        val result = tree.compose()
+        if (result !is XmlParseResult.Parsed) return XmlDecoding.Failed(result.diagnostics)
+        return decodeElement(deserializer, result.document.root, result.diagnostics)
+    }
+
+    /**
+     * Decodes a value from the next element of [reader], as [XmlReader.nextElement] reads it, so that a large document
+     * can be decoded one element at a time; the ranges of the diagnostics refer to the text of the reader.
+     *
+     * @param T the type of the value.
+     * @param deserializer the deserializer of the value.
+     * @param reader the reader, positioned before the element; it reads on until the element ends.
+     * @return [XmlDecoding.Decoded] with the value and the warnings, [XmlDecoding.Failed] with the diagnostics of the
+     * reader or of decoding, or `null` when the enclosing element or the document ended before another element.
+     * @since 1.0.0
+     */
+    public fun <T> decodeNextOrNull(deserializer: DeserializationStrategy<T>, reader: XmlReader): XmlDecoding<T>? {
+        val element = reader.nextElement()
+        if (!reader.isValid) return XmlDecoding.Failed(reader.diagnostics)
+        return element?.let { next -> decodeElement(deserializer, next, emptyList()) }
+    }
 
     /**
      * Returns the configuration, such as `XmlFormat(XmlFormatConfiguration(...))`.

@@ -29,4 +29,6 @@ internal sealed interface Content {
     data class Entries(val entries: List<Pair<Content, Content>>) : Content
 
     data object Absent : Content
+
+    data object Nil : Content
 }

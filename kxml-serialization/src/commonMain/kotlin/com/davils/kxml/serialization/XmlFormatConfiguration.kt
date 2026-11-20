@@ -77,6 +77,13 @@ public class XmlFormatConfiguration internal constructor(builder: XmlFormatBuild
     public val isDeclarationWritten: Boolean = builder.isDeclarationWritten
 
     /**
+     * Whether the encoder writes a `null` value as an empty element with `xsi:nil="true"`.
+     *
+     * @since 1.0.0
+     */
+    public val isNilWritten: Boolean = builder.isNilWritten
+
+    /**
      * How the names of properties are derived.
      *
      * @since 1.0.0
@@ -126,6 +133,6 @@ public class XmlFormatConfiguration internal constructor(builder: XmlFormatBuild
         "XmlFormatConfiguration(namespace=${namespace?.let(SafeText::quoted) ?: "none"}, " +
             "namespaceMatching=$namespaceMatching, " +
             "isUnknownElementIgnored=$isUnknownElementIgnored, isDefaultEncoded=$isDefaultEncoded, " +
-            "isDeclarationWritten=$isDeclarationWritten, polymorphism=$polymorphism, " +
+            "isDeclarationWritten=$isDeclarationWritten, isNilWritten=$isNilWritten, polymorphism=$polymorphism, " +
             "classDiscriminator=$classDiscriminator)"
 }

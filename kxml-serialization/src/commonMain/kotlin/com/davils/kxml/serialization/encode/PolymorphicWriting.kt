@@ -16,7 +16,9 @@
 
 package com.davils.kxml.serialization.encode
 
+import com.davils.kxml.core.name.XmlName
 import com.davils.kxml.core.node.XmlAttribute
+import com.davils.kxml.serialization.SchemaInstance
 import com.davils.kxml.serialization.XmlPolymorphism
 import com.davils.kxml.serialization.shape.EntryNames
 import kotlinx.serialization.InternalSerializationApi
@@ -46,14 +48,21 @@ internal class PolymorphicWriting(private val context: EncodeContext) {
 
     private fun typed(descriptor: SerialDescriptor, content: Content): Content =
         when (context.configuration.polymorphism) {
-            XmlPolymorphism.Attribute -> withDiscriminator(descriptor, content)
+            XmlPolymorphism.Attribute -> withDiscriminator(
+                descriptor = descriptor,
+                content = content,
+                discriminatorName = context.configuration.classDiscriminator,
+            )
+
+            XmlPolymorphism.SchemaType -> withDiscriminator(descriptor, content, SchemaInstance.type)
+
             XmlPolymorphism.Element -> wrapped(descriptor, content)
         }
 
-    private fun withDiscriminator(descriptor: SerialDescriptor, content: Content): Content {
+    private fun withDiscriminator(descriptor: SerialDescriptor, content: Content, discriminatorName: XmlName): Content {
         val structure = content as? Content.Structure
             ?: throw SerializationException("The type ${descriptor.serialName} needs a class to carry its name")
-        val discriminator = XmlAttribute(context.configuration.classDiscriminator, descriptor.serialName)
+        val discriminator = XmlAttribute(discriminatorName, descriptor.serialName)
         return structure.copy(attributes = listOf(discriminator) + structure.attributes)
     }
 

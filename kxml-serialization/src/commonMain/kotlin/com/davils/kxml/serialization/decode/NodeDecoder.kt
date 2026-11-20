@@ -17,6 +17,7 @@
 package com.davils.kxml.serialization.decode
 
 import com.davils.kxml.core.diagnostic.XmlDiagnosticCode
+import com.davils.kxml.serialization.SchemaInstance
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.descriptors.SerialDescriptor
@@ -32,9 +33,15 @@ private val booleans: Map<String, Boolean> = mapOf("true" to true, "1" to true, 
 internal class NodeDecoder(private val context: DecodeContext, val value: XmlValue) : AbstractDecoder() {
     override val serializersModule: SerializersModule get() = context.configuration.serializersModule
 
+    private val isNil: Boolean
+        get() {
+            val element = (value as? XmlValue.Element)?.element
+            return SchemaInstance.isNil(element?.attribute(SchemaInstance.nil)?.value)
+        }
+
     override fun decodeElementIndex(descriptor: SerialDescriptor): Int = CompositeDecoder.DECODE_DONE
 
-    override fun decodeNotNullMark(): Boolean = value !is XmlValue.Absent
+    override fun decodeNotNullMark(): Boolean = value !is XmlValue.Absent && !isNil
 
     override fun decodeNull(): Nothing? = null
 
@@ -89,6 +96,7 @@ internal class NodeDecoder(private val context: DecodeContext, val value: XmlVal
     private fun token(): String = text().trim()
 
     private fun text(): String {
+        if (isNil) context.mismatch(value.range, "a value, but the element is nil")
         val current = value
         if (current is XmlValue.Text) return current.text
         val holder = current as? XmlValue.Element ?: context.mismatch(current.range, "a single value")

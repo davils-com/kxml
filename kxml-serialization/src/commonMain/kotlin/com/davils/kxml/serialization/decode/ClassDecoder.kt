@@ -20,6 +20,7 @@ import com.davils.kxml.core.diagnostic.XmlDiagnosticCode
 import com.davils.kxml.core.name.XmlName
 import com.davils.kxml.core.node.XmlAttribute
 import com.davils.kxml.core.node.XmlNode
+import com.davils.kxml.serialization.SCHEMA_INSTANCE
 import com.davils.kxml.serialization.shape.Placement
 import com.davils.kxml.serialization.shape.PropertyShape
 import kotlinx.serialization.descriptors.SerialDescriptor
@@ -130,10 +131,11 @@ internal class ClassDecoder(
         val discriminator = context.configuration.classDiscriminator
         return element.attributes.filterNot { attribute ->
             val isDiscriminator = context.matches(actual = attribute.name, expected = discriminator)
+            val isSchemaInstance = attribute.name.namespace == SCHEMA_INSTANCE
             val isKnown = known.any { shape ->
                 context.matches(actual = attribute.name, expected = shape.name, aliases = shape.aliases)
             }
-            isDiscriminator || isKnown
+            isDiscriminator || isKnown || isSchemaInstance
         }
     }
 
