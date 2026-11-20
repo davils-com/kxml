@@ -19,8 +19,14 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
 - `kxml-serialization`: a kotlinx.serialization `StringFormat` for XML with attributes, text content, namespaces,
   wrapped and repeated lists, maps, polymorphism by attribute or element, naming strategies and decoding with
   diagnostics instead of exceptions.
-- Both modules are Kotlin Multiplatform libraries with a `jvm` and a `wasmJs` target. Sources are decoded from UTF-8
-  and UTF-16 in common code, and untrusted text is escaped by `SafeText` of Kore.
+- Both modules are Kotlin Multiplatform libraries with a `jvm` and a `wasmJs` target. Sources are decoded in common
+  code, and untrusted text is escaped by `SafeText` of Kore.
+- Sources of bytes are detected as Appendix F of XML 1.0 describes it and decoded strictly from UTF-8, UTF-16 and
+  UTF-32 in either byte order, and from ISO-8859-1 and US-ASCII when the declaration names them. `XmlSource.of`
+  takes the charset the bytes were labelled with, which, as RFC 7303 orders it, gives way to a byte order mark and
+  overrides the declared encoding with an `EncodingOverridden` warning. A declared encoding that contradicts the
+  bytes is refused with `EncodingMismatch`, and EBCDIC, UCS-4 in an unusual byte order and every other encoding with
+  `UnsupportedEncoding`.
 - `XmlLimits` gives every limit a hard ceiling, `HARD_INPUT_LENGTH`, `HARD_DEPTH`, `HARD_ELEMENTS`, `HARD_ATTRIBUTES`
   and `HARD_NAME_LENGTH`, which no preset and no configuration exceeds; the limits validate themselves when they are
   created.
@@ -46,3 +52,5 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
   whitespace before the name, and a processing instruction inside a skipped internal subset is skipped as a whole.
 - An entity reference must name an XML name, and a character reference accepts only ASCII digits, so
   `&#\u0666\u0665;` no longer reads as `A`.
+- UTF-16 without a byte order mark is only read when the document starts with `<?`, as Appendix F detects it, and
+  encoding names are matched without regard to case.

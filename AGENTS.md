@@ -36,7 +36,8 @@ under Node.js; the published klib runs in the browser as well.
 - JavaScript interop is written with `js("...")` or `@JsFun` in `src/wasmJsMain/kotlin` only, behind a file-level
   `@file:OptIn(ExperimentalWasmJsInterop::class)`.
 - Text is walked by code point with the internal helpers of `CodePoints.kt`, never with `Character`, `String.format`
-  or `java.nio`; sources are decoded by `SourceDecoding` and `Utf16` in common code.
+  or `java.nio`; sources are detected by `EncodingDetection` as Appendix F of XML 1.0 describes it and decoded
+  strictly by `SourceDecoding` in common code, never into U+FFFD.
 
 ## Verify
 

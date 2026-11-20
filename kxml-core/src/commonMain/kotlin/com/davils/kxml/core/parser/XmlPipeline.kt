@@ -17,6 +17,7 @@
 package com.davils.kxml.core.parser
 
 import com.davils.kore.core.text.TextRange
+import com.davils.kore.core.validation.violation.Severity
 import com.davils.kxml.core.XmlConfiguration
 import com.davils.kxml.core.XmlEventResult
 import com.davils.kxml.core.XmlParseResult
@@ -52,14 +53,15 @@ internal class XmlPipeline(private val configuration: XmlConfiguration) {
 
     private fun decoded(source: XmlSource): XmlEventResult {
         val decoded = SourceDecoding.decode(source)
-        if (decoded.diagnostics.isNotEmpty()) return XmlEventResult(emptyList(), decoded.diagnostics)
+        val isRefused = decoded.diagnostics.any { diagnostic -> diagnostic.severity == Severity.Error }
+        if (isRefused) return XmlEventResult(emptyList(), decoded.diagnostics)
         return scanned(decoded)
     }
 
     private fun scanned(decoded: DecodedSource): XmlEventResult {
         val scanner = XmlScanner(decoded.text, configuration, decoded.encoding)
         val failure = failureOf(scanner)
-        return XmlEventResult(scanner.events, scanner.warnings + listOfNotNull(failure))
+        return XmlEventResult(scanner.events, decoded.diagnostics + scanner.warnings + listOfNotNull(failure))
     }
 
     private fun failureOf(scanner: XmlScanner): XmlDiagnostic? = try {

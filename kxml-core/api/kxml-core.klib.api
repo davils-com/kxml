@@ -11,6 +11,8 @@ final enum class com.davils.kxml.core.diagnostic/XmlDiagnosticCode : kotlin/Enum
     enum entry ContentAfterRoot // com.davils.kxml.core.diagnostic/XmlDiagnosticCode.ContentAfterRoot|null[0]
     enum entry DuplicateAttribute // com.davils.kxml.core.diagnostic/XmlDiagnosticCode.DuplicateAttribute|null[0]
     enum entry EmptyPrefixBinding // com.davils.kxml.core.diagnostic/XmlDiagnosticCode.EmptyPrefixBinding|null[0]
+    enum entry EncodingMismatch // com.davils.kxml.core.diagnostic/XmlDiagnosticCode.EncodingMismatch|null[0]
+    enum entry EncodingOverridden // com.davils.kxml.core.diagnostic/XmlDiagnosticCode.EncodingOverridden|null[0]
     enum entry IgnoredDoctype // com.davils.kxml.core.diagnostic/XmlDiagnosticCode.IgnoredDoctype|null[0]
     enum entry InputTooLong // com.davils.kxml.core.diagnostic/XmlDiagnosticCode.InputTooLong|null[0]
     enum entry InvalidAttribute // com.davils.kxml.core.diagnostic/XmlDiagnosticCode.InvalidAttribute|null[0]
@@ -448,7 +450,7 @@ final class com.davils.kxml.core.source/XmlSource { // com.davils.kxml.core.sour
     final fun toString(): kotlin/String // com.davils.kxml.core.source/XmlSource.toString|toString(){}[0]
 
     final object Companion { // com.davils.kxml.core.source/XmlSource.Companion|null[0]
-        final fun of(kotlin/ByteArray, kotlin/String? = ...): com.davils.kxml.core.source/XmlSource // com.davils.kxml.core.source/XmlSource.Companion.of|of(kotlin.ByteArray;kotlin.String?){}[0]
+        final fun of(kotlin/ByteArray, kotlin/String? = ..., kotlin/String? = ...): com.davils.kxml.core.source/XmlSource // com.davils.kxml.core.source/XmlSource.Companion.of|of(kotlin.ByteArray;kotlin.String?;kotlin.String?){}[0]
         final fun of(kotlin/String, kotlin/String? = ...): com.davils.kxml.core.source/XmlSource // com.davils.kxml.core.source/XmlSource.Companion.of|of(kotlin.String;kotlin.String?){}[0]
     }
 }

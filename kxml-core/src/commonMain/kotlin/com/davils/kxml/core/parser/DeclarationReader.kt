@@ -34,11 +34,6 @@ private const val NO: String = "no"
 
 private val versionPattern: Regex = Regex("1\\.[0-9]+")
 private val encodingPattern: Regex = Regex("[A-Za-z][A-Za-z0-9._-]*")
-private val compatible: Map<XmlEncoding, Set<String>> = mapOf(
-    XmlEncoding.Utf8 to setOf("UTF-8", "UTF8", "US-ASCII", "ASCII"),
-    XmlEncoding.Utf16LittleEndian to setOf("UTF-16", "UTF-16LE"),
-    XmlEncoding.Utf16BigEndian to setOf("UTF-16", "UTF-16BE"),
-)
 
 internal class DeclarationReader(private val cursor: Cursor, private val characters: CharacterReader) {
     fun isAhead(): Boolean {
@@ -88,12 +83,12 @@ internal class DeclarationReader(private val cursor: Cursor, private val charact
     }
 
     private fun checkEncoding(declared: String?, detected: XmlEncoding?, start: Int) {
-        val isCompatible = declared == null || detected == null || declared.uppercase() in compatible.getValue(detected)
+        val isCompatible = declared == null || detected == null || detected.accepts(declared)
         if (isCompatible) return
         failure(
-            XmlDiagnosticCode.UnsupportedEncoding,
+            XmlDiagnosticCode.EncodingMismatch,
             cursor.rangeFrom(start),
-            "The document declares $declared, but is $detected; kxml reads UTF-8 and UTF-16",
+            "The document declares $declared, but its bytes are $detected",
         )
     }
 

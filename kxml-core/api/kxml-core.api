@@ -173,6 +173,8 @@ public final class com/davils/kxml/core/diagnostic/XmlDiagnosticCode : java/lang
 	public static final field ContentAfterRoot Lcom/davils/kxml/core/diagnostic/XmlDiagnosticCode;
 	public static final field DuplicateAttribute Lcom/davils/kxml/core/diagnostic/XmlDiagnosticCode;
 	public static final field EmptyPrefixBinding Lcom/davils/kxml/core/diagnostic/XmlDiagnosticCode;
+	public static final field EncodingMismatch Lcom/davils/kxml/core/diagnostic/XmlDiagnosticCode;
+	public static final field EncodingOverridden Lcom/davils/kxml/core/diagnostic/XmlDiagnosticCode;
 	public static final field IgnoredDoctype Lcom/davils/kxml/core/diagnostic/XmlDiagnosticCode;
 	public static final field InputTooLong Lcom/davils/kxml/core/diagnostic/XmlDiagnosticCode;
 	public static final field InvalidAttribute Lcom/davils/kxml/core/diagnostic/XmlDiagnosticCode;
@@ -466,8 +468,8 @@ public final class com/davils/kxml/core/source/XmlSource {
 
 public final class com/davils/kxml/core/source/XmlSource$Companion {
 	public final fun of (Ljava/lang/String;Ljava/lang/String;)Lcom/davils/kxml/core/source/XmlSource;
-	public final fun of ([BLjava/lang/String;)Lcom/davils/kxml/core/source/XmlSource;
+	public final fun of ([BLjava/lang/String;Ljava/lang/String;)Lcom/davils/kxml/core/source/XmlSource;
 	public static synthetic fun of$default (Lcom/davils/kxml/core/source/XmlSource$Companion;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/davils/kxml/core/source/XmlSource;
-	public static synthetic fun of$default (Lcom/davils/kxml/core/source/XmlSource$Companion;[BLjava/lang/String;ILjava/lang/Object;)Lcom/davils/kxml/core/source/XmlSource;
+	public static synthetic fun of$default (Lcom/davils/kxml/core/source/XmlSource$Companion;[BLjava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/davils/kxml/core/source/XmlSource;
 }
 

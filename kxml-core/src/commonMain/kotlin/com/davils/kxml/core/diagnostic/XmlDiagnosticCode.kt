@@ -212,11 +212,27 @@ public enum class XmlDiagnosticCode(public val value: String, public val severit
     InvalidEncoding("kxml.source.invalid-encoding", Severity.Error),
 
     /**
-     * An encoding other than UTF-8 and UTF-16, or a declared encoding that contradicts the bytes.
+     * An encoding kxml does not read, such as EBCDIC, UCS-4 in an unusual byte order or Windows-1252, whether the bytes
+     * start like it, the document declares it or the charset of the source names it.
      *
      * @since 1.0.0
      */
     UnsupportedEncoding("kxml.source.unsupported-encoding", Severity.Error),
+
+    /**
+     * A declared encoding that contradicts the bytes, such as UTF-16 declared for bytes that start like ASCII or UTF-8
+     * declared after a byte order mark of UTF-16.
+     *
+     * @since 1.0.0
+     */
+    EncodingMismatch("kxml.source.encoding-mismatch", Severity.Error),
+
+    /**
+     * The charset of the source overrides the encoding the document declares, as RFC 7303 orders it; a warning.
+     *
+     * @since 1.0.0
+     */
+    EncodingOverridden("kxml.source.encoding-overridden", Severity.Warning),
 
     /**
      * A source longer than [XmlLimits.maximumInputLength][com.davils.kxml.core.limit.XmlLimits.maximumInputLength].
