@@ -17,7 +17,7 @@
 package com.davils.kxml.core.node
 
 import com.davils.kore.core.annotation.DavilsInternal
-import com.davils.kxml.core.internal.immutableList
+import com.davils.kore.core.collection.immutableList
 
 /**
  * A whole document: the root element, the declaration and the comments and processing instructions around the root.

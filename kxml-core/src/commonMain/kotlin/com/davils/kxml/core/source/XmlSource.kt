@@ -17,7 +17,7 @@
 package com.davils.kxml.core.source
 
 import com.davils.kore.core.annotation.DavilsInternal
-import com.davils.kxml.core.internal.SafeDisplay
+import com.davils.kore.core.text.SafeText
 
 /**
  * A document to read, as text or as bytes, with an optional name for messages.
@@ -49,7 +49,7 @@ public class XmlSource private constructor(
      * @since 1.0.0
      */
     @OptIn(DavilsInternal::class)
-    override fun toString(): String = "XmlSource(${name?.let(SafeDisplay::quoted) ?: "unnamed"})"
+    override fun toString(): String = "XmlSource(${name?.let(SafeText::quoted) ?: "unnamed"})"
 
     /**
      * Creates sources.

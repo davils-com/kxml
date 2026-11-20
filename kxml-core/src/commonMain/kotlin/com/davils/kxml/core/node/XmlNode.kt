@@ -17,9 +17,9 @@
 package com.davils.kxml.core.node
 
 import com.davils.kore.core.annotation.DavilsInternal
+import com.davils.kore.core.collection.immutableList
+import com.davils.kore.core.text.SafeText
 import com.davils.kore.core.text.TextRange
-import com.davils.kxml.core.internal.SafeDisplay
-import com.davils.kxml.core.internal.immutableList
 import com.davils.kxml.core.name.XmlName
 import com.davils.kxml.core.name.XmlNamespaceBinding
 
@@ -198,7 +198,7 @@ public sealed class XmlNode(public val range: TextRange?) {
          * @since 1.0.0
          */
         @OptIn(DavilsInternal::class)
-        override fun toString(): String = "Text(${SafeDisplay.quoted(value)})"
+        override fun toString(): String = "Text(${SafeText.quoted(value)})"
     }
 
     /**
@@ -238,7 +238,7 @@ public sealed class XmlNode(public val range: TextRange?) {
          * @since 1.0.0
          */
         @OptIn(DavilsInternal::class)
-        override fun toString(): String = "CData(${SafeDisplay.quoted(value)})"
+        override fun toString(): String = "CData(${SafeText.quoted(value)})"
     }
 
     /**
@@ -278,7 +278,7 @@ public sealed class XmlNode(public val range: TextRange?) {
          * @since 1.0.0
          */
         @OptIn(DavilsInternal::class)
-        override fun toString(): String = "Comment(${SafeDisplay.quoted(value)})"
+        override fun toString(): String = "Comment(${SafeText.quoted(value)})"
     }
 
     /**
@@ -320,6 +320,6 @@ public sealed class XmlNode(public val range: TextRange?) {
          * @since 1.0.0
          */
         @OptIn(DavilsInternal::class)
-        override fun toString(): String = "ProcessingInstruction(${SafeDisplay.text(target)})"
+        override fun toString(): String = "ProcessingInstruction(${SafeText.text(target)})"
     }
 }

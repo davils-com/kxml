@@ -17,9 +17,9 @@
 package com.davils.kxml.core.diagnostic
 
 import com.davils.kore.core.annotation.DavilsInternal
+import com.davils.kore.core.text.SafeText
 import com.davils.kore.core.text.TextRange
 import com.davils.kore.core.validation.violation.Severity
-import com.davils.kxml.core.internal.SafeDisplay
 
 /**
  * A problem the reader or a decoder found in a document.
@@ -66,5 +66,5 @@ public class XmlDiagnostic(
      * @since 1.0.0
      */
     @OptIn(DavilsInternal::class)
-    override fun toString(): String = "$severity $code at $range: ${SafeDisplay.quoted(message)}"
+    override fun toString(): String = "$severity $code at $range: ${SafeText.quoted(message)}"
 }

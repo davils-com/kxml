@@ -17,8 +17,8 @@
 package com.davils.kxml.core
 
 import com.davils.kore.core.annotation.DavilsInternal
+import com.davils.kore.core.collection.immutableList
 import com.davils.kxml.core.diagnostic.XmlDiagnostic
-import com.davils.kxml.core.internal.immutableList
 import com.davils.kxml.core.node.XmlDocument
 
 /**

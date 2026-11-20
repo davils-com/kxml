@@ -17,7 +17,7 @@
 package com.davils.kxml.core.name
 
 import com.davils.kore.core.annotation.DavilsInternal
-import com.davils.kxml.core.internal.SafeDisplay
+import com.davils.kore.core.text.SafeText
 
 private const val HASH_FACTOR: Int = 31
 
@@ -43,11 +43,11 @@ public class XmlName(
 ) {
     init {
         require(XmlCharacters.isNcName(local)) {
-            "A local XML name must be a name without a colon, but was ${SafeDisplay.quoted(local)}"
+            "A local XML name must be a name without a colon, but was ${SafeText.quoted(local)}"
         }
         prefix?.let { declared ->
             require(XmlCharacters.isNcName(declared)) {
-                "An XML prefix must be a name, but was ${SafeDisplay.quoted(declared)}"
+                "An XML prefix must be a name, but was ${SafeText.quoted(declared)}"
             }
             requireNotNull(namespace) { "The prefix $declared of $local needs a namespace" }
         }
@@ -97,6 +97,6 @@ public class XmlName(
      */
     override fun toString(): String {
         val uri = namespace ?: return local
-        return "{${SafeDisplay.text(uri)}}$local"
+        return "{${SafeText.text(uri)}}$local"
     }
 }

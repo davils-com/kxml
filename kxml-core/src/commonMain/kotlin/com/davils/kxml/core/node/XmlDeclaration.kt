@@ -17,7 +17,7 @@
 package com.davils.kxml.core.node
 
 import com.davils.kore.core.annotation.DavilsInternal
-import com.davils.kxml.core.internal.SafeDisplay
+import com.davils.kore.core.text.SafeText
 
 private const val NOT_DECLARED: String = "none"
 
@@ -64,9 +64,9 @@ public class XmlDeclaration(
      */
     @OptIn(DavilsInternal::class)
     override fun toString(): String {
-        val shownEncoding = encoding?.let(SafeDisplay::quoted) ?: NOT_DECLARED
+        val shownEncoding = encoding?.let(SafeText::quoted) ?: NOT_DECLARED
         val shownStandalone = isStandalone?.toString() ?: NOT_DECLARED
-        return "XmlDeclaration(version=${SafeDisplay.quoted(version)}, encoding=$shownEncoding, " +
+        return "XmlDeclaration(version=${SafeText.quoted(version)}, encoding=$shownEncoding, " +
             "standalone=$shownStandalone)"
     }
 

@@ -1,8 +1,6 @@
 # Third-Party Material
 
-No published artifact of kxml contains third-party code. The sanitizer `com.davils.kxml.core.internal.SafeDisplay`
-and the `hostileText` test fixture come from [Kore](https://github.com/davils-com/kore), Copyright 2026 Davils, under
-the same Apache License 2.0.
+No published artifact of kxml contains third-party code.
 
 The tests use documents shaped like the responses of the Amazon S3 REST API and its namespace name
 `http://s3.amazonaws.com/doc/2006-03-01/`; the documents themselves were written for kxml.

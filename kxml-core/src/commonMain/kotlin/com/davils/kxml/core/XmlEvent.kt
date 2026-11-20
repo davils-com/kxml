@@ -17,9 +17,9 @@
 package com.davils.kxml.core
 
 import com.davils.kore.core.annotation.DavilsInternal
+import com.davils.kore.core.collection.immutableList
+import com.davils.kore.core.text.SafeText
 import com.davils.kore.core.text.TextRange
-import com.davils.kxml.core.internal.SafeDisplay
-import com.davils.kxml.core.internal.immutableList
 import com.davils.kxml.core.name.XmlName
 import com.davils.kxml.core.name.XmlNamespaceBinding
 import com.davils.kxml.core.node.XmlAttribute
@@ -134,7 +134,7 @@ public sealed interface XmlEvent {
         override fun hashCode(): Int = values.hashCode()
 
         @OptIn(DavilsInternal::class)
-        override fun toString(): String = "Text(${SafeDisplay.quoted(value)})"
+        override fun toString(): String = "Text(${SafeText.quoted(value)})"
     }
 
     /**
@@ -152,7 +152,7 @@ public sealed interface XmlEvent {
         override fun hashCode(): Int = values.hashCode()
 
         @OptIn(DavilsInternal::class)
-        override fun toString(): String = "CData(${SafeDisplay.quoted(value)})"
+        override fun toString(): String = "CData(${SafeText.quoted(value)})"
     }
 
     /**
@@ -170,7 +170,7 @@ public sealed interface XmlEvent {
         override fun hashCode(): Int = values.hashCode()
 
         @OptIn(DavilsInternal::class)
-        override fun toString(): String = "Comment(${SafeDisplay.quoted(value)})"
+        override fun toString(): String = "Comment(${SafeText.quoted(value)})"
     }
 
     /**
@@ -193,6 +193,6 @@ public sealed interface XmlEvent {
         override fun hashCode(): Int = values.hashCode()
 
         @OptIn(DavilsInternal::class)
-        override fun toString(): String = "ProcessingInstruction(${SafeDisplay.text(target)})"
+        override fun toString(): String = "ProcessingInstruction(${SafeText.text(target)})"
     }
 }

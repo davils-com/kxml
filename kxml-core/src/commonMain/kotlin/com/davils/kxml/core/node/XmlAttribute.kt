@@ -17,8 +17,8 @@
 package com.davils.kxml.core.node
 
 import com.davils.kore.core.annotation.DavilsInternal
+import com.davils.kore.core.text.SafeText
 import com.davils.kore.core.text.TextRange
-import com.davils.kxml.core.internal.SafeDisplay
 import com.davils.kxml.core.name.XmlName
 
 /**
@@ -63,5 +63,5 @@ public class XmlAttribute(
      * @since 1.0.0
      */
     @OptIn(DavilsInternal::class)
-    override fun toString(): String = "$name=${SafeDisplay.quoted(value)}"
+    override fun toString(): String = "$name=${SafeText.quoted(value)}"
 }

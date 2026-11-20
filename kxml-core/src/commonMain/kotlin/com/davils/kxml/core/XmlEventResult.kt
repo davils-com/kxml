@@ -17,9 +17,9 @@
 package com.davils.kxml.core
 
 import com.davils.kore.core.annotation.DavilsInternal
+import com.davils.kore.core.collection.immutableList
 import com.davils.kore.core.validation.violation.Severity
 import com.davils.kxml.core.diagnostic.XmlDiagnostic
-import com.davils.kxml.core.internal.immutableList
 
 /**
  * The events [Xml.events] read and the diagnostics it raised.

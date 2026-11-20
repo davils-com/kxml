@@ -17,7 +17,7 @@
 package com.davils.kxml.core.name
 
 import com.davils.kore.core.annotation.DavilsInternal
-import com.davils.kxml.core.internal.SafeDisplay
+import com.davils.kore.core.text.SafeText
 
 /**
  * A namespace declaration, `xmlns="uri"` or `xmlns:prefix="uri"`.
@@ -36,7 +36,7 @@ public class XmlNamespaceBinding(public val prefix: String?, public val uri: Str
     init {
         prefix?.let { declared ->
             require(XmlCharacters.isNcName(declared)) {
-                "A namespace prefix must be a name, but was ${SafeDisplay.quoted(declared)}"
+                "A namespace prefix must be a name, but was ${SafeText.quoted(declared)}"
             }
             require(uri.isNotEmpty()) { "The prefix $declared cannot be bound to nothing" }
         }
@@ -66,7 +66,7 @@ public class XmlNamespaceBinding(public val prefix: String?, public val uri: Str
      * @since 1.0.0
      */
     override fun toString(): String {
-        val shown = SafeDisplay.quoted(uri)
+        val shown = SafeText.quoted(uri)
         val declared = prefix ?: return "xmlns=$shown"
         return "xmlns:$declared=$shown"
     }

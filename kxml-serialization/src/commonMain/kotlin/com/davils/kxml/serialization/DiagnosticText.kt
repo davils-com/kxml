@@ -18,8 +18,8 @@ package com.davils.kxml.serialization
 
 import com.davils.kore.core.annotation.DavilsInternal
 import com.davils.kore.core.text.LineMap
+import com.davils.kore.core.text.SafeText
 import com.davils.kxml.core.diagnostic.XmlDiagnostic
-import com.davils.kxml.core.internal.SafeDisplay
 
 private const val LINE_BREAK: String = "\n"
 
@@ -29,7 +29,7 @@ internal object DiagnosticText {
         val lines = LineMap.of(text)
         val details = diagnostics.joinToString(LINE_BREAK) { diagnostic ->
             val offset = minOf(a = diagnostic.range.start, b = text.length)
-            "${lines.positionOf(offset)} ${SafeDisplay.text(diagnostic.message)} [${diagnostic.code}]"
+            "${lines.positionOf(offset)} ${SafeText.text(diagnostic.message)} [${diagnostic.code}]"
         }
         return "The XML could not be decoded:$LINE_BREAK$details"
     }

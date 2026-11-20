@@ -574,11 +574,6 @@ sealed class com.davils.kxml.core.node/XmlNode { // com.davils.kxml.core.node/Xm
     }
 }
 
-final object com.davils.kxml.core.internal/SafeDisplay { // com.davils.kxml.core.internal/SafeDisplay|null[0]
-    final fun quoted(kotlin/CharSequence, kotlin/Int = ...): kotlin/String // com.davils.kxml.core.internal/SafeDisplay.quoted|quoted(kotlin.CharSequence;kotlin.Int){}[0]
-    final fun text(kotlin/CharSequence, kotlin/Int = ...): kotlin/String // com.davils.kxml.core.internal/SafeDisplay.text|text(kotlin.CharSequence;kotlin.Int){}[0]
-}
-
 final object com.davils.kxml.core.name/XmlNamespaces { // com.davils.kxml.core.name/XmlNamespaces|null[0]
     final const val XML // com.davils.kxml.core.name/XmlNamespaces.XML|{}XML[0]
         final fun <get-XML>(): kotlin/String // com.davils.kxml.core.name/XmlNamespaces.XML.<get-XML>|<get-XML>(){}[0]
@@ -599,7 +594,6 @@ final object com.davils.kxml.core/XmlViolationCodes { // com.davils.kxml.core/Xm
         final fun <get-NOT_POSITIVE>(): com.davils.kore.core.validation.violation/ViolationCode // com.davils.kxml.core/XmlViolationCodes.NOT_POSITIVE.<get-NOT_POSITIVE>|<get-NOT_POSITIVE>(){}[0]
 }
 
-final fun <#A: kotlin/Any> (kotlin.collections/Collection<#A>).com.davils.kxml.core.internal/immutableList(): kotlin.collections/List<#A> // com.davils.kxml.core.internal/immutableList|immutableList@kotlin.collections.Collection<0:0>(){0§<kotlin.Any>}[0]
 final fun com.davils.kxml.core.limit/xmlLimits(com.davils.kxml.core.limit/XmlLimits = ..., kotlin/Function1<com.davils.kxml.core.limit/XmlLimitsBuilder, kotlin/Unit>): com.davils.kxml.core.limit/XmlLimits // com.davils.kxml.core.limit/xmlLimits|xmlLimits(com.davils.kxml.core.limit.XmlLimits;kotlin.Function1<com.davils.kxml.core.limit.XmlLimitsBuilder,kotlin.Unit>){}[0]
 final fun com.davils.kxml.core.node/xmlCData(kotlin/String): com.davils.kxml.core.node/XmlNode.CData // com.davils.kxml.core.node/xmlCData|xmlCData(kotlin.String){}[0]
 final fun com.davils.kxml.core.node/xmlComment(kotlin/String): com.davils.kxml.core.node/XmlNode.Comment // com.davils.kxml.core.node/xmlComment|xmlComment(kotlin.String){}[0]

@@ -17,10 +17,10 @@
 package com.davils.kxml.serialization
 
 import com.davils.kore.core.annotation.DavilsInternal
+import com.davils.kore.core.text.SafeText
 import com.davils.kore.core.validation.Validatable
 import com.davils.kore.core.validation.ValidationScope
 import com.davils.kxml.core.Xml
-import com.davils.kxml.core.internal.SafeDisplay
 import com.davils.kxml.core.name.XmlName
 import kotlinx.serialization.modules.SerializersModule
 
@@ -123,7 +123,7 @@ public class XmlFormatConfiguration internal constructor(builder: XmlFormatBuild
      */
     @OptIn(DavilsInternal::class)
     override fun toString(): String =
-        "XmlFormatConfiguration(namespace=${namespace?.let(SafeDisplay::quoted) ?: "none"}, " +
+        "XmlFormatConfiguration(namespace=${namespace?.let(SafeText::quoted) ?: "none"}, " +
             "namespaceMatching=$namespaceMatching, " +
             "isUnknownElementIgnored=$isUnknownElementIgnored, isDefaultEncoded=$isDefaultEncoded, " +
             "isDeclarationWritten=$isDeclarationWritten, polymorphism=$polymorphism, " +
