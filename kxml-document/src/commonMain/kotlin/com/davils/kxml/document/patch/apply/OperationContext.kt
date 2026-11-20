@@ -17,19 +17,20 @@ package com.davils.kxml.document.patch.apply
 
 import com.davils.kxml.core.name.XmlNamespaces
 import com.davils.kxml.document.navigation.DocumentModel
+import com.davils.kxml.document.navigation.PrefixScope
 
 internal class OperationContext(val model: DocumentModel, val editor: TreeEditor, val charge: (Int) -> Unit) {
     fun scopeOf(element: Int): Map<String, String> {
-        val scope = mutableMapOf(XmlNamespaces.XML_PREFIX to XmlNamespaces.XML)
-        var current = element
-        while (current > DocumentModel.ROOT) {
-            model.declaredNamespaces(current).forEach { binding ->
-                charge(1)
-                scope.getOrPut(prefixOf(binding)) { binding.uri }
-            }
-            current = model.parent(current)
+        val ancestors = generateSequence(element, model::parent)
+        val elements = ancestors.takeWhile { node -> node > DocumentModel.ROOT }
+        val outermost = elements.toList().asReversed()
+        val xml = PrefixScope.EMPTY.with(listOf(XmlNamespaces.XML_PREFIX to XmlNamespaces.XML))
+        val declared = outermost.flatMap { ancestor ->
+            val bindings = model.declaredNamespaces(ancestor)
+            charge(bindings.size + 1)
+            bindings.map { binding -> prefixOf(binding) to binding.uri }
         }
-        return scope.filterValues(String::isNotEmpty)
+        return xml.with(declared)
     }
 
     fun isDeclaredOn(element: Int, prefix: String): Boolean =

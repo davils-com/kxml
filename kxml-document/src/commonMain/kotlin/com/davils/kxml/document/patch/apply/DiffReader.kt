@@ -22,6 +22,7 @@ import com.davils.kxml.core.name.XmlNamespaceBinding
 import com.davils.kxml.core.node.XmlDocument
 import com.davils.kxml.core.node.XmlNode
 import com.davils.kxml.document.XmlDocumentLimitException
+import com.davils.kxml.document.navigation.PrefixScope
 import com.davils.kxml.document.patch.XmlPatchErrorCode
 import com.davils.kxml.document.patch.XmlPatchOperation
 import com.davils.kxml.document.patch.XmlPatchPosition
@@ -61,7 +62,7 @@ internal class DiffReader(private val limits: XmlLimits) {
     )
 
     fun operations(diff: XmlDocument): List<XmlPatchOperation> {
-        val scope = scopeOf(diff.root.namespaces, outer = emptyMap())
+        val scope = scopeOf(diff.root.namespaces, outer = PrefixScope.EMPTY)
         val operations = mutableListOf<XmlPatchOperation>()
         diff.root.children.forEach { child ->
             val element = child as? XmlNode.Element
@@ -133,10 +134,8 @@ internal class DiffReader(private val limits: XmlLimits) {
         return XmlPatchOperation.Remove(selector = selector, whitespace = whitespace, namespaces = scope)
     }
 
-    private fun scopeOf(declared: List<XmlNamespaceBinding>, outer: Map<String, String>): Map<String, String> {
-        val inner = declared.associate { binding -> prefixOf(binding) to binding.uri }
-        return (outer + inner).filterValues(String::isNotEmpty)
-    }
+    private fun scopeOf(declared: List<XmlNamespaceBinding>, outer: PrefixScope): PrefixScope =
+        outer.with(declared.map { binding -> prefixOf(binding) to binding.uri })
 
     private fun invalid(reason: String): Nothing = throw PatchFailure(XmlPatchErrorCode.InvalidAttributeValue, reason)
 }

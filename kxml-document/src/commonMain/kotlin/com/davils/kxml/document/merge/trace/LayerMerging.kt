@@ -24,6 +24,7 @@ import com.davils.kxml.core.name.XmlCharacters
 import com.davils.kxml.core.name.XmlName
 import com.davils.kxml.core.node.XmlNode
 import com.davils.kxml.document.merge.XmlMergeOptions
+import com.davils.kxml.document.navigation.PrefixScope
 import com.davils.kxml.document.patch.apply.ContentNamespaces
 import com.davils.kxml.document.patch.apply.prefixOf
 import com.davils.kxml.document.xpath.evaluate.EvaluationBounds
@@ -40,7 +41,7 @@ internal class LayerMerging(
 
     fun merged(base: TracedNode.Element, overlay: XmlNode.Element, outer: Map<String, String>) {
         bounds.charge(outer.size.toLong() + base.namespaces.size + base.attributes.size + overlay.attributes.size + 1)
-        val scope = outer + base.namespaces.associate { binding -> prefixOf(binding) to binding.uri }
+        val scope = PrefixScope.of(outer).with(base.namespaces.map { binding -> prefixOf(binding) to binding.uri })
         mergedAttributes(base, overlay)
         val declared = OrderedSet(base.namespaces.map(::prefixOf))
         base.namespaces += overlay.namespaces.filter { binding -> prefixOf(binding) !in declared }

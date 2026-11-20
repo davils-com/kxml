@@ -19,11 +19,11 @@ package com.davils.kxml.document.patch
 
 import com.davils.kore.core.annotation.DavilsInternal
 import com.davils.kore.core.collection.immutableList
-import com.davils.kore.core.collection.immutableMap
 import com.davils.kore.core.text.SafeText
 import com.davils.kxml.core.name.XmlCharacters
 import com.davils.kxml.core.name.XmlNamespaces
 import com.davils.kxml.core.node.XmlNode
+import com.davils.kxml.document.navigation.PrefixScope
 
 /**
  * One operation of an XML patch of RFC 5261: `<add>`, `<replace>` or `<remove>`.
@@ -46,7 +46,7 @@ public sealed class XmlPatchOperation(public val selector: String, namespaces: M
      *
      * @since 1.0.0
      */
-    public val namespaces: Map<String, String> = namespaces.immutableMap()
+    public val namespaces: Map<String, String> = PrefixScope.of(namespaces)
 
     init {
         namespaces.forEach { (prefix, uri) ->

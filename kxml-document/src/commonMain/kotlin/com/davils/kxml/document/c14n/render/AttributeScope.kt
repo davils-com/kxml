@@ -13,8 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:OptIn(DavilsInternal::class)
+
 package com.davils.kxml.document.c14n.render
 
+import com.davils.kore.core.annotation.DavilsInternal
+import com.davils.kore.core.collection.OrderedSet
 import com.davils.kxml.core.name.XmlName
 import com.davils.kxml.core.name.XmlNamespaces
 import com.davils.kxml.document.navigation.DocumentModel
@@ -55,7 +59,7 @@ internal class AttributeScope(
     }
 
     private fun inheritedInto(own: List<Rendered>, included: List<Rendered>): List<Rendered> {
-        val ownNames = own.filter(::isXml).mapTo(mutableSetOf()) { attribute -> attribute.name.local }
+        val ownNames = OrderedSet(own.filter(::isXml).map { attribute -> attribute.name.local })
         val entries = inherited.entries()
         charge(entries.size)
         val isSimple = inheritance == Inheritance.SimpleXml

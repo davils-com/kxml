@@ -20,6 +20,7 @@ package com.davils.kxml.document.c14n.render
 import com.davils.kore.core.annotation.DavilsInternal
 import com.davils.kore.core.collection.OrderedMap
 import com.davils.kxml.document.navigation.NodeSet
+import com.davils.kxml.document.navigation.PrefixScope
 import com.davils.kxml.document.xpath.evaluate.NodeAccess
 import com.davils.kxml.document.xpath.evaluate.NodeKeys
 
@@ -46,8 +47,8 @@ internal class NodeSubset(keys: LongArray, nodes: NodeAccess) : Membership {
     override fun isIncluded(node: Int): Boolean = node in members
 
     override fun namespacesOf(element: Int): Map<String, String> {
-        val bindings = namespaces[element] ?: return emptyMap()
+        val bindings = namespaces[element] ?: return PrefixScope.EMPTY
         val entries = bindings.entries.sortedWith(compareBy(CodePointOrder) { entry -> entry.first })
-        return entries.toMap()
+        return PrefixScope.EMPTY.with(entries)
     }
 }
