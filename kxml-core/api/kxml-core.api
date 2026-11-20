@@ -775,6 +775,7 @@ public final class com/davils/kxml/core/syntax/XmlSyntaxTree {
 	public final fun compose ()Lcom/davils/kxml/core/XmlParseResult;
 	public final fun edit (Ljava/util/List;)Lcom/davils/kxml/core/syntax/XmlSyntaxTree;
 	public final fun getDiagnostics ()Ljava/util/List;
+	public final fun getDocument ()Lcom/davils/kxml/core/syntax/ast/XmlDocumentSyntax;
 	public final fun getLines ()Lcom/davils/kore/core/text/LineMap;
 	public final fun getRoot ()Lcom/davils/kxml/core/syntax/XmlSyntaxNode;
 	public final fun getText ()Ljava/lang/String;
@@ -786,5 +787,48 @@ public final class com/davils/kxml/core/syntax/XmlSyntaxTree {
 public final class com/davils/kxml/core/syntax/XmlSyntaxTree$Companion {
 	public final fun parse (Ljava/lang/String;Lcom/davils/kxml/core/Xml;)Lcom/davils/kxml/core/syntax/XmlSyntaxTree;
 	public static synthetic fun parse$default (Lcom/davils/kxml/core/syntax/XmlSyntaxTree$Companion;Ljava/lang/String;Lcom/davils/kxml/core/Xml;ILjava/lang/Object;)Lcom/davils/kxml/core/syntax/XmlSyntaxTree;
+}
+
+public final class com/davils/kxml/core/syntax/ast/XmlAttributeSyntax {
+	public final fun getLocalName ()Ljava/lang/String;
+	public final fun getName ()Ljava/lang/String;
+	public final fun getNode ()Lcom/davils/kxml/core/syntax/XmlSyntaxNode;
+	public final fun getPrefix ()Ljava/lang/String;
+	public final fun getRawValue ()Ljava/lang/String;
+	public final fun getValue ()Ljava/lang/String;
+	public final fun getValueRange ()Lcom/davils/kore/core/text/TextRange;
+	public final fun isNamespaceDeclaration ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/core/syntax/ast/XmlDocumentSyntax {
+	public final fun getDeclaration ()Lcom/davils/kxml/core/syntax/XmlSyntaxNode;
+	public final fun getDoctype ()Lcom/davils/kxml/core/syntax/XmlSyntaxNode;
+	public final fun getEpilog ()Ljava/util/List;
+	public final fun getNode ()Lcom/davils/kxml/core/syntax/XmlSyntaxNode;
+	public final fun getProlog ()Ljava/util/List;
+	public final fun getRoot ()Lcom/davils/kxml/core/syntax/ast/XmlElementSyntax;
+	public final fun getVersion ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/core/syntax/ast/XmlElementSyntax {
+	public final fun attribute (Ljava/lang/String;)Lcom/davils/kxml/core/syntax/ast/XmlAttributeSyntax;
+	public final fun elements (Ljava/lang/String;)Ljava/util/List;
+	public final fun getAttributes ()Ljava/util/List;
+	public final fun getContent ()Ljava/util/List;
+	public final fun getElements ()Ljava/util/List;
+	public final fun getEndTag ()Lcom/davils/kxml/core/syntax/XmlSyntaxNode;
+	public final fun getLocalName ()Ljava/lang/String;
+	public final fun getName ()Ljava/lang/String;
+	public final fun getNamespace ()Ljava/lang/String;
+	public final fun getNode ()Lcom/davils/kxml/core/syntax/XmlSyntaxNode;
+	public final fun getParent ()Lcom/davils/kxml/core/syntax/ast/XmlElementSyntax;
+	public final fun getPrefix ()Ljava/lang/String;
+	public final fun getStartTag ()Lcom/davils/kxml/core/syntax/XmlSyntaxNode;
+	public final fun getText ()Ljava/lang/String;
+	public final fun isEmptyTag ()Z
+	public final fun namespaceFor (Ljava/lang/String;)Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
 }
 

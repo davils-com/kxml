@@ -25,6 +25,7 @@ import com.davils.kore.core.validation.violation.Severity
 import com.davils.kxml.core.Xml
 import com.davils.kxml.core.XmlParseResult
 import com.davils.kxml.core.diagnostic.XmlDiagnostic
+import com.davils.kxml.core.syntax.ast.XmlDocumentSyntax
 import com.davils.kxml.core.syntax.internal.GreenNode
 import com.davils.kxml.core.syntax.internal.Reparse
 import com.davils.kxml.core.syntax.internal.SyntaxParsing
@@ -89,6 +90,13 @@ public class XmlSyntaxTree internal constructor(
      * @since 1.0.0
      */
     public val lines: LineMap by lazy { LineMap.of(text.take(Limits.MAX_LINE_MAP_LENGTH)) }
+
+    /**
+     * The typed view of the document: its declarations, its root element and what surrounds it.
+     *
+     * @since 1.0.0
+     */
+    public val document: XmlDocumentSyntax by lazy { XmlDocumentSyntax(root) }
 
     /**
      * Reads [text] into a document with [xml], as [Xml.parse] does.

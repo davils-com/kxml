@@ -44,6 +44,13 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
   errors or a document type declaration, an edit that reaches a tag of the enclosing element and an element that is
   no longer a single element are parsed as a whole, so the result always equals a full parse of the edited text,
   with every limit charged to the whole document.
+- `XmlSyntaxTree.document` gives a typed view of the tree in the new package `com.davils.kxml.core.syntax.ast`:
+  `XmlDocumentSyntax` with the declarations, the version, the root element and the comments and processing
+  instructions around it; `XmlElementSyntax` with the tags, the qualified name, the attributes, the child elements,
+  the content and the namespaces in scope; `XmlAttributeSyntax` with the value as written, its range and the value as
+  a reader reports it. Character data and values are decoded as without a document type declaration: references to
+  other entities give `null` instead of a guess. The views read the tree as it is, so they also show a document with
+  errors as far as it was parsed.
 - `XmlDoctype.Internal` reads the internal subset of a document type declaration: general and parameter entities,
   attribute lists with their defaults and the normalization of their types, element types, notations and unparsed
   entities. Entities are expanded in content and in attribute values, defaults are added before namespaces are

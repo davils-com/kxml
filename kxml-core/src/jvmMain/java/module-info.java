@@ -28,4 +28,5 @@ module com.davils.kxml.core {
     exports com.davils.kxml.core.resolve;
     exports com.davils.kxml.core.source;
     exports com.davils.kxml.core.syntax;
+    exports com.davils.kxml.core.syntax.ast;
 }
