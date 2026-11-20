@@ -28,15 +28,21 @@ check:
     artifacts: ["kxml-core/build/libs/*.jar", "kxml-serialization/build/libs/*.jar"]
 
 policy:
+  # Line breaks and the default charset differ on Windows, and kxml reads and writes text, so develop, main and a tag
+  # run there too.
   push-develop:
     stages: [check, snapshot]
+    os: [ubuntu-latest, windows-latest]
     overrides:
       check:
         reproducible: { enabled: true }
   push-main:
+    os: [ubuntu-latest, windows-latest]
     overrides:
       check:
         reproducible: { enabled: true }
+  tag:
+    os: [ubuntu-latest, windows-latest]
 
 security:
   gradle:
