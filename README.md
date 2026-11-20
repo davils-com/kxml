@@ -66,7 +66,15 @@ val written = xml.emit(xmlElement(XmlName("order")) { element(XmlName("item")) {
 A malformed or oversized document never throws: the result lists diagnostics with a stable code, the range in the
 source and a message. Document type declarations are refused unless `doctype = XmlDoctype.Internal`, which reads
 the internal subset and expands its entities within the budget of `XmlLimits`. External resources are loaded only
-under `XmlDoctype.External`, through an `XmlResolver` the caller hands over.
+under `XmlDoctype.External`, through an `XmlResolver` the caller hands over, such as an `XmlCatalogResolver` of
+OASIS XML Catalogs 1.1:
+
+```kotlin
+val xml = xml {
+    doctype = XmlDoctype.External
+    resolver = XmlCatalogResolver.fromDirectory(Path.of("/etc/xml/dtd"))   // JVM: catalog.xml and resources below it
+}
+```
 
 ### Serialization
 

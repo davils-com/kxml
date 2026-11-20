@@ -66,6 +66,12 @@ The following are **not** vulnerabilities in kxml:
   given exposes the application to server-side request forgery and to reading local files. A resolver should map
   identifiers to resources it trusts, such as files below one directory. An exception the resolver throws leaves the
   reader.
+- `XmlCatalogResolver` reaches only what its catalog maps an identifier to and what its loader agrees to load; without
+  a fallback it refuses everything else, and a lookup that reaches a catalog file beyond the limits is refused instead
+  of skipped. The catalog files themselves are input: whoever can change them decides what documents reach. On the
+  JVM, `XmlDirectoryLoader` and `fromDirectory` load only regular files below one directory, with every symbolic link
+  followed, and refuse `..`, percent-encoded separators, hosts and every scheme but `file`. A catalog file that cannot
+  be loaded or read is treated as empty, as XML Catalogs 1.1 requires, and listed in `XmlCatalog.problems`.
 - On Wasm, `SafeText` of Kore takes the Unicode categories from the regular expressions of the JavaScript engine, on the
   JVM from the JDK. An engine with an older Unicode version may treat a newly assigned character as unassigned and
   escape it, never the other way round for the categories that matter.
