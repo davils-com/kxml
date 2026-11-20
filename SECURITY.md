@@ -47,7 +47,7 @@ The following are **not** vulnerabilities in kxml:
 
 - a vulnerability in the JDK, the Kotlin standard library, kotlinx.serialization or Kore — report those to the
   respective project,
-- an application that reads untrusted documents with `XmlLimits.Trusted` or limits of its own that are too large,
+- an application that reads untrusted documents with `XmlLimits.Relaxed` or limits of its own that are too large,
 - an application that logs `XmlDiagnostic.message` without escaping it; the message is input, and
   `XmlDiagnostic.toString` escapes it,
 - the meaning an application gives to a document that is well-formed; kxml does not validate against a schema.
@@ -57,15 +57,15 @@ The following are **not** vulnerabilities in kxml:
 - kxml reads XML 1.0 with namespaces in UTF-8 and UTF-16 only. It does not validate against a DTD or a schema and
   never reads the internal subset of a document type declaration, so default attributes declared there are not
   applied.
-- On Wasm, `SafeDisplay` takes the Unicode categories from the regular expressions of the JavaScript engine, on the
+- On Wasm, `SafeText` of Kore takes the Unicode categories from the regular expressions of the JavaScript engine, on the
   JVM from the JDK. An engine with an older Unicode version may treat a newly assigned character as unassigned and
   escape it, never the other way round for the categories that matter.
 - The limits bound the work of one call. An application that reads many documents at once bounds their number
   itself.
 - `@DavilsInternal` is a compile-time opt-in, not an access boundary. Kotlin `internal` is public in JVM bytecode:
   Java code and reflection reach internal declarations through their mangled names. On the module path the
-  `module-info` of each module exports only packages with public API, and `com.davils.kxml.core.internal` only to
-  `com.davils.kxml.serialization`; on the class path every class is reachable. kxml therefore validates in every
+  `module-info` of each module exports only packages with public API and never an `internal` package; on the class
+  path every class is reachable. kxml therefore validates in every
   public constructor.
 - Escapes are written as `\u{XXXX}`, `\n`, `\r` and `\t`. A literal backslash in free text is shown as it is, so
   input can display text that looks like an escape, but never a real control character.

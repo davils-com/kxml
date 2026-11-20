@@ -30,7 +30,7 @@ the changelog check, Trivy and the Kreate assurance gate. A pull request is only
 
 Every document kxml reads may come from an attacker. A change to the reader checks the input against `XmlLimits`
 before the work grows with it, never resolves an entity or an external resource, escapes every untrusted value it
-shows through `SafeDisplay`, never puts a decoded value into a message and fails closed. It ships with tests that feed
+shows through `SafeText` of Kore, never puts a decoded value into a message and fails closed. It ships with tests that feed
 hostile input through every new sink.
 
 ### The public API is a gate

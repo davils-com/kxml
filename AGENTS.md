@@ -9,18 +9,19 @@ Apache License 2.0, with security first.
 
 | Module | Artifact | Purpose |
 |---|---|---|
-| `kxml-core` | `com.davils:kxml-core` | The reader with its event stream, limits and diagnostics, the immutable node tree, the writer and the escaping of untrusted text shared by both modules |
+| `kxml-core` | `com.davils:kxml-core` | The reader with its event stream, limits and diagnostics, the immutable node tree and the writer |
 | `kxml-serialization` | `com.davils:kxml-serialization` | The kotlinx.serialization format: elements, attributes, text, namespaces, wrapped and repeated collections, maps, polymorphism and decoding with diagnostics |
-| `build-logic` | - | One convention plugin per Kreate concern, composed by `kxml.kotlin-library` for the modules and `kxml.root` for the root project; they hold nothing but `plugins { }` and `kreate { }` |
+| `build-logic` | - | One convention plugin per Kreate concern, composed by `kxml.kotlin-library` and `kxml.serialization-library` for the modules and `kxml.root` for the root project; they hold nothing but `plugins { }` and `kreate { }` |
 
 The root package of a module is `com.davils.kxml.<module without kxml->`, such as `com.davils.kxml.core`, and its
 Java module has the same name. Both modules declare it in `src/jvmMain/java/module-info.java` and export only
-packages with public API. The one exception is `com.davils.kxml.core.internal`, which `kxml-core` exports to
-`com.davils.kxml.serialization` alone.
+packages with public API, never an `internal` package.
 
 kxml uses Kore wherever Kore has the building block: validation and violation codes, `ValidatingBuilder` and
-`@DavilsDsl`, `TextRange` and `LineMap`, `Limits.MAX_DISPLAY_LENGTH` and the `Davils*` annotations. Never write a
-second version of something Kore has; what kxml needs from Kore and Kore does not offer yet is added to Kore.
+`@DavilsDsl`, `TextRange` and `LineMap`, `Limits`, `SafeText`, `immutableList()`, the `Davils*` annotations and, in
+the tests, `HostileFragments` and `unsafeCodePointsIn` of `kore-testing`. Never write a second version of something
+Kore has; what kxml needs from Kore and Kore does not offer yet is added to Kore. Until a release of Kore offers it,
+`OrderedIndex`, `NameMap` and `NameSet` stay in `com.davils.kxml.core.internal`.
 
 ## Targets
 
@@ -30,8 +31,8 @@ under Node.js; the published klib runs in the browser as well.
 - Code lives in `src/commonMain/kotlin` unless it needs the JVM. What only the JVM can offer lives in
   `src/jvmMain/kotlin`; a member of a common class that needs a JDK type becomes an extension function there.
 - A platform difference hides behind an `internal expect fun` in `<Role>.kt` with its `actual` in `<Role>.jvm.kt` and
-  `<Role>.wasmJs.kt`, such as `UnicodeCategories` of `SafeDisplay`. kxml declares no `expect` or `actual` class:
-  they are a Beta language feature.
+  `<Role>.wasmJs.kt`, and a parity test proves that both targets give the same result. kxml declares no `expect` or
+  `actual` class: they are a Beta language feature.
 - JavaScript interop is written with `js("...")` or `@JsFun` in `src/wasmJsMain/kotlin` only, behind a file-level
   `@file:OptIn(ExperimentalWasmJsInterop::class)`.
 - Text is walked by code point with the internal helpers of `CodePoints.kt`, never with `Character`, `String.format`
@@ -84,10 +85,12 @@ a baseline. Build scripts and `build-logic` follow the same rules, although Dete
 - **Names.** No type, file, function or property carries the name of the library as a prefix: `XmlName`, never
   `KxmlName`. `Xml` names the domain, as `Semantic` does in `SemanticVersion` of Kore. The only other prefix is
   `Davils` on the annotations of Kore. The ids of the Gradle plugins in `build-logic` keep their `kxml.` prefix.
-- **`@DavilsInternal`** marks API that `kxml-serialization` shares with `kxml-core` and consumers must not use; it
-  lives in `com.davils.kxml.core.internal` and is opted into locally with `@OptIn(DavilsInternal::class)`.
-- **Immutable values.** Public types are immutable; public collections are copied with the internal
-  `immutableList()`, never stored from `toList()` or `+`, so neither a cast nor the caller's list can change them.
+- **`@DavilsInternal`** marks API shared between Davils libraries that consumers must not use, such as `SafeText` and
+  `immutableList()` of Kore; it is opted into locally with `@OptIn(DavilsInternal::class)`. kxml declares no
+  annotation of that kind itself, and what `kxml-serialization` needs from `kxml-core` is public API or comes from
+  Kore.
+- **Immutable values.** Public types are immutable; public collections are copied with `immutableList()` of Kore,
+  never stored from `toList()` or `+`, so neither a cast nor the caller's list can change them.
 - **No public `data class`.** It freezes `copy` and `componentN` into the binary API. Write a regular class whose
   `equals` and `hashCode` compare a private `values` list and whose `toString` escapes; `value class` stays allowed.
 - **Explicit return types** on public functions with an expression body or a result; a block body that returns
@@ -102,19 +105,26 @@ a baseline. Build scripts and `build-logic` follow the same rules, although Dete
 Every document kxml reads may come from an attacker, and so may every name, namespace and value a caller hands to
 it. kxml is built so that a mistake of a caller fails closed.
 
-- **No entity expansion, no external resources.** The reader never reads a document type declaration's internal
-  subset, never loads anything and never expands an entity but the five predefined ones. `XmlDoctype.Refuse` is the
-  default; `XmlDoctype.Ignore` skips the declaration with a warning. Nothing may change that.
+- **No external resources, no unbounded expansion.** `XmlDoctype.Refuse` is the default; `XmlDoctype.Ignore` skips
+  the declaration with a warning. Today the reader never reads the internal subset of a document type declaration
+  and never expands an entity but the five predefined ones. When it reads the internal subset, every expansion of an
+  entity charges a budget of `XmlLimits` while it is done, so a billion laughs document fails at its budget, and
+  nothing is ever loaded unless the caller hands the reader a resolver of its own.
 - **Limits before work.** The reader checks every input against `XmlLimits` before it does work that grows with the
   input: the length of the source, the depth, the number of elements and attributes, the length of names and texts.
   What is too large ends reading with a diagnostic; nothing is truncated silently. A new limit goes into
-  `XmlLimits` and `XmlLimitsBuilder`, never into a private constant. `XmlLimits.Untrusted` is the default.
+  `XmlLimits` and `XmlLimitsBuilder`, never into a private constant, and has a hard ceiling, a `HARD_*` constant:
+  no preset, `XmlLimits.Relaxed` included, is unbounded. `XmlLimits.Untrusted` is the default.
+- **No input decides the complexity.** A structure keyed by input, such as attribute names, namespace prefixes and
+  the comparison of attributes, is indexed in a total order through `OrderedIndex`, `NameMap` and `NameSet`, never by
+  hash codes alone, so colliding hash codes cannot make it quadratic on the JVM or on Wasm. No check compares every
+  pair of what the input holds.
 - **Malformed input never throws.** The reader turns every problem of a document into an `XmlDiagnostic` with a
   stable `XmlDiagnosticCode` and a `TextRange`; an exception out of the reader is a bug.
 - **Escape untrusted text exactly once, at the sink.** Whatever shows text that may come from input, such as an
-  exception message, a `toString` or the message of `XmlDecodingException`, writes it through the internal
-  `SafeDisplay`, which escapes control, format and separator characters, bidirectional overrides and lone
-  surrogates and bounds the length. Names that were checked to be XML names are shown as they are. The message of an
+  exception message, a `toString` or the message of `XmlDecodingException`, writes it through `SafeText` of Kore,
+  which escapes control, format and separator characters, bidirectional overrides and lone surrogates and bounds the
+  length. Names that were checked to be XML names are shown as they are. The message of an
   `XmlDiagnostic` is input and is only escaped where it is shown.
 - **No raw input in exceptions.** Messages are constant text plus escaped, bounded fields.
 - **Values may be sensitive.** A decoded value never appears in a `toString` or a message.
@@ -122,11 +132,11 @@ it. kxml is built so that a mistake of a caller fails closed.
   escapes every text and attribute value.
 - **Hide what Java must not reach.** Kotlin's `internal` is `public` in the bytecode, so a Java caller on the module
   path reaches every internal class of an exported package. Implementation lives in packages that are not exported,
-  such as `parser`, `compose`, `decode` and `encode`, and `module-info.java` exports an `internal` package to
-  `com.davils.kxml.serialization` only.
+  such as `parser`, `compose`, `decode` and `encode`, and `module-info.java` never exports an `internal` package.
 - **Secure randomness only.** No `java.util.Random`, `kotlin.random.Random` or `ThreadLocalRandom`.
-- **Every sink has an injection test.** A renderer is tested with the `hostileText` fixture and
-  `shouldBeSafeToShow` or `shouldBeShownSafely`.
+- **Every sink has an injection test.** A renderer is tested with the `hostileText` fixture, built from
+  `HostileFragments` of `kore-testing`, and `shouldBeSafeToShow` or `shouldBeShownSafely`, which leave
+  `unsafeCodePointsIn` empty; every limit has a test at its ceiling and one past it.
 
 ## Tests
 
@@ -143,7 +153,8 @@ it. kxml is built so that a mistake of a caller fails closed.
 
 ## Build
 
-- Every module applies exactly one plugin, `id("kxml.kotlin-library")`, and declares nothing but its description
+- Every module applies exactly one plugin, `id("kxml.kotlin-library")`, or `id("kxml.serialization-library")` for
+  `kxml-serialization`, and declares nothing but its description
   and its dependencies, through the configurations of the source sets such as `commonMainApi`. Detekt, Kover, Kotest, Trivy, the compiler and publishing are configured only in
   `build-logic`, through Kreate.
 - `build-logic` holds no Kotlin classes, no tasks of its own and no Gradle API calls beyond reading the version
@@ -157,6 +168,7 @@ it. kxml is built so that a mistake of a caller fails closed.
   | `kxml.git-hooks` | The Git hooks |
   | `kxml.trivy` | Every Trivy scan |
   | `kxml.assurance` | The assurance gate and its `ignore` rules |
+  | `kxml.standards` | The standards kxml implements, reviewed in `standards.lock` |
   | `kxml.platform` | The JDK, the Kotlin compiler, the targets and the Java module name |
   | `kxml.web-tools` | Node.js and Yarn for the Wasm target, from the repositories of the settings |
   | `kxml.serialization` | The kotlinx.serialization compiler plugin |
@@ -172,7 +184,7 @@ it. kxml is built so that a mistake of a caller fails closed.
   | `kxml.license-header` | The license header check |
 
   `kxml.kotlin-library` composes them for a module and adds only the class paths the assurance gate reads;
-  `kxml.root` composes them for the root project. A new concern gets a plugin of its own, never a block in a
+  `kxml.serialization-library` adds `kxml.serialization` to it; `kxml.root` composes them for the root project. A new concern gets a plugin of its own, never a block in a
   composing plugin.
 - Dependencies are declared in `gradle/libs.versions.toml`. kxml depends on `kore-core` and, in
   `kxml-serialization`, on `kotlinx-serialization-core`. Libraries of JetBrains and of Davils may be added when they
@@ -198,6 +210,16 @@ it. kxml is built so that a mistake of a caller fails closed.
 - A finding of the assurance gate that is a known, harmless property of a dependency gets an `ignore` rule in
   `build-logic/src/main/kotlin/kxml.assurance.gradle.kts`, with a reason, the exact module and an expiry date no more
   than six months ahead. CRITICAL and HIGH findings can never be ignored.
+- Every standard kxml implements is declared in `build-logic/src/main/kotlin/kxml.standards.gradle.kts`, with a note
+  on what implements it, by the id the standards body uses, such as `w3c("xml")`, `w3c("xpath-10")` or
+  `w3c("xml-c14n10")`; `xpath` and `xml-c14n` name the newest level, not the one kxml implements. A change that
+  implements a standard, or names one in a source or a Markdown file, declares it. A finding of the standards audit,
+  such as a new version, new errata or a replacement, is read against the code: what it breaks is fixed with a test
+  first, and the review records in its note what the finding means for kxml:
+
+  ```bash
+  ./gradlew kreateStandardsReview --standard=w3c:xml --note="What the review found."
+  ```
 
 ## Public API
 
