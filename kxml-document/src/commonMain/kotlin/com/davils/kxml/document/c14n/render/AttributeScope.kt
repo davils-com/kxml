@@ -30,6 +30,8 @@ private val namespaceOrder: Comparator<Rendered> =
 private val attributeOrder: Comparator<Rendered> =
     namespaceOrder.thenBy(CodePointOrder) { attribute -> attribute.name.local }
 
+private const val CODE_UNITS_PER_STEP: Int = 256
+
 internal class AttributeScope(
     private val model: DocumentModel,
     private val membership: Membership,
@@ -74,6 +76,7 @@ internal class AttributeScope(
         val omitted = chain.asReversed().takeWhile { link -> !link.isIncluded }
         charge(omitted.size)
         val bases = omitted.mapNotNull(Link::base)
+        charge(bases.sumOf(String::length) / CODE_UNITS_PER_STEP)
         if (bases.isEmpty()) return included
         return included.filterNot(::isBase) + listOfNotNull(joinedBase(included, bases))
     }
