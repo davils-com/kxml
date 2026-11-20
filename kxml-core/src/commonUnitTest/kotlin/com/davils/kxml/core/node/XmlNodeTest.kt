@@ -134,7 +134,6 @@ class XmlNodeTest : FunSpec({
         test("refuse what XML cannot carry") {
             shouldThrow<IllegalArgumentException> { xmlText(CONTROL) }
             shouldThrow<IllegalArgumentException> { xmlCData(CONTROL) }
-            shouldThrow<IllegalArgumentException> { xmlCData("a]]>b") }
             shouldThrow<IllegalArgumentException> { xmlComment(CONTROL) }
             shouldThrow<IllegalArgumentException> { xmlComment("a--b") }
             shouldThrow<IllegalArgumentException> { xmlComment("a-") }

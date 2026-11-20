@@ -38,7 +38,7 @@ import com.davils.kxml.core.source.XmlSource
 public class Xml internal constructor(public val configuration: XmlConfiguration) {
     private val pipeline: XmlPipeline = XmlPipeline(configuration)
 
-    private val writer: XmlWriter = XmlWriter(configuration.emitter)
+    private val writer: XmlWriter = XmlWriter(configuration.emitter, configuration.limits)
 
     /**
      * Parses [text] into a document.
@@ -85,11 +85,17 @@ public class Xml internal constructor(public val configuration: XmlConfiguration
     /**
      * Writes [document] as XML text with the options of [XmlConfiguration.emitter].
      *
-     * Text and attribute values are escaped; names, comments and processing instructions were checked when the nodes
-     * were created.
+     * Text and attribute values are escaped for the version the declaration of [document] names: in XML 1.1, the
+     * characters that version only allows as references, such as C0 and C1 controls, and the line ends NEL and U+2028
+     * are written as character references. A CDATA section that contains `]]>` is split into two sections. Names,
+     * comments and processing instructions were checked when the nodes were created.
      *
      * @param document the document to write.
      * @return the XML text.
+     * @throws IllegalArgumentException if a value holds a character the version cannot carry, or a CDATA section, a
+     * comment or a processing instruction holds one it could only carry as a reference.
+     * @throws IllegalStateException if the text would be longer than `XmlLimits.maximumOutputLength` of the
+     * configuration; nothing longer is built.
      * @since 1.0.0
      */
     public fun emit(document: XmlDocument): String = writer.write(document)
@@ -99,6 +105,9 @@ public class Xml internal constructor(public val configuration: XmlConfiguration
      *
      * @param element the root element to write.
      * @return the XML text.
+     * @throws IllegalArgumentException if a value holds a character XML 1.0 cannot carry.
+     * @throws IllegalStateException if the text would be longer than `XmlLimits.maximumOutputLength` of the
+     * configuration.
      * @since 1.0.0
      */
     public fun emit(element: XmlNode.Element): String = emit(XmlDocument(element))

@@ -19,7 +19,7 @@ package com.davils.kxml.core.emit
 import com.davils.kxml.core.node.XmlNode
 
 internal sealed interface WriteStep {
-    data class Node(val node: XmlNode, val depth: Int, val scope: WriterScope) : WriteStep
+    data class Node(val node: XmlNode, val depth: Int) : WriteStep
 
     data class Close(val name: String) : WriteStep
 

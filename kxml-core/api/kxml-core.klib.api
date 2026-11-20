@@ -510,6 +510,8 @@ final class com.davils.kxml.core.limit/XmlLimits : com.davils.kore.core.validati
         final fun <get-maximumInputLength>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimits.maximumInputLength.<get-maximumInputLength>|<get-maximumInputLength>(){}[0]
     final val maximumNameLength // com.davils.kxml.core.limit/XmlLimits.maximumNameLength|{}maximumNameLength[0]
         final fun <get-maximumNameLength>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimits.maximumNameLength.<get-maximumNameLength>|<get-maximumNameLength>(){}[0]
+    final val maximumOutputLength // com.davils.kxml.core.limit/XmlLimits.maximumOutputLength|{}maximumOutputLength[0]
+        final fun <get-maximumOutputLength>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimits.maximumOutputLength.<get-maximumOutputLength>|<get-maximumOutputLength>(){}[0]
     final val maximumTextLength // com.davils.kxml.core.limit/XmlLimits.maximumTextLength|{}maximumTextLength[0]
         final fun <get-maximumTextLength>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimits.maximumTextLength.<get-maximumTextLength>|<get-maximumTextLength>(){}[0]
 
@@ -591,6 +593,9 @@ final class com.davils.kxml.core.limit/XmlLimitsBuilder : com.davils.kore.core.d
     final var maximumNameLength // com.davils.kxml.core.limit/XmlLimitsBuilder.maximumNameLength|{}maximumNameLength[0]
         final fun <get-maximumNameLength>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimitsBuilder.maximumNameLength.<get-maximumNameLength>|<get-maximumNameLength>(){}[0]
         final fun <set-maximumNameLength>(kotlin/Int) // com.davils.kxml.core.limit/XmlLimitsBuilder.maximumNameLength.<set-maximumNameLength>|<set-maximumNameLength>(kotlin.Int){}[0]
+    final var maximumOutputLength // com.davils.kxml.core.limit/XmlLimitsBuilder.maximumOutputLength|{}maximumOutputLength[0]
+        final fun <get-maximumOutputLength>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimitsBuilder.maximumOutputLength.<get-maximumOutputLength>|<get-maximumOutputLength>(){}[0]
+        final fun <set-maximumOutputLength>(kotlin/Int) // com.davils.kxml.core.limit/XmlLimitsBuilder.maximumOutputLength.<set-maximumOutputLength>|<set-maximumOutputLength>(kotlin.Int){}[0]
     final var maximumTextLength // com.davils.kxml.core.limit/XmlLimitsBuilder.maximumTextLength|{}maximumTextLength[0]
         final fun <get-maximumTextLength>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimitsBuilder.maximumTextLength.<get-maximumTextLength>|<get-maximumTextLength>(){}[0]
         final fun <set-maximumTextLength>(kotlin/Int) // com.davils.kxml.core.limit/XmlLimitsBuilder.maximumTextLength.<set-maximumTextLength>|<set-maximumTextLength>(kotlin.Int){}[0]

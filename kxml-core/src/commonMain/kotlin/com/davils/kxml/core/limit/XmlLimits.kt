@@ -161,6 +161,14 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
      */
     public val maximumCatalogDepth: Int = builder.maximumCatalogDepth
 
+    /**
+     * The longest text, in code units, that [Xml.emit][com.davils.kxml.core.Xml.emit] writes; the writer stops before
+     * it builds a longer one: 64 Mi by default, at most [HARD_INPUT_LENGTH].
+     *
+     * @since 1.0.0
+     */
+    public val maximumOutputLength: Int = builder.maximumOutputLength
+
     init {
         validateOrThrow(SUBJECT)
     }
@@ -229,6 +237,11 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
                 value = maximumCatalogDepth.toLong(),
                 ceiling = HARD_CATALOG_DEPTH.toLong(),
             ),
+            Bound(
+                property = ::maximumOutputLength,
+                value = maximumOutputLength.toLong(),
+                ceiling = HARD_INPUT_LENGTH.toLong(),
+            ),
         )
 
     private val values: List<Long> get() = bounds.map(Bound::value)
@@ -272,7 +285,7 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
             "entities=$maximumEntityDeclarations, attributeDeclarations=$maximumAttributeDeclarations, " +
             "entityExpansion=$maximumEntityExpansion, entityDepth=$maximumEntityDepth, " +
             "externalResources=$maximumExternalResources, externalLength=$maximumExternalLength, " +
-            "catalogFiles=$maximumCatalogFiles, catalogDepth=$maximumCatalogDepth)"
+            "catalogFiles=$maximumCatalogFiles, catalogDepth=$maximumCatalogDepth, output=$maximumOutputLength)"
 
     private fun ValidationScope.bounded(bound: Bound) {
         val value = bound.value
@@ -404,7 +417,7 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
          * text, [HARD_DEPTH] levels, 50,000,000 elements, 100,000 attributes on an element, 65,536 code units of a
          * name, 100,000 entities, 1,000,000 attribute definitions, 10,000,000 characters of entity expansion, 64
          * levels of entities, 1,000 external resources and [HARD_INPUT_LENGTH] code units of each, 256 catalog files
-         * and chains of 32 of them.
+         * and chains of 32 of them, and [HARD_INPUT_LENGTH] code units of output.
          *
          * Every limit stays finite and at most its hard ceiling, so even a trusted source cannot exhaust the memory
          * without bound.
@@ -429,6 +442,7 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
             builder.maximumExternalLength = HARD_INPUT_LENGTH
             builder.maximumCatalogFiles = RELAXED_CATALOG_FILES
             builder.maximumCatalogDepth = RELAXED_CATALOG_DEPTH
+            builder.maximumOutputLength = HARD_INPUT_LENGTH
             return builder.build()
         }
     }

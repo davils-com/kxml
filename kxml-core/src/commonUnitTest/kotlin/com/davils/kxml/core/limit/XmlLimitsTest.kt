@@ -80,6 +80,7 @@ class XmlLimitsTest : FunSpec({
                 maximumExternalLength = XmlLimits.HARD_INPUT_LENGTH
                 maximumCatalogFiles = XmlLimits.HARD_CATALOG_FILES
                 maximumCatalogDepth = XmlLimits.HARD_CATALOG_DEPTH
+                maximumOutputLength = XmlLimits.HARD_INPUT_LENGTH
             }
 
             ceilings.maximumElements shouldBe XmlLimits.HARD_ELEMENTS
@@ -88,6 +89,7 @@ class XmlLimitsTest : FunSpec({
             ceilings.toString() shouldContain "externalLength=${XmlLimits.HARD_INPUT_LENGTH}"
             ceilings.toString() shouldContain "catalogFiles=${XmlLimits.HARD_CATALOG_FILES}"
             ceilings.maximumCatalogDepth shouldBe XmlLimits.HARD_CATALOG_DEPTH
+            ceilings.toString() shouldContain "output=${XmlLimits.HARD_INPUT_LENGTH}"
         }
 
         test("refuse every limit past its ceiling") {
@@ -103,6 +105,7 @@ class XmlLimitsTest : FunSpec({
             shouldThrow<ValidationException> { xmlLimits { maximumExternalLength = XmlLimits.HARD_INPUT_LENGTH + 1 } }
             shouldThrow<ValidationException> { xmlLimits { maximumCatalogFiles = XmlLimits.HARD_CATALOG_FILES + 1 } }
             shouldThrow<ValidationException> { xmlLimits { maximumCatalogDepth = XmlLimits.HARD_CATALOG_DEPTH + 1 } }
+            shouldThrow<ValidationException> { xmlLimits { maximumOutputLength = XmlLimits.HARD_INPUT_LENGTH + 1 } }
         }
 
         test("refuse every limit below 1") {
@@ -115,6 +118,7 @@ class XmlLimitsTest : FunSpec({
             shouldThrow<ValidationException> { xmlLimits { maximumExternalLength = 0 } }
             shouldThrow<ValidationException> { xmlLimits { maximumCatalogFiles = 0 } }
             shouldThrow<ValidationException> { xmlLimits { maximumCatalogDepth = 0 } }
+            shouldThrow<ValidationException> { xmlLimits { maximumOutputLength = 0 } }
         }
 
         test("keep the relaxed preset finite and within every ceiling") {

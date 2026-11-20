@@ -28,79 +28,85 @@ import com.davils.kxml.core.node.XmlNode
 private const val DEFAULT: String = ""
 private const val GENERATED_PREFIX: String = "ns"
 
-internal class WriterScope private constructor(
-    private val parent: WriterScope?,
-    private val isUndeclaringAllowed: Boolean,
-) {
-    private val bindings = OrderedMap<String, String>()
+internal class WriterScope(private val isUndeclaringAllowed: Boolean) {
+    private val uris = OrderedMap<String, ArrayDeque<String>>()
+    private val prefixes = OrderedMap<String, ArrayDeque<String>>()
+    private val frames = ArrayDeque<List<String>>()
+    private var generated = 0
 
-    private val attributePrefixes = OrderedMap<String, String>()
-
-    val declarations: List<XmlNamespaceBinding>
-        get() = bindings.entries.map { (prefix, uri) -> XmlNamespaceBinding(prefix.takeIf { it.isNotEmpty() }, uri) }
-
-    fun child(): WriterScope = WriterScope(parent = this, isUndeclaringAllowed = isUndeclaringAllowed)
-
-    fun open(element: XmlNode.Element) {
-        bindElement(element.name)
-        element.namespaces.forEach(::bindExplicit)
-        element.attributes.forEach { attribute -> bindAttribute(attribute.name) }
+    init {
+        bind(prefix = XmlNamespaces.XML_PREFIX, uri = XmlNamespaces.XML)
     }
 
-    fun attributeName(name: XmlName): String {
-        val namespace = name.namespace ?: return name.local
-        val prefix = checkNotNull(attributePrefixes[namespace]) { "The namespace of an attribute has no prefix" }
-        return "$prefix:${name.local}"
+    fun open(element: XmlNode.Element): OpenedElement {
+        val opened = OpenedElement()
+        bindElement(element.name, opened)
+        element.namespaces.forEach { binding -> bindExplicit(binding, opened) }
+        element.attributes.forEach { attribute -> bindAttribute(attribute.name, opened) }
+        frames.addLast(opened.prefixes)
+        return opened
     }
 
-    private fun lookup(prefix: String): String? = bindings[prefix] ?: parent?.lookup(prefix)
+    fun close() {
+        val bound = frames.removeLast()
+        bound.asReversed().forEach(::unbind)
+    }
 
-    private fun prefixesInScope(): List<String> = bindings.keys + parent?.prefixesInScope().orEmpty()
+    private fun lookup(prefix: String): String? = uris[prefix]?.lastOrNull()
 
-    private fun bindElement(name: XmlName) {
+    private fun bind(prefix: String, uri: String) {
+        val boundUris = uris.getOrPut(prefix) { ArrayDeque() }
+        val boundPrefixes = prefixes.getOrPut(uri) { ArrayDeque() }
+        boundUris.addLast(uri)
+        boundPrefixes.addLast(prefix)
+    }
+
+    private fun unbind(prefix: String) {
+        val uri = uris[prefix]?.removeLast().orEmpty()
+        prefixes[uri]?.removeLast()
+    }
+
+    private fun declare(prefix: String, uri: String, opened: OpenedElement) {
+        bind(prefix, uri)
+        opened.declare(prefix, uri)
+    }
+
+    private fun bindElement(name: XmlName, opened: OpenedElement) {
         val prefix = name.prefix ?: DEFAULT
         val wanted = name.namespace ?: DEFAULT
         val current = lookup(prefix) ?: DEFAULT
-        if (current != wanted) bindings[prefix] = wanted
+        if (current != wanted) declare(prefix, wanted, opened)
     }
 
-    private fun bindExplicit(binding: XmlNamespaceBinding) {
+    private fun bindExplicit(binding: XmlNamespaceBinding, opened: OpenedElement) {
         val isUndeclaring = binding.prefix != null && binding.uri.isEmpty()
         require(!isUndeclaring || isUndeclaringAllowed) { "A prefix can only be undeclared in a document of XML 1.1" }
         val prefix = binding.prefix ?: DEFAULT
         val current = lookup(prefix) ?: DEFAULT
-        if (prefix !in bindings && current != binding.uri) bindings[prefix] = binding.uri
+        if (!opened.isDeclared(prefix) && current != binding.uri) declare(prefix, binding.uri, opened)
     }
 
-    private fun bindAttribute(name: XmlName) {
-        val namespace = name.namespace?.takeIf { it !in attributePrefixes } ?: return
-        attributePrefixes[namespace] = prefixFor(namespace, name.prefix)
+    private fun bindAttribute(name: XmlName, opened: OpenedElement) {
+        val namespace = name.namespace?.takeUnless(opened::hasAttributePrefix) ?: return
+        opened.useAttributePrefix(namespace, prefixFor(namespace, name.prefix, opened))
     }
 
-    private fun prefixFor(namespace: String, wanted: String?): String {
-        val bound = wanted?.takeIf { lookup(it) == namespace } ?: visiblePrefixOf(namespace)
-        return bound ?: declared(wanted?.takeIf { it !in bindings } ?: freshPrefix(), namespace)
-    }
-
-    private fun visiblePrefixOf(namespace: String): String? =
-        prefixesInScope().firstOrNull { prefix -> prefix.isNotEmpty() && lookup(prefix) == namespace }
-
-    private fun declared(prefix: String, namespace: String): String {
-        bindings[prefix] = namespace
+    private fun prefixFor(namespace: String, wanted: String?, opened: OpenedElement): String {
+        val bound = wanted?.takeIf { prefix -> lookup(prefix) == namespace } ?: visiblePrefixOf(namespace)
+        if (bound != null) return bound
+        val prefix = wanted?.takeUnless(opened::isDeclared) ?: freshPrefix()
+        declare(prefix, namespace, opened)
         return prefix
     }
 
-    private fun freshPrefix(): String {
-        val candidates = generateSequence(1) { index -> index + 1 }
-        val prefixes = candidates.map { index -> "$GENERATED_PREFIX$index" }
-        return prefixes.first { prefix -> lookup(prefix) == null }
+    private fun visiblePrefixOf(namespace: String): String? {
+        val candidates = prefixes[namespace].orEmpty()
+        return candidates.asReversed().firstOrNull { prefix -> prefix.isNotEmpty() && lookup(prefix) == namespace }
     }
 
-    companion object {
-        fun root(isUndeclaringAllowed: Boolean): WriterScope {
-            val scope = WriterScope(parent = null, isUndeclaringAllowed = isUndeclaringAllowed)
-            scope.bindings[XmlNamespaces.XML_PREFIX] = XmlNamespaces.XML
-            return scope
-        }
+    private fun freshPrefix(): String {
+        var prefix = GENERATED_PREFIX + ++generated
+        while (lookup(prefix) != null) prefix = GENERATED_PREFIX + ++generated
+        return prefix
     }
 }

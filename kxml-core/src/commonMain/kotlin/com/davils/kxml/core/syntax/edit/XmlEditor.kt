@@ -18,6 +18,7 @@ package com.davils.kxml.core.syntax.edit
 
 import com.davils.kore.core.text.TextEdit
 import com.davils.kore.core.text.TextRange
+import com.davils.kxml.core.emit.XmlEscaping
 import com.davils.kxml.core.name.XmlCharacters
 import com.davils.kxml.core.syntax.XmlSyntaxKind
 import com.davils.kxml.core.syntax.XmlSyntaxTree
@@ -68,7 +69,7 @@ public class XmlEditor(private val tree: XmlSyntaxTree) {
         val refusal = elementRefusal(element) ?: attributeNameRefusal(element, name)
         val existing = element.attribute(name)
         val quote = existing?.let(::quoteOf) ?: DOUBLE_QUOTE
-        val escaped = escapedValue(value, version, quote)
+        val escaped = XmlEscaping.escapedOrNull(value, version, quote)
         val edit = escaped?.let { text ->
             attributeEdit(element = element, existing = existing, name = name, value = text)
         }
@@ -101,7 +102,7 @@ public class XmlEditor(private val tree: XmlSyntaxTree) {
      * @since 1.0.0
      */
     public fun setText(element: XmlElementSyntax, text: String): XmlEditResult {
-        val escaped = escapedText(text, version)
+        val escaped = XmlEscaping.escapedOrNull(text, version, quote = null)
         val refusal = elementRefusal(element) ?: XmlEditRefusal.InvalidCharacter.takeIf { escaped == null }
         return result(refusal, listOfNotNull(escaped?.let { content -> contentEdit(element, content) }))
     }

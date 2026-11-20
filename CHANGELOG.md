@@ -97,6 +97,12 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
 - `XmlLimits` bounds catalogs with `maximumCatalogFiles`, the catalog files one catalog loads, and
   `maximumCatalogDepth`, the longest chain of catalog files and the most delegations of one lookup, each with a hard
   ceiling. Catalog files that refer to each other in a circle are loaded once and searched once per lookup.
+- The writer writes a document whose declaration names version 1.1 by the rules of XML 1.1: the characters that
+  version only allows as references, C0 and C1 controls, NEL and U+2028 are written as character references. A CDATA
+  section is split around `]]>` and around every character only a reference carries, so `xmlCData` now accepts `]]>`,
+  and a comment or a processing instruction that reading would change, such as one with a carriage return, is
+  refused. `XmlLimits.maximumOutputLength` bounds the text the writer builds; it stops with an `IllegalStateException`
+  before it builds a longer one.
 - The W3C XML Conformance Test Suite runs in the build: `XmlConformanceTest` downloads the pinned archive, reads it
   with a resolver confined to the suite, and lists every case kxml does not pass with its reason. Of 2,227 cases,
   2,225 pass. Of the other two, one expects an undeclared entity to be skipped, which kxml refuses, and one of XML
@@ -133,6 +139,8 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
   refused in a document of XML 1.0, and a standalone document cannot use an entity the external subset declares.
 - An entity reference must name an XML name, and a character reference accepts only ASCII digits, so
   `&#\u0666\u0665;` no longer reads as `A`.
+- The writer keeps the namespaces in scope on one stack per prefix and per namespace instead of searching every
+  enclosing element, so writing many namespaces on many levels grows linearly.
 - `XmlEditor` cannot inject markup: names must be qualified XML names whose prefix is declared in scope, namespace
   declarations are never added, changed or removed, text and attribute values are escaped for the version of the
   document so they read back exactly, and a character the version cannot represent is refused.

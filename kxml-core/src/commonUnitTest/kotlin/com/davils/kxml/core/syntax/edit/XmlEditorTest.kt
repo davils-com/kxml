@@ -154,7 +154,7 @@ class XmlEditorTest : FunSpec({
             val tree = treeOf("<?xml version='1.1'?><r/>")
             val editor = XmlEditor(tree)
 
-            editor.setText(tree.rootElement(), "a${NEL}b${CR}c").edited().text shouldContain "a&#x85;b&#xD;c"
+            editor.setText(tree.rootElement(), "a${NEL}b${CR}c").edited().text shouldContain "a&#133;b&#13;c"
             editor.setText(tree.rootElement(), "a$NUL").refusal() shouldBe XmlEditRefusal.InvalidCharacter
         }
 

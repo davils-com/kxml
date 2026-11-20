@@ -137,6 +137,13 @@ public class XmlLimitsBuilder internal constructor() : ValidatingBuilder<XmlLimi
      */
     public var maximumCatalogDepth: Int = DEFAULT_CATALOG_DEPTH
 
+    /**
+     * The longest text the writer writes; [DEFAULT_INPUT_LENGTH] by default, at most [XmlLimits.HARD_INPUT_LENGTH].
+     *
+     * @since 1.0.0
+     */
+    public var maximumOutputLength: Int = DEFAULT_INPUT_LENGTH
+
     internal fun from(limits: XmlLimits) {
         maximumInputLength = limits.maximumInputLength
         maximumDepth = limits.maximumDepth
@@ -152,6 +159,7 @@ public class XmlLimitsBuilder internal constructor() : ValidatingBuilder<XmlLimi
         maximumExternalLength = limits.maximumExternalLength
         maximumCatalogFiles = limits.maximumCatalogFiles
         maximumCatalogDepth = limits.maximumCatalogDepth
+        maximumOutputLength = limits.maximumOutputLength
     }
 
     override fun assemble(): XmlLimits = XmlLimits(this)

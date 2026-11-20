@@ -320,6 +320,7 @@ public final class com/davils/kxml/core/limit/XmlLimits : com/davils/kore/core/v
 	public final fun getMaximumExternalResources ()I
 	public final fun getMaximumInputLength ()I
 	public final fun getMaximumNameLength ()I
+	public final fun getMaximumOutputLength ()I
 	public final fun getMaximumTextLength ()I
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
@@ -361,6 +362,7 @@ public final class com/davils/kxml/core/limit/XmlLimitsBuilder : com/davils/kore
 	public final fun getMaximumExternalResources ()I
 	public final fun getMaximumInputLength ()I
 	public final fun getMaximumNameLength ()I
+	public final fun getMaximumOutputLength ()I
 	public final fun getMaximumTextLength ()I
 	public final fun setMaximumAttributeDeclarations (I)V
 	public final fun setMaximumAttributes (I)V
@@ -375,6 +377,7 @@ public final class com/davils/kxml/core/limit/XmlLimitsBuilder : com/davils/kore
 	public final fun setMaximumExternalResources (I)V
 	public final fun setMaximumInputLength (I)V
 	public final fun setMaximumNameLength (I)V
+	public final fun setMaximumOutputLength (I)V
 	public final fun setMaximumTextLength (I)V
 }
 

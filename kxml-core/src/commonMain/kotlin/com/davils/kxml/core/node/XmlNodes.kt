@@ -19,7 +19,6 @@ package com.davils.kxml.core.node
 import com.davils.kxml.core.name.XmlCharacters
 import com.davils.kxml.core.name.XmlName
 
-private const val CDATA_END: String = "]]>"
 private const val COMMENT_DASHES: String = "--"
 private const val COMMENT_DASH: String = "-"
 private const val INSTRUCTION_END: String = "?>"
@@ -56,14 +55,13 @@ public fun xmlText(value: String): XmlNode.Text {
 /**
  * Creates a CDATA section.
  *
- * @param value the content.
+ * @param value the content; the writer splits it into two sections where it contains `]]>`.
  * @return the CDATA section.
- * @throws IllegalArgumentException if [value] holds a character XML cannot carry or contains `]]>`.
+ * @throws IllegalArgumentException if [value] holds a character XML cannot carry.
  * @since 1.0.0
  */
 public fun xmlCData(value: String): XmlNode.CData {
     require(XmlCharacters.isText(value)) { "The character data holds characters XML cannot carry" }
-    require(CDATA_END !in value) { "Character data cannot contain $CDATA_END" }
     return XmlNode.CData(value, range = null)
 }
 
