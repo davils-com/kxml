@@ -153,6 +153,23 @@ class XmlWellFormednessTest : FunSpec({
                 XmlDiagnosticCode.MisplacedDoctype
         }
 
+        test("refuse a document type after the root even when it may be ignored") {
+            xml { doctype = XmlDoctype.Ignore }.refusal("<a/><!DOCTYPE a>") shouldBe
+                XmlDiagnosticCode.MisplacedDoctype
+        }
+
+        test("refuse a document type without whitespace before its name") {
+            xml { doctype = XmlDoctype.Ignore }.refusal("<!DOCTYPEa><a/>") shouldBe
+                XmlDiagnosticCode.UnexpectedContent
+        }
+
+        test("skip an instruction with brackets and quotes inside an ignored subset") {
+            val text = """<!DOCTYPE a [ <?pi ] " ' > ?> ]><a/>"""
+            val result = xml { doctype = XmlDoctype.Ignore }.parse(text)
+
+            result.diagnostics.single().code shouldBe XmlDiagnosticCode.IgnoredDoctype
+        }
+
         test("refuse an unclosed document type") {
             xml { doctype = XmlDoctype.Ignore }.refusal(
                 "<!DOCTYPE a [",

@@ -37,6 +37,7 @@ private val skippedSections: List<Pair<String, String>> = listOf(
     "\"" to "\"",
     "'" to "'",
     COMMENT_OPEN to COMMENT_CLOSE,
+    INSTRUCTION_OPEN to INSTRUCTION_CLOSE,
 )
 
 internal class MarkupReader(private val cursor: Cursor, private val budget: ParseBudget, private val tags: TagReader) {
@@ -96,6 +97,13 @@ internal class MarkupReader(private val cursor: Cursor, private val budget: Pars
     fun skipDoctype() {
         val start = cursor.offset
         cursor.advance(DOCTYPE_OPEN.length)
+        if (!cursor.skipWhitespace()) {
+            failure(
+                XmlDiagnosticCode.UnexpectedContent,
+                TextRange.at(cursor.offset),
+                "A document type needs whitespace before its name",
+            )
+        }
         var depth = 0
         while (depth > 0 || !cursor.startsWith(DOCTYPE_CLOSE)) {
             if (cursor.isAtEnd) {

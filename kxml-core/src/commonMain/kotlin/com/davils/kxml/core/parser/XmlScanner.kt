@@ -147,7 +147,13 @@ internal class XmlScanner(
         if (configuration.doctype == XmlDoctype.Refuse) {
             failure(XmlDiagnosticCode.RefusedDoctype, range, "Document type declarations are refused")
         }
-        if (hasDoctype) failure(XmlDiagnosticCode.MisplacedDoctype, range, "There is a second document type")
+        if (hasDoctype || hasRoot) {
+            failure(
+                XmlDiagnosticCode.MisplacedDoctype,
+                range,
+                "A document type may only stand once, before the root element",
+            )
+        }
         markup.skipDoctype()
         hasDoctype = true
         noticed += XmlDiagnostic(
