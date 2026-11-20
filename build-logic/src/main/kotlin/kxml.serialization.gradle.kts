@@ -15,6 +15,6 @@
  */
 
 plugins {
-    id("org.jetbrains.kotlin.plugin.serialization")
     id("kxml.base")
+    id("org.jetbrains.kotlin.plugin.serialization")
 }

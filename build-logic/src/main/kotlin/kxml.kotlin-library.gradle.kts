@@ -31,7 +31,6 @@ plugins {
     id("kxml.publish")
     id("kxml.archives")
     id("kxml.tool-classpaths")
-    id("kxml.serialization")
 }
 
 kreate {

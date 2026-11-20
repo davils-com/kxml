@@ -15,7 +15,7 @@
  */
 
 plugins {
-    id("kxml.kotlin-library")
+    id("kxml.serialization-library")
 }
 
 kreate {
