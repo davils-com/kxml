@@ -112,6 +112,9 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
   and a comment or a processing instruction that reading would change, such as one with a carriage return, is
   refused. `XmlLimits.maximumOutputLength` bounds the text the writer builds; it stops with an `IllegalStateException`
   before it builds a longer one.
+- `XmlLimits` bounds XPath with `maximumQueryLength`, `maximumQueryNesting`, `maximumQuerySteps`,
+  `maximumQueryResults` and `maximumQueryStringLength`, each with a hard ceiling, for the expressions of
+  `kxml-document`.
 - The W3C XML Conformance Test Suite runs in the build: `XmlConformanceTest` downloads the pinned archive, reads it
   with a resolver confined to the suite, and lists every case kxml does not pass with its reason. Of 2,227 cases,
   2,225 pass. Of the other two, one expects an undeclared entity to be skipped, which kxml refuses, and one of XML

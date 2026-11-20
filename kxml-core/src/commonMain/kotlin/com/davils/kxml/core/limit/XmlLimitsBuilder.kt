@@ -144,6 +144,46 @@ public class XmlLimitsBuilder internal constructor() : ValidatingBuilder<XmlLimi
      */
     public var maximumOutputLength: Int = DEFAULT_INPUT_LENGTH
 
+    /**
+     * The longest XPath expression, in code units; [DEFAULT_QUERY_LENGTH] by default, at most
+     * [XmlLimits.HARD_QUERY_LENGTH].
+     *
+     * @since 1.0.0
+     */
+    public var maximumQueryLength: Int = DEFAULT_QUERY_LENGTH
+
+    /**
+     * The deepest nesting of an XPath expression; [DEFAULT_QUERY_NESTING] by default, at most
+     * [XmlLimits.HARD_QUERY_NESTING].
+     *
+     * @since 1.0.0
+     */
+    public var maximumQueryNesting: Int = DEFAULT_QUERY_NESTING
+
+    /**
+     * The most steps one evaluation of an XPath expression takes; [DEFAULT_QUERY_STEPS] by default, at most
+     * [XmlLimits.HARD_QUERY_STEPS].
+     *
+     * @since 1.0.0
+     */
+    public var maximumQuerySteps: Long = DEFAULT_QUERY_STEPS
+
+    /**
+     * The most nodes in one node-set of an evaluation; [DEFAULT_QUERY_RESULTS] by default, at most
+     * [XmlLimits.HARD_QUERY_RESULTS].
+     *
+     * @since 1.0.0
+     */
+    public var maximumQueryResults: Int = DEFAULT_QUERY_RESULTS
+
+    /**
+     * The longest string an evaluation builds, in code units; [DEFAULT_QUERY_STRING_LENGTH] by default, at most
+     * [XmlLimits.HARD_INPUT_LENGTH].
+     *
+     * @since 1.0.0
+     */
+    public var maximumQueryStringLength: Int = DEFAULT_QUERY_STRING_LENGTH
+
     internal fun from(limits: XmlLimits) {
         maximumInputLength = limits.maximumInputLength
         maximumDepth = limits.maximumDepth
@@ -160,6 +200,11 @@ public class XmlLimitsBuilder internal constructor() : ValidatingBuilder<XmlLimi
         maximumCatalogFiles = limits.maximumCatalogFiles
         maximumCatalogDepth = limits.maximumCatalogDepth
         maximumOutputLength = limits.maximumOutputLength
+        maximumQueryLength = limits.maximumQueryLength
+        maximumQueryNesting = limits.maximumQueryNesting
+        maximumQuerySteps = limits.maximumQuerySteps
+        maximumQueryResults = limits.maximumQueryResults
+        maximumQueryStringLength = limits.maximumQueryStringLength
     }
 
     override fun assemble(): XmlLimits = XmlLimits(this)
@@ -267,5 +312,40 @@ public class XmlLimitsBuilder internal constructor() : ValidatingBuilder<XmlLimi
          * @since 1.0.0
          */
         public const val DEFAULT_CATALOG_DEPTH: Int = 8
+
+        /**
+         * The default of [maximumQueryLength]: 64 Ki code units.
+         *
+         * @since 1.0.0
+         */
+        public const val DEFAULT_QUERY_LENGTH: Int = 64 * 1024
+
+        /**
+         * The default of [maximumQueryNesting]: 64 levels.
+         *
+         * @since 1.0.0
+         */
+        public const val DEFAULT_QUERY_NESTING: Int = 64
+
+        /**
+         * The default of [maximumQuerySteps]: 10,000,000 steps.
+         *
+         * @since 1.0.0
+         */
+        public const val DEFAULT_QUERY_STEPS: Long = 10_000_000L
+
+        /**
+         * The default of [maximumQueryResults]: 1,000,000 nodes.
+         *
+         * @since 1.0.0
+         */
+        public const val DEFAULT_QUERY_RESULTS: Int = 1_000_000
+
+        /**
+         * The default of [maximumQueryStringLength]: 16 Mi code units.
+         *
+         * @since 1.0.0
+         */
+        public const val DEFAULT_QUERY_STRING_LENGTH: Int = 16 * 1024 * 1024
     }
 }

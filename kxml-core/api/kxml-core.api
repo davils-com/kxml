@@ -307,6 +307,10 @@ public final class com/davils/kxml/core/limit/XmlLimits : com/davils/kore/core/v
 	public static final field HARD_EXTERNAL_RESOURCES I
 	public static final field HARD_INPUT_LENGTH I
 	public static final field HARD_NAME_LENGTH I
+	public static final field HARD_QUERY_LENGTH I
+	public static final field HARD_QUERY_NESTING I
+	public static final field HARD_QUERY_RESULTS I
+	public static final field HARD_QUERY_STEPS J
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getMaximumAttributeDeclarations ()I
 	public final fun getMaximumAttributes ()I
@@ -322,6 +326,11 @@ public final class com/davils/kxml/core/limit/XmlLimits : com/davils/kore/core/v
 	public final fun getMaximumInputLength ()I
 	public final fun getMaximumNameLength ()I
 	public final fun getMaximumOutputLength ()I
+	public final fun getMaximumQueryLength ()I
+	public final fun getMaximumQueryNesting ()I
+	public final fun getMaximumQueryResults ()I
+	public final fun getMaximumQuerySteps ()J
+	public final fun getMaximumQueryStringLength ()I
 	public final fun getMaximumTextLength ()I
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
@@ -348,6 +357,11 @@ public final class com/davils/kxml/core/limit/XmlLimitsBuilder : com/davils/kore
 	public static final field DEFAULT_EXTERNAL_RESOURCES I
 	public static final field DEFAULT_INPUT_LENGTH I
 	public static final field DEFAULT_NAME_LENGTH I
+	public static final field DEFAULT_QUERY_LENGTH I
+	public static final field DEFAULT_QUERY_NESTING I
+	public static final field DEFAULT_QUERY_RESULTS I
+	public static final field DEFAULT_QUERY_STEPS J
+	public static final field DEFAULT_QUERY_STRING_LENGTH I
 	public static final field DEFAULT_TEXT_LENGTH I
 	public synthetic fun assemble ()Lcom/davils/kore/core/validation/Validatable;
 	public final fun getMaximumAttributeDeclarations ()I
@@ -364,6 +378,11 @@ public final class com/davils/kxml/core/limit/XmlLimitsBuilder : com/davils/kore
 	public final fun getMaximumInputLength ()I
 	public final fun getMaximumNameLength ()I
 	public final fun getMaximumOutputLength ()I
+	public final fun getMaximumQueryLength ()I
+	public final fun getMaximumQueryNesting ()I
+	public final fun getMaximumQueryResults ()I
+	public final fun getMaximumQuerySteps ()J
+	public final fun getMaximumQueryStringLength ()I
 	public final fun getMaximumTextLength ()I
 	public final fun setMaximumAttributeDeclarations (I)V
 	public final fun setMaximumAttributes (I)V
@@ -379,6 +398,11 @@ public final class com/davils/kxml/core/limit/XmlLimitsBuilder : com/davils/kore
 	public final fun setMaximumInputLength (I)V
 	public final fun setMaximumNameLength (I)V
 	public final fun setMaximumOutputLength (I)V
+	public final fun setMaximumQueryLength (I)V
+	public final fun setMaximumQueryNesting (I)V
+	public final fun setMaximumQueryResults (I)V
+	public final fun setMaximumQuerySteps (J)V
+	public final fun setMaximumQueryStringLength (I)V
 	public final fun setMaximumTextLength (I)V
 }
 

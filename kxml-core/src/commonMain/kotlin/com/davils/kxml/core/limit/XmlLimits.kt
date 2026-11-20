@@ -169,6 +169,46 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
      */
     public val maximumOutputLength: Int = builder.maximumOutputLength
 
+    /**
+     * The longest XPath expression, in code units, that `kxml-document` parses: 64 Ki by default, at most
+     * [HARD_QUERY_LENGTH].
+     *
+     * @since 1.0.0
+     */
+    public val maximumQueryLength: Int = builder.maximumQueryLength
+
+    /**
+     * The deepest nesting of an XPath expression, counted in parentheses, predicates and the arguments of function
+     * calls: 64 by default, at most [HARD_QUERY_NESTING].
+     *
+     * @since 1.0.0
+     */
+    public val maximumQueryNesting: Int = builder.maximumQueryNesting
+
+    /**
+     * The most steps one evaluation of an XPath expression takes, counted in the nodes it visits, the operations it
+     * applies and the text it builds: 10,000,000 by default, at most [HARD_QUERY_STEPS].
+     *
+     * @since 1.0.0
+     */
+    public val maximumQuerySteps: Long = builder.maximumQuerySteps
+
+    /**
+     * The most nodes in one node-set an evaluation of an XPath expression builds: 1,000,000 by default, at most
+     * [HARD_QUERY_RESULTS].
+     *
+     * @since 1.0.0
+     */
+    public val maximumQueryResults: Int = builder.maximumQueryResults
+
+    /**
+     * The longest string, in code units, an evaluation of an XPath expression builds, such as the result of `concat`
+     * or the string-value of a node: 16 Mi by default, at most [HARD_INPUT_LENGTH].
+     *
+     * @since 1.0.0
+     */
+    public val maximumQueryStringLength: Int = builder.maximumQueryStringLength
+
     init {
         validateOrThrow(SUBJECT)
     }
@@ -242,6 +282,27 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
                 value = maximumOutputLength.toLong(),
                 ceiling = HARD_INPUT_LENGTH.toLong(),
             ),
+            Bound(
+                property = ::maximumQueryLength,
+                value = maximumQueryLength.toLong(),
+                ceiling = HARD_QUERY_LENGTH.toLong(),
+            ),
+            Bound(
+                property = ::maximumQueryNesting,
+                value = maximumQueryNesting.toLong(),
+                ceiling = HARD_QUERY_NESTING.toLong(),
+            ),
+            Bound(property = ::maximumQuerySteps, value = maximumQuerySteps, ceiling = HARD_QUERY_STEPS),
+            Bound(
+                property = ::maximumQueryResults,
+                value = maximumQueryResults.toLong(),
+                ceiling = HARD_QUERY_RESULTS.toLong(),
+            ),
+            Bound(
+                property = ::maximumQueryStringLength,
+                value = maximumQueryStringLength.toLong(),
+                ceiling = HARD_INPUT_LENGTH.toLong(),
+            ),
         )
 
     private val values: List<Long> get() = bounds.map(Bound::value)
@@ -285,7 +346,9 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
             "entities=$maximumEntityDeclarations, attributeDeclarations=$maximumAttributeDeclarations, " +
             "entityExpansion=$maximumEntityExpansion, entityDepth=$maximumEntityDepth, " +
             "externalResources=$maximumExternalResources, externalLength=$maximumExternalLength, " +
-            "catalogFiles=$maximumCatalogFiles, catalogDepth=$maximumCatalogDepth, output=$maximumOutputLength)"
+            "catalogFiles=$maximumCatalogFiles, catalogDepth=$maximumCatalogDepth, output=$maximumOutputLength, " +
+            "queryLength=$maximumQueryLength, queryNesting=$maximumQueryNesting, querySteps=$maximumQuerySteps, " +
+            "queryResults=$maximumQueryResults, queryString=$maximumQueryStringLength)"
 
     private fun ValidationScope.bounded(bound: Bound) {
         val value = bound.value
@@ -391,6 +454,34 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
          */
         public const val HARD_CATALOG_DEPTH: Int = 64
 
+        /**
+         * The ceiling of [maximumQueryLength]: 16 Mi code units.
+         *
+         * @since 1.0.0
+         */
+        public const val HARD_QUERY_LENGTH: Int = 16 * 1024 * 1024
+
+        /**
+         * The ceiling of [maximumQueryNesting]: 256 levels.
+         *
+         * @since 1.0.0
+         */
+        public const val HARD_QUERY_NESTING: Int = 256
+
+        /**
+         * The ceiling of [maximumQuerySteps]: 100,000,000,000 steps.
+         *
+         * @since 1.0.0
+         */
+        public const val HARD_QUERY_STEPS: Long = 100_000_000_000L
+
+        /**
+         * The ceiling of [maximumQueryResults]: 100,000,000 nodes.
+         *
+         * @since 1.0.0
+         */
+        public const val HARD_QUERY_RESULTS: Int = 100_000_000
+
         private const val SUBJECT: String = "xml limits"
         private const val RELAXED_ELEMENTS: Long = 50_000_000L
         private const val RELAXED_ATTRIBUTES: Int = 100_000
@@ -402,6 +493,8 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
         private const val RELAXED_EXTERNAL_RESOURCES: Int = 1_000
         private const val RELAXED_CATALOG_FILES: Int = 256
         private const val RELAXED_CATALOG_DEPTH: Int = 32
+        private const val RELAXED_QUERY_STEPS: Long = 1_000_000_000L
+        private const val RELAXED_QUERY_RESULTS: Int = 50_000_000
 
         /**
          * The default limits, for documents from sources that are not trusted: the `DEFAULT_*` values of
@@ -417,7 +510,9 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
          * text, [HARD_DEPTH] levels, 50,000,000 elements, 100,000 attributes on an element, 65,536 code units of a
          * name, 100,000 entities, 1,000,000 attribute definitions, 10,000,000 characters of entity expansion, 64
          * levels of entities, 1,000 external resources and [HARD_INPUT_LENGTH] code units of each, 256 catalog files
-         * and chains of 32 of them, and [HARD_INPUT_LENGTH] code units of output.
+         * and chains of 32 of them, [HARD_INPUT_LENGTH] code units of output, XPath expressions of [HARD_QUERY_LENGTH]
+         * code units nested [HARD_QUERY_NESTING] levels deep, and evaluations of 1,000,000,000 steps, 50,000,000 nodes
+         * in a node-set and strings of [HARD_INPUT_LENGTH] code units.
          *
          * Every limit stays finite and at most its hard ceiling, so even a trusted source cannot exhaust the memory
          * without bound.
@@ -443,6 +538,11 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
             builder.maximumCatalogFiles = RELAXED_CATALOG_FILES
             builder.maximumCatalogDepth = RELAXED_CATALOG_DEPTH
             builder.maximumOutputLength = HARD_INPUT_LENGTH
+            builder.maximumQueryLength = HARD_QUERY_LENGTH
+            builder.maximumQueryNesting = HARD_QUERY_NESTING
+            builder.maximumQuerySteps = RELAXED_QUERY_STEPS
+            builder.maximumQueryResults = RELAXED_QUERY_RESULTS
+            builder.maximumQueryStringLength = HARD_INPUT_LENGTH
             return builder.build()
         }
     }

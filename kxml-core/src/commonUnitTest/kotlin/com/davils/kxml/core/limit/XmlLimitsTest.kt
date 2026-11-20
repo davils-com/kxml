@@ -81,6 +81,11 @@ class XmlLimitsTest : FunSpec({
                 maximumCatalogFiles = XmlLimits.HARD_CATALOG_FILES
                 maximumCatalogDepth = XmlLimits.HARD_CATALOG_DEPTH
                 maximumOutputLength = XmlLimits.HARD_INPUT_LENGTH
+                maximumQueryLength = XmlLimits.HARD_QUERY_LENGTH
+                maximumQueryNesting = XmlLimits.HARD_QUERY_NESTING
+                maximumQuerySteps = XmlLimits.HARD_QUERY_STEPS
+                maximumQueryResults = XmlLimits.HARD_QUERY_RESULTS
+                maximumQueryStringLength = XmlLimits.HARD_INPUT_LENGTH
             }
 
             ceilings.maximumElements shouldBe XmlLimits.HARD_ELEMENTS
@@ -90,6 +95,12 @@ class XmlLimitsTest : FunSpec({
             ceilings.toString() shouldContain "catalogFiles=${XmlLimits.HARD_CATALOG_FILES}"
             ceilings.maximumCatalogDepth shouldBe XmlLimits.HARD_CATALOG_DEPTH
             ceilings.toString() shouldContain "output=${XmlLimits.HARD_INPUT_LENGTH}"
+            ceilings.maximumQueryLength shouldBe XmlLimits.HARD_QUERY_LENGTH
+            ceilings.maximumQueryNesting shouldBe XmlLimits.HARD_QUERY_NESTING
+            ceilings.maximumQuerySteps shouldBe XmlLimits.HARD_QUERY_STEPS
+            ceilings.maximumQueryResults shouldBe XmlLimits.HARD_QUERY_RESULTS
+            ceilings.toString() shouldContain "queryString=${XmlLimits.HARD_INPUT_LENGTH}"
+            xmlLimits(base = ceilings) { } shouldBe ceilings
         }
 
         test("refuse every limit past its ceiling") {
@@ -106,6 +117,13 @@ class XmlLimitsTest : FunSpec({
             shouldThrow<ValidationException> { xmlLimits { maximumCatalogFiles = XmlLimits.HARD_CATALOG_FILES + 1 } }
             shouldThrow<ValidationException> { xmlLimits { maximumCatalogDepth = XmlLimits.HARD_CATALOG_DEPTH + 1 } }
             shouldThrow<ValidationException> { xmlLimits { maximumOutputLength = XmlLimits.HARD_INPUT_LENGTH + 1 } }
+            shouldThrow<ValidationException> { xmlLimits { maximumQueryLength = XmlLimits.HARD_QUERY_LENGTH + 1 } }
+            shouldThrow<ValidationException> { xmlLimits { maximumQueryNesting = XmlLimits.HARD_QUERY_NESTING + 1 } }
+            shouldThrow<ValidationException> { xmlLimits { maximumQuerySteps = XmlLimits.HARD_QUERY_STEPS + 1 } }
+            shouldThrow<ValidationException> { xmlLimits { maximumQueryResults = XmlLimits.HARD_QUERY_RESULTS + 1 } }
+            shouldThrow<ValidationException> {
+                xmlLimits { maximumQueryStringLength = XmlLimits.HARD_INPUT_LENGTH + 1 }
+            }
         }
 
         test("refuse every limit below 1") {
@@ -119,6 +137,11 @@ class XmlLimitsTest : FunSpec({
             shouldThrow<ValidationException> { xmlLimits { maximumCatalogFiles = 0 } }
             shouldThrow<ValidationException> { xmlLimits { maximumCatalogDepth = 0 } }
             shouldThrow<ValidationException> { xmlLimits { maximumOutputLength = 0 } }
+            shouldThrow<ValidationException> { xmlLimits { maximumQueryLength = 0 } }
+            shouldThrow<ValidationException> { xmlLimits { maximumQueryNesting = 0 } }
+            shouldThrow<ValidationException> { xmlLimits { maximumQuerySteps = 0 } }
+            shouldThrow<ValidationException> { xmlLimits { maximumQueryResults = 0 } }
+            shouldThrow<ValidationException> { xmlLimits { maximumQueryStringLength = 0 } }
         }
 
         test("keep the relaxed preset finite and within every ceiling") {
