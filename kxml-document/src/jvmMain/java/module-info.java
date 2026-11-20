@@ -20,6 +20,7 @@ module com.davils.kxml.document {
 
     exports com.davils.kxml.document;
     exports com.davils.kxml.document.c14n;
+    exports com.davils.kxml.document.diff;
     exports com.davils.kxml.document.patch;
     exports com.davils.kxml.document.xpath;
 }

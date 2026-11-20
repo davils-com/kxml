@@ -191,6 +191,18 @@ final class com.davils.kxml.document.c14n/XmlCanonicalizer { // com.davils.kxml.
     }
 }
 
+final class com.davils.kxml.document.diff/XmlDiff { // com.davils.kxml.document.diff/XmlDiff|null[0]
+    constructor <init>(com.davils.kxml.core.limit/XmlLimits = ...) // com.davils.kxml.document.diff/XmlDiff.<init>|<init>(com.davils.kxml.core.limit.XmlLimits){}[0]
+
+    final val limits // com.davils.kxml.document.diff/XmlDiff.limits|{}limits[0]
+        final fun <get-limits>(): com.davils.kxml.core.limit/XmlLimits // com.davils.kxml.document.diff/XmlDiff.limits.<get-limits>|<get-limits>(){}[0]
+
+    final fun diff(com.davils.kxml.core.node/XmlDocument, com.davils.kxml.core.node/XmlDocument): com.davils.kxml.document.patch/XmlPatch // com.davils.kxml.document.diff/XmlDiff.diff|diff(com.davils.kxml.core.node.XmlDocument;com.davils.kxml.core.node.XmlDocument){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // com.davils.kxml.document.diff/XmlDiff.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // com.davils.kxml.document.diff/XmlDiff.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // com.davils.kxml.document.diff/XmlDiff.toString|toString(){}[0]
+}
+
 final class com.davils.kxml.document.patch/XmlPatch { // com.davils.kxml.document.patch/XmlPatch|null[0]
     constructor <init>(kotlin.collections/List<com.davils.kxml.document.patch/XmlPatchOperation>, com.davils.kxml.core.limit/XmlLimits = ...) // com.davils.kxml.document.patch/XmlPatch.<init>|<init>(kotlin.collections.List<com.davils.kxml.document.patch.XmlPatchOperation>;com.davils.kxml.core.limit.XmlLimits){}[0]
 
@@ -202,6 +214,7 @@ final class com.davils.kxml.document.patch/XmlPatch { // com.davils.kxml.documen
     final fun apply(com.davils.kxml.core.node/XmlDocument): com.davils.kxml.document.patch/XmlPatchResult // com.davils.kxml.document.patch/XmlPatch.apply|apply(com.davils.kxml.core.node.XmlDocument){}[0]
     final fun equals(kotlin/Any?): kotlin/Boolean // com.davils.kxml.document.patch/XmlPatch.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // com.davils.kxml.document.patch/XmlPatch.hashCode|hashCode(){}[0]
+    final fun toDocument(): com.davils.kxml.core.node/XmlDocument // com.davils.kxml.document.patch/XmlPatch.toDocument|toDocument(){}[0]
     final fun toString(): kotlin/String // com.davils.kxml.document.patch/XmlPatch.toString|toString(){}[0]
 
     final object Companion { // com.davils.kxml.document.patch/XmlPatch.Companion|null[0]

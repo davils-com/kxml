@@ -43,7 +43,11 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
   code: `<add>` with `pos` and `type`, `<replace>` and `<remove>` with `ws`, selectors that resolve unprefixed names
   through the default namespace of the diff, prefixes of added content mapped onto the declarations of the target,
   and the error conditions of section 5.1. A patch is atomic, holds at most `maximumPatchOperations` operations and
-  counts its work against `maximumQuerySteps`.
+  counts its work against `maximumQuerySteps`. `XmlPatch.toDocument` writes a patch as a diff document.
+- `XmlDiff` computes the patch that turns one document into another: the children of matching elements are aligned
+  within `maximumDiffWork`, the operations use positional selectors in an order that keeps them valid, and an element
+  whose alignment would exceed the work, whose namespace declarations changed or whose texts would join is replaced
+  as a whole, so the patch stays correct and only grows coarser.
 - All modules are Kotlin Multiplatform libraries with a `jvm` and a `wasmJs` target. Sources are decoded in common
   code, and untrusted text is escaped by `SafeText` of Kore.
 - Sources of bytes are detected as Appendix F of XML 1.0 describes it and decoded strictly from UTF-8, UTF-16 and

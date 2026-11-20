@@ -87,7 +87,7 @@ kreate {
                 note = "Exclusive XML Canonicalization 1.0 in kxml-document: XmlCanonicalizer with Exclusive10 and the InclusiveNamespaces PrefixList."
             }
             rfc(5261) {
-                note = "XML Patch Operations in kxml-document: XmlPatch, its add, replace and remove operations, namespace mangling and error conditions."
+                note = "XML Patch Operations in kxml-document: XmlPatch, its operations, namespace mangling and error conditions, and the patches XmlDiff makes."
             }
             unicode {
                 note = "The safe display of text follows the Unicode tables of the platform."

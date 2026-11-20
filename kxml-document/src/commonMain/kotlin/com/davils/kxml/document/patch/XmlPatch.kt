@@ -25,6 +25,7 @@ import com.davils.kxml.document.XmlDocumentLimitException
 import com.davils.kxml.document.patch.apply.DiffReader
 import com.davils.kxml.document.patch.apply.PatchApplier
 import com.davils.kxml.document.patch.apply.PatchFailure
+import com.davils.kxml.document.patch.apply.PatchWriter
 
 private const val OPERATIONS_LIMIT: String = "maximumPatchOperations"
 
@@ -69,6 +70,16 @@ public class XmlPatch(operations: List<XmlPatchOperation>, public val limits: Xm
      * @since 1.0.0
      */
     public fun apply(document: XmlDocument): XmlPatchResult = PatchApplier(limits).applied(document, operations)
+
+    /**
+     * Writes the patch as a diff document of RFC 5261: a `diff` element of no namespace with an `add`, `replace` or
+     * `remove` element for every operation, which declares the namespaces of the operation and holds its content.
+     * [read] reads the document back as an equal patch.
+     *
+     * @return the diff document.
+     * @since 1.0.0
+     */
+    public fun toDocument(): XmlDocument = PatchWriter.documentOf(operations)
 
     /**
      * Returns whether [other] is a patch with equal operations and limits.
