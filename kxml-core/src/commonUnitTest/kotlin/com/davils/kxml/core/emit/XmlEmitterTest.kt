@@ -193,13 +193,13 @@ class XmlEmitterTest : FunSpec({
     context("deep trees") {
         test("are written and compared at the hard depth without exhausting the stack") {
             val deepest = nested(XmlLimits.HARD_DEPTH)
-            val trusted = xml {
-                limits = XmlLimits.Trusted
+            val relaxed = xml {
+                limits = XmlLimits.Relaxed
                 emitter = XmlEmitOptions.Compact
             }
-            val text = trusted.emit(deepest)
+            val text = relaxed.emit(deepest)
 
-            trusted.root(text) shouldBe deepest
+            relaxed.root(text) shouldBe deepest
         }
     }
 

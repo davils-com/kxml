@@ -16,165 +16,244 @@
 
 package com.davils.kxml.core.limit
 
+import com.davils.kore.core.Limits
 import com.davils.kore.core.validation.Validatable
 import com.davils.kore.core.validation.ValidationScope
+import com.davils.kore.core.validation.validateOrThrow
 import com.davils.kxml.core.XmlViolationCodes
 import kotlin.reflect.KProperty0
 
 /**
- * The bounds the reader checks before its work grows with the input.
+ * The limits that bound the work and the memory kxml spends on one source or one written text.
  *
- * A document that breaks a limit is not read further; the result carries the diagnostic of the limit, such as
- * [TooDeep][com.davils.kxml.core.diagnostic.XmlDiagnosticCode.TooDeep]. Use [Untrusted] for input from outside,
- * [Trusted] only for documents the application wrote itself, and [xmlLimits] for anything in between. An instance is
- * immutable.
+ * Every input of kxml may come from an attacker, so the reader checks its input against these limits before it does
+ * work that grows with the input. A document that breaks a limit is not read further; the result carries the
+ * diagnostic of the limit, such as [TooDeep][com.davils.kxml.core.diagnostic.XmlDiagnosticCode.TooDeep]. Nothing is
+ * truncated silently.
+ *
+ * Every limit is at least 1 and at most a hard ceiling, a `HARD_*` constant of the companion that no preset and no
+ * configuration exceeds. [Untrusted] is the default and fits documents from unknown sources; [Relaxed] raises every
+ * limit for trusted, large documents and is still finite. Other limits are built with [xmlLimits] or the `limits`
+ * block of [com.davils.kxml.core.xml], which validate them and throw a
+ * [com.davils.kore.core.validation.report.ValidationException] for a value below 1 or above its ceiling. The limits
+ * validate themselves when they are created, however they are created, so no limits beyond a ceiling exist.
+ *
+ * The limits are an immutable value and safe to share between threads; two limits are equal when every limit is
+ * equal.
  *
  * @since 1.0.0
  */
 public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validatable {
     /**
-     * The longest source in characters, or in bytes for a source of bytes.
+     * The longest source in UTF-16 code units, or in bytes for a source of bytes: 64 Mi (67,108,864) by default, at
+     * most [HARD_INPUT_LENGTH].
+     *
+     * A longer source is refused with an [InputTooLong][com.davils.kxml.core.diagnostic.XmlDiagnosticCode.InputTooLong]
+     * diagnostic before it is read.
      *
      * @since 1.0.0
      */
     public val maximumInputLength: Int = builder.maximumInputLength
 
     /**
-     * The deepest nesting of elements; never above [HARD_DEPTH].
+     * The deepest nesting of elements: 256 by default, at most [HARD_DEPTH].
+     *
+     * Deeper nesting stops the reader with a [TooDeep][com.davils.kxml.core.diagnostic.XmlDiagnosticCode.TooDeep]
+     * diagnostic. Whatever the limit, the reader and the writer never nest deeper than [HARD_DEPTH].
      *
      * @since 1.0.0
      */
     public val maximumDepth: Int = builder.maximumDepth
 
     /**
-     * The most elements in one document.
+     * The most elements in one document, counted as they are read: 5,000,000 by default, at most [HARD_ELEMENTS].
      *
      * @since 1.0.0
      */
     public val maximumElements: Long = builder.maximumElements
 
     /**
-     * The most attributes on one element.
+     * The most attributes on one element, namespace declarations included: 1,024 by default, at most
+     * [HARD_ATTRIBUTES].
      *
      * @since 1.0.0
      */
     public val maximumAttributes: Int = builder.maximumAttributes
 
     /**
-     * The longest run of text.
+     * The longest run of text, attribute value, comment, CDATA section or data of a processing instruction, in UTF-16
+     * code units: 16 Mi (16,777,216) by default, at most [HARD_INPUT_LENGTH].
      *
      * @since 1.0.0
      */
     public val maximumTextLength: Int = builder.maximumTextLength
 
     /**
-     * The longest name.
+     * The longest name of an element, an attribute, a prefix or a processing instruction, in UTF-16 code units: 1,024
+     * by default, at most [HARD_NAME_LENGTH].
      *
      * @since 1.0.0
      */
     public val maximumNameLength: Int = builder.maximumNameLength
 
-    private val values: List<Long>
+    init {
+        validateOrThrow(SUBJECT)
+    }
+
+    private val bounds: List<Bound>
         get() = listOf(
-            maximumInputLength.toLong(),
-            maximumDepth.toLong(),
-            maximumElements,
-            maximumAttributes.toLong(),
-            maximumTextLength.toLong(),
-            maximumNameLength.toLong(),
+            Bound(
+                property = ::maximumInputLength,
+                value = maximumInputLength.toLong(),
+                ceiling = HARD_INPUT_LENGTH.toLong(),
+            ),
+            Bound(property = ::maximumDepth, value = maximumDepth.toLong(), ceiling = HARD_DEPTH.toLong()),
+            Bound(property = ::maximumElements, value = maximumElements, ceiling = HARD_ELEMENTS),
+            Bound(
+                property = ::maximumAttributes,
+                value = maximumAttributes.toLong(),
+                ceiling = HARD_ATTRIBUTES.toLong(),
+            ),
+            Bound(
+                property = ::maximumTextLength,
+                value = maximumTextLength.toLong(),
+                ceiling = HARD_INPUT_LENGTH.toLong(),
+            ),
+            Bound(
+                property = ::maximumNameLength,
+                value = maximumNameLength.toLong(),
+                ceiling = HARD_NAME_LENGTH.toLong(),
+            ),
         )
 
+    private val values: List<Long> get() = bounds.map(Bound::value)
+
     /**
-     * Reports every limit below 1 with [XmlViolationCodes.NOT_POSITIVE] and a depth above [HARD_DEPTH] with
-     * [XmlViolationCodes.ABOVE_HARD_LIMIT].
+     * Checks that every limit lies between 1 and its hard ceiling: a value below 1 is reported with
+     * [XmlViolationCodes.NOT_POSITIVE], a value above its ceiling with [XmlViolationCodes.ABOVE_HARD_LIMIT].
      *
      * @since 1.0.0
      */
     override fun ValidationScope.validate() {
-        positive(::maximumInputLength, maximumInputLength.toLong())
-        positive(::maximumDepth, maximumDepth.toLong())
-        positive(::maximumElements, maximumElements)
-        positive(::maximumAttributes, maximumAttributes.toLong())
-        positive(::maximumTextLength, maximumTextLength.toLong())
-        positive(::maximumNameLength, maximumNameLength.toLong())
-        if (maximumDepth > HARD_DEPTH) {
-            fail(
-                ::maximumDepth,
-                "must not exceed $HARD_DEPTH, the depth the reader and the writer can nest safely",
-                XmlViolationCodes.ABOVE_HARD_LIMIT,
-            )
-        }
+        bounds.forEach { bound -> bounded(bound) }
     }
 
     /**
-     * Compares every limit.
+     * Returns whether [other] holds the same value for every limit.
      *
-     * @param other the value to compare with.
-     * @return whether [other] holds the same limits.
+     * @param other the object to compare with, which may be `null`.
+     * @return `true` if [other] is equal limits, `false` otherwise.
      * @since 1.0.0
      */
-    override fun equals(other: Any?): Boolean {
-        val isSame = other is XmlLimits && values == other.values
-        return this === other || isSame
-    }
+    override fun equals(other: Any?): Boolean = other is XmlLimits && values == other.values
 
     /**
-     * Returns a hash code derived from every limit.
+     * Returns a hash code consistent with [equals].
      *
-     * @return the hash code.
+     * @return the hash code of every limit.
      * @since 1.0.0
      */
     override fun hashCode(): Int = values.hashCode()
 
     /**
-     * Returns every limit, such as `XmlLimits(input=67108864, depth=256, ...)`.
+     * Returns every limit by a short name, such as `XmlLimits(input=67108864, depth=256, …)`.
      *
-     * @return a text for diagnostics.
+     * @return the limits as text.
      * @since 1.0.0
      */
     override fun toString(): String =
         "XmlLimits(input=$maximumInputLength, depth=$maximumDepth, elements=$maximumElements, " +
             "attributes=$maximumAttributes, text=$maximumTextLength, name=$maximumNameLength)"
 
-    private fun ValidationScope.positive(property: KProperty0<*>, value: Long) {
-        if (value < 1) fail(property, "must be at least 1, but was $value", XmlViolationCodes.NOT_POSITIVE)
+    private fun ValidationScope.bounded(bound: Bound) {
+        val value = bound.value
+        if (value < 1) fail(bound.property, "must be at least 1, but was $value", XmlViolationCodes.NOT_POSITIVE)
+        if (value > bound.ceiling) {
+            val message = "must not exceed ${bound.ceiling}, but was $value"
+            fail(bound.property, message, XmlViolationCodes.ABOVE_HARD_LIMIT)
+        }
     }
 
+    private data class Bound(val property: KProperty0<*>, val value: Long, val ceiling: Long)
+
     /**
-     * Holds the hard bound and the predefined limits.
+     * The hard ceilings of every limit and the presets [Untrusted] and [Relaxed].
      *
      * @since 1.0.0
      */
     public companion object {
         /**
-         * The deepest nesting the reader and the writer handle without running out of stack.
+         * The ceiling of [maximumInputLength] and [maximumTextLength]: 64 Mi (67,108,864) UTF-16 code units, the
+         * longest text the line map of Kore, [Limits.MAX_LINE_MAP_LENGTH], indexes, so every source a limit admits can
+         * be given lines and columns.
          *
          * @since 1.0.0
          */
-        public const val HARD_DEPTH: Int = 1000
+        public const val HARD_INPUT_LENGTH: Int = Limits.MAX_LINE_MAP_LENGTH
 
         /**
-         * The defaults of [XmlLimitsBuilder], meant for input from outside.
+         * The ceiling of [maximumDepth] and the deepest nesting the reader and the writer handle without running out
+         * of stack: 1,000 levels.
+         *
+         * @since 1.0.0
+         */
+        public const val HARD_DEPTH: Int = 1_000
+
+        /**
+         * The ceiling of [maximumElements]: 100,000,000 elements.
+         *
+         * @since 1.0.0
+         */
+        public const val HARD_ELEMENTS: Long = 100_000_000L
+
+        /**
+         * The ceiling of [maximumAttributes]: 1,000,000 attributes on one element.
+         *
+         * @since 1.0.0
+         */
+        public const val HARD_ATTRIBUTES: Int = 1_000_000
+
+        /**
+         * The ceiling of [maximumNameLength]: 1 Mi (1,048,576) UTF-16 code units.
+         *
+         * @since 1.0.0
+         */
+        public const val HARD_NAME_LENGTH: Int = 1_024 * 1_024
+
+        private const val SUBJECT: String = "xml limits"
+        private const val RELAXED_ELEMENTS: Long = 50_000_000L
+        private const val RELAXED_ATTRIBUTES: Int = 100_000
+        private const val RELAXED_NAME_LENGTH: Int = 65_536
+
+        /**
+         * The default limits, for documents from sources that are not trusted: the `DEFAULT_*` values of
+         * [XmlLimitsBuilder], such as 64 Mi code units of input, 256 levels, 5,000,000 elements and 1,024 attributes
+         * on an element.
          *
          * @since 1.0.0
          */
         public val Untrusted: XmlLimits = XmlLimitsBuilder().build()
 
         /**
-         * No bound but [HARD_DEPTH]; only for documents the application wrote itself.
+         * Raised limits for large documents from trusted sources: [HARD_INPUT_LENGTH] code units of input and of
+         * text, [HARD_DEPTH] levels, 50,000,000 elements, 100,000 attributes on an element and 65,536 code units of a
+         * name.
+         *
+         * Every limit stays finite and at most its hard ceiling, so even a trusted source cannot exhaust the memory
+         * without bound.
          *
          * @since 1.0.0
          */
-        public val Trusted: XmlLimits = trusted()
+        public val Relaxed: XmlLimits = relaxed()
 
-        private fun trusted(): XmlLimits {
+        private fun relaxed(): XmlLimits {
             val builder = XmlLimitsBuilder()
-            builder.maximumInputLength = Int.MAX_VALUE
+            builder.maximumInputLength = HARD_INPUT_LENGTH
             builder.maximumDepth = HARD_DEPTH
-            builder.maximumElements = Long.MAX_VALUE
-            builder.maximumAttributes = Int.MAX_VALUE
-            builder.maximumTextLength = Int.MAX_VALUE
-            builder.maximumNameLength = Int.MAX_VALUE
+            builder.maximumElements = RELAXED_ELEMENTS
+            builder.maximumAttributes = RELAXED_ATTRIBUTES
+            builder.maximumTextLength = HARD_INPUT_LENGTH
+            builder.maximumNameLength = RELAXED_NAME_LENGTH
             return builder.build()
         }
     }

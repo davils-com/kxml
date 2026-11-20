@@ -32,7 +32,7 @@ public object XmlViolationCodes {
     public val NOT_POSITIVE: ViolationCode = ViolationCode("kxml.config.not-positive")
 
     /**
-     * A limit is above what the reader and the writer can handle safely, such as
+     * A limit is above its hard ceiling, a `HARD_*` constant of [com.davils.kxml.core.limit.XmlLimits], such as
      * [XmlLimits.HARD_DEPTH][com.davils.kxml.core.limit.XmlLimits.HARD_DEPTH].
      *
      * @since 1.0.0

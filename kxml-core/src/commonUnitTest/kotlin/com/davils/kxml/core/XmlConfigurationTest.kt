@@ -28,6 +28,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.shouldContain
 
+private const val RELAXED_ELEMENTS: Long = 50_000_000L
 private const val DEPTH: Int = 12
 private const val TOO_WIDE: Int = XmlEmitOptions.MAXIMUM_INDENT + 1
 
@@ -58,18 +59,18 @@ class XmlConfigurationTest : FunSpec({
         }
 
         test("builds limits from a base") {
-            val limits = xmlLimits(XmlLimits.Trusted) { maximumDepth = DEPTH }
+            val limits = xmlLimits(XmlLimits.Relaxed) { maximumDepth = DEPTH }
 
             limits.maximumDepth shouldBe DEPTH
-            limits.maximumElements shouldBe Long.MAX_VALUE
+            limits.maximumElements shouldBe RELAXED_ELEMENTS
             limits.toString() shouldContain "depth=$DEPTH"
-            limits shouldNotBe XmlLimits.Trusted
+            limits shouldNotBe XmlLimits.Relaxed
             limits shouldNotBe DEPTH
             xmlLimits { }.hashCode() shouldBe XmlLimits.Untrusted.hashCode()
         }
 
         test("keeps limits and emitters set directly") {
-            xml { limits = XmlLimits.Trusted }.configuration.limits shouldBe XmlLimits.Trusted
+            xml { limits = XmlLimits.Relaxed }.configuration.limits shouldBe XmlLimits.Relaxed
             xml { emitter = XmlEmitOptions.Compact }.configuration.emitter shouldBe XmlEmitOptions.Compact
         }
 

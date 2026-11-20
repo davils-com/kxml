@@ -289,11 +289,19 @@ final class com.davils.kxml.core.limit/XmlLimits : com.davils.kore.core.validati
     final fun toString(): kotlin/String // com.davils.kxml.core.limit/XmlLimits.toString|toString(){}[0]
 
     final object Companion { // com.davils.kxml.core.limit/XmlLimits.Companion|null[0]
+        final const val HARD_ATTRIBUTES // com.davils.kxml.core.limit/XmlLimits.Companion.HARD_ATTRIBUTES|{}HARD_ATTRIBUTES[0]
+            final fun <get-HARD_ATTRIBUTES>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimits.Companion.HARD_ATTRIBUTES.<get-HARD_ATTRIBUTES>|<get-HARD_ATTRIBUTES>(){}[0]
         final const val HARD_DEPTH // com.davils.kxml.core.limit/XmlLimits.Companion.HARD_DEPTH|{}HARD_DEPTH[0]
             final fun <get-HARD_DEPTH>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimits.Companion.HARD_DEPTH.<get-HARD_DEPTH>|<get-HARD_DEPTH>(){}[0]
+        final const val HARD_ELEMENTS // com.davils.kxml.core.limit/XmlLimits.Companion.HARD_ELEMENTS|{}HARD_ELEMENTS[0]
+            final fun <get-HARD_ELEMENTS>(): kotlin/Long // com.davils.kxml.core.limit/XmlLimits.Companion.HARD_ELEMENTS.<get-HARD_ELEMENTS>|<get-HARD_ELEMENTS>(){}[0]
+        final const val HARD_INPUT_LENGTH // com.davils.kxml.core.limit/XmlLimits.Companion.HARD_INPUT_LENGTH|{}HARD_INPUT_LENGTH[0]
+            final fun <get-HARD_INPUT_LENGTH>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimits.Companion.HARD_INPUT_LENGTH.<get-HARD_INPUT_LENGTH>|<get-HARD_INPUT_LENGTH>(){}[0]
+        final const val HARD_NAME_LENGTH // com.davils.kxml.core.limit/XmlLimits.Companion.HARD_NAME_LENGTH|{}HARD_NAME_LENGTH[0]
+            final fun <get-HARD_NAME_LENGTH>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimits.Companion.HARD_NAME_LENGTH.<get-HARD_NAME_LENGTH>|<get-HARD_NAME_LENGTH>(){}[0]
 
-        final val Trusted // com.davils.kxml.core.limit/XmlLimits.Companion.Trusted|{}Trusted[0]
-            final fun <get-Trusted>(): com.davils.kxml.core.limit/XmlLimits // com.davils.kxml.core.limit/XmlLimits.Companion.Trusted.<get-Trusted>|<get-Trusted>(){}[0]
+        final val Relaxed // com.davils.kxml.core.limit/XmlLimits.Companion.Relaxed|{}Relaxed[0]
+            final fun <get-Relaxed>(): com.davils.kxml.core.limit/XmlLimits // com.davils.kxml.core.limit/XmlLimits.Companion.Relaxed.<get-Relaxed>|<get-Relaxed>(){}[0]
         final val Untrusted // com.davils.kxml.core.limit/XmlLimits.Companion.Untrusted|{}Untrusted[0]
             final fun <get-Untrusted>(): com.davils.kxml.core.limit/XmlLimits // com.davils.kxml.core.limit/XmlLimits.Companion.Untrusted.<get-Untrusted>|<get-Untrusted>(){}[0]
     }

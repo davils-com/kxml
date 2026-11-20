@@ -21,11 +21,16 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
   diagnostics instead of exceptions.
 - Both modules are Kotlin Multiplatform libraries with a `jvm` and a `wasmJs` target. Sources are decoded from UTF-8
   and UTF-16 in common code, and untrusted text is escaped by `SafeText` of Kore.
+- `XmlLimits` gives every limit a hard ceiling, `HARD_INPUT_LENGTH`, `HARD_DEPTH`, `HARD_ELEMENTS`, `HARD_ATTRIBUTES`
+  and `HARD_NAME_LENGTH`, which no preset and no configuration exceeds; the limits validate themselves when they are
+  created.
 
 ### Changed
 
 - Compared with the internal original, types lost their project prefix (`XmlName` instead of `KideXmlName`), public
   data classes became regular immutable classes, events and results have internal constructors, and every
   `toString` and exception message escapes the text it shows.
+- `XmlLimits.Trusted`, which left every limit but the depth unbounded, is replaced by `XmlLimits.Relaxed`, whose
+  limits are raised but finite.
 - The escaping of untrusted text and the immutable lists are those of Kore; `com.davils.kxml.core.internal` is no
   longer exported to `kxml-serialization`.

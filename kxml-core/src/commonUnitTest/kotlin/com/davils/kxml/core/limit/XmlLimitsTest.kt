@@ -16,11 +16,14 @@
 
 package com.davils.kxml.core.limit
 
+import com.davils.kore.core.validation.report.ValidationException
 import com.davils.kxml.core.diagnostic.XmlDiagnosticCode
 import com.davils.kxml.core.fixture.refusal
 import com.davils.kxml.core.fixture.root
 import com.davils.kxml.core.xml
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
+import io.kotest.matchers.longs.shouldBeLessThanOrEqual
 import io.kotest.matchers.shouldBe
 
 private const val SMALL: Int = 4
@@ -56,6 +59,49 @@ class XmlLimitsTest : FunSpec({
 
         test("is refused when a name is too long") {
             xml { limits { maximumNameLength = SMALL } }.refusal("<abcde/>") shouldBe XmlDiagnosticCode.NameTooLong
+        }
+    }
+
+    context("the hard ceilings") {
+        test("admit every limit at its ceiling") {
+            val ceilings = xmlLimits {
+                maximumInputLength = XmlLimits.HARD_INPUT_LENGTH
+                maximumDepth = XmlLimits.HARD_DEPTH
+                maximumElements = XmlLimits.HARD_ELEMENTS
+                maximumAttributes = XmlLimits.HARD_ATTRIBUTES
+                maximumTextLength = XmlLimits.HARD_INPUT_LENGTH
+                maximumNameLength = XmlLimits.HARD_NAME_LENGTH
+            }
+
+            ceilings.maximumElements shouldBe XmlLimits.HARD_ELEMENTS
+            ceilings.maximumNameLength shouldBe XmlLimits.HARD_NAME_LENGTH
+        }
+
+        test("refuse every limit past its ceiling") {
+            shouldThrow<ValidationException> { xmlLimits { maximumInputLength = XmlLimits.HARD_INPUT_LENGTH + 1 } }
+            shouldThrow<ValidationException> { xmlLimits { maximumDepth = XmlLimits.HARD_DEPTH + 1 } }
+            shouldThrow<ValidationException> { xmlLimits { maximumElements = XmlLimits.HARD_ELEMENTS + 1 } }
+            shouldThrow<ValidationException> { xmlLimits { maximumAttributes = XmlLimits.HARD_ATTRIBUTES + 1 } }
+            shouldThrow<ValidationException> { xmlLimits { maximumTextLength = XmlLimits.HARD_INPUT_LENGTH + 1 } }
+            shouldThrow<ValidationException> { xmlLimits { maximumNameLength = XmlLimits.HARD_NAME_LENGTH + 1 } }
+        }
+
+        test("refuse every limit below 1") {
+            shouldThrow<ValidationException> { xmlLimits { maximumInputLength = 0 } }
+            shouldThrow<ValidationException> { xmlLimits { maximumDepth = 0 } }
+            shouldThrow<ValidationException> { xmlLimits { maximumAttributes = 0 } }
+            shouldThrow<ValidationException> { xmlLimits { maximumTextLength = 0 } }
+            shouldThrow<ValidationException> { xmlLimits { maximumNameLength = 0 } }
+        }
+
+        test("keep the relaxed preset finite and within every ceiling") {
+            val relaxed = XmlLimits.Relaxed
+
+            relaxed.maximumInputLength shouldBe XmlLimits.HARD_INPUT_LENGTH
+            relaxed.maximumDepth shouldBe XmlLimits.HARD_DEPTH
+            relaxed.maximumElements shouldBeLessThanOrEqual XmlLimits.HARD_ELEMENTS
+            relaxed.maximumAttributes.toLong() shouldBeLessThanOrEqual XmlLimits.HARD_ATTRIBUTES.toLong()
+            relaxed.maximumNameLength.toLong() shouldBeLessThanOrEqual XmlLimits.HARD_NAME_LENGTH.toLong()
         }
     }
 

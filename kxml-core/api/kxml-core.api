@@ -261,7 +261,11 @@ public final class com/davils/kxml/core/emit/XmlLineBreak : java/lang/Enum {
 
 public final class com/davils/kxml/core/limit/XmlLimits : com/davils/kore/core/validation/Validatable {
 	public static final field Companion Lcom/davils/kxml/core/limit/XmlLimits$Companion;
+	public static final field HARD_ATTRIBUTES I
 	public static final field HARD_DEPTH I
+	public static final field HARD_ELEMENTS J
+	public static final field HARD_INPUT_LENGTH I
+	public static final field HARD_NAME_LENGTH I
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getMaximumAttributes ()I
 	public final fun getMaximumDepth ()I
@@ -275,7 +279,7 @@ public final class com/davils/kxml/core/limit/XmlLimits : com/davils/kore/core/v
 }
 
 public final class com/davils/kxml/core/limit/XmlLimits$Companion {
-	public final fun getTrusted ()Lcom/davils/kxml/core/limit/XmlLimits;
+	public final fun getRelaxed ()Lcom/davils/kxml/core/limit/XmlLimits;
 	public final fun getUntrusted ()Lcom/davils/kxml/core/limit/XmlLimits;
 }
 

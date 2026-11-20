@@ -23,7 +23,8 @@ import com.davils.kore.core.dsl.ValidatingBuilder
  * Collects the limits of [XmlLimits]; used through [xmlLimits] and
  * [XmlBuilder.limits][com.davils.kxml.core.XmlBuilder.limits].
  *
- * Every limit must be at least 1; the builder is not thread safe.
+ * Every limit must lie between 1 and its hard ceiling, a `HARD_*` constant of [XmlLimits]; the builder is not thread
+ * safe.
  *
  * @since 1.0.0
  */
@@ -32,7 +33,8 @@ public class XmlLimitsBuilder internal constructor() : ValidatingBuilder<XmlLimi
     override val subject: String get() = "xml limits"
 
     /**
-     * The longest source in characters, or in bytes for a source of bytes; [DEFAULT_INPUT_LENGTH] by default.
+     * The longest source in characters, or in bytes for a source of bytes; [DEFAULT_INPUT_LENGTH] by default, at most
+     * [XmlLimits.HARD_INPUT_LENGTH].
      *
      * @since 1.0.0
      */
@@ -46,28 +48,28 @@ public class XmlLimitsBuilder internal constructor() : ValidatingBuilder<XmlLimi
     public var maximumDepth: Int = DEFAULT_DEPTH
 
     /**
-     * The most elements in one document; [DEFAULT_ELEMENTS] by default.
+     * The most elements in one document; [DEFAULT_ELEMENTS] by default, at most [XmlLimits.HARD_ELEMENTS].
      *
      * @since 1.0.0
      */
     public var maximumElements: Long = DEFAULT_ELEMENTS
 
     /**
-     * The most attributes on one element; [DEFAULT_ATTRIBUTES] by default.
+     * The most attributes on one element; [DEFAULT_ATTRIBUTES] by default, at most [XmlLimits.HARD_ATTRIBUTES].
      *
      * @since 1.0.0
      */
     public var maximumAttributes: Int = DEFAULT_ATTRIBUTES
 
     /**
-     * The longest run of text; [DEFAULT_TEXT_LENGTH] by default.
+     * The longest run of text; [DEFAULT_TEXT_LENGTH] by default, at most [XmlLimits.HARD_INPUT_LENGTH].
      *
      * @since 1.0.0
      */
     public var maximumTextLength: Int = DEFAULT_TEXT_LENGTH
 
     /**
-     * The longest name; [DEFAULT_NAME_LENGTH] by default.
+     * The longest name; [DEFAULT_NAME_LENGTH] by default, at most [XmlLimits.HARD_NAME_LENGTH].
      *
      * @since 1.0.0
      */
