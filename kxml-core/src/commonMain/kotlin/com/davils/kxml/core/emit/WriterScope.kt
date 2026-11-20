@@ -16,6 +16,7 @@
 
 package com.davils.kxml.core.emit
 
+import com.davils.kxml.core.internal.NameMap
 import com.davils.kxml.core.name.XmlName
 import com.davils.kxml.core.name.XmlNamespaceBinding
 import com.davils.kxml.core.name.XmlNamespaces
@@ -24,15 +25,15 @@ import com.davils.kxml.core.node.XmlNode
 private const val DEFAULT: String = ""
 private const val GENERATED_PREFIX: String = "ns"
 
-internal class WriterScope private constructor(private val parent: WriterScope?, initial: Map<String, String>) {
-    private val bindings = LinkedHashMap(initial)
+internal class WriterScope private constructor(private val parent: WriterScope?) {
+    private val bindings = NameMap<String>()
 
-    private val attributePrefixes = mutableMapOf<String, String>()
+    private val attributePrefixes = NameMap<String>()
 
     val declarations: List<XmlNamespaceBinding>
-        get() = bindings.map { (prefix, uri) -> XmlNamespaceBinding(prefix.takeIf { it.isNotEmpty() }, uri) }
+        get() = bindings.entries.map { (prefix, uri) -> XmlNamespaceBinding(prefix.takeIf { it.isNotEmpty() }, uri) }
 
-    fun child(): WriterScope = WriterScope(parent = this, initial = emptyMap())
+    fun child(): WriterScope = WriterScope(parent = this)
 
     fun open(element: XmlNode.Element) {
         bindElement(element.name)
@@ -42,12 +43,13 @@ internal class WriterScope private constructor(private val parent: WriterScope?,
 
     fun attributeName(name: XmlName): String {
         val namespace = name.namespace ?: return name.local
-        return "${attributePrefixes.getValue(namespace)}:${name.local}"
+        val prefix = checkNotNull(attributePrefixes[namespace]) { "The namespace of an attribute has no prefix" }
+        return "$prefix:${name.local}"
     }
 
     private fun lookup(prefix: String): String? = bindings[prefix] ?: parent?.lookup(prefix)
 
-    private fun prefixesInScope(): Set<String> = bindings.keys + parent?.prefixesInScope().orEmpty()
+    private fun prefixesInScope(): List<String> = bindings.names + parent?.prefixesInScope().orEmpty()
 
     private fun bindElement(name: XmlName) {
         val prefix = name.prefix ?: DEFAULT
@@ -87,9 +89,10 @@ internal class WriterScope private constructor(private val parent: WriterScope?,
     }
 
     companion object {
-        fun root(): WriterScope = WriterScope(
-            parent = null,
-            initial = mapOf(XmlNamespaces.XML_PREFIX to XmlNamespaces.XML),
-        )
+        fun root(): WriterScope {
+            val scope = WriterScope(parent = null)
+            scope.bindings[XmlNamespaces.XML_PREFIX] = XmlNamespaces.XML
+            return scope
+        }
     }
 }

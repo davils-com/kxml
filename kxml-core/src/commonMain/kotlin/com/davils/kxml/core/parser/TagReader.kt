@@ -18,6 +18,7 @@ package com.davils.kxml.core.parser
 
 import com.davils.kore.core.text.TextRange
 import com.davils.kxml.core.diagnostic.XmlDiagnosticCode
+import com.davils.kxml.core.internal.NameSet
 import com.davils.kxml.core.internal.charCountOf
 import com.davils.kxml.core.name.XmlCharacters
 
@@ -48,8 +49,9 @@ internal class TagReader(
         cursor.advance()
         val name = qualifiedName()
         val attributes = mutableListOf<RawAttribute>()
+        val names = NameSet()
         while (!isTagEnd(start)) {
-            attributes += attribute(attributes)
+            attributes += attribute(names)
             budget.attributes(attributes.size, cursor.rangeFrom(start))
         }
         val isEmpty = cursor.startsWith(EMPTY_CLOSE)
@@ -111,10 +113,10 @@ internal class TagReader(
         return isEnd
     }
 
-    private fun attribute(existing: List<RawAttribute>): RawAttribute {
+    private fun attribute(names: NameSet): RawAttribute {
         val start = cursor.offset
         val name = qualifiedName()
-        if (existing.any { attribute -> attribute.qualified == name }) {
+        if (!names.add(name)) {
             failure(
                 XmlDiagnosticCode.DuplicateAttribute,
                 cursor.rangeFrom(start),

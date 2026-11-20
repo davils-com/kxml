@@ -18,6 +18,8 @@ package com.davils.kxml.core.parser
 
 import com.davils.kore.core.text.TextRange
 import com.davils.kxml.core.diagnostic.XmlDiagnosticCode
+import com.davils.kxml.core.internal.NameMap
+import com.davils.kxml.core.internal.NameSet
 import com.davils.kxml.core.name.XmlName
 import com.davils.kxml.core.name.XmlNamespaceBinding
 import com.davils.kxml.core.name.XmlNamespaces
@@ -28,20 +30,33 @@ private const val COLON: Char = ':'
 private const val DECLARATION_PREFIX: String = "xmlns:"
 
 internal class NamespaceResolver {
-    private val frames = ArrayDeque(listOf(mapOf(XmlNamespaces.XML_PREFIX to XmlNamespaces.XML)))
+    private val scopes = NameMap<ArrayDeque<String>>()
+    private val frames = ArrayDeque<List<String>>()
+
+    init {
+        bind(prefix = XmlNamespaces.XML_PREFIX, uri = XmlNamespaces.XML)
+    }
 
     fun open(tag: RawTag): ResolvedTag {
         val bindings = tag.attributes.mapNotNull(::bindingOf)
-        frames.addLast(bindings.associate { binding -> (binding.prefix ?: DEFAULT) to binding.uri })
+        val prefixes = bindings.map { binding -> binding.prefix ?: DEFAULT }
+        frames.addLast(prefixes)
+        bindings.forEach { binding -> bind(prefix = binding.prefix ?: DEFAULT, uri = binding.uri) }
         val name = elementName(tag)
         val plain = tag.attributes.filter { attribute -> declaredPrefixOf(attribute.qualified) == null }
-        val attributes = plain.associateWith(::attributeOf)
+        val attributes = plain.map { raw -> raw to attributeOf(raw) }
         checkDuplicates(attributes)
-        return ResolvedTag(name, attributes.values.toList(), bindings)
+        return ResolvedTag(name, attributes.map { (_, attribute) -> attribute }, bindings)
     }
 
     fun close() {
-        frames.removeLast()
+        val prefixes = frames.removeLast()
+        prefixes.forEach { prefix -> scopes[prefix]?.removeLast() }
+    }
+
+    private fun bind(prefix: String, uri: String) {
+        val stack = scopes.getOrPut(prefix) { ArrayDeque() }
+        stack.add(uri)
     }
 
     private fun bindingOf(attribute: RawAttribute): XmlNamespaceBinding? {
@@ -93,21 +108,27 @@ internal class NamespaceResolver {
         return XmlAttribute(name, attribute.value, attribute.range)
     }
 
-    private fun checkDuplicates(attributes: Map<RawAttribute, XmlAttribute>) {
-        val seen = mutableSetOf<XmlName>()
-        val duplicate = attributes.entries.firstOrNull { (_, attribute) -> !seen.add(attribute.name) } ?: return
+    private fun checkDuplicates(attributes: List<Pair<RawAttribute, XmlAttribute>>) {
+        val seen = NameSet()
+        val duplicate = attributes.firstOrNull { (_, attribute) -> !seen.add(keyOf(attribute.name)) } ?: return
+        val (raw, attribute) = duplicate
         failure(
             XmlDiagnosticCode.DuplicateAttribute,
-            duplicate.key.range,
-            "The attribute ${duplicate.value.name} is set twice",
+            raw.range,
+            "The attribute ${attribute.name} is set twice",
         )
+    }
+
+    private fun keyOf(name: XmlName): String {
+        val namespace = name.namespace ?: return name.local
+        return "${name.local}$COLON$namespace"
     }
 
     private fun prefixOf(qualified: String): String? =
         qualified.substringBefore(COLON, missingDelimiterValue = DEFAULT).takeIf { it.isNotEmpty() }
 
     private fun resolve(prefix: String): String? {
-        val found = frames.asReversed().firstNotNullOfOrNull { frame -> frame[prefix] }
+        val found = scopes[prefix]?.lastOrNull()
         return found?.takeIf { it.isNotEmpty() }
     }
 

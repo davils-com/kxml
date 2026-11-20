@@ -34,3 +34,9 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
   limits are raised but finite.
 - The escaping of untrusted text and the immutable lists are those of Kore; `com.davils.kxml.core.internal` is no
   longer exported to `kxml-serialization`.
+
+### Security
+
+- Attribute names, namespace prefixes and the attributes compared by `XmlNode.Element.equals` are indexed in a total
+  order instead of by hash codes, so names with colliding hash codes cannot make reading quadratic, and the
+  duplicate check of attribute names no longer compares every pair.

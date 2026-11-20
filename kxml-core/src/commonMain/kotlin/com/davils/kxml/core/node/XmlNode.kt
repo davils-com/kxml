@@ -25,6 +25,12 @@ import com.davils.kxml.core.name.XmlNamespaceBinding
 
 private const val HASH_FACTOR: Int = 31
 
+private val attributeOrder: Comparator<Triple<String?, String, String>> = compareBy(
+    { entry -> entry.first },
+    { entry -> entry.second },
+    { entry -> entry.third },
+)
+
 /**
  * A node of the immutable document tree.
  *
@@ -72,11 +78,16 @@ public sealed class XmlNode(public val range: TextRange?) {
          */
         public val namespaces: List<XmlNamespaceBinding> = namespaces.immutableList()
 
-        private val attributeSet: Set<Pair<XmlName, String>> by lazy {
-            attributes.mapTo(mutableSetOf()) { attribute -> attribute.name to attribute.value }
+        private val sortedAttributes: List<Triple<String?, String, String>> by lazy {
+            val entries = attributes.map { attribute ->
+                Triple(first = attribute.name.namespace, second = attribute.name.local, third = attribute.value)
+            }
+            entries.sortedWith(attributeOrder)
         }
 
-        private val hash: Int by lazy { HASH_FACTOR * name.hashCode() + attributeSet.hashCode() + children.hashCode() }
+        private val hash: Int by lazy {
+            HASH_FACTOR * name.hashCode() + sortedAttributes.hashCode() + children.hashCode()
+        }
 
         /**
          * The child elements in document order.
@@ -149,7 +160,7 @@ public sealed class XmlNode(public val range: TextRange?) {
         override fun toString(): String = "Element($name, ${children.size} children)"
 
         private fun sameContent(other: Element): Boolean =
-            name == other.name && attributeSet == other.attributeSet && children == other.children
+            name == other.name && sortedAttributes == other.sortedAttributes && children == other.children
 
         private fun textOf(node: XmlNode): String? = (node as? Text)?.value ?: (node as? CData)?.value
     }
