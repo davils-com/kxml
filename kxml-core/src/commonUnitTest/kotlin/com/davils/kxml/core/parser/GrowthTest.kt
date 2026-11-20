@@ -23,10 +23,13 @@ import com.davils.kxml.core.fixture.shouldGrowLinearly
 import com.davils.kxml.core.limit.XmlLimits
 import com.davils.kxml.core.syntax.XmlSyntaxTree
 import com.davils.kxml.core.xml
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 
 private const val SMALL_PIECES: Int = 9
+private const val QUADRATIC_SMALL: Int = 500
 private const val LARGE_PIECES: Int = 13
 private const val SMALL_DEPTH: Int = 50
 private const val SMALL_COUNT: Int = 2_000
@@ -53,7 +56,29 @@ private fun read(text: String) {
     relaxed.parse(text).shouldBeInstanceOf<XmlParseResult.Parsed>()
 }
 
+private fun quadratic(text: String) {
+    var pairs = 0L
+    for (first in text.indices) {
+        for (second in first + 1..<text.length) {
+            if (text[first] == text[second]) pairs++
+        }
+    }
+    pairs shouldBe text.length.toLong() * (text.length - 1) / 2
+}
+
 class GrowthTest : FunSpec({
+    context("the growth check") {
+        test("refuses work that grows with the square of the input, however often it measures") {
+            shouldThrow<AssertionError> {
+                shouldGrowLinearly(
+                    small = "a".repeat(QUADRATIC_SMALL),
+                    large = "a".repeat(QUADRATIC_SMALL * GROWTH_FACTOR),
+                    read = ::quadratic,
+                )
+            }
+        }
+    }
+
     context("the work of reading") {
         test("grows linearly with attributes whose names share a hash code") {
             shouldGrowLinearly(

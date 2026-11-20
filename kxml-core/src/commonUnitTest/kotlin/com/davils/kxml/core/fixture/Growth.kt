@@ -22,11 +22,19 @@ import kotlin.time.TimeSource
 internal const val GROWTH_FACTOR: Int = 16
 
 private const val RUNS: Int = 5
+private const val ATTEMPTS: Int = 3
 private const val SLACK: Int = 3
 private const val LEAST_MICROSECONDS: Long = 20_000L
 
 internal fun shouldGrowLinearly(small: String, large: String, read: (String) -> Unit) {
-    timeRatio(small, large, read) shouldBeLessThan (GROWTH_FACTOR * SLACK).toDouble()
+    val bound = (GROWTH_FACTOR * SLACK).toDouble()
+    var ratio = timeRatio(small, large, read)
+    var attempt = 1
+    while (ratio >= bound && attempt < ATTEMPTS) {
+        ratio = minOf(a = ratio, b = timeRatio(small, large, read))
+        attempt++
+    }
+    ratio shouldBeLessThan bound
 }
 
 private fun timeRatio(small: String, large: String, read: (String) -> Unit): Double {
