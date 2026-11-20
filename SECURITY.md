@@ -111,10 +111,16 @@ The following are **not** vulnerabilities in kxml:
 
 ## Verifying a Release
 
-Releases are published to `https://repo.davils.com/releases` and signed with the release key of Davils; its
-fingerprint is published in this section with the first release, so a consumer can pin it as a `trusted-key` in its
-own `gradle/verification-metadata.xml`. A release also carries a signed build provenance attestation made by the
-GitHub Actions run that built it:
+Releases are published to `https://repo.davils.com/releases` and signed with the release key of Davils, whose
+fingerprint is
+
+```text
+36F578E8AD2D4391E0FA6C18154C625FAD370063
+```
+
+A consumer pins it as a `trusted-key` for the group `com.davils` in its own `gradle/verification-metadata.xml`, as
+kxml does for Kore. A release also carries a signed build provenance attestation made by the GitHub Actions run that
+built it:
 
 ```bash
 gh attestation verify kxml-core-1.0.0.jar --repo davils-com/kxml --signer-repo davils-com/kotlin-workflow

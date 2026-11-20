@@ -142,6 +142,32 @@ query limits of `XmlLimits` and stops with an `XmlDocumentLimitException` instea
 val canonical = XmlCanonicalizer(XmlCanonicalization.Exclusive10).canonicalize(parsed.document)   // UTF-8 bytes
 ```
 
+### Diffs, merges and redaction
+
+`XmlDiff` computes the RFC 5261 patch that turns one document into another, `XmlMerger` merges layers of
+configuration and records the layer every node comes from, and `XmlRedaction` replaces secrets before a document is
+logged or shared:
+
+```kotlin
+val patch = XmlDiff().diff(old = before, new = after)                   // XmlPatch; patch.toDocument() writes it
+
+val merger = XmlMerger(XmlMergeOptions(keys = mapOf(XmlName("server") to listOf(XmlName("id")))))
+val merged = merger.merge(listOf(XmlLayer("defaults", defaults), XmlLayer("production", production)))
+merged.originOf("/config[1]/server[1]/@port")                           // "production"
+
+val redaction = xmlRedaction {
+    path("//password")
+    attribute { name -> name.local == "token" }
+    value(Regex("\\d{4}-\\d{4}-\\d{4}-\\d{4}"))
+}
+redaction.redact(parsed.document)                                       // a copy with *** in place of each secret
+redaction.redact(tree)                                                  // edits a syntax tree in place, or refuses
+```
+
+A diff, a merge and a redaction are bounded by the limits of `XmlLimits` like every evaluation. A redaction of a
+syntax tree keeps the layout of the document and refuses, instead of returning, a result it cannot prove free of the
+secrets its rules select.
+
 ## Security
 
 Every document may come from an attacker. The reader checks the document against `XmlLimits` before the work grows
