@@ -64,8 +64,8 @@ val written = xml.emit(xmlElement(XmlName("order")) { element(XmlName("item")) {
 ```
 
 A malformed or oversized document never throws: the result lists diagnostics with a stable code, the range in the
-source and a message. Document type declarations are refused unless `doctype = XmlDoctype.Ignore`; entities other
-than the five predefined ones and external resources are never resolved.
+source and a message. Document type declarations are refused unless `doctype = XmlDoctype.Internal`, which reads
+the internal subset and expands its entities within the budget of `XmlLimits`; external resources are never loaded.
 
 ### Serialization
 
@@ -90,7 +90,7 @@ when (val decoding = format.decodeOrFailure<Order>("<Order/>")) {
 ## Security
 
 Every document may come from an attacker. The reader checks the document against `XmlLimits` before the work grows
-with it, never expands entities, and every `toString` and exception message escapes what it shows. See
+with it, expands entities only within a budget, never loads an external resource, and every `toString` and exception message escapes what it shows. See
 [SECURITY.md](SECURITY.md) for the scope, known limitations and how to report a vulnerability privately.
 
 ## Building

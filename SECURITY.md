@@ -35,8 +35,8 @@ The following are **in scope**:
 
 - a document that makes kxml use memory or CPU beyond what `XmlLimits` allows, overflow the stack, or throw out of
   the reader,
-- any resolution of an entity other than the five predefined ones, any access to a file, a URL or another external
-  resource, and any way past `XmlDoctype.Refuse`,
+- any access to a file, a URL or another external resource, any way past `XmlDoctype.Refuse`, and any entity
+  expansion beyond `maximumEntityExpansion` or `maximumEntityDepth`,
 - a document that the reader accepts although it is not well-formed, or a node tree the writer turns into XML that is
   not well-formed or means something else,
 - untrusted text that reaches a message, a `toString` or the message of `XmlDecodingException` unescaped, so it can
@@ -55,9 +55,12 @@ The following are **not** vulnerabilities in kxml:
 ## Known Limitations
 
 - kxml reads XML 1.0 and 1.1 with namespaces in UTF-8, UTF-16, UTF-32, ISO-8859-1 and US-ASCII only; it refuses every other
-  encoding, such as EBCDIC and Windows-1252, and reads the encoding declaration from the first 1,024 bytes. It does not validate against a DTD or a schema and
-  never reads the internal subset of a document type declaration, so default attributes declared there are not
-  applied.
+  encoding, such as EBCDIC and Windows-1252, and reads the encoding declaration from the first 1,024 bytes. It does not validate against a DTD or a schema.
+- Under `XmlDoctype.Internal`, kxml reads the internal subset only. It never loads the external subset or an external
+  entity, so a document that relies on declarations there is refused or, after an unread parameter entity, read
+  without the declarations that follow it, as section 5.1 of XML 1.0 requires. A document type declaration changes
+  what a document means through defaults, normalization and entities; an application that signs or compares
+  documents keeps `XmlDoctype.Refuse`.
 - On Wasm, `SafeText` of Kore takes the Unicode categories from the regular expressions of the JavaScript engine, on the
   JVM from the JDK. An engine with an older Unicode version may treat a newly assigned character as unassigned and
   escape it, never the other way round for the categories that matter.
