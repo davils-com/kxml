@@ -20,6 +20,7 @@ import com.davils.kxml.core.XmlDoctype
 import com.davils.kxml.core.XmlParseResult
 import com.davils.kxml.core.conformance.fixture.ConformanceSuite
 import com.davils.kxml.core.conformance.fixture.SuiteCase
+import com.davils.kxml.core.conformance.fixture.SuiteResolver
 import com.davils.kxml.core.limit.XmlLimits
 import com.davils.kxml.core.source.XmlSource
 import com.davils.kxml.core.xml
@@ -29,7 +30,8 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 private val reader = xml {
-    doctype = XmlDoctype.Internal
+    doctype = XmlDoctype.External
+    resolver = SuiteResolver(ConformanceSuite.root)
     limits = XmlLimits.Relaxed
 }
 
@@ -55,7 +57,9 @@ private fun report(cases: List<SuiteCase>, known: Map<String, String>) {
 
 private fun isConforming(case: SuiteCase): Boolean {
     val bytes = Files.readAllBytes(case.path)
-    val isRefused = reader.parse(XmlSource.of(bytes, name = case.id)) is XmlParseResult.Failed
+    val location = case.path.toRealPath().toUri()
+    val source = XmlSource.of(bytes, name = case.id, uri = location.toString())
+    val isRefused = reader.parse(source) is XmlParseResult.Failed
     return isRefused == case.isRefusalExpected
 }
 
