@@ -23,6 +23,7 @@ import com.davils.kxml.core.internal.charCountOf
 import com.davils.kxml.core.internal.textOf
 import com.davils.kxml.core.internal.unicodeNameOf
 import com.davils.kxml.core.name.XmlCharacters
+import com.davils.kxml.core.syntax.XmlSyntaxKind
 
 private const val AMPERSAND: Char = '&'
 private const val LESS_THAN: Char = '<'
@@ -53,9 +54,12 @@ private val predefined: Map<String, String> = mapOf(
     "quot" to "\"",
 )
 
-internal class CharacterReader(private val cursor: Cursor, private val budget: ParseBudget) {
+internal class CharacterReader(
+    private val cursor: Cursor,
+    private val budget: ParseBudget,
+    private val sink: SyntaxSink,
+) {
     private val handlers: Map<Char, (Boolean) -> String?> = mapOf(
-        AMPERSAND to { _ -> reference() },
         CARRIAGE_RETURN to ::carriageReturn,
         LINE_FEED to ::whitespace,
         TAB to ::whitespace,
@@ -65,18 +69,23 @@ internal class CharacterReader(private val cursor: Cursor, private val budget: P
     fun text(): XmlEvent.Text {
         val start = cursor.offset
         val value = StringBuilder()
+        var run = start
         while (!cursor.isAtEnd && cursor.peek() != LESS_THAN) {
-            appendNext(value, isAttribute = false, stop = LESS_THAN)
+            run = appendNext(value, Piece(isAttribute = false, stop = LESS_THAN, run = run))
             budget.text(value.length, cursor.rangeFrom(start))
         }
+        sink.token(kind = XmlSyntaxKind.TEXT, start = run, end = cursor.offset)
         return XmlEvent.Text(value.toString(), cursor.rangeFrom(start))
     }
 
     fun attributeValue(): String {
         val start = cursor.offset
         val quote = quoteAt(start)
+        sink.startNode(XmlSyntaxKind.ATTRIBUTE_VALUE)
         cursor.advance()
+        sink.token(kind = XmlSyntaxKind.QUOTE, start = start, end = cursor.offset)
         val value = StringBuilder()
+        var run = cursor.offset
         while (!cursor.isAtEnd && cursor.peek() != quote) {
             if (cursor.peek() == LESS_THAN) {
                 failure(
@@ -85,7 +94,7 @@ internal class CharacterReader(private val cursor: Cursor, private val budget: P
                     "A value cannot hold <",
                 )
             }
-            appendNext(value, isAttribute = true, stop = quote)
+            run = appendNext(value, Piece(isAttribute = true, stop = quote, run = run))
             budget.text(value.length, cursor.rangeFrom(start))
         }
         if (cursor.isAtEnd) {
@@ -95,7 +104,10 @@ internal class CharacterReader(private val cursor: Cursor, private val budget: P
                 "The value is not closed",
             )
         }
+        sink.token(kind = XmlSyntaxKind.ATTRIBUTE_TEXT, start = run, end = cursor.offset)
         cursor.advance()
+        sink.token(kind = XmlSyntaxKind.QUOTE, start = cursor.offset - 1, end = cursor.offset)
+        sink.finishNode()
         return value.toString()
     }
 
@@ -107,10 +119,23 @@ internal class CharacterReader(private val cursor: Cursor, private val budget: P
         return quote
     }
 
-    private fun appendNext(value: StringBuilder, isAttribute: Boolean, stop: Char) {
+    private fun appendNext(value: StringBuilder, piece: Piece): Int {
+        if (cursor.peek() == AMPERSAND) return appendReference(value, piece)
         val handler = handlers[cursor.peek()]
-        val special = handler?.invoke(isAttribute)
-        value.append(special ?: plainRun(isAttribute, stop))
+        val special = handler?.invoke(piece.isAttribute)
+        value.append(special ?: plainRun(piece.isAttribute, piece.stop))
+        return piece.run
+    }
+
+    private fun appendReference(value: StringBuilder, piece: Piece): Int {
+        val start = cursor.offset
+        val runKind = XmlSyntaxKind.ATTRIBUTE_TEXT.takeIf { piece.isAttribute } ?: XmlSyntaxKind.TEXT
+        sink.token(kind = runKind, start = piece.run, end = start)
+        value.append(reference())
+        val isCharacter = cursor.text.startsWith(CHARACTER_PREFIX, start + 1)
+        val kind = XmlSyntaxKind.CHARACTER_REFERENCE.takeIf { isCharacter } ?: XmlSyntaxKind.ENTITY_REFERENCE
+        sink.token(kind = kind, start = start, end = cursor.offset)
+        return cursor.offset
     }
 
     private fun plainRun(isAttribute: Boolean, stop: Char): String {
@@ -159,8 +184,9 @@ internal class CharacterReader(private val cursor: Cursor, private val budget: P
 
     private fun reference(): String {
         val start = cursor.offset
-        val end = cursor.indexOf(SEMICOLON)
-        val isTerminated = end > start + 1 && end - start <= MAXIMUM_REFERENCE
+        val searched = minOf(a = cursor.text.length, b = start + MAXIMUM_REFERENCE + 1)
+        val end = cursor.text.substring(startIndex = start, endIndex = searched).indexOf(SEMICOLON) + start
+        val isTerminated = end > start + 1
         if (!isTerminated) {
             failure(XmlDiagnosticCode.InvalidReference, TextRange.of(start, 1), "A reference must end with ;")
         }
@@ -198,4 +224,6 @@ internal class CharacterReader(private val cursor: Cursor, private val budget: P
         }
         return textOf(code)
     }
+
+    private data class Piece(val isAttribute: Boolean, val stop: Char, val run: Int)
 }

@@ -9,7 +9,7 @@ Apache License 2.0, with security first.
 
 | Module | Artifact | Purpose |
 |---|---|---|
-| `kxml-core` | `com.davils:kxml-core` | The reader with its event stream, limits and diagnostics, the immutable node tree and the writer |
+| `kxml-core` | `com.davils:kxml-core` | The reader with its pull reader, limits and diagnostics, the lossless syntax tree, the immutable node tree and the writer |
 | `kxml-serialization` | `com.davils:kxml-serialization` | The kotlinx.serialization format: elements, attributes, text, namespaces, wrapped and repeated collections, maps, polymorphism and decoding with diagnostics |
 | `build-logic` | - | One convention plugin per Kreate concern, composed by `kxml.kotlin-library` and `kxml.serialization-library` for the modules and `kxml.root` for the root project; they hold nothing but `plugins { }` and `kreate { }` |
 
@@ -133,7 +133,8 @@ it. kxml is built so that a mistake of a caller fails closed.
   escapes every text and attribute value.
 - **Hide what Java must not reach.** Kotlin's `internal` is `public` in the bytecode, so a Java caller on the module
   path reaches every internal class of an exported package. Implementation lives in packages that are not exported,
-  such as `parser`, `compose`, `decode` and `encode`, and `module-info.java` never exports an `internal` package.
+  such as `parser`, `compose`, `decode` and `encode`, and in `internal` packages, such as the green tree in
+  `com.davils.kxml.core.syntax.internal`; `module-info.java` never exports an `internal` package.
 - **Secure randomness only.** No `java.util.Random`, `kotlin.random.Random` or `ThreadLocalRandom`.
 - **Every sink has an injection test.** A renderer is tested with the `hostileText` fixture, built from
   `HostileFragments` of `kore-testing`, and `shouldBeSafeToShow` or `shouldBeShownSafely`, which leave

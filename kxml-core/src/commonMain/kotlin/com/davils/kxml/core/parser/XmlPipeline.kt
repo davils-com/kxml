@@ -21,24 +21,30 @@ import com.davils.kore.core.validation.violation.Severity
 import com.davils.kxml.core.XmlConfiguration
 import com.davils.kxml.core.XmlEventResult
 import com.davils.kxml.core.XmlParseResult
+import com.davils.kxml.core.XmlReader
 import com.davils.kxml.core.compose.TreeComposer
 import com.davils.kxml.core.diagnostic.XmlDiagnostic
 import com.davils.kxml.core.diagnostic.XmlDiagnosticCode
-import com.davils.kxml.core.source.DecodedSource
 import com.davils.kxml.core.source.SourceDecoding
 import com.davils.kxml.core.source.XmlSource
 
 internal class XmlPipeline(private val configuration: XmlConfiguration) {
     fun parse(source: XmlSource): XmlParseResult {
-        val result = events(source)
-        if (!result.isValid) return XmlParseResult.Failed(result.diagnostics)
-        val document = TreeComposer(configuration.whitespace).compose(result.events)
-        return XmlParseResult.Parsed(document, result.diagnostics)
+        val reader = reader(source)
+        val document = TreeComposer(configuration.whitespace).compose(reader)
+        val parsed = document?.takeIf { reader.isValid } ?: return XmlParseResult.Failed(reader.diagnostics)
+        return XmlParseResult.Parsed(parsed, reader.diagnostics)
     }
 
     fun events(source: XmlSource): XmlEventResult {
+        val reader = reader(source)
+        val events = generateSequence(reader::next).toList()
+        return XmlEventResult(events, reader.diagnostics)
+    }
+
+    fun reader(source: XmlSource): XmlReader {
         val refusal = refusalOf(source) ?: return decoded(source)
-        return XmlEventResult(emptyList(), listOf(refusal))
+        return XmlReader(scanner = null, decoding = listOf(refusal))
     }
 
     private fun refusalOf(source: XmlSource): XmlDiagnostic? {
@@ -51,23 +57,15 @@ internal class XmlPipeline(private val configuration: XmlConfiguration) {
         )
     }
 
-    private fun decoded(source: XmlSource): XmlEventResult {
+    private fun decoded(source: XmlSource): XmlReader {
         val decoded = SourceDecoding.decode(source)
         val isRefused = decoded.diagnostics.any { diagnostic -> diagnostic.severity == Severity.Error }
-        if (isRefused) return XmlEventResult(emptyList(), decoded.diagnostics)
-        return scanned(decoded)
-    }
-
-    private fun scanned(decoded: DecodedSource): XmlEventResult {
-        val scanner = XmlScanner(decoded.text, configuration, decoded.encoding)
-        val failure = failureOf(scanner)
-        return XmlEventResult(scanner.events, decoded.diagnostics + scanner.warnings + listOfNotNull(failure))
-    }
-
-    private fun failureOf(scanner: XmlScanner): XmlDiagnostic? = try {
-        scanner.scan()
-        null
-    } catch (failure: ParseFailure) {
-        failure.diagnostic
+        val scanner = XmlScanner(
+            text = decoded.text,
+            configuration = configuration,
+            encoding = decoded.encoding,
+            sink = NoSyntax,
+        )
+        return XmlReader(scanner = scanner.takeUnless { isRefused }, decoding = decoded.diagnostics)
     }
 }

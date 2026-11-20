@@ -6,6 +6,7 @@ public final class com/davils/kxml/core/Xml {
 	public final fun getConfiguration ()Lcom/davils/kxml/core/XmlConfiguration;
 	public final fun parse (Lcom/davils/kxml/core/source/XmlSource;)Lcom/davils/kxml/core/XmlParseResult;
 	public final fun parse (Ljava/lang/String;)Lcom/davils/kxml/core/XmlParseResult;
+	public final fun reader (Lcom/davils/kxml/core/source/XmlSource;)Lcom/davils/kxml/core/XmlReader;
 	public fun toString ()Ljava/lang/String;
 }
 
@@ -133,6 +134,13 @@ public final class com/davils/kxml/core/XmlParseResult$Parsed : com/davils/kxml/
 	public fun getDiagnostics ()Ljava/util/List;
 	public final fun getDocument ()Lcom/davils/kxml/core/node/XmlDocument;
 	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/core/XmlReader {
+	public final fun getDiagnostics ()Ljava/util/List;
+	public final fun isValid ()Z
+	public final fun next ()Lcom/davils/kxml/core/XmlEvent;
 	public fun toString ()Ljava/lang/String;
 }
 
@@ -471,5 +479,102 @@ public final class com/davils/kxml/core/source/XmlSource$Companion {
 	public final fun of ([BLjava/lang/String;Ljava/lang/String;)Lcom/davils/kxml/core/source/XmlSource;
 	public static synthetic fun of$default (Lcom/davils/kxml/core/source/XmlSource$Companion;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/davils/kxml/core/source/XmlSource;
 	public static synthetic fun of$default (Lcom/davils/kxml/core/source/XmlSource$Companion;[BLjava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/davils/kxml/core/source/XmlSource;
+}
+
+public abstract interface class com/davils/kxml/core/syntax/XmlSyntaxElement {
+	public fun getAncestors ()Lkotlin/sequences/Sequence;
+	public abstract fun getKind ()Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public abstract fun getParent ()Lcom/davils/kxml/core/syntax/XmlSyntaxNode;
+	public abstract fun getRange ()Lcom/davils/kore/core/text/TextRange;
+	public abstract fun getText ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/core/syntax/XmlSyntaxKind : java/lang/Enum {
+	public static final field ATTRIBUTE Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field ATTRIBUTE_TEXT Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field ATTRIBUTE_VALUE Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field BYTE_ORDER_MARK Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field CDATA_CLOSE Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field CDATA_OPEN Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field CDATA_SECTION Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field CDATA_TEXT Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field CHARACTER_REFERENCE Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field COMMENT Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field COMMENT_CLOSE Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field COMMENT_OPEN Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field COMMENT_TEXT Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field DOCTYPE Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field DOCTYPE_OPEN Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field DOCTYPE_TEXT Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field DOCUMENT Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field ELEMENT Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field EMPTY_TAG_CLOSE Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field END_TAG Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field END_TAG_OPEN Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field ENTITY_REFERENCE Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field EQUALS Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field ERROR Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field GREATER_THAN Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field INSTRUCTION_CLOSE Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field INSTRUCTION_OPEN Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field INSTRUCTION_TEXT Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field LESS_THAN Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field NAME Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field PROCESSING_INSTRUCTION Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field QUOTE Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field START_TAG Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field TEXT Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field WHITESPACE Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static final field XML_DECLARATION Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun isToken ()Z
+	public final fun isTrivia ()Z
+	public static fun valueOf (Ljava/lang/String;)Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public static fun values ()[Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+}
+
+public final class com/davils/kxml/core/syntax/XmlSyntaxNode : com/davils/kxml/core/syntax/XmlSyntaxElement {
+	public final fun child (Lcom/davils/kxml/core/syntax/XmlSyntaxKind;)Lcom/davils/kxml/core/syntax/XmlSyntaxNode;
+	public final fun coveringNode (Lcom/davils/kore/core/text/TextRange;)Lcom/davils/kxml/core/syntax/XmlSyntaxNode;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getChildNodes ()Ljava/util/List;
+	public final fun getChildren ()Ljava/util/List;
+	public final fun getDescendants ()Lkotlin/sequences/Sequence;
+	public fun getKind ()Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public fun getParent ()Lcom/davils/kxml/core/syntax/XmlSyntaxNode;
+	public fun getRange ()Lcom/davils/kore/core/text/TextRange;
+	public fun getText ()Ljava/lang/String;
+	public final fun getTokens ()Lkotlin/sequences/Sequence;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public final fun token (Lcom/davils/kxml/core/syntax/XmlSyntaxKind;)Lcom/davils/kxml/core/syntax/XmlSyntaxToken;
+	public final fun tokenAt (I)Lcom/davils/kxml/core/syntax/XmlSyntaxToken;
+}
+
+public final class com/davils/kxml/core/syntax/XmlSyntaxToken : com/davils/kxml/core/syntax/XmlSyntaxElement {
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getKind ()Lcom/davils/kxml/core/syntax/XmlSyntaxKind;
+	public fun getParent ()Lcom/davils/kxml/core/syntax/XmlSyntaxNode;
+	public fun getRange ()Lcom/davils/kore/core/text/TextRange;
+	public fun getText ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/core/syntax/XmlSyntaxTree {
+	public static final field Companion Lcom/davils/kxml/core/syntax/XmlSyntaxTree$Companion;
+	public final fun compose ()Lcom/davils/kxml/core/XmlParseResult;
+	public final fun getDiagnostics ()Ljava/util/List;
+	public final fun getLines ()Lcom/davils/kore/core/text/LineMap;
+	public final fun getRoot ()Lcom/davils/kxml/core/syntax/XmlSyntaxNode;
+	public final fun getText ()Ljava/lang/String;
+	public final fun getXml ()Lcom/davils/kxml/core/Xml;
+	public final fun isValid ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/core/syntax/XmlSyntaxTree$Companion {
+	public final fun parse (Ljava/lang/String;Lcom/davils/kxml/core/Xml;)Lcom/davils/kxml/core/syntax/XmlSyntaxTree;
+	public static synthetic fun parse$default (Lcom/davils/kxml/core/syntax/XmlSyntaxTree$Companion;Ljava/lang/String;Lcom/davils/kxml/core/Xml;ILjava/lang/Object;)Lcom/davils/kxml/core/syntax/XmlSyntaxTree;
 }
 

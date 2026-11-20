@@ -61,6 +61,16 @@ public class Xml internal constructor(public val configuration: XmlConfiguration
     public fun parse(source: XmlSource): XmlParseResult = pipeline.parse(source)
 
     /**
+     * Creates a reader that reads [source] event by event, without building its tree, with the limits of
+     * [configuration].
+     *
+     * @param source the document to read.
+     * @return a reader that is not thread safe; it never throws for malformed input.
+     * @since 1.0.0
+     */
+    public fun reader(source: XmlSource): XmlReader = pipeline.reader(source)
+
+    /**
      * Reads [source] into a flat list of events without building a tree.
      *
      * The reader stops at the first error; the result then holds the events read so far and the diagnostic of the

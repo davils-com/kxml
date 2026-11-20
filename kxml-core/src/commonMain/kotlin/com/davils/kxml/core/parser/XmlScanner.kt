@@ -23,6 +23,7 @@ import com.davils.kxml.core.XmlEvent
 import com.davils.kxml.core.diagnostic.XmlDiagnostic
 import com.davils.kxml.core.diagnostic.XmlDiagnosticCode
 import com.davils.kxml.core.source.XmlEncoding
+import com.davils.kxml.core.syntax.XmlSyntaxKind
 
 private const val END_TAG: String = "</"
 private const val COMMENT: String = "<!--"
@@ -32,25 +33,27 @@ private const val DOCTYPE: String = "<!DOCTYPE"
 private const val MARKUP: String = "<!"
 private const val START: String = "<"
 private const val ANYTHING: String = ""
+private const val BYTE_ORDER_MARK: String = "\uFEFF"
 
 internal class XmlScanner(
     text: String,
     private val configuration: XmlConfiguration,
     private val encoding: XmlEncoding?,
+    private val sink: SyntaxSink,
 ) {
     private val cursor = Cursor(text)
     private val budget = ParseBudget(configuration.limits)
-    private val characters = CharacterReader(cursor, budget)
-    private val tags = TagReader(cursor, budget, characters)
-    private val markup = MarkupReader(cursor, budget, tags)
-    private val declarations = DeclarationReader(cursor, characters)
+    private val characters = CharacterReader(cursor, budget, sink)
+    private val tags = TagReader(cursor = cursor, budget = budget, characters = characters, sink = sink)
+    private val markup = MarkupReader(cursor = cursor, budget = budget, tags = tags, sink = sink)
+    private val declarations = DeclarationReader(cursor, characters, sink)
     private val resolver = NamespaceResolver()
     private val open = ArrayDeque<OpenElement>()
     private val pending = ArrayDeque<XmlEvent>()
-    private val scanned = mutableListOf<XmlEvent>()
     private val noticed = mutableListOf<XmlDiagnostic>()
     private var hasRoot = false
     private var hasDoctype = false
+    private var isStarted = false
 
     private val contentReaders: List<Pair<String, () -> XmlEvent>> = listOf(
         END_TAG to ::endTag,
@@ -71,16 +74,23 @@ internal class XmlScanner(
         ANYTHING to ::strayText,
     )
 
-    val events: List<XmlEvent> get() = scanned.toList()
-
     val warnings: List<XmlDiagnostic> get() = noticed.toList()
 
-    fun scan() {
-        if (declarations.isAhead()) scanned += declarations.read(encoding)
-        generateSequence(::next).forEach(scanned::add)
+    fun next(): XmlEvent? {
+        if (!isStarted) return start()
+        return pending.removeFirstOrNull() ?: produce()
     }
 
-    private fun next(): XmlEvent? = pending.removeFirstOrNull() ?: produce()
+    private fun start(): XmlEvent? {
+        isStarted = true
+        sink.startNode(XmlSyntaxKind.DOCUMENT)
+        if (cursor.startsWith(BYTE_ORDER_MARK)) {
+            cursor.advance(BYTE_ORDER_MARK.length)
+            sink.token(kind = XmlSyntaxKind.BYTE_ORDER_MARK, start = 0, end = cursor.offset)
+        }
+        if (declarations.isAhead()) return declarations.read(encoding)
+        return next()
+    }
 
     private fun produce(): XmlEvent? {
         if (open.isNotEmpty()) return content()
@@ -100,7 +110,7 @@ internal class XmlScanner(
     }
 
     private fun outside(): XmlEvent? {
-        cursor.skipWhitespace()
+        cursor.skipWhitespace(sink)
         if (cursor.isAtEnd) return finish()
         val (_, reader) = outsideReaders.first { (prefix, _) -> cursor.startsWith(prefix) }
         return reader()
@@ -114,6 +124,7 @@ internal class XmlScanner(
                 "There is no root element",
             )
         }
+        sink.finishNode()
         return null
     }
 
@@ -199,6 +210,7 @@ internal class XmlScanner(
             )
         }
         resolver.close()
+        sink.finishNode()
         return XmlEvent.EndElement(top.name, tag.range)
     }
 }

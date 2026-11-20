@@ -21,6 +21,7 @@ import com.davils.kxml.core.diagnostic.XmlDiagnosticCode
 import com.davils.kxml.core.internal.NameSet
 import com.davils.kxml.core.internal.charCountOf
 import com.davils.kxml.core.name.XmlCharacters
+import com.davils.kxml.core.syntax.XmlSyntaxKind
 
 private const val END_TAG_OPEN: String = "</"
 private const val TAG_CLOSE: Char = '>'
@@ -31,6 +32,7 @@ internal class TagReader(
     private val cursor: Cursor,
     private val budget: ParseBudget,
     private val characters: CharacterReader,
+    private val sink: SyntaxSink,
 ) {
     fun name(): String {
         val start = cursor.offset
@@ -41,12 +43,16 @@ internal class TagReader(
             cursor.advance(charCountOf(cursor.codePoint()))
         }
         budget.name(cursor.offset - start, cursor.rangeFrom(start))
+        sink.token(kind = XmlSyntaxKind.NAME, start = start, end = cursor.offset)
         return cursor.text.substring(startIndex = start, endIndex = cursor.offset)
     }
 
     fun startTag(): RawTag {
         val start = cursor.offset
+        sink.startNode(XmlSyntaxKind.ELEMENT)
+        sink.startNode(XmlSyntaxKind.START_TAG)
         cursor.advance()
+        sink.token(kind = XmlSyntaxKind.LESS_THAN, start = start, end = cursor.offset)
         val name = qualifiedName()
         val attributes = mutableListOf<RawAttribute>()
         val names = NameSet()
@@ -55,7 +61,12 @@ internal class TagReader(
             budget.attributes(attributes.size, cursor.rangeFrom(start))
         }
         val isEmpty = cursor.startsWith(EMPTY_CLOSE)
+        val close = cursor.offset
         cursor.advance(EMPTY_CLOSE.length.takeIf { isEmpty } ?: 1)
+        val closing = XmlSyntaxKind.EMPTY_TAG_CLOSE.takeIf { isEmpty } ?: XmlSyntaxKind.GREATER_THAN
+        sink.token(kind = closing, start = close, end = cursor.offset)
+        sink.finishNode()
+        if (isEmpty) sink.finishNode()
         return RawTag(
             qualified = name,
             attributes = attributes.toList(),
@@ -66,9 +77,11 @@ internal class TagReader(
 
     fun endTag(): RawTag {
         val start = cursor.offset
+        sink.startNode(XmlSyntaxKind.END_TAG)
         cursor.advance(END_TAG_OPEN.length)
+        sink.token(kind = XmlSyntaxKind.END_TAG_OPEN, start = start, end = cursor.offset)
         val name = qualifiedName()
-        cursor.skipWhitespace()
+        cursor.skipWhitespace(sink)
         if (cursor.isAtEnd || cursor.peek() != TAG_CLOSE) {
             failure(
                 XmlDiagnosticCode.UnexpectedContent,
@@ -77,6 +90,8 @@ internal class TagReader(
             )
         }
         cursor.advance()
+        sink.token(kind = XmlSyntaxKind.GREATER_THAN, start = cursor.offset - 1, end = cursor.offset)
+        sink.finishNode()
         return RawTag(qualified = name, attributes = emptyList(), isEmpty = false, range = cursor.rangeFrom(start))
     }
 
@@ -94,7 +109,7 @@ internal class TagReader(
     }
 
     private fun isTagEnd(start: Int): Boolean {
-        val hasSpace = cursor.skipWhitespace()
+        val hasSpace = cursor.skipWhitespace(sink)
         if (cursor.isAtEnd) {
             failure(
                 XmlDiagnosticCode.UnexpectedEnd,
@@ -115,6 +130,7 @@ internal class TagReader(
 
     private fun attribute(names: NameSet): RawAttribute {
         val start = cursor.offset
+        sink.startNode(XmlSyntaxKind.ATTRIBUTE)
         val name = qualifiedName()
         if (!names.add(name)) {
             failure(
@@ -123,7 +139,7 @@ internal class TagReader(
                 "The attribute $name is set twice",
             )
         }
-        cursor.skipWhitespace()
+        cursor.skipWhitespace(sink)
         if (cursor.isAtEnd || cursor.peek() != EQUALS) {
             failure(
                 XmlDiagnosticCode.InvalidAttribute,
@@ -132,8 +148,10 @@ internal class TagReader(
             )
         }
         cursor.advance()
-        cursor.skipWhitespace()
+        sink.token(kind = XmlSyntaxKind.EQUALS, start = cursor.offset - 1, end = cursor.offset)
+        cursor.skipWhitespace(sink)
         val value = characters.attributeValue()
+        sink.finishNode()
         return RawAttribute(name, value, cursor.rangeFrom(start))
     }
 }

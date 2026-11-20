@@ -76,6 +76,55 @@ final enum class com.davils.kxml.core.emit/XmlLineBreak : kotlin/Enum<com.davils
     final fun values(): kotlin/Array<com.davils.kxml.core.emit/XmlLineBreak> // com.davils.kxml.core.emit/XmlLineBreak.values|values#static(){}[0]
 }
 
+final enum class com.davils.kxml.core.syntax/XmlSyntaxKind : kotlin/Enum<com.davils.kxml.core.syntax/XmlSyntaxKind> { // com.davils.kxml.core.syntax/XmlSyntaxKind|null[0]
+    enum entry ATTRIBUTE // com.davils.kxml.core.syntax/XmlSyntaxKind.ATTRIBUTE|null[0]
+    enum entry ATTRIBUTE_TEXT // com.davils.kxml.core.syntax/XmlSyntaxKind.ATTRIBUTE_TEXT|null[0]
+    enum entry ATTRIBUTE_VALUE // com.davils.kxml.core.syntax/XmlSyntaxKind.ATTRIBUTE_VALUE|null[0]
+    enum entry BYTE_ORDER_MARK // com.davils.kxml.core.syntax/XmlSyntaxKind.BYTE_ORDER_MARK|null[0]
+    enum entry CDATA_CLOSE // com.davils.kxml.core.syntax/XmlSyntaxKind.CDATA_CLOSE|null[0]
+    enum entry CDATA_OPEN // com.davils.kxml.core.syntax/XmlSyntaxKind.CDATA_OPEN|null[0]
+    enum entry CDATA_SECTION // com.davils.kxml.core.syntax/XmlSyntaxKind.CDATA_SECTION|null[0]
+    enum entry CDATA_TEXT // com.davils.kxml.core.syntax/XmlSyntaxKind.CDATA_TEXT|null[0]
+    enum entry CHARACTER_REFERENCE // com.davils.kxml.core.syntax/XmlSyntaxKind.CHARACTER_REFERENCE|null[0]
+    enum entry COMMENT // com.davils.kxml.core.syntax/XmlSyntaxKind.COMMENT|null[0]
+    enum entry COMMENT_CLOSE // com.davils.kxml.core.syntax/XmlSyntaxKind.COMMENT_CLOSE|null[0]
+    enum entry COMMENT_OPEN // com.davils.kxml.core.syntax/XmlSyntaxKind.COMMENT_OPEN|null[0]
+    enum entry COMMENT_TEXT // com.davils.kxml.core.syntax/XmlSyntaxKind.COMMENT_TEXT|null[0]
+    enum entry DOCTYPE // com.davils.kxml.core.syntax/XmlSyntaxKind.DOCTYPE|null[0]
+    enum entry DOCTYPE_OPEN // com.davils.kxml.core.syntax/XmlSyntaxKind.DOCTYPE_OPEN|null[0]
+    enum entry DOCTYPE_TEXT // com.davils.kxml.core.syntax/XmlSyntaxKind.DOCTYPE_TEXT|null[0]
+    enum entry DOCUMENT // com.davils.kxml.core.syntax/XmlSyntaxKind.DOCUMENT|null[0]
+    enum entry ELEMENT // com.davils.kxml.core.syntax/XmlSyntaxKind.ELEMENT|null[0]
+    enum entry EMPTY_TAG_CLOSE // com.davils.kxml.core.syntax/XmlSyntaxKind.EMPTY_TAG_CLOSE|null[0]
+    enum entry END_TAG // com.davils.kxml.core.syntax/XmlSyntaxKind.END_TAG|null[0]
+    enum entry END_TAG_OPEN // com.davils.kxml.core.syntax/XmlSyntaxKind.END_TAG_OPEN|null[0]
+    enum entry ENTITY_REFERENCE // com.davils.kxml.core.syntax/XmlSyntaxKind.ENTITY_REFERENCE|null[0]
+    enum entry EQUALS // com.davils.kxml.core.syntax/XmlSyntaxKind.EQUALS|null[0]
+    enum entry ERROR // com.davils.kxml.core.syntax/XmlSyntaxKind.ERROR|null[0]
+    enum entry GREATER_THAN // com.davils.kxml.core.syntax/XmlSyntaxKind.GREATER_THAN|null[0]
+    enum entry INSTRUCTION_CLOSE // com.davils.kxml.core.syntax/XmlSyntaxKind.INSTRUCTION_CLOSE|null[0]
+    enum entry INSTRUCTION_OPEN // com.davils.kxml.core.syntax/XmlSyntaxKind.INSTRUCTION_OPEN|null[0]
+    enum entry INSTRUCTION_TEXT // com.davils.kxml.core.syntax/XmlSyntaxKind.INSTRUCTION_TEXT|null[0]
+    enum entry LESS_THAN // com.davils.kxml.core.syntax/XmlSyntaxKind.LESS_THAN|null[0]
+    enum entry NAME // com.davils.kxml.core.syntax/XmlSyntaxKind.NAME|null[0]
+    enum entry PROCESSING_INSTRUCTION // com.davils.kxml.core.syntax/XmlSyntaxKind.PROCESSING_INSTRUCTION|null[0]
+    enum entry QUOTE // com.davils.kxml.core.syntax/XmlSyntaxKind.QUOTE|null[0]
+    enum entry START_TAG // com.davils.kxml.core.syntax/XmlSyntaxKind.START_TAG|null[0]
+    enum entry TEXT // com.davils.kxml.core.syntax/XmlSyntaxKind.TEXT|null[0]
+    enum entry WHITESPACE // com.davils.kxml.core.syntax/XmlSyntaxKind.WHITESPACE|null[0]
+    enum entry XML_DECLARATION // com.davils.kxml.core.syntax/XmlSyntaxKind.XML_DECLARATION|null[0]
+
+    final val entries // com.davils.kxml.core.syntax/XmlSyntaxKind.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<com.davils.kxml.core.syntax/XmlSyntaxKind> // com.davils.kxml.core.syntax/XmlSyntaxKind.entries.<get-entries>|<get-entries>#static(){}[0]
+    final val isToken // com.davils.kxml.core.syntax/XmlSyntaxKind.isToken|{}isToken[0]
+        final fun <get-isToken>(): kotlin/Boolean // com.davils.kxml.core.syntax/XmlSyntaxKind.isToken.<get-isToken>|<get-isToken>(){}[0]
+    final val isTrivia // com.davils.kxml.core.syntax/XmlSyntaxKind.isTrivia|{}isTrivia[0]
+        final fun <get-isTrivia>(): kotlin/Boolean // com.davils.kxml.core.syntax/XmlSyntaxKind.isTrivia.<get-isTrivia>|<get-isTrivia>(){}[0]
+
+    final fun valueOf(kotlin/String): com.davils.kxml.core.syntax/XmlSyntaxKind // com.davils.kxml.core.syntax/XmlSyntaxKind.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<com.davils.kxml.core.syntax/XmlSyntaxKind> // com.davils.kxml.core.syntax/XmlSyntaxKind.values|values#static(){}[0]
+}
+
 final enum class com.davils.kxml.core/XmlDoctype : kotlin/Enum<com.davils.kxml.core/XmlDoctype> { // com.davils.kxml.core/XmlDoctype|null[0]
     enum entry Ignore // com.davils.kxml.core/XmlDoctype.Ignore|null[0]
     enum entry Refuse // com.davils.kxml.core/XmlDoctype.Refuse|null[0]
@@ -96,6 +145,19 @@ final enum class com.davils.kxml.core/XmlWhitespace : kotlin/Enum<com.davils.kxm
 
     final fun valueOf(kotlin/String): com.davils.kxml.core/XmlWhitespace // com.davils.kxml.core/XmlWhitespace.valueOf|valueOf#static(kotlin.String){}[0]
     final fun values(): kotlin/Array<com.davils.kxml.core/XmlWhitespace> // com.davils.kxml.core/XmlWhitespace.values|values#static(){}[0]
+}
+
+sealed interface com.davils.kxml.core.syntax/XmlSyntaxElement { // com.davils.kxml.core.syntax/XmlSyntaxElement|null[0]
+    abstract val kind // com.davils.kxml.core.syntax/XmlSyntaxElement.kind|{}kind[0]
+        abstract fun <get-kind>(): com.davils.kxml.core.syntax/XmlSyntaxKind // com.davils.kxml.core.syntax/XmlSyntaxElement.kind.<get-kind>|<get-kind>(){}[0]
+    abstract val parent // com.davils.kxml.core.syntax/XmlSyntaxElement.parent|{}parent[0]
+        abstract fun <get-parent>(): com.davils.kxml.core.syntax/XmlSyntaxNode? // com.davils.kxml.core.syntax/XmlSyntaxElement.parent.<get-parent>|<get-parent>(){}[0]
+    abstract val range // com.davils.kxml.core.syntax/XmlSyntaxElement.range|{}range[0]
+        abstract fun <get-range>(): com.davils.kore.core.text/TextRange // com.davils.kxml.core.syntax/XmlSyntaxElement.range.<get-range>|<get-range>(){}[0]
+    abstract val text // com.davils.kxml.core.syntax/XmlSyntaxElement.text|{}text[0]
+        abstract fun <get-text>(): kotlin/String // com.davils.kxml.core.syntax/XmlSyntaxElement.text.<get-text>|<get-text>(){}[0]
+    open val ancestors // com.davils.kxml.core.syntax/XmlSyntaxElement.ancestors|{}ancestors[0]
+        open fun <get-ancestors>(): kotlin.sequences/Sequence<com.davils.kxml.core.syntax/XmlSyntaxNode> // com.davils.kxml.core.syntax/XmlSyntaxElement.ancestors.<get-ancestors>|<get-ancestors>(){}[0]
 }
 
 sealed interface com.davils.kxml.core/XmlEvent { // com.davils.kxml.core/XmlEvent|null[0]
@@ -455,6 +517,70 @@ final class com.davils.kxml.core.source/XmlSource { // com.davils.kxml.core.sour
     }
 }
 
+final class com.davils.kxml.core.syntax/XmlSyntaxNode : com.davils.kxml.core.syntax/XmlSyntaxElement { // com.davils.kxml.core.syntax/XmlSyntaxNode|null[0]
+    final val childNodes // com.davils.kxml.core.syntax/XmlSyntaxNode.childNodes|{}childNodes[0]
+        final fun <get-childNodes>(): kotlin.collections/List<com.davils.kxml.core.syntax/XmlSyntaxNode> // com.davils.kxml.core.syntax/XmlSyntaxNode.childNodes.<get-childNodes>|<get-childNodes>(){}[0]
+    final val children // com.davils.kxml.core.syntax/XmlSyntaxNode.children|{}children[0]
+        final fun <get-children>(): kotlin.collections/List<com.davils.kxml.core.syntax/XmlSyntaxElement> // com.davils.kxml.core.syntax/XmlSyntaxNode.children.<get-children>|<get-children>(){}[0]
+    final val descendants // com.davils.kxml.core.syntax/XmlSyntaxNode.descendants|{}descendants[0]
+        final fun <get-descendants>(): kotlin.sequences/Sequence<com.davils.kxml.core.syntax/XmlSyntaxNode> // com.davils.kxml.core.syntax/XmlSyntaxNode.descendants.<get-descendants>|<get-descendants>(){}[0]
+    final val kind // com.davils.kxml.core.syntax/XmlSyntaxNode.kind|{}kind[0]
+        final fun <get-kind>(): com.davils.kxml.core.syntax/XmlSyntaxKind // com.davils.kxml.core.syntax/XmlSyntaxNode.kind.<get-kind>|<get-kind>(){}[0]
+    final val parent // com.davils.kxml.core.syntax/XmlSyntaxNode.parent|{}parent[0]
+        final fun <get-parent>(): com.davils.kxml.core.syntax/XmlSyntaxNode? // com.davils.kxml.core.syntax/XmlSyntaxNode.parent.<get-parent>|<get-parent>(){}[0]
+    final val range // com.davils.kxml.core.syntax/XmlSyntaxNode.range|{}range[0]
+        final fun <get-range>(): com.davils.kore.core.text/TextRange // com.davils.kxml.core.syntax/XmlSyntaxNode.range.<get-range>|<get-range>(){}[0]
+    final val text // com.davils.kxml.core.syntax/XmlSyntaxNode.text|{}text[0]
+        final fun <get-text>(): kotlin/String // com.davils.kxml.core.syntax/XmlSyntaxNode.text.<get-text>|<get-text>(){}[0]
+    final val tokens // com.davils.kxml.core.syntax/XmlSyntaxNode.tokens|{}tokens[0]
+        final fun <get-tokens>(): kotlin.sequences/Sequence<com.davils.kxml.core.syntax/XmlSyntaxToken> // com.davils.kxml.core.syntax/XmlSyntaxNode.tokens.<get-tokens>|<get-tokens>(){}[0]
+
+    final fun child(com.davils.kxml.core.syntax/XmlSyntaxKind): com.davils.kxml.core.syntax/XmlSyntaxNode? // com.davils.kxml.core.syntax/XmlSyntaxNode.child|child(com.davils.kxml.core.syntax.XmlSyntaxKind){}[0]
+    final fun coveringNode(com.davils.kore.core.text/TextRange): com.davils.kxml.core.syntax/XmlSyntaxNode // com.davils.kxml.core.syntax/XmlSyntaxNode.coveringNode|coveringNode(com.davils.kore.core.text.TextRange){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // com.davils.kxml.core.syntax/XmlSyntaxNode.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // com.davils.kxml.core.syntax/XmlSyntaxNode.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // com.davils.kxml.core.syntax/XmlSyntaxNode.toString|toString(){}[0]
+    final fun token(com.davils.kxml.core.syntax/XmlSyntaxKind): com.davils.kxml.core.syntax/XmlSyntaxToken? // com.davils.kxml.core.syntax/XmlSyntaxNode.token|token(com.davils.kxml.core.syntax.XmlSyntaxKind){}[0]
+    final fun tokenAt(kotlin/Int): com.davils.kxml.core.syntax/XmlSyntaxToken? // com.davils.kxml.core.syntax/XmlSyntaxNode.tokenAt|tokenAt(kotlin.Int){}[0]
+}
+
+final class com.davils.kxml.core.syntax/XmlSyntaxToken : com.davils.kxml.core.syntax/XmlSyntaxElement { // com.davils.kxml.core.syntax/XmlSyntaxToken|null[0]
+    final val kind // com.davils.kxml.core.syntax/XmlSyntaxToken.kind|{}kind[0]
+        final fun <get-kind>(): com.davils.kxml.core.syntax/XmlSyntaxKind // com.davils.kxml.core.syntax/XmlSyntaxToken.kind.<get-kind>|<get-kind>(){}[0]
+    final val parent // com.davils.kxml.core.syntax/XmlSyntaxToken.parent|{}parent[0]
+        final fun <get-parent>(): com.davils.kxml.core.syntax/XmlSyntaxNode? // com.davils.kxml.core.syntax/XmlSyntaxToken.parent.<get-parent>|<get-parent>(){}[0]
+    final val range // com.davils.kxml.core.syntax/XmlSyntaxToken.range|{}range[0]
+        final fun <get-range>(): com.davils.kore.core.text/TextRange // com.davils.kxml.core.syntax/XmlSyntaxToken.range.<get-range>|<get-range>(){}[0]
+    final val text // com.davils.kxml.core.syntax/XmlSyntaxToken.text|{}text[0]
+        final fun <get-text>(): kotlin/String // com.davils.kxml.core.syntax/XmlSyntaxToken.text.<get-text>|<get-text>(){}[0]
+
+    final fun equals(kotlin/Any?): kotlin/Boolean // com.davils.kxml.core.syntax/XmlSyntaxToken.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // com.davils.kxml.core.syntax/XmlSyntaxToken.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // com.davils.kxml.core.syntax/XmlSyntaxToken.toString|toString(){}[0]
+}
+
+final class com.davils.kxml.core.syntax/XmlSyntaxTree { // com.davils.kxml.core.syntax/XmlSyntaxTree|null[0]
+    final val diagnostics // com.davils.kxml.core.syntax/XmlSyntaxTree.diagnostics|{}diagnostics[0]
+        final fun <get-diagnostics>(): kotlin.collections/List<com.davils.kxml.core.diagnostic/XmlDiagnostic> // com.davils.kxml.core.syntax/XmlSyntaxTree.diagnostics.<get-diagnostics>|<get-diagnostics>(){}[0]
+    final val isValid // com.davils.kxml.core.syntax/XmlSyntaxTree.isValid|{}isValid[0]
+        final fun <get-isValid>(): kotlin/Boolean // com.davils.kxml.core.syntax/XmlSyntaxTree.isValid.<get-isValid>|<get-isValid>(){}[0]
+    final val lines // com.davils.kxml.core.syntax/XmlSyntaxTree.lines|{}lines[0]
+        final fun <get-lines>(): com.davils.kore.core.text/LineMap // com.davils.kxml.core.syntax/XmlSyntaxTree.lines.<get-lines>|<get-lines>(){}[0]
+    final val root // com.davils.kxml.core.syntax/XmlSyntaxTree.root|{}root[0]
+        final fun <get-root>(): com.davils.kxml.core.syntax/XmlSyntaxNode // com.davils.kxml.core.syntax/XmlSyntaxTree.root.<get-root>|<get-root>(){}[0]
+    final val text // com.davils.kxml.core.syntax/XmlSyntaxTree.text|{}text[0]
+        final fun <get-text>(): kotlin/String // com.davils.kxml.core.syntax/XmlSyntaxTree.text.<get-text>|<get-text>(){}[0]
+    final val xml // com.davils.kxml.core.syntax/XmlSyntaxTree.xml|{}xml[0]
+        final fun <get-xml>(): com.davils.kxml.core/Xml // com.davils.kxml.core.syntax/XmlSyntaxTree.xml.<get-xml>|<get-xml>(){}[0]
+
+    final fun compose(): com.davils.kxml.core/XmlParseResult // com.davils.kxml.core.syntax/XmlSyntaxTree.compose|compose(){}[0]
+    final fun toString(): kotlin/String // com.davils.kxml.core.syntax/XmlSyntaxTree.toString|toString(){}[0]
+
+    final object Companion { // com.davils.kxml.core.syntax/XmlSyntaxTree.Companion|null[0]
+        final fun parse(kotlin/String, com.davils.kxml.core/Xml = ...): com.davils.kxml.core.syntax/XmlSyntaxTree // com.davils.kxml.core.syntax/XmlSyntaxTree.Companion.parse|parse(kotlin.String;com.davils.kxml.core.Xml){}[0]
+    }
+}
+
 final class com.davils.kxml.core/Xml { // com.davils.kxml.core/Xml|null[0]
     final val configuration // com.davils.kxml.core/Xml.configuration|{}configuration[0]
         final fun <get-configuration>(): com.davils.kxml.core/XmlConfiguration // com.davils.kxml.core/Xml.configuration.<get-configuration>|<get-configuration>(){}[0]
@@ -464,6 +590,7 @@ final class com.davils.kxml.core/Xml { // com.davils.kxml.core/Xml|null[0]
     final fun events(com.davils.kxml.core.source/XmlSource): com.davils.kxml.core/XmlEventResult // com.davils.kxml.core/Xml.events|events(com.davils.kxml.core.source.XmlSource){}[0]
     final fun parse(com.davils.kxml.core.source/XmlSource): com.davils.kxml.core/XmlParseResult // com.davils.kxml.core/Xml.parse|parse(com.davils.kxml.core.source.XmlSource){}[0]
     final fun parse(kotlin/String): com.davils.kxml.core/XmlParseResult // com.davils.kxml.core/Xml.parse|parse(kotlin.String){}[0]
+    final fun reader(com.davils.kxml.core.source/XmlSource): com.davils.kxml.core/XmlReader // com.davils.kxml.core/Xml.reader|reader(com.davils.kxml.core.source.XmlSource){}[0]
     final fun toString(): kotlin/String // com.davils.kxml.core/Xml.toString|toString(){}[0]
 
     final object Companion { // com.davils.kxml.core/Xml.Companion|null[0]
@@ -515,6 +642,16 @@ final class com.davils.kxml.core/XmlEventResult { // com.davils.kxml.core/XmlEve
     final fun equals(kotlin/Any?): kotlin/Boolean // com.davils.kxml.core/XmlEventResult.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // com.davils.kxml.core/XmlEventResult.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // com.davils.kxml.core/XmlEventResult.toString|toString(){}[0]
+}
+
+final class com.davils.kxml.core/XmlReader { // com.davils.kxml.core/XmlReader|null[0]
+    final val diagnostics // com.davils.kxml.core/XmlReader.diagnostics|{}diagnostics[0]
+        final fun <get-diagnostics>(): kotlin.collections/List<com.davils.kxml.core.diagnostic/XmlDiagnostic> // com.davils.kxml.core/XmlReader.diagnostics.<get-diagnostics>|<get-diagnostics>(){}[0]
+    final val isValid // com.davils.kxml.core/XmlReader.isValid|{}isValid[0]
+        final fun <get-isValid>(): kotlin/Boolean // com.davils.kxml.core/XmlReader.isValid.<get-isValid>|<get-isValid>(){}[0]
+
+    final fun next(): com.davils.kxml.core/XmlEvent? // com.davils.kxml.core/XmlReader.next|next(){}[0]
+    final fun toString(): kotlin/String // com.davils.kxml.core/XmlReader.toString|toString(){}[0]
 }
 
 sealed class com.davils.kxml.core.node/XmlNode { // com.davils.kxml.core.node/XmlNode|null[0]

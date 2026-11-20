@@ -18,6 +18,7 @@ package com.davils.kxml.core.compose
 
 import com.davils.kore.core.text.TextRange
 import com.davils.kxml.core.XmlEvent
+import com.davils.kxml.core.XmlReader
 import com.davils.kxml.core.XmlWhitespace
 import com.davils.kxml.core.node.XmlDeclaration
 import com.davils.kxml.core.node.XmlDocument
@@ -30,9 +31,9 @@ internal class TreeComposer(private val whitespace: XmlWhitespace) {
     private var root: XmlNode.Element? = null
     private var declaration: XmlDeclaration? = null
 
-    fun compose(events: List<XmlEvent>): XmlDocument {
-        events.forEach(::accept)
-        val composed = checkNotNull(root) { "A valid event stream has a root element" }
+    fun compose(reader: XmlReader): XmlDocument? {
+        generateSequence(reader::next).forEach(::accept)
+        val composed = root ?: return null
         return XmlDocument(
             root = composed,
             declaration = declaration,

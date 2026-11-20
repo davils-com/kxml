@@ -20,6 +20,7 @@ import com.davils.kore.core.text.TextRange
 import com.davils.kxml.core.XmlEvent
 import com.davils.kxml.core.diagnostic.XmlDiagnosticCode
 import com.davils.kxml.core.name.XmlCharacters
+import com.davils.kxml.core.syntax.XmlSyntaxKind
 
 private const val COMMENT_OPEN: String = "<!--"
 private const val COMMENT_DASHES: String = "--"
@@ -40,7 +41,12 @@ private val skippedSections: List<Pair<String, String>> = listOf(
     INSTRUCTION_OPEN to INSTRUCTION_CLOSE,
 )
 
-internal class MarkupReader(private val cursor: Cursor, private val budget: ParseBudget, private val tags: TagReader) {
+internal class MarkupReader(
+    private val cursor: Cursor,
+    private val budget: ParseBudget,
+    private val tags: TagReader,
+    private val sink: SyntaxSink,
+) {
     fun comment(): XmlEvent.Comment {
         val start = cursor.offset
         val from = start + COMMENT_OPEN.length
@@ -55,6 +61,11 @@ internal class MarkupReader(private val cursor: Cursor, private val budget: Pars
         }
         val value = section(from, dashes, start)
         cursor.moveTo(dashes + COMMENT_CLOSE.length)
+        sink.startNode(XmlSyntaxKind.COMMENT)
+        sink.token(kind = XmlSyntaxKind.COMMENT_OPEN, start = start, end = from)
+        sink.token(kind = XmlSyntaxKind.COMMENT_TEXT, start = from, end = dashes)
+        sink.token(kind = XmlSyntaxKind.COMMENT_CLOSE, start = dashes, end = cursor.offset)
+        sink.finishNode()
         return XmlEvent.Comment(value, cursor.rangeFrom(start))
     }
 
@@ -71,15 +82,22 @@ internal class MarkupReader(private val cursor: Cursor, private val budget: Pars
         }
         val value = section(from, end, start)
         cursor.moveTo(end + CDATA_CLOSE.length)
+        sink.startNode(XmlSyntaxKind.CDATA_SECTION)
+        sink.token(kind = XmlSyntaxKind.CDATA_OPEN, start = start, end = from)
+        sink.token(kind = XmlSyntaxKind.CDATA_TEXT, start = from, end = end)
+        sink.token(kind = XmlSyntaxKind.CDATA_CLOSE, start = end, end = cursor.offset)
+        sink.finishNode()
         return XmlEvent.CData(value, cursor.rangeFrom(start))
     }
 
     fun instruction(): XmlEvent.ProcessingInstruction {
         val start = cursor.offset
+        sink.startNode(XmlSyntaxKind.PROCESSING_INSTRUCTION)
         cursor.advance(INSTRUCTION_OPEN.length)
+        sink.token(kind = XmlSyntaxKind.INSTRUCTION_OPEN, start = start, end = cursor.offset)
         val target = tags.name()
         checkTarget(target, start)
-        val hasSpace = cursor.skipWhitespace()
+        val hasSpace = cursor.skipWhitespace(sink)
         val end = cursor.indexOf(INSTRUCTION_CLOSE)
         if (end < 0) failure(XmlDiagnosticCode.UnexpectedEnd, cursor.rest(start), "The instruction is not closed")
         if (!hasSpace && end != cursor.offset) {
@@ -90,20 +108,26 @@ internal class MarkupReader(private val cursor: Cursor, private val budget: Pars
             )
         }
         val data = section(from = cursor.offset, to = end, start = start)
+        sink.token(kind = XmlSyntaxKind.INSTRUCTION_TEXT, start = cursor.offset, end = end)
         cursor.moveTo(end + INSTRUCTION_CLOSE.length)
+        sink.token(kind = XmlSyntaxKind.INSTRUCTION_CLOSE, start = end, end = cursor.offset)
+        sink.finishNode()
         return XmlEvent.ProcessingInstruction(target, data, cursor.rangeFrom(start))
     }
 
     fun skipDoctype() {
         val start = cursor.offset
+        sink.startNode(XmlSyntaxKind.DOCTYPE)
         cursor.advance(DOCTYPE_OPEN.length)
-        if (!cursor.skipWhitespace()) {
+        sink.token(kind = XmlSyntaxKind.DOCTYPE_OPEN, start = start, end = cursor.offset)
+        if (!cursor.skipWhitespace(sink)) {
             failure(
                 XmlDiagnosticCode.UnexpectedContent,
                 TextRange.at(cursor.offset),
                 "A document type needs whitespace before its name",
             )
         }
+        val content = cursor.offset
         var depth = 0
         while (depth > 0 || !cursor.startsWith(DOCTYPE_CLOSE)) {
             if (cursor.isAtEnd) {
@@ -111,7 +135,10 @@ internal class MarkupReader(private val cursor: Cursor, private val budget: Pars
             }
             depth += skipUnit(start)
         }
+        sink.token(kind = XmlSyntaxKind.DOCTYPE_TEXT, start = content, end = cursor.offset)
         cursor.advance(DOCTYPE_CLOSE.length)
+        sink.token(kind = XmlSyntaxKind.GREATER_THAN, start = cursor.offset - DOCTYPE_CLOSE.length, end = cursor.offset)
+        sink.finishNode()
     }
 
     private fun skipUnit(start: Int): Int {

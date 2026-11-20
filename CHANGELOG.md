@@ -30,6 +30,11 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
 - `XmlLimits` gives every limit a hard ceiling, `HARD_INPUT_LENGTH`, `HARD_DEPTH`, `HARD_ELEMENTS`, `HARD_ATTRIBUTES`
   and `HARD_NAME_LENGTH`, which no preset and no configuration exceeds; the limits validate themselves when they are
   created.
+- `XmlReader`, from `Xml.reader`, reads a document event by event without building its tree and stops at the first
+  error; `Xml.parse` composes the tree from it without holding every event.
+- `XmlSyntaxTree` is the lossless syntax tree of a text: every character belongs to exactly one token, so the text of
+  its root is the text again, and the rest of a text that stops being well formed becomes one `ERROR` token. It is
+  read by the same rules and limits as `Xml.parse`, and every walk over it is iterative.
 - The standards kxml implements are declared and reviewed in `standards.lock`, and the assurance gate reports a new
   version, a replacement or an undeclared standard.
 
