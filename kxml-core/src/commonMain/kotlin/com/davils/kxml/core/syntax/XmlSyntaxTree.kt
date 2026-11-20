@@ -20,11 +20,13 @@ import com.davils.kore.core.Limits
 import com.davils.kore.core.annotation.DavilsInternal
 import com.davils.kore.core.collection.immutableList
 import com.davils.kore.core.text.LineMap
+import com.davils.kore.core.text.TextEdit
 import com.davils.kore.core.validation.violation.Severity
 import com.davils.kxml.core.Xml
 import com.davils.kxml.core.XmlParseResult
 import com.davils.kxml.core.diagnostic.XmlDiagnostic
 import com.davils.kxml.core.syntax.internal.GreenNode
+import com.davils.kxml.core.syntax.internal.Reparse
 import com.davils.kxml.core.syntax.internal.SyntaxParsing
 
 /**
@@ -95,6 +97,26 @@ public class XmlSyntaxTree internal constructor(
      * @since 1.0.0
      */
     public fun compose(): XmlParseResult = xml.parse(text)
+
+    /**
+     * Applies [edits] to the text and returns the tree of the edited text.
+     *
+     * When the edits lie inside one element of a well-formed document without a document type declaration, only the
+     * smallest element that encloses them is parsed again, in the context of the XML declaration and the start tags
+     * around it, so its namespaces and its version are those of the document; the rest of the tree is shared with
+     * this one. In every other case, such as an edit that reaches a tag of the enclosing element, a document with
+     * errors or with a document type declaration, or an element that is no longer a single element afterwards, the
+     * edited text is parsed as a whole. Either way the result has the same text, tokens and diagnostics as a [parse]
+     * of the edited text with [xml]; the limits apply to the whole edited document, and an edited text longer than
+     * `XmlLimits.maximumInputLength` ends with an `InputTooLong` diagnostic, like [parse].
+     *
+     * @param edits the edits to apply, in any order, with ranges into [text] that do not overlap.
+     * @return the tree of the edited text, or this tree when [edits] is empty.
+     * @throws IllegalArgumentException if two edits overlap, an edit reaches beyond [text], or the edited text would
+     * be too long to be held in a string.
+     * @since 1.0.0
+     */
+    public fun edit(edits: List<TextEdit>): XmlSyntaxTree = Reparse(this).apply(edits)
 
     /**
      * Returns the length of the text and the number of diagnostics, such as `XmlSyntaxTree(120 characters, 0

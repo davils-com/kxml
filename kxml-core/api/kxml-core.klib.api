@@ -834,6 +834,7 @@ final class com.davils.kxml.core.syntax/XmlSyntaxTree { // com.davils.kxml.core.
         final fun <get-xml>(): com.davils.kxml.core/Xml // com.davils.kxml.core.syntax/XmlSyntaxTree.xml.<get-xml>|<get-xml>(){}[0]
 
     final fun compose(): com.davils.kxml.core/XmlParseResult // com.davils.kxml.core.syntax/XmlSyntaxTree.compose|compose(){}[0]
+    final fun edit(kotlin.collections/List<com.davils.kore.core.text/TextEdit>): com.davils.kxml.core.syntax/XmlSyntaxTree // com.davils.kxml.core.syntax/XmlSyntaxTree.edit|edit(kotlin.collections.List<com.davils.kore.core.text.TextEdit>){}[0]
     final fun toString(): kotlin/String // com.davils.kxml.core.syntax/XmlSyntaxTree.toString|toString(){}[0]
 
     final object Companion { // com.davils.kxml.core.syntax/XmlSyntaxTree.Companion|null[0]

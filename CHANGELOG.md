@@ -39,6 +39,11 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
 - `XmlSyntaxTree` is the lossless syntax tree of a text: every character belongs to exactly one token, so the text of
   its root is the text again, and the rest of a text that stops being well formed becomes one `ERROR` token. It is
   read by the same rules and limits as `Xml.parse`, and every walk over it is iterative.
+- `XmlSyntaxTree.edit` applies `TextEdit`s of Kore and parses only the smallest element that encloses them again, in
+  the context of the XML declaration and the start tags around it, and shares the rest of the tree. A document with
+  errors or a document type declaration, an edit that reaches a tag of the enclosing element and an element that is
+  no longer a single element are parsed as a whole, so the result always equals a full parse of the edited text,
+  with every limit charged to the whole document.
 - `XmlDoctype.Internal` reads the internal subset of a document type declaration: general and parameter entities,
   attribute lists with their defaults and the normalization of their types, element types, notations and unparsed
   entities. Entities are expanded in content and in attribute values, defaults are added before namespaces are
