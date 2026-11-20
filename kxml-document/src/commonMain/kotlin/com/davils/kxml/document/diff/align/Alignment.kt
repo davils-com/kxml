@@ -13,15 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:OptIn(DavilsInternal::class)
+
 package com.davils.kxml.document.diff.align
+
+import com.davils.kore.core.annotation.DavilsInternal
+import com.davils.kore.core.collection.OrderedMap
 
 internal object Alignment {
     fun matches(old: List<String>, new: List<String>): List<Pair<Int, Int>> {
         val prefix = commonPrefix(old, new)
         val suffix = commonSuffix(old, new, prefix)
         val middle = longestCommon(
-            old = old.subList(fromIndex = prefix, toIndex = old.size - suffix),
-            new = new.subList(fromIndex = prefix, toIndex = new.size - suffix),
+            oldKeys = old.subList(fromIndex = prefix, toIndex = old.size - suffix),
+            newKeys = new.subList(fromIndex = prefix, toIndex = new.size - suffix),
         )
         val head = (0..<prefix).map { index -> index to index }
         val shifted = middle.map { (left, right) -> left + prefix to right + prefix }
@@ -50,7 +55,10 @@ internal object Alignment {
     private fun isSameFromEnd(old: List<String>, new: List<String>, offset: Int): Boolean =
         old[old.size - 1 - offset] == new[new.size - 1 - offset]
 
-    private fun longestCommon(old: List<String>, new: List<String>): List<Pair<Int, Int>> {
+    private fun longestCommon(oldKeys: List<String>, newKeys: List<String>): List<Pair<Int, Int>> {
+        val codes = OrderedMap<String, Int>()
+        val old = oldKeys.map { key -> codes.getOrPut(key) { codes.size } }
+        val new = newKeys.map { key -> codes.getOrPut(key) { codes.size } }
         val width = new.size + 1
         val lengths = IntArray((old.size + 1) * width)
         for (left in old.indices.reversed()) {

@@ -42,6 +42,8 @@ private const val CASES: Int = 300
 private const val SMALL: Long = 30L
 private const val VISITS: Long = 6L
 private const val IN_PLACE: Int = 8
+private const val DECLARATIONS: Int = 100
+private const val INSERTED: Int = 40
 
 private val pretty: String = """
     |<a>
@@ -149,6 +151,25 @@ class XmlDiffTest : FunSpec({
             val coarse = shouldTurnInto(old, new, XmlDiff(xmlLimits { maximumDiffWork = SMALL * SMALL / 2 }))
 
             coarse.operations.size shouldBeLessThanOrEqual 1
+        }
+
+        test("charges the namespaces every inserted element carries") {
+            val declarations = (0..<DECLARATIONS).joinToString(
+                separator = " ",
+            ) { index -> "xmlns:p$index='urn:$index'" }
+            val old = "<r $declarations><a/></r>"
+            val new = "<r $declarations><a/>" + "<b/>".repeat(INSERTED) + "</r>"
+            val enough = XmlDiff(xmlLimits { maximumDiffWork = DECLARATIONS * INSERTED * 2L })
+            val tight = XmlDiff(xmlLimits { maximumDiffWork = DECLARATIONS * INSERTED / 2L })
+
+            shouldTurnInto(old, new, enough).operations.size shouldBe 1
+            val error = shouldThrow<XmlDocumentLimitException> {
+                tight.diff(
+                    old = documentOf(old),
+                    new = documentOf(new),
+                )
+            }
+            error.limit shouldBe "maximumDiffWork"
         }
 
         test("stops a diff that visits too many nodes") {

@@ -67,7 +67,7 @@ public class XmlDiff(public val limits: XmlLimits = XmlLimits.Untrusted) {
         val walk = DiffWalk(
             old = DocumentModel.of(old),
             new = newModel,
-            source = NodeSource(new, newModel),
+            source = NodeSource(new, newModel, budget),
             budget = budget,
         )
         val operations = try {

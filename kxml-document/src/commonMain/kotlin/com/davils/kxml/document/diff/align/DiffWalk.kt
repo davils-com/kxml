@@ -19,6 +19,7 @@ package com.davils.kxml.document.diff.align
 
 import com.davils.kore.core.annotation.DavilsInternal
 import com.davils.kore.core.budget.WorkBudget
+import com.davils.kore.core.collection.OrderedMap
 import com.davils.kxml.core.name.XmlCharacters
 import com.davils.kxml.core.name.XmlName
 import com.davils.kxml.core.name.XmlNamespaces
@@ -109,10 +110,10 @@ internal class DiffWalk(
         aligned(siblings = siblings, oldRange = siblings.old.indices, newRange = siblings.new.indices, isStrict = false)
 
     private fun attributes(selector: String, oldElement: Int, newElement: Int) {
-        val before = old.attributes(oldElement).associateBy { attribute -> expandedOf(old.attributeName(attribute)) }
-        val after = new.attributes(newElement).associateBy { attribute -> expandedOf(new.attributeName(attribute)) }
+        val before = attributesOf(old, oldElement)
+        val after = attributesOf(new, newElement)
         budget.charge((before.size + after.size).toLong())
-        before.forEach { (key, attribute) ->
+        before.entries.forEach { (key, attribute) ->
             val (written, namespaces) = writtenOf(old.attributeName(attribute))
             val target = "$selector/@$written"
             val replacement = after[key]?.let(new::value)
@@ -126,7 +127,8 @@ internal class DiffWalk(
                 )
             }
         }
-        after.filterKeys { key -> key !in before }.values.forEach { attribute ->
+        val added = after.entries.filter { (key, _) -> key !in before }
+        added.forEach { (_, attribute) ->
             val (written, namespaces) = writtenOf(new.attributeName(attribute))
             operations += XmlPatchOperation.AddAttribute(
                 selector = selector,
@@ -215,8 +217,20 @@ internal class DiffWalk(
 
     private fun expandedOf(name: XmlName): String = "{${name.namespace.orEmpty()}}${name.local}"
 
-    private fun declarationsOf(model: DocumentModel, element: Int): Set<Pair<String, String>> =
-        model.declaredNamespaces(element).mapTo(mutableSetOf()) { binding -> prefixOf(binding) to binding.uri }
+    private fun attributesOf(model: DocumentModel, element: Int): OrderedMap<String, Int> {
+        val attributes = OrderedMap<String, Int>()
+        for (attribute in model.attributes(element)) {
+            val name = model.attributeName(attribute)
+            attributes[expandedOf(name)] = attribute
+        }
+        return attributes
+    }
+
+    private fun declarationsOf(model: DocumentModel, element: Int): List<String> {
+        val declarations = model.declaredNamespaces(element)
+        budget.charge(declarations.size.toLong())
+        return declarations.map { binding -> "${prefixOf(binding)}$SEPARATOR${binding.uri}" }.sorted()
+    }
 
     private fun writtenOf(name: XmlName): Pair<String, Map<String, String>> {
         val namespace = name.namespace ?: return name.local to emptyMap()
