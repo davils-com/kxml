@@ -37,6 +37,12 @@ kreate {
                 note = "The cases XmlConformanceTest downloads as xmlts20130923.tar.gz, pinned by its SHA-256, and runs on the JVM."
                 url = "https://www.w3.org/XML/Test/"
             }
+            w3c("xml11") {
+                note = "XML 1.1 Second Edition: its line ends, its restricted characters and references to C0 controls."
+            }
+            w3c("xml-names11") {
+                note = "Namespaces in XML 1.1: undeclaring a prefix in a document of XML 1.1."
+            }
             w3c("xml-names") {
                 note = "Namespaces in XML 1.0: the namespace resolution of the reader and the prefixes the writer declares."
             }

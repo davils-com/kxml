@@ -144,7 +144,7 @@
         {
             "id": "w3c:xml-names",
             "reviewedOn": "2026-11-20",
-            "note": "Namespaces in XML 1.0 Third Edition. The series names Namespaces in XML 1.1 as newer; kxml-core reads 1.0 and refuses undeclaring a prefix, which only 1.1 allows. Kreate does not read W3C errata yet, so none were reviewed here.",
+            "note": "Namespaces in XML 1.0 Third Edition. The series names Namespaces in XML 1.1 as newer; kxml reads both, each for the version a document declares, and refuses undeclaring a prefix in XML 1.0. Kreate does not read W3C errata yet.",
             "snapshot": {
                 "title": "Namespaces in XML 1.0 (Third Edition)",
                 "status": "Recommendation",
@@ -154,6 +154,38 @@
                 "replacedBy": [],
                 "updatedBy": [
                     "w3c:xml-names11"
+                ],
+                "errata": {}
+            }
+        },
+        {
+            "id": "w3c:xml-names11",
+            "reviewedOn": "2026-11-20",
+            "note": "Namespaces in XML 1.1 Second Edition. kxml-core lets a document of XML 1.1 undeclare a prefix and refuses it in XML 1.0; the writer undeclares a prefix only in a document of XML 1.1. IRIs as namespace names are compared as strings, as both versions require. Kreate does not read W3C errata yet.",
+            "snapshot": {
+                "title": "Namespaces in XML 1.1 (Second Edition)",
+                "status": "Recommendation",
+                "revision": "2006-08-16",
+                "published": "2006-08-16",
+                "withdrawn": false,
+                "replacedBy": [],
+                "updatedBy": [],
+                "errata": {}
+            }
+        },
+        {
+            "id": "w3c:xml11",
+            "reviewedOn": "2026-11-20",
+            "note": "XML 1.1 Second Edition of 2006-08-16. The series names XML 1.0 Fifth Edition as its newer member, which is a newer edition of the other version, not a successor of 1.1. kxml-core applies the line ends, restricted characters and character references of 1.1 to documents that declare version 1.1, as Xml11Test and the 1.1 cases of the W3C suite pin. Kreate does not read W3C errata yet.",
+            "snapshot": {
+                "title": "Extensible Markup Language (XML) 1.1 (Second Edition)",
+                "status": "Recommendation",
+                "revision": "2006-08-16",
+                "published": "2006-08-16",
+                "withdrawn": false,
+                "replacedBy": [],
+                "updatedBy": [
+                    "w3c:xml"
                 ],
                 "errata": {}
             }
