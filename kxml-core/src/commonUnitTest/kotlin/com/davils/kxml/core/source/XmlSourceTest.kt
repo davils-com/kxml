@@ -135,10 +135,16 @@ class XmlSourceTest : FunSpec({
             test("read characters outside the basic plane from $encoding") {
                 parsedText(XmlSource.of(encode("$MARK<Key>$ROCKET</Key>"))) shouldBe ROCKET
             }
+
+            test("refuse a second byte order mark in $encoding, which is a character before the root") {
+                val doubled = XmlSource.of(encode(MARK + MARK + DOCUMENT))
+                Xml.Default.parse(doubled).shouldBeInstanceOf<XmlParseResult.Failed>()
+            }
         }
 
         test("strip a byte order mark from text") {
             parsedText(XmlSource.of(MARK + DOCUMENT)) shouldBe "über"
+            Xml.Default.parse(XmlSource.of(MARK + MARK + DOCUMENT)).shouldBeInstanceOf<XmlParseResult.Failed>()
         }
     }
 

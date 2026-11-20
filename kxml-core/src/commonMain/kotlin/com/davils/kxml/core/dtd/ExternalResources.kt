@@ -29,6 +29,8 @@ import com.davils.kxml.core.resolve.XmlResolver
 import com.davils.kxml.core.resolve.XmlResourceRequest
 import com.davils.kxml.core.source.SourceDecoding
 
+private const val BYTE_ORDER_MARK: String = "\uFEFF"
+
 internal class ExternalResources(private val resolver: XmlResolver?, private val limits: XmlLimits) {
     private val loaded = OrderedMap<String, LoadedResource>()
     private var count = 0
@@ -64,6 +66,7 @@ internal class ExternalResources(private val resolver: XmlResolver?, private val
         val decoded = SourceDecoding.decode(source)
         val error = decoded.diagnostics.firstOrNull { diagnostic -> diagnostic.severity == Severity.Error }
         if (error != null) failure(error.code, range, error.message)
-        return LoadedResource(text = decoded.text, encoding = decoded.encoding, uri = source.uri)
+        val text = decoded.text.removePrefix(BYTE_ORDER_MARK)
+        return LoadedResource(text = text, encoding = decoded.encoding, uri = source.uri)
     }
 }

@@ -114,6 +114,13 @@ class XmlResolverTest : FunSpec({
             request.name shouldBe "ch"
         }
 
+        test("strips one byte order mark from an external entity and keeps a second one as text") {
+            val mark = "\uFEFF"
+            val resolver = RecordingResolver(CHAPTER to "$mark${mark}x")
+
+            external(resolver).document(CHAPTER_BODY).root.text shouldBe "${mark}x"
+        }
+
         test("names the resource that declares an entity as its base") {
             val resolver = RecordingResolver(SUBSET to "<!ENTITY ch SYSTEM 'ch.xml'>", CHAPTER to "x")
 

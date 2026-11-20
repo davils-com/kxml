@@ -20,13 +20,12 @@ import com.davils.kore.core.text.TextRange
 import com.davils.kxml.core.diagnostic.XmlDiagnostic
 import com.davils.kxml.core.diagnostic.XmlDiagnosticCode
 
-private const val BYTE_ORDER_MARK: String = "\uFEFF"
 private const val PEEK_LENGTH: Int = 1_024
 
 internal object SourceDecoding {
     fun decode(source: XmlSource): DecodedSource {
         val text = source.text ?: return decode(source.bytes, source.charset)
-        return DecodedSource(text.removePrefix(BYTE_ORDER_MARK), encoding = null, diagnostics = emptyList())
+        return DecodedSource(text, encoding = null, diagnostics = emptyList())
     }
 
     private fun decode(bytes: ByteArray, charset: String?): DecodedSource =
@@ -49,7 +48,7 @@ internal object SourceDecoding {
             XmlDiagnosticCode.UnsupportedEncoding,
             "The document declares an encoding kxml does not read",
         )
-        return decoded(bytes = bytes, markLength = known.markLength, encoding = encoding, isAuthoritative = false)
+        return decoded(bytes = bytes, encoding = encoding, isAuthoritative = false)
     }
 
     private fun encodingOf(bytes: ByteArray, known: Detection.Known): XmlEncoding? {
@@ -71,7 +70,7 @@ internal object SourceDecoding {
             XmlDiagnosticCode.UnsupportedEncoding,
             "The charset of the source names an encoding kxml does not read",
         )
-        val decoded = decoded(bytes = bytes, markLength = 0, encoding = encoding, isAuthoritative = true)
+        val decoded = decoded(bytes = bytes, encoding = encoding, isAuthoritative = true)
         val declared = DeclaredEncoding.of(decoded.text)
         val isOverridden = declared != null && !encoding.accepts(declared)
         return decoded.takeUnless { isOverridden } ?: overridden(decoded, declared.orEmpty())
@@ -86,14 +85,8 @@ internal object SourceDecoding {
         return DecodedSource(decoded.text, decoded.encoding, decoded.diagnostics + warning)
     }
 
-    private fun decoded(
-        bytes: ByteArray,
-        markLength: Int,
-        encoding: XmlEncoding,
-        isAuthoritative: Boolean,
-    ): DecodedSource {
-        val content = bytes.copyOfRange(fromIndex = markLength, toIndex = bytes.size)
-        val text = textOrNull(content, encoding) ?: return refused(
+    private fun decoded(bytes: ByteArray, encoding: XmlEncoding, isAuthoritative: Boolean): DecodedSource {
+        val text = textOrNull(bytes, encoding) ?: return refused(
             XmlDiagnosticCode.InvalidEncoding,
             "The source is not valid $encoding",
         )
