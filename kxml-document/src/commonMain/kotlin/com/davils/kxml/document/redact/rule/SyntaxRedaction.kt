@@ -19,6 +19,7 @@ import com.davils.kore.core.text.TextEdit
 import com.davils.kore.core.text.TextRange
 import com.davils.kxml.core.XmlParseResult
 import com.davils.kxml.core.node.XmlDocument
+import com.davils.kxml.core.syntax.XmlSyntaxElement
 import com.davils.kxml.core.syntax.XmlSyntaxKind
 import com.davils.kxml.core.syntax.XmlSyntaxNode
 import com.davils.kxml.core.syntax.XmlSyntaxToken
@@ -165,13 +166,26 @@ internal class SyntaxRedaction(private val rules: RedactionRules) {
         }
 
         private fun referencesIn(node: XmlSyntaxNode, range: TextRange = node.range) {
-            val references = node.tokens.filter { token ->
+            val references = tokensWithin(node, range).filter { token ->
                 token.kind == XmlSyntaxKind.ENTITY_REFERENCE &&
                     token.range.start >= range.start &&
                     token.range.end <= range.end
             }
             val names = references.map { token -> token.text.removePrefix("&").removeSuffix(";") }
             names.filter { name -> name !in predefined }.forEach(::declarationEdited)
+        }
+
+        private fun tokensWithin(node: XmlSyntaxNode, range: TextRange): Sequence<XmlSyntaxToken> {
+            val children = node.children
+            val insertion = children.binarySearch { child -> (-1).takeIf { child.range.end <= range.start } ?: 1 }
+            val overlapping = children.subList(fromIndex = -(insertion + 1), toIndex = children.size)
+            val inside = overlapping.asSequence().takeWhile { child -> child.range.start < range.end }
+            return inside.flatMap(::tokensOf)
+        }
+
+        private fun tokensOf(child: XmlSyntaxElement): Sequence<XmlSyntaxToken> = when (child) {
+            is XmlSyntaxNode -> child.tokens
+            is XmlSyntaxToken -> sequenceOf(child)
         }
 
         private fun declarationEdited(name: String) {

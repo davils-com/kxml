@@ -24,10 +24,12 @@ import com.davils.kxml.core.xml
 import com.davils.kxml.document.XmlDocumentLimitException
 import com.davils.kxml.document.c14n.XmlCanonicalization
 import com.davils.kxml.document.c14n.XmlCanonicalizer
+import com.davils.kxml.document.fixture.GROWTH_FACTOR
 import com.davils.kxml.document.fixture.documentOf
 import com.davils.kxml.document.fixture.hostileText
 import com.davils.kxml.document.fixture.shouldBeShownSafely
 import com.davils.kxml.document.fixture.shouldFailSafely
+import com.davils.kxml.document.fixture.shouldGrowLinearly
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
@@ -60,6 +62,13 @@ private fun redactedText(text: String, rules: XmlRedaction = redaction): String 
 private fun refusalOf(text: String, rules: XmlRedaction = redaction): XmlRedactionRefusal {
     val tree = XmlSyntaxTree.parse(text, xml { doctype = XmlDoctype.Internal })
     return rules.redact(tree).shouldBeInstanceOf<XmlRedactionResult.Refused>().reason
+}
+
+private const val REDACTION_GROWTH: Int = 100
+
+private fun secrets(size: Int): String {
+    val entries = "\n  <user token='$SECRET'/><password>$SECRET</password><note>555-1234</note>".repeat(size)
+    return "<config>$entries\n</config>"
 }
 
 class XmlRedactionTest : FunSpec({
@@ -201,6 +210,17 @@ class XmlRedactionTest : FunSpec({
                 replaced.getOrNull()?.shouldBeShownSafely()
                 replaced.shouldFailSafely()
             }
+        }
+    }
+    context("the work of a redaction") {
+        test("grows linearly with the secrets of a document and of a syntax tree") {
+            val small = secrets(REDACTION_GROWTH)
+            val large = secrets(REDACTION_GROWTH * GROWTH_FACTOR)
+            val documents = mapOf(small to documentOf(small), large to documentOf(large))
+            val trees = mapOf(small to XmlSyntaxTree.parse(small), large to XmlSyntaxTree.parse(large))
+
+            shouldGrowLinearly(small = small, large = large) { text -> redaction.redact(documents.getValue(text)) }
+            shouldGrowLinearly(small = small, large = large) { text -> redaction.redact(trees.getValue(text)) }
         }
     }
 })
