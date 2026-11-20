@@ -145,6 +145,22 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
      */
     public val maximumExternalLength: Int = builder.maximumExternalLength
 
+    /**
+     * The most catalog files one [XmlCatalog][com.davils.kxml.core.resolve.XmlCatalog] loads, the first ones and
+     * every one they reach: 32 by default, at most [HARD_CATALOG_FILES].
+     *
+     * @since 1.0.0
+     */
+    public val maximumCatalogFiles: Int = builder.maximumCatalogFiles
+
+    /**
+     * The longest chain of catalog files that refer to each other through `nextCatalog` and `delegate*` entries, and
+     * the most delegations one lookup follows: 8 by default, at most [HARD_CATALOG_DEPTH].
+     *
+     * @since 1.0.0
+     */
+    public val maximumCatalogDepth: Int = builder.maximumCatalogDepth
+
     init {
         validateOrThrow(SUBJECT)
     }
@@ -203,6 +219,16 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
                 value = maximumExternalLength.toLong(),
                 ceiling = HARD_INPUT_LENGTH.toLong(),
             ),
+            Bound(
+                property = ::maximumCatalogFiles,
+                value = maximumCatalogFiles.toLong(),
+                ceiling = HARD_CATALOG_FILES.toLong(),
+            ),
+            Bound(
+                property = ::maximumCatalogDepth,
+                value = maximumCatalogDepth.toLong(),
+                ceiling = HARD_CATALOG_DEPTH.toLong(),
+            ),
         )
 
     private val values: List<Long> get() = bounds.map(Bound::value)
@@ -245,7 +271,8 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
             "attributes=$maximumAttributes, text=$maximumTextLength, name=$maximumNameLength, " +
             "entities=$maximumEntityDeclarations, attributeDeclarations=$maximumAttributeDeclarations, " +
             "entityExpansion=$maximumEntityExpansion, entityDepth=$maximumEntityDepth, " +
-            "externalResources=$maximumExternalResources, externalLength=$maximumExternalLength)"
+            "externalResources=$maximumExternalResources, externalLength=$maximumExternalLength, " +
+            "catalogFiles=$maximumCatalogFiles, catalogDepth=$maximumCatalogDepth)"
 
     private fun ValidationScope.bounded(bound: Bound) {
         val value = bound.value
@@ -337,6 +364,20 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
          */
         public const val HARD_EXTERNAL_RESOURCES: Int = 10_000
 
+        /**
+         * The ceiling of [maximumCatalogFiles]: 1,000 catalog files.
+         *
+         * @since 1.0.0
+         */
+        public const val HARD_CATALOG_FILES: Int = 1_000
+
+        /**
+         * The ceiling of [maximumCatalogDepth]: 64 catalog files in a chain.
+         *
+         * @since 1.0.0
+         */
+        public const val HARD_CATALOG_DEPTH: Int = 64
+
         private const val SUBJECT: String = "xml limits"
         private const val RELAXED_ELEMENTS: Long = 50_000_000L
         private const val RELAXED_ATTRIBUTES: Int = 100_000
@@ -346,6 +387,8 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
         private const val RELAXED_ENTITY_EXPANSION: Long = 10_000_000L
         private const val RELAXED_ENTITY_DEPTH: Int = 64
         private const val RELAXED_EXTERNAL_RESOURCES: Int = 1_000
+        private const val RELAXED_CATALOG_FILES: Int = 256
+        private const val RELAXED_CATALOG_DEPTH: Int = 32
 
         /**
          * The default limits, for documents from sources that are not trusted: the `DEFAULT_*` values of
@@ -360,7 +403,8 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
          * Raised limits for large documents from trusted sources: [HARD_INPUT_LENGTH] code units of input and of
          * text, [HARD_DEPTH] levels, 50,000,000 elements, 100,000 attributes on an element, 65,536 code units of a
          * name, 100,000 entities, 1,000,000 attribute definitions, 10,000,000 characters of entity expansion, 64
-         * levels of entities, 1,000 external resources and [HARD_INPUT_LENGTH] code units of each.
+         * levels of entities, 1,000 external resources and [HARD_INPUT_LENGTH] code units of each, 256 catalog files
+         * and chains of 32 of them.
          *
          * Every limit stays finite and at most its hard ceiling, so even a trusted source cannot exhaust the memory
          * without bound.
@@ -383,6 +427,8 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
             builder.maximumEntityDepth = RELAXED_ENTITY_DEPTH
             builder.maximumExternalResources = RELAXED_EXTERNAL_RESOURCES
             builder.maximumExternalLength = HARD_INPUT_LENGTH
+            builder.maximumCatalogFiles = RELAXED_CATALOG_FILES
+            builder.maximumCatalogDepth = RELAXED_CATALOG_DEPTH
             return builder.build()
         }
     }

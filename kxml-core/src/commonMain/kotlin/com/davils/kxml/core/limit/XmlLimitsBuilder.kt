@@ -121,6 +121,22 @@ public class XmlLimitsBuilder internal constructor() : ValidatingBuilder<XmlLimi
      */
     public var maximumExternalLength: Int = DEFAULT_EXTERNAL_LENGTH
 
+    /**
+     * The most catalog files one catalog loads; [DEFAULT_CATALOG_FILES] by default, at most
+     * [XmlLimits.HARD_CATALOG_FILES].
+     *
+     * @since 1.0.0
+     */
+    public var maximumCatalogFiles: Int = DEFAULT_CATALOG_FILES
+
+    /**
+     * The longest chain of catalog files and the most delegations of one lookup; [DEFAULT_CATALOG_DEPTH] by default,
+     * at most [XmlLimits.HARD_CATALOG_DEPTH].
+     *
+     * @since 1.0.0
+     */
+    public var maximumCatalogDepth: Int = DEFAULT_CATALOG_DEPTH
+
     internal fun from(limits: XmlLimits) {
         maximumInputLength = limits.maximumInputLength
         maximumDepth = limits.maximumDepth
@@ -134,6 +150,8 @@ public class XmlLimitsBuilder internal constructor() : ValidatingBuilder<XmlLimi
         maximumEntityDepth = limits.maximumEntityDepth
         maximumExternalResources = limits.maximumExternalResources
         maximumExternalLength = limits.maximumExternalLength
+        maximumCatalogFiles = limits.maximumCatalogFiles
+        maximumCatalogDepth = limits.maximumCatalogDepth
     }
 
     override fun assemble(): XmlLimits = XmlLimits(this)
@@ -227,5 +245,19 @@ public class XmlLimitsBuilder internal constructor() : ValidatingBuilder<XmlLimi
          * @since 1.0.0
          */
         public const val DEFAULT_EXTERNAL_LENGTH: Int = 8_388_608
+
+        /**
+         * The default of [maximumCatalogFiles]: 32 catalog files.
+         *
+         * @since 1.0.0
+         */
+        public const val DEFAULT_CATALOG_FILES: Int = 32
+
+        /**
+         * The default of [maximumCatalogDepth]: 8 catalog files in a chain.
+         *
+         * @since 1.0.0
+         */
+        public const val DEFAULT_CATALOG_DEPTH: Int = 8
     }
 }

@@ -78,12 +78,16 @@ class XmlLimitsTest : FunSpec({
                 maximumEntityDepth = XmlLimits.HARD_ENTITY_DEPTH
                 maximumExternalResources = XmlLimits.HARD_EXTERNAL_RESOURCES
                 maximumExternalLength = XmlLimits.HARD_INPUT_LENGTH
+                maximumCatalogFiles = XmlLimits.HARD_CATALOG_FILES
+                maximumCatalogDepth = XmlLimits.HARD_CATALOG_DEPTH
             }
 
             ceilings.maximumElements shouldBe XmlLimits.HARD_ELEMENTS
             ceilings.maximumNameLength shouldBe XmlLimits.HARD_NAME_LENGTH
             ceilings.maximumExternalResources shouldBe XmlLimits.HARD_EXTERNAL_RESOURCES
             ceilings.toString() shouldContain "externalLength=${XmlLimits.HARD_INPUT_LENGTH}"
+            ceilings.toString() shouldContain "catalogFiles=${XmlLimits.HARD_CATALOG_FILES}"
+            ceilings.maximumCatalogDepth shouldBe XmlLimits.HARD_CATALOG_DEPTH
         }
 
         test("refuse every limit past its ceiling") {
@@ -97,6 +101,8 @@ class XmlLimitsTest : FunSpec({
                 xmlLimits { maximumExternalResources = XmlLimits.HARD_EXTERNAL_RESOURCES + 1 }
             }
             shouldThrow<ValidationException> { xmlLimits { maximumExternalLength = XmlLimits.HARD_INPUT_LENGTH + 1 } }
+            shouldThrow<ValidationException> { xmlLimits { maximumCatalogFiles = XmlLimits.HARD_CATALOG_FILES + 1 } }
+            shouldThrow<ValidationException> { xmlLimits { maximumCatalogDepth = XmlLimits.HARD_CATALOG_DEPTH + 1 } }
         }
 
         test("refuse every limit below 1") {
@@ -107,6 +113,8 @@ class XmlLimitsTest : FunSpec({
             shouldThrow<ValidationException> { xmlLimits { maximumNameLength = 0 } }
             shouldThrow<ValidationException> { xmlLimits { maximumExternalResources = 0 } }
             shouldThrow<ValidationException> { xmlLimits { maximumExternalLength = 0 } }
+            shouldThrow<ValidationException> { xmlLimits { maximumCatalogFiles = 0 } }
+            shouldThrow<ValidationException> { xmlLimits { maximumCatalogDepth = 0 } }
         }
 
         test("keep the relaxed preset finite and within every ceiling") {

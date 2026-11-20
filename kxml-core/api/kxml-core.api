@@ -296,6 +296,8 @@ public final class com/davils/kxml/core/limit/XmlLimits : com/davils/kore/core/v
 	public static final field Companion Lcom/davils/kxml/core/limit/XmlLimits$Companion;
 	public static final field HARD_ATTRIBUTES I
 	public static final field HARD_ATTRIBUTE_DECLARATIONS I
+	public static final field HARD_CATALOG_DEPTH I
+	public static final field HARD_CATALOG_FILES I
 	public static final field HARD_DEPTH I
 	public static final field HARD_ELEMENTS J
 	public static final field HARD_ENTITY_DECLARATIONS I
@@ -307,6 +309,8 @@ public final class com/davils/kxml/core/limit/XmlLimits : com/davils/kore/core/v
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getMaximumAttributeDeclarations ()I
 	public final fun getMaximumAttributes ()I
+	public final fun getMaximumCatalogDepth ()I
+	public final fun getMaximumCatalogFiles ()I
 	public final fun getMaximumDepth ()I
 	public final fun getMaximumElements ()J
 	public final fun getMaximumEntityDeclarations ()I
@@ -331,6 +335,8 @@ public final class com/davils/kxml/core/limit/XmlLimitsBuilder : com/davils/kore
 	public static final field Companion Lcom/davils/kxml/core/limit/XmlLimitsBuilder$Companion;
 	public static final field DEFAULT_ATTRIBUTES I
 	public static final field DEFAULT_ATTRIBUTE_DECLARATIONS I
+	public static final field DEFAULT_CATALOG_DEPTH I
+	public static final field DEFAULT_CATALOG_FILES I
 	public static final field DEFAULT_DEPTH I
 	public static final field DEFAULT_ELEMENTS J
 	public static final field DEFAULT_ENTITY_DECLARATIONS I
@@ -344,6 +350,8 @@ public final class com/davils/kxml/core/limit/XmlLimitsBuilder : com/davils/kore
 	public synthetic fun assemble ()Lcom/davils/kore/core/validation/Validatable;
 	public final fun getMaximumAttributeDeclarations ()I
 	public final fun getMaximumAttributes ()I
+	public final fun getMaximumCatalogDepth ()I
+	public final fun getMaximumCatalogFiles ()I
 	public final fun getMaximumDepth ()I
 	public final fun getMaximumElements ()J
 	public final fun getMaximumEntityDeclarations ()I
@@ -356,6 +364,8 @@ public final class com/davils/kxml/core/limit/XmlLimitsBuilder : com/davils/kore
 	public final fun getMaximumTextLength ()I
 	public final fun setMaximumAttributeDeclarations (I)V
 	public final fun setMaximumAttributes (I)V
+	public final fun setMaximumCatalogDepth (I)V
+	public final fun setMaximumCatalogFiles (I)V
 	public final fun setMaximumDepth (I)V
 	public final fun setMaximumElements (J)V
 	public final fun setMaximumEntityDeclarations (I)V
@@ -551,6 +561,79 @@ public final class com/davils/kxml/core/node/XmlUnparsedEntity {
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class com/davils/kxml/core/resolve/DirectoryCatalogsKt {
+	public static final fun fromDirectory (Lcom/davils/kxml/core/resolve/XmlCatalog$Companion;Ljava/nio/file/Path;Ljava/lang/String;Lcom/davils/kxml/core/resolve/XmlCatalogPrefer;Lcom/davils/kxml/core/limit/XmlLimits;)Lcom/davils/kxml/core/resolve/XmlCatalog;
+	public static final fun fromDirectory (Lcom/davils/kxml/core/resolve/XmlCatalogResolver$Companion;Ljava/nio/file/Path;Ljava/lang/String;Lcom/davils/kxml/core/resolve/XmlCatalogPrefer;Lcom/davils/kxml/core/limit/XmlLimits;Lcom/davils/kxml/core/resolve/XmlResolver;)Lcom/davils/kxml/core/resolve/XmlCatalogResolver;
+	public static synthetic fun fromDirectory$default (Lcom/davils/kxml/core/resolve/XmlCatalog$Companion;Ljava/nio/file/Path;Ljava/lang/String;Lcom/davils/kxml/core/resolve/XmlCatalogPrefer;Lcom/davils/kxml/core/limit/XmlLimits;ILjava/lang/Object;)Lcom/davils/kxml/core/resolve/XmlCatalog;
+	public static synthetic fun fromDirectory$default (Lcom/davils/kxml/core/resolve/XmlCatalogResolver$Companion;Ljava/nio/file/Path;Ljava/lang/String;Lcom/davils/kxml/core/resolve/XmlCatalogPrefer;Lcom/davils/kxml/core/limit/XmlLimits;Lcom/davils/kxml/core/resolve/XmlResolver;ILjava/lang/Object;)Lcom/davils/kxml/core/resolve/XmlCatalogResolver;
+}
+
+public final class com/davils/kxml/core/resolve/XmlCatalog {
+	public static final field Companion Lcom/davils/kxml/core/resolve/XmlCatalog$Companion;
+	public final fun getProblems ()Ljava/util/List;
+	public final fun resolveExternalId (Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+	public final fun resolveUri (Ljava/lang/String;)Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/core/resolve/XmlCatalog$Companion {
+	public final fun load (Ljava/util/List;Lcom/davils/kxml/core/resolve/XmlResourceLoader;Lcom/davils/kxml/core/resolve/XmlCatalogPrefer;Lcom/davils/kxml/core/limit/XmlLimits;)Lcom/davils/kxml/core/resolve/XmlCatalog;
+	public static synthetic fun load$default (Lcom/davils/kxml/core/resolve/XmlCatalog$Companion;Ljava/util/List;Lcom/davils/kxml/core/resolve/XmlResourceLoader;Lcom/davils/kxml/core/resolve/XmlCatalogPrefer;Lcom/davils/kxml/core/limit/XmlLimits;ILjava/lang/Object;)Lcom/davils/kxml/core/resolve/XmlCatalog;
+}
+
+public final class com/davils/kxml/core/resolve/XmlCatalogPrefer : java/lang/Enum {
+	public static final field Public Lcom/davils/kxml/core/resolve/XmlCatalogPrefer;
+	public static final field System Lcom/davils/kxml/core/resolve/XmlCatalogPrefer;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/davils/kxml/core/resolve/XmlCatalogPrefer;
+	public static fun values ()[Lcom/davils/kxml/core/resolve/XmlCatalogPrefer;
+}
+
+public final class com/davils/kxml/core/resolve/XmlCatalogProblem {
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDetail ()Ljava/lang/String;
+	public final fun getKind ()Lcom/davils/kxml/core/resolve/XmlCatalogProblemKind;
+	public final fun getUri ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/core/resolve/XmlCatalogProblemKind : java/lang/Enum {
+	public static final field InvalidEntry Lcom/davils/kxml/core/resolve/XmlCatalogProblemKind;
+	public static final field LimitExceeded Lcom/davils/kxml/core/resolve/XmlCatalogProblemKind;
+	public static final field Malformed Lcom/davils/kxml/core/resolve/XmlCatalogProblemKind;
+	public static final field NotCatalog Lcom/davils/kxml/core/resolve/XmlCatalogProblemKind;
+	public static final field Unloaded Lcom/davils/kxml/core/resolve/XmlCatalogProblemKind;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/davils/kxml/core/resolve/XmlCatalogProblemKind;
+	public static fun values ()[Lcom/davils/kxml/core/resolve/XmlCatalogProblemKind;
+}
+
+public final class com/davils/kxml/core/resolve/XmlCatalogResolver : com/davils/kxml/core/resolve/XmlResolver {
+	public static final field Companion Lcom/davils/kxml/core/resolve/XmlCatalogResolver$Companion;
+	public fun <init> (Lcom/davils/kxml/core/resolve/XmlCatalog;Lcom/davils/kxml/core/resolve/XmlResourceLoader;Lcom/davils/kxml/core/resolve/XmlResolver;)V
+	public synthetic fun <init> (Lcom/davils/kxml/core/resolve/XmlCatalog;Lcom/davils/kxml/core/resolve/XmlResourceLoader;Lcom/davils/kxml/core/resolve/XmlResolver;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getCatalog ()Lcom/davils/kxml/core/resolve/XmlCatalog;
+	public final fun getFallback ()Lcom/davils/kxml/core/resolve/XmlResolver;
+	public final fun getLoader ()Lcom/davils/kxml/core/resolve/XmlResourceLoader;
+	public fun resolve (Lcom/davils/kxml/core/resolve/XmlResourceRequest;)Lcom/davils/kxml/core/source/XmlSource;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/core/resolve/XmlCatalogResolver$Companion {
+}
+
+public final class com/davils/kxml/core/resolve/XmlDirectoryLoader : com/davils/kxml/core/resolve/XmlResourceLoader {
+	public fun <init> (Ljava/nio/file/Path;I)V
+	public synthetic fun <init> (Ljava/nio/file/Path;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getMaximumLength ()I
+	public final fun getRoot ()Ljava/nio/file/Path;
+	public final fun getRootUri ()Ljava/lang/String;
+	public fun load (Ljava/lang/String;)Lcom/davils/kxml/core/source/XmlSource;
+	public fun toString ()Ljava/lang/String;
+	public final fun uriOf (Ljava/lang/String;)Ljava/lang/String;
+}
+
 public abstract interface class com/davils/kxml/core/resolve/XmlResolver {
 	public abstract fun resolve (Lcom/davils/kxml/core/resolve/XmlResourceRequest;)Lcom/davils/kxml/core/source/XmlSource;
 }
@@ -564,8 +647,13 @@ public final class com/davils/kxml/core/resolve/XmlResourceKind : java/lang/Enum
 	public static fun values ()[Lcom/davils/kxml/core/resolve/XmlResourceKind;
 }
 
+public abstract interface class com/davils/kxml/core/resolve/XmlResourceLoader {
+	public abstract fun load (Ljava/lang/String;)Lcom/davils/kxml/core/source/XmlSource;
+}
+
 public final class com/davils/kxml/core/resolve/XmlResourceRequest {
 	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAbsoluteSystemId ()Ljava/lang/String;
 	public final fun getBaseUri ()Ljava/lang/String;
 	public final fun getKind ()Lcom/davils/kxml/core/resolve/XmlResourceKind;
 	public final fun getName ()Ljava/lang/String;

@@ -86,6 +86,31 @@ final enum class com.davils.kxml.core.emit/XmlLineBreak : kotlin/Enum<com.davils
     final fun values(): kotlin/Array<com.davils.kxml.core.emit/XmlLineBreak> // com.davils.kxml.core.emit/XmlLineBreak.values|values#static(){}[0]
 }
 
+final enum class com.davils.kxml.core.resolve/XmlCatalogPrefer : kotlin/Enum<com.davils.kxml.core.resolve/XmlCatalogPrefer> { // com.davils.kxml.core.resolve/XmlCatalogPrefer|null[0]
+    enum entry Public // com.davils.kxml.core.resolve/XmlCatalogPrefer.Public|null[0]
+    enum entry System // com.davils.kxml.core.resolve/XmlCatalogPrefer.System|null[0]
+
+    final val entries // com.davils.kxml.core.resolve/XmlCatalogPrefer.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<com.davils.kxml.core.resolve/XmlCatalogPrefer> // com.davils.kxml.core.resolve/XmlCatalogPrefer.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): com.davils.kxml.core.resolve/XmlCatalogPrefer // com.davils.kxml.core.resolve/XmlCatalogPrefer.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<com.davils.kxml.core.resolve/XmlCatalogPrefer> // com.davils.kxml.core.resolve/XmlCatalogPrefer.values|values#static(){}[0]
+}
+
+final enum class com.davils.kxml.core.resolve/XmlCatalogProblemKind : kotlin/Enum<com.davils.kxml.core.resolve/XmlCatalogProblemKind> { // com.davils.kxml.core.resolve/XmlCatalogProblemKind|null[0]
+    enum entry InvalidEntry // com.davils.kxml.core.resolve/XmlCatalogProblemKind.InvalidEntry|null[0]
+    enum entry LimitExceeded // com.davils.kxml.core.resolve/XmlCatalogProblemKind.LimitExceeded|null[0]
+    enum entry Malformed // com.davils.kxml.core.resolve/XmlCatalogProblemKind.Malformed|null[0]
+    enum entry NotCatalog // com.davils.kxml.core.resolve/XmlCatalogProblemKind.NotCatalog|null[0]
+    enum entry Unloaded // com.davils.kxml.core.resolve/XmlCatalogProblemKind.Unloaded|null[0]
+
+    final val entries // com.davils.kxml.core.resolve/XmlCatalogProblemKind.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<com.davils.kxml.core.resolve/XmlCatalogProblemKind> // com.davils.kxml.core.resolve/XmlCatalogProblemKind.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): com.davils.kxml.core.resolve/XmlCatalogProblemKind // com.davils.kxml.core.resolve/XmlCatalogProblemKind.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<com.davils.kxml.core.resolve/XmlCatalogProblemKind> // com.davils.kxml.core.resolve/XmlCatalogProblemKind.values|values#static(){}[0]
+}
+
 final enum class com.davils.kxml.core.resolve/XmlResourceKind : kotlin/Enum<com.davils.kxml.core.resolve/XmlResourceKind> { // com.davils.kxml.core.resolve/XmlResourceKind|null[0]
     enum entry ExternalEntity // com.davils.kxml.core.resolve/XmlResourceKind.ExternalEntity|null[0]
     enum entry ExternalSubset // com.davils.kxml.core.resolve/XmlResourceKind.ExternalSubset|null[0]
@@ -185,6 +210,10 @@ final enum class com.davils.kxml.core/XmlWhitespace : kotlin/Enum<com.davils.kxm
 
 abstract fun interface com.davils.kxml.core.resolve/XmlResolver { // com.davils.kxml.core.resolve/XmlResolver|null[0]
     abstract fun resolve(com.davils.kxml.core.resolve/XmlResourceRequest): com.davils.kxml.core.source/XmlSource? // com.davils.kxml.core.resolve/XmlResolver.resolve|resolve(com.davils.kxml.core.resolve.XmlResourceRequest){}[0]
+}
+
+abstract fun interface com.davils.kxml.core.resolve/XmlResourceLoader { // com.davils.kxml.core.resolve/XmlResourceLoader|null[0]
+    abstract fun load(kotlin/String): com.davils.kxml.core.source/XmlSource? // com.davils.kxml.core.resolve/XmlResourceLoader.load|load(kotlin.String){}[0]
 }
 
 sealed interface com.davils.kxml.core.syntax/XmlSyntaxElement { // com.davils.kxml.core.syntax/XmlSyntaxElement|null[0]
@@ -389,6 +418,10 @@ final class com.davils.kxml.core.limit/XmlLimits : com.davils.kore.core.validati
         final fun <get-maximumAttributeDeclarations>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimits.maximumAttributeDeclarations.<get-maximumAttributeDeclarations>|<get-maximumAttributeDeclarations>(){}[0]
     final val maximumAttributes // com.davils.kxml.core.limit/XmlLimits.maximumAttributes|{}maximumAttributes[0]
         final fun <get-maximumAttributes>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimits.maximumAttributes.<get-maximumAttributes>|<get-maximumAttributes>(){}[0]
+    final val maximumCatalogDepth // com.davils.kxml.core.limit/XmlLimits.maximumCatalogDepth|{}maximumCatalogDepth[0]
+        final fun <get-maximumCatalogDepth>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimits.maximumCatalogDepth.<get-maximumCatalogDepth>|<get-maximumCatalogDepth>(){}[0]
+    final val maximumCatalogFiles // com.davils.kxml.core.limit/XmlLimits.maximumCatalogFiles|{}maximumCatalogFiles[0]
+        final fun <get-maximumCatalogFiles>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimits.maximumCatalogFiles.<get-maximumCatalogFiles>|<get-maximumCatalogFiles>(){}[0]
     final val maximumDepth // com.davils.kxml.core.limit/XmlLimits.maximumDepth|{}maximumDepth[0]
         final fun <get-maximumDepth>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimits.maximumDepth.<get-maximumDepth>|<get-maximumDepth>(){}[0]
     final val maximumElements // com.davils.kxml.core.limit/XmlLimits.maximumElements|{}maximumElements[0]
@@ -420,6 +453,10 @@ final class com.davils.kxml.core.limit/XmlLimits : com.davils.kore.core.validati
             final fun <get-HARD_ATTRIBUTES>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimits.Companion.HARD_ATTRIBUTES.<get-HARD_ATTRIBUTES>|<get-HARD_ATTRIBUTES>(){}[0]
         final const val HARD_ATTRIBUTE_DECLARATIONS // com.davils.kxml.core.limit/XmlLimits.Companion.HARD_ATTRIBUTE_DECLARATIONS|{}HARD_ATTRIBUTE_DECLARATIONS[0]
             final fun <get-HARD_ATTRIBUTE_DECLARATIONS>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimits.Companion.HARD_ATTRIBUTE_DECLARATIONS.<get-HARD_ATTRIBUTE_DECLARATIONS>|<get-HARD_ATTRIBUTE_DECLARATIONS>(){}[0]
+        final const val HARD_CATALOG_DEPTH // com.davils.kxml.core.limit/XmlLimits.Companion.HARD_CATALOG_DEPTH|{}HARD_CATALOG_DEPTH[0]
+            final fun <get-HARD_CATALOG_DEPTH>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimits.Companion.HARD_CATALOG_DEPTH.<get-HARD_CATALOG_DEPTH>|<get-HARD_CATALOG_DEPTH>(){}[0]
+        final const val HARD_CATALOG_FILES // com.davils.kxml.core.limit/XmlLimits.Companion.HARD_CATALOG_FILES|{}HARD_CATALOG_FILES[0]
+            final fun <get-HARD_CATALOG_FILES>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimits.Companion.HARD_CATALOG_FILES.<get-HARD_CATALOG_FILES>|<get-HARD_CATALOG_FILES>(){}[0]
         final const val HARD_DEPTH // com.davils.kxml.core.limit/XmlLimits.Companion.HARD_DEPTH|{}HARD_DEPTH[0]
             final fun <get-HARD_DEPTH>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimits.Companion.HARD_DEPTH.<get-HARD_DEPTH>|<get-HARD_DEPTH>(){}[0]
         final const val HARD_ELEMENTS // com.davils.kxml.core.limit/XmlLimits.Companion.HARD_ELEMENTS|{}HARD_ELEMENTS[0]
@@ -451,6 +488,12 @@ final class com.davils.kxml.core.limit/XmlLimitsBuilder : com.davils.kore.core.d
     final var maximumAttributes // com.davils.kxml.core.limit/XmlLimitsBuilder.maximumAttributes|{}maximumAttributes[0]
         final fun <get-maximumAttributes>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimitsBuilder.maximumAttributes.<get-maximumAttributes>|<get-maximumAttributes>(){}[0]
         final fun <set-maximumAttributes>(kotlin/Int) // com.davils.kxml.core.limit/XmlLimitsBuilder.maximumAttributes.<set-maximumAttributes>|<set-maximumAttributes>(kotlin.Int){}[0]
+    final var maximumCatalogDepth // com.davils.kxml.core.limit/XmlLimitsBuilder.maximumCatalogDepth|{}maximumCatalogDepth[0]
+        final fun <get-maximumCatalogDepth>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimitsBuilder.maximumCatalogDepth.<get-maximumCatalogDepth>|<get-maximumCatalogDepth>(){}[0]
+        final fun <set-maximumCatalogDepth>(kotlin/Int) // com.davils.kxml.core.limit/XmlLimitsBuilder.maximumCatalogDepth.<set-maximumCatalogDepth>|<set-maximumCatalogDepth>(kotlin.Int){}[0]
+    final var maximumCatalogFiles // com.davils.kxml.core.limit/XmlLimitsBuilder.maximumCatalogFiles|{}maximumCatalogFiles[0]
+        final fun <get-maximumCatalogFiles>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimitsBuilder.maximumCatalogFiles.<get-maximumCatalogFiles>|<get-maximumCatalogFiles>(){}[0]
+        final fun <set-maximumCatalogFiles>(kotlin/Int) // com.davils.kxml.core.limit/XmlLimitsBuilder.maximumCatalogFiles.<set-maximumCatalogFiles>|<set-maximumCatalogFiles>(kotlin.Int){}[0]
     final var maximumDepth // com.davils.kxml.core.limit/XmlLimitsBuilder.maximumDepth|{}maximumDepth[0]
         final fun <get-maximumDepth>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimitsBuilder.maximumDepth.<get-maximumDepth>|<get-maximumDepth>(){}[0]
         final fun <set-maximumDepth>(kotlin/Int) // com.davils.kxml.core.limit/XmlLimitsBuilder.maximumDepth.<set-maximumDepth>|<set-maximumDepth>(kotlin.Int){}[0]
@@ -487,6 +530,10 @@ final class com.davils.kxml.core.limit/XmlLimitsBuilder : com.davils.kore.core.d
             final fun <get-DEFAULT_ATTRIBUTES>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimitsBuilder.Companion.DEFAULT_ATTRIBUTES.<get-DEFAULT_ATTRIBUTES>|<get-DEFAULT_ATTRIBUTES>(){}[0]
         final const val DEFAULT_ATTRIBUTE_DECLARATIONS // com.davils.kxml.core.limit/XmlLimitsBuilder.Companion.DEFAULT_ATTRIBUTE_DECLARATIONS|{}DEFAULT_ATTRIBUTE_DECLARATIONS[0]
             final fun <get-DEFAULT_ATTRIBUTE_DECLARATIONS>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimitsBuilder.Companion.DEFAULT_ATTRIBUTE_DECLARATIONS.<get-DEFAULT_ATTRIBUTE_DECLARATIONS>|<get-DEFAULT_ATTRIBUTE_DECLARATIONS>(){}[0]
+        final const val DEFAULT_CATALOG_DEPTH // com.davils.kxml.core.limit/XmlLimitsBuilder.Companion.DEFAULT_CATALOG_DEPTH|{}DEFAULT_CATALOG_DEPTH[0]
+            final fun <get-DEFAULT_CATALOG_DEPTH>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimitsBuilder.Companion.DEFAULT_CATALOG_DEPTH.<get-DEFAULT_CATALOG_DEPTH>|<get-DEFAULT_CATALOG_DEPTH>(){}[0]
+        final const val DEFAULT_CATALOG_FILES // com.davils.kxml.core.limit/XmlLimitsBuilder.Companion.DEFAULT_CATALOG_FILES|{}DEFAULT_CATALOG_FILES[0]
+            final fun <get-DEFAULT_CATALOG_FILES>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimitsBuilder.Companion.DEFAULT_CATALOG_FILES.<get-DEFAULT_CATALOG_FILES>|<get-DEFAULT_CATALOG_FILES>(){}[0]
         final const val DEFAULT_DEPTH // com.davils.kxml.core.limit/XmlLimitsBuilder.Companion.DEFAULT_DEPTH|{}DEFAULT_DEPTH[0]
             final fun <get-DEFAULT_DEPTH>(): kotlin/Int // com.davils.kxml.core.limit/XmlLimitsBuilder.Companion.DEFAULT_DEPTH.<get-DEFAULT_DEPTH>|<get-DEFAULT_DEPTH>(){}[0]
         final const val DEFAULT_ELEMENTS // com.davils.kxml.core.limit/XmlLimitsBuilder.Companion.DEFAULT_ELEMENTS|{}DEFAULT_ELEMENTS[0]
@@ -655,7 +702,51 @@ final class com.davils.kxml.core.node/XmlUnparsedEntity { // com.davils.kxml.cor
     final fun toString(): kotlin/String // com.davils.kxml.core.node/XmlUnparsedEntity.toString|toString(){}[0]
 }
 
+final class com.davils.kxml.core.resolve/XmlCatalog { // com.davils.kxml.core.resolve/XmlCatalog|null[0]
+    final val problems // com.davils.kxml.core.resolve/XmlCatalog.problems|{}problems[0]
+        final fun <get-problems>(): kotlin.collections/List<com.davils.kxml.core.resolve/XmlCatalogProblem> // com.davils.kxml.core.resolve/XmlCatalog.problems.<get-problems>|<get-problems>(){}[0]
+
+    final fun resolveExternalId(kotlin/String?, kotlin/String?): kotlin/String? // com.davils.kxml.core.resolve/XmlCatalog.resolveExternalId|resolveExternalId(kotlin.String?;kotlin.String?){}[0]
+    final fun resolveUri(kotlin/String): kotlin/String? // com.davils.kxml.core.resolve/XmlCatalog.resolveUri|resolveUri(kotlin.String){}[0]
+    final fun toString(): kotlin/String // com.davils.kxml.core.resolve/XmlCatalog.toString|toString(){}[0]
+
+    final object Companion { // com.davils.kxml.core.resolve/XmlCatalog.Companion|null[0]
+        final fun load(kotlin.collections/List<kotlin/String>, com.davils.kxml.core.resolve/XmlResourceLoader, com.davils.kxml.core.resolve/XmlCatalogPrefer = ..., com.davils.kxml.core.limit/XmlLimits = ...): com.davils.kxml.core.resolve/XmlCatalog // com.davils.kxml.core.resolve/XmlCatalog.Companion.load|load(kotlin.collections.List<kotlin.String>;com.davils.kxml.core.resolve.XmlResourceLoader;com.davils.kxml.core.resolve.XmlCatalogPrefer;com.davils.kxml.core.limit.XmlLimits){}[0]
+    }
+}
+
+final class com.davils.kxml.core.resolve/XmlCatalogProblem { // com.davils.kxml.core.resolve/XmlCatalogProblem|null[0]
+    final val detail // com.davils.kxml.core.resolve/XmlCatalogProblem.detail|{}detail[0]
+        final fun <get-detail>(): kotlin/String // com.davils.kxml.core.resolve/XmlCatalogProblem.detail.<get-detail>|<get-detail>(){}[0]
+    final val kind // com.davils.kxml.core.resolve/XmlCatalogProblem.kind|{}kind[0]
+        final fun <get-kind>(): com.davils.kxml.core.resolve/XmlCatalogProblemKind // com.davils.kxml.core.resolve/XmlCatalogProblem.kind.<get-kind>|<get-kind>(){}[0]
+    final val uri // com.davils.kxml.core.resolve/XmlCatalogProblem.uri|{}uri[0]
+        final fun <get-uri>(): kotlin/String // com.davils.kxml.core.resolve/XmlCatalogProblem.uri.<get-uri>|<get-uri>(){}[0]
+
+    final fun equals(kotlin/Any?): kotlin/Boolean // com.davils.kxml.core.resolve/XmlCatalogProblem.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // com.davils.kxml.core.resolve/XmlCatalogProblem.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // com.davils.kxml.core.resolve/XmlCatalogProblem.toString|toString(){}[0]
+}
+
+final class com.davils.kxml.core.resolve/XmlCatalogResolver : com.davils.kxml.core.resolve/XmlResolver { // com.davils.kxml.core.resolve/XmlCatalogResolver|null[0]
+    constructor <init>(com.davils.kxml.core.resolve/XmlCatalog, com.davils.kxml.core.resolve/XmlResourceLoader, com.davils.kxml.core.resolve/XmlResolver? = ...) // com.davils.kxml.core.resolve/XmlCatalogResolver.<init>|<init>(com.davils.kxml.core.resolve.XmlCatalog;com.davils.kxml.core.resolve.XmlResourceLoader;com.davils.kxml.core.resolve.XmlResolver?){}[0]
+
+    final val catalog // com.davils.kxml.core.resolve/XmlCatalogResolver.catalog|{}catalog[0]
+        final fun <get-catalog>(): com.davils.kxml.core.resolve/XmlCatalog // com.davils.kxml.core.resolve/XmlCatalogResolver.catalog.<get-catalog>|<get-catalog>(){}[0]
+    final val fallback // com.davils.kxml.core.resolve/XmlCatalogResolver.fallback|{}fallback[0]
+        final fun <get-fallback>(): com.davils.kxml.core.resolve/XmlResolver? // com.davils.kxml.core.resolve/XmlCatalogResolver.fallback.<get-fallback>|<get-fallback>(){}[0]
+    final val loader // com.davils.kxml.core.resolve/XmlCatalogResolver.loader|{}loader[0]
+        final fun <get-loader>(): com.davils.kxml.core.resolve/XmlResourceLoader // com.davils.kxml.core.resolve/XmlCatalogResolver.loader.<get-loader>|<get-loader>(){}[0]
+
+    final fun resolve(com.davils.kxml.core.resolve/XmlResourceRequest): com.davils.kxml.core.source/XmlSource? // com.davils.kxml.core.resolve/XmlCatalogResolver.resolve|resolve(com.davils.kxml.core.resolve.XmlResourceRequest){}[0]
+    final fun toString(): kotlin/String // com.davils.kxml.core.resolve/XmlCatalogResolver.toString|toString(){}[0]
+
+    final object Companion // com.davils.kxml.core.resolve/XmlCatalogResolver.Companion|null[0]
+}
+
 final class com.davils.kxml.core.resolve/XmlResourceRequest { // com.davils.kxml.core.resolve/XmlResourceRequest|null[0]
+    final val absoluteSystemId // com.davils.kxml.core.resolve/XmlResourceRequest.absoluteSystemId|{}absoluteSystemId[0]
+        final fun <get-absoluteSystemId>(): kotlin/String? // com.davils.kxml.core.resolve/XmlResourceRequest.absoluteSystemId.<get-absoluteSystemId>|<get-absoluteSystemId>(){}[0]
     final val baseUri // com.davils.kxml.core.resolve/XmlResourceRequest.baseUri|{}baseUri[0]
         final fun <get-baseUri>(): kotlin/String? // com.davils.kxml.core.resolve/XmlResourceRequest.baseUri.<get-baseUri>|<get-baseUri>(){}[0]
     final val kind // com.davils.kxml.core.resolve/XmlResourceRequest.kind|{}kind[0]

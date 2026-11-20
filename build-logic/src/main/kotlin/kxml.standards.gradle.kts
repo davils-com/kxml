@@ -64,6 +64,16 @@ kreate {
             rfc(7303) {
                 note = "The precedence of a byte order mark over the charset of a source over the declared encoding."
             }
+            rfc(3986) {
+                note = "URI references of the catalogs and XmlResourceRequest.absoluteSystemId, through UriReference of Kore."
+            }
+            w3c("xmlbase") {
+                note = "The xml:base attribute of catalog files, which sets the base URI of the entries it encloses."
+            }
+            document("OASIS XML Catalogs 1.1") {
+                note = "XmlCatalog and XmlCatalogResolver: the catalog entries, their resolution and the normalization of identifiers."
+                url = "https://groups.oasis-open.org/higherlogic/ws/public/download/14809/xml-catalogs.html"
+            }
             unicode {
                 note = "The safe display of text follows the Unicode tables of the platform."
             }

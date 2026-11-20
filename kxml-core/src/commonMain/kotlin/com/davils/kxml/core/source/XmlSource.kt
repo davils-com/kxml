@@ -59,6 +59,9 @@ public class XmlSource private constructor(
 
     internal val length: Int get() = text?.length ?: bytes.size
 
+    internal fun withUri(uri: String): XmlSource =
+        XmlSource(text = text, bytes = bytes, name = name, charset = charset, uri = uri)
+
     /**
      * Returns the escaped name, such as `XmlSource("order.xml")`.
      *

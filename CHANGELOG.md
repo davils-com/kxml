@@ -62,6 +62,20 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
   `XmlDoctype` refuses one, reported as `kxml.config.resolver-mismatch`.
 - `XmlLimits` bounds external resources with `maximumExternalResources` and `maximumExternalLength`, checked before
   a resource is decoded, reported as `kxml.limit.external-resources` and `kxml.limit.external-length`.
+- `XmlCatalog` reads OASIS XML Catalogs 1.1 through an `XmlResourceLoader` and resolves external identifiers and URIs
+  as sections 7.1 and 7.2 describe: `system`, `rewriteSystem`, `systemSuffix` and `delegateSystem` before `public` and
+  `delegatePublic`, `uri`, `rewriteURI`, `uriSuffix` and `delegateURI`, `nextCatalog`, `group`, `prefer`, `xml:base`,
+  `urn:publicid:` URNs and the normalization of identifiers of section 6. A catalog file that cannot be loaded or
+  read, and an entry that is invalid, are skipped as section 8 asks and listed in `XmlCatalog.problems`.
+  `XmlCatalogResolver` resolves the requests of a document through a catalog, first as written and then in absolute
+  form, loads what it maps to and hands what it does not map to an optional fallback; a lookup that reaches a catalog
+  file beyond the limits is refused. On the JVM, `XmlDirectoryLoader` loads `file:` URIs below one directory only,
+  and `XmlCatalog.fromDirectory` and `XmlCatalogResolver.fromDirectory` keep a catalog and its resources inside it.
+- `XmlResourceRequest.absoluteSystemId` gives the system identifier escaped as section 4.2.2 of XML 1.0 describes it
+  and resolved against the base URI by RFC 3986, with `UriReference` of Kore.
+- `XmlLimits` bounds catalogs with `maximumCatalogFiles`, the catalog files one catalog loads, and
+  `maximumCatalogDepth`, the longest chain of catalog files and the most delegations of one lookup, each with a hard
+  ceiling. Catalog files that refer to each other in a circle are loaded once and searched once per lookup.
 - The W3C XML Conformance Test Suite runs in the build: `XmlConformanceTest` downloads the pinned archive, reads it
   with a resolver confined to the suite, and lists every case kxml does not pass with its reason. Of 2,227 cases,
   2,225 pass. Of the other two, one expects an undeclared entity to be skipped, which kxml refuses, and one of XML

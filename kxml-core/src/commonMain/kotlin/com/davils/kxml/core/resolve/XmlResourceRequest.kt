@@ -20,6 +20,7 @@ package com.davils.kxml.core.resolve
 
 import com.davils.kore.core.annotation.DavilsInternal
 import com.davils.kore.core.text.SafeText
+import com.davils.kxml.core.resolve.internal.referenceOf
 
 private const val NONE: String = "none"
 
@@ -73,6 +74,24 @@ public class XmlResourceRequest internal constructor(
      * @since 1.0.0
      */
     public val baseUri: String? = baseUri
+
+    /**
+     * The system identifier made absolute: escaped as section 4.2.2 of XML 1.0 describes it, which writes every
+     * character outside printable ASCII and every space as `%HH` of its UTF-8 bytes, and resolved against [baseUri] by
+     * section 5.2 of RFC 3986. `null` when the system identifier or the base URI is no URI reference, or when the
+     * system identifier is relative and there is no absolute base URI.
+     *
+     * It is computed from input; a resolver must still decide whether it may load it.
+     *
+     * @since 1.0.0
+     */
+    public val absoluteSystemId: String?
+        get() {
+            val reference = referenceOf(systemId) ?: return null
+            if (reference.isAbsolute) return reference.toString()
+            val base = baseUri?.let(::referenceOf)
+            return base?.resolve(reference)?.toString()
+        }
 
     private val values: List<Any?> get() = listOf(kind, name, publicId, systemId, baseUri)
 

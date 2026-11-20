@@ -2,6 +2,19 @@
     "schemaVersion": 1,
     "standards": [
         {
+            "id": "document:oasis-xml-catalogs-1.1",
+            "reviewedOn": "2026-11-20",
+            "note": "XmlCatalog follows sections 6 to 8: every entry type, group, prefer, xml:base, urn:publicid, the normalization of section 6, the resolution of 7.1 and 7.2 with delegation and nextCatalog, and resource failures; XmlCatalogTest covers each step.",
+            "snapshot": {
+                "title": "document:oasis-xml-catalogs-1.1",
+                "withdrawn": false,
+                "replacedBy": [],
+                "updatedBy": [],
+                "errata": {},
+                "fingerprint": "sha256:72c79586f3f49c453db9177047dc79ddb5caca665b88b018682261f53c9c6856"
+            }
+        },
+        {
             "id": "document:w3c-xml-conformance-test-suite",
             "reviewedOn": "2026-11-20",
             "note": "xmlts20130923 of 2013-09-23 is the newest archive the page links. Its licenses allow running it but not vendoring a modified copy, so XmlConformanceTest downloads the archive, checks its SHA-256 and runs the cases from build/.",
@@ -98,6 +111,42 @@
             }
         },
         {
+            "id": "rfc:3986",
+            "reviewedOn": "2026-11-20",
+            "note": "Catalog URIs and XmlResourceRequest.absoluteSystemId are parsed, resolved and normalized by UriReference of Kore 2.3.1, which Kore tests with the examples of section 5.4; kxml relies on the strict algorithm of section 5.2.",
+            "snapshot": {
+                "title": "Uniform Resource Identifier (URI): Generic Syntax",
+                "status": "INTERNET STANDARD",
+                "published": "January 2005",
+                "withdrawn": false,
+                "replacedBy": [],
+                "updatedBy": [
+                    "RFC7320",
+                    "RFC8820"
+                ],
+                "errata": {
+                    "1783": "REJECTED",
+                    "2033": "HELD",
+                    "2525": "VERIFIED",
+                    "2624": "HELD",
+                    "2717": "REJECTED",
+                    "2933": "HELD",
+                    "3330": "REJECTED",
+                    "4293": "REJECTED",
+                    "4393": "REJECTED",
+                    "4394": "REJECTED",
+                    "4547": "HELD",
+                    "4789": "HELD",
+                    "4942": "HELD",
+                    "5428": "HELD",
+                    "7019": "REJECTED",
+                    "7590": "VERIFIED",
+                    "8442": "REJECTED",
+                    "9147": "REPORTED"
+                }
+            }
+        },
+        {
             "id": "rfc:7303",
             "reviewedOn": "2026-11-20",
             "note": "Held erratum 4578 only narrows the change controller of the +xml suffix to its registration. kxml takes a byte order mark over the charset of a source over the declared encoding, as section 3 orders it and XmlSourceTest pins.",
@@ -187,6 +236,21 @@
                 "updatedBy": [
                     "w3c:xml"
                 ],
+                "errata": {}
+            }
+        },
+        {
+            "id": "w3c:xmlbase",
+            "reviewedOn": "2026-11-20",
+            "note": "Only catalog files read xml:base: on catalog, group and every entry it sets the base of their URIs, tested in XmlCatalogTest. Documents do not apply xml:base yet.",
+            "snapshot": {
+                "title": "XML Base (Second Edition)",
+                "status": "Recommendation",
+                "revision": "2009-01-28",
+                "published": "2009-01-28",
+                "withdrawn": false,
+                "replacedBy": [],
+                "updatedBy": [],
                 "errata": {}
             }
         }
