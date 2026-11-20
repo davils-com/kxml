@@ -29,11 +29,12 @@ private val typeTests: Map<String, NodeTest> = mapOf(
     "node" to NodeTest.AnyNode,
 )
 
-internal class QueryNames(private val namespaces: (String) -> String?) {
-    fun nameTest(token: Token): NodeTest {
+internal class QueryNames(private val namespaces: (String) -> String?, private val elementNamespace: String?) {
+    fun nameTest(token: Token, isElement: Boolean): NodeTest {
         if (token.text == WILDCARD) return NodeTest.AnyName
         val local = token.text.substringAfter(COLON)
-        val namespace = namespaceOf(token)
+        val isDefaulted = isElement && COLON !in token.text
+        val namespace = elementNamespace.takeIf { isDefaulted } ?: namespaceOf(token)
         val anyLocal = namespace?.takeIf { local == WILDCARD }?.let(NodeTest::AnyLocal)
         return anyLocal ?: NodeTest.Name(local, namespace)
     }

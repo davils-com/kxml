@@ -123,6 +123,16 @@ books.select(parsed.document).map(XPathNode::value)                    // ["Kotl
 XPath.parse("count(//*)").evaluate(parsed.document)                    // XPathValue.Number(2.0)
 ```
 
+`XmlPatch` applies a diff document of RFC 5261 and returns the patched document or the error of the first operation
+that failed:
+
+```kotlin
+when (val reading = XmlPatch.read(diff)) {
+    is XmlPatchReading.Read -> reading.patch.apply(parsed.document)
+    is XmlPatchReading.Refused -> reading.error
+}
+```
+
 `XPath` of `kxml-document` evaluates XPath 1.0 with its core function library. Every evaluation is bounded by the
 query limits of `XmlLimits` and stops with an `XmlDocumentLimitException` instead of running on.
 

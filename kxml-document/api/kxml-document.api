@@ -40,6 +40,136 @@ public final class com/davils/kxml/document/c14n/XmlCanonicalizer {
 public final class com/davils/kxml/document/c14n/XmlCanonicalizer$Companion {
 }
 
+public final class com/davils/kxml/document/patch/XmlPatch {
+	public static final field Companion Lcom/davils/kxml/document/patch/XmlPatch$Companion;
+	public fun <init> (Ljava/util/List;Lcom/davils/kxml/core/limit/XmlLimits;)V
+	public synthetic fun <init> (Ljava/util/List;Lcom/davils/kxml/core/limit/XmlLimits;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun apply (Lcom/davils/kxml/core/node/XmlDocument;)Lcom/davils/kxml/document/patch/XmlPatchResult;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getLimits ()Lcom/davils/kxml/core/limit/XmlLimits;
+	public final fun getOperations ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/document/patch/XmlPatch$Companion {
+	public final fun read (Lcom/davils/kxml/core/node/XmlDocument;Lcom/davils/kxml/core/limit/XmlLimits;)Lcom/davils/kxml/document/patch/XmlPatchReading;
+	public static synthetic fun read$default (Lcom/davils/kxml/document/patch/XmlPatch$Companion;Lcom/davils/kxml/core/node/XmlDocument;Lcom/davils/kxml/core/limit/XmlLimits;ILjava/lang/Object;)Lcom/davils/kxml/document/patch/XmlPatchReading;
+}
+
+public final class com/davils/kxml/document/patch/XmlPatchError {
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCode ()Lcom/davils/kxml/document/patch/XmlPatchErrorCode;
+	public final fun getMessage ()Ljava/lang/String;
+	public final fun getOperation ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/document/patch/XmlPatchErrorCode : java/lang/Enum {
+	public static final field InvalidAttributeValue Lcom/davils/kxml/document/patch/XmlPatchErrorCode;
+	public static final field InvalidDiffFormat Lcom/davils/kxml/document/patch/XmlPatchErrorCode;
+	public static final field InvalidNamespacePrefix Lcom/davils/kxml/document/patch/XmlPatchErrorCode;
+	public static final field InvalidNamespaceUri Lcom/davils/kxml/document/patch/XmlPatchErrorCode;
+	public static final field InvalidNodeTypes Lcom/davils/kxml/document/patch/XmlPatchErrorCode;
+	public static final field InvalidRootElementOperation Lcom/davils/kxml/document/patch/XmlPatchErrorCode;
+	public static final field InvalidWhitespaceDirective Lcom/davils/kxml/document/patch/XmlPatchErrorCode;
+	public static final field InvalidXmlPrologOperation Lcom/davils/kxml/document/patch/XmlPatchErrorCode;
+	public static final field UnlocatedNode Lcom/davils/kxml/document/patch/XmlPatchErrorCode;
+	public final fun getElement ()Ljava/lang/String;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/davils/kxml/document/patch/XmlPatchErrorCode;
+	public static fun values ()[Lcom/davils/kxml/document/patch/XmlPatchErrorCode;
+}
+
+public abstract class com/davils/kxml/document/patch/XmlPatchOperation {
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/Map;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getNamespaces ()Ljava/util/Map;
+	public final fun getSelector ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/document/patch/XmlPatchOperation$Add : com/davils/kxml/document/patch/XmlPatchOperation {
+	public fun <init> (Ljava/lang/String;Ljava/util/List;Lcom/davils/kxml/document/patch/XmlPatchPosition;Ljava/util/Map;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Lcom/davils/kxml/document/patch/XmlPatchPosition;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getContent ()Ljava/util/List;
+	public final fun getPosition ()Lcom/davils/kxml/document/patch/XmlPatchPosition;
+}
+
+public final class com/davils/kxml/document/patch/XmlPatchOperation$AddAttribute : com/davils/kxml/document/patch/XmlPatchOperation {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getName ()Ljava/lang/String;
+	public final fun getValue ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/document/patch/XmlPatchOperation$AddNamespace : com/davils/kxml/document/patch/XmlPatchOperation {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getPrefix ()Ljava/lang/String;
+	public final fun getUri ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/document/patch/XmlPatchOperation$Remove : com/davils/kxml/document/patch/XmlPatchOperation {
+	public fun <init> (Ljava/lang/String;Lcom/davils/kxml/document/patch/XmlPatchWhitespace;Ljava/util/Map;)V
+	public synthetic fun <init> (Ljava/lang/String;Lcom/davils/kxml/document/patch/XmlPatchWhitespace;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getWhitespace ()Lcom/davils/kxml/document/patch/XmlPatchWhitespace;
+}
+
+public final class com/davils/kxml/document/patch/XmlPatchOperation$Replace : com/davils/kxml/document/patch/XmlPatchOperation {
+	public fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/util/Map;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getContent ()Ljava/util/List;
+}
+
+public final class com/davils/kxml/document/patch/XmlPatchPosition : java/lang/Enum {
+	public static final field After Lcom/davils/kxml/document/patch/XmlPatchPosition;
+	public static final field Append Lcom/davils/kxml/document/patch/XmlPatchPosition;
+	public static final field Before Lcom/davils/kxml/document/patch/XmlPatchPosition;
+	public static final field Prepend Lcom/davils/kxml/document/patch/XmlPatchPosition;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/davils/kxml/document/patch/XmlPatchPosition;
+	public static fun values ()[Lcom/davils/kxml/document/patch/XmlPatchPosition;
+}
+
+public abstract interface class com/davils/kxml/document/patch/XmlPatchReading {
+}
+
+public final class com/davils/kxml/document/patch/XmlPatchReading$Read : com/davils/kxml/document/patch/XmlPatchReading {
+	public final fun getPatch ()Lcom/davils/kxml/document/patch/XmlPatch;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/document/patch/XmlPatchReading$Refused : com/davils/kxml/document/patch/XmlPatchReading {
+	public final fun getError ()Lcom/davils/kxml/document/patch/XmlPatchError;
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class com/davils/kxml/document/patch/XmlPatchResult {
+}
+
+public final class com/davils/kxml/document/patch/XmlPatchResult$Applied : com/davils/kxml/document/patch/XmlPatchResult {
+	public final fun getDocument ()Lcom/davils/kxml/core/node/XmlDocument;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/document/patch/XmlPatchResult$Failed : com/davils/kxml/document/patch/XmlPatchResult {
+	public final fun getError ()Lcom/davils/kxml/document/patch/XmlPatchError;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/document/patch/XmlPatchWhitespace : java/lang/Enum {
+	public static final field After Lcom/davils/kxml/document/patch/XmlPatchWhitespace;
+	public static final field Before Lcom/davils/kxml/document/patch/XmlPatchWhitespace;
+	public static final field Both Lcom/davils/kxml/document/patch/XmlPatchWhitespace;
+	public static final field None Lcom/davils/kxml/document/patch/XmlPatchWhitespace;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/davils/kxml/document/patch/XmlPatchWhitespace;
+	public static fun values ()[Lcom/davils/kxml/document/patch/XmlPatchWhitespace;
+}
+
 public final class com/davils/kxml/document/xpath/XPath {
 	public static final field Companion Lcom/davils/kxml/document/xpath/XPath$Companion;
 	public fun equals (Ljava/lang/Object;)Z

@@ -31,13 +31,17 @@ internal class ModelBuilder {
     private val values = mutableListOf<String?>()
     private val ranges = mutableListOf<TextRange?>()
     private val namespaces = mutableListOf<List<XmlNamespaceBinding>>()
+    private val indices = mutableListOf<Int>()
+    private val spans = mutableListOf<Int>()
 
     fun build(document: XmlDocument): DocumentModel {
-        add(kind = NodeKind.Root, parent = -1, name = null, value = null, range = null)
+        add(kind = NodeKind.Root, parent = -1, name = null, value = null, range = null, index = -1)
         val top = document.prolog + document.root + document.epilog
         val pending = ArrayDeque<Step>()
         pending.addLast(Step.Close(DocumentModel.ROOT))
-        top.asReversed().forEach { node -> pending.addLast(Step.Open(node, DocumentModel.ROOT)) }
+        for (index in top.indices.reversed()) {
+            pending.addLast(Step.Open(node = top[index], parent = DocumentModel.ROOT, index = index))
+        }
         val text = TextRun()
         while (pending.isNotEmpty()) perform(pending.removeLast(), pending, text)
         return DocumentModel(
@@ -49,6 +53,7 @@ internal class ModelBuilder {
             values = values.toTypedArray(),
             ranges = ranges.toTypedArray(),
             namespaces = namespaces.toTypedArray(),
+            locations = Locations(indices = indices.toIntArray(), spans = spans.toIntArray()),
         )
     }
 
@@ -60,69 +65,89 @@ internal class ModelBuilder {
         }
         val open = step as Step.Open
         val parent = open.parent
+        val index = open.index
         when (val node = open.node) {
             is XmlNode.Text -> {
-                text.append(characters = node.value, nodeRange = node.range, owner = parent)
+                text.append(characters = node.value, nodeRange = node.range, owner = parent, index = index)
             }
 
             is XmlNode.CData -> {
-                text.append(characters = node.value, nodeRange = node.range, owner = parent)
+                text.append(characters = node.value, nodeRange = node.range, owner = parent, index = index)
             }
 
             is XmlNode.Element -> {
                 flush(text)
-                element(node, parent, pending)
+                element(node, Placement(parent, index), pending)
             }
 
             is XmlNode.Comment -> {
                 flush(text)
-                leaf(kind = NodeKind.Comment, parent = parent, name = null, value = node.value, range = node.range)
+                val placement = Placement(parent, index)
+                val kind = NodeKind.Comment
+                leaf(kind = kind, placement = placement, name = null, value = node.value, range = node.range)
             }
 
             is XmlNode.ProcessingInstruction -> {
                 flush(text)
                 val name = XmlName(node.target)
                 val kind = NodeKind.ProcessingInstruction
-                leaf(kind = kind, parent = parent, name = name, value = node.data, range = node.range)
+                val placement = Placement(parent, index)
+                leaf(kind = kind, placement = placement, name = name, value = node.data, range = node.range)
             }
         }
     }
 
-    private fun element(element: XmlNode.Element, parent: Int, pending: ArrayDeque<Step>) {
+    private fun element(element: XmlNode.Element, placement: Placement, pending: ArrayDeque<Step>) {
         val ordinal = add(
             kind = NodeKind.Element,
-            parent = parent,
+            parent = placement.parent,
             name = element.name,
             value = null,
             range = element.range,
+            index = placement.index,
         )
         namespaces[ordinal] = element.namespaces
         attributeCounts[ordinal] = element.attributes.size
-        element.attributes.forEach { attribute ->
+        element.attributes.forEachIndexed { index, attribute ->
             leaf(
                 kind = NodeKind.Attribute,
-                parent = ordinal,
+                placement = Placement(parent = ordinal, index = index),
                 name = attribute.name,
                 value = attribute.value,
                 range = attribute.range,
             )
         }
         pending.addLast(Step.Close(ordinal))
-        element.children.asReversed().forEach { child -> pending.addLast(Step.Open(child, ordinal)) }
+        val children = element.children
+        for (index in children.indices.reversed()) {
+            pending.addLast(Step.Open(node = children[index], parent = ordinal, index = index))
+        }
     }
 
-    private fun leaf(kind: NodeKind, parent: Int, name: XmlName?, value: String, range: TextRange?) {
-        val ordinal = add(kind = kind, parent = parent, name = name, value = value, range = range)
+    private fun leaf(kind: NodeKind, placement: Placement, name: XmlName?, value: String, range: TextRange?): Int {
+        val index = placement.index
+        val ordinal = add(
+            kind = kind,
+            parent = placement.parent,
+            name = name,
+            value = value,
+            range = range,
+            index = index,
+        )
         ends[ordinal] = ordinal + 1
+        return ordinal
     }
 
     private fun flush(text: TextRun) {
         val parent = text.parent ?: return
-        leaf(kind = NodeKind.Text, parent = parent, name = null, value = text.value, range = text.range)
+        val placement = Placement(parent = parent, index = text.first)
+        val value = text.value
+        val ordinal = leaf(kind = NodeKind.Text, placement = placement, name = null, value = value, range = text.range)
+        spans[ordinal] = text.count
         text.clear()
     }
 
-    private fun add(kind: NodeKind, parent: Int, name: XmlName?, value: String?, range: TextRange?): Int {
+    private fun add(kind: NodeKind, parent: Int, name: XmlName?, value: String?, range: TextRange?, index: Int): Int {
         val ordinal = kinds.size
         kinds += kind
         parents += parent
@@ -132,11 +157,15 @@ internal class ModelBuilder {
         values += value
         ranges += range
         namespaces.add(emptyList())
+        indices += index
+        spans += 1
         return ordinal
     }
 
+    private data class Placement(val parent: Int, val index: Int)
+
     private sealed interface Step {
-        data class Open(val node: XmlNode, val parent: Int) : Step
+        data class Open(val node: XmlNode, val parent: Int, val index: Int) : Step
 
         data class Close(val node: Int) : Step
     }
@@ -147,20 +176,33 @@ internal class ModelBuilder {
             private set
         var range: TextRange? = null
             private set
+        var first: Int = 0
+            private set
+        var count: Int = 0
+            private set
 
         val value: String get() = text.toString()
 
-        fun append(characters: String, nodeRange: TextRange?, owner: Int) {
+        fun append(characters: String, nodeRange: TextRange?, owner: Int, index: Int) {
+            range = nodeRange.takeIf { count == 0 } ?: joined(current = range, next = nodeRange)
+            if (count == 0) first = index
+            count += 1
             text.append(characters)
             parent = owner
-            val start = range?.start
-            range = nodeRange?.let { found -> TextRange(start = start ?: found.start, end = found.end) }
+        }
+
+        private fun joined(current: TextRange?, next: TextRange?): TextRange? {
+            if (current == null || next == null) return null
+            return next.takeIf { found -> found.start >= current.end }?.let { found ->
+                TextRange(start = current.start, end = found.end)
+            }
         }
 
         fun clear() {
             text.clear()
             parent = null
             range = null
+            count = 0
         }
     }
 }

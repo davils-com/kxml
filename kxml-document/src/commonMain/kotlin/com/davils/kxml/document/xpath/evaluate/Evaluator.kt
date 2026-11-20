@@ -39,8 +39,8 @@ internal class Evaluator(
     private val model: DocumentModel,
     limits: XmlLimits,
     private val variables: Map<XmlName, XPathValue>,
+    val bounds: EvaluationBounds = EvaluationBounds(limits),
 ) {
-    val bounds: EvaluationBounds = EvaluationBounds(limits)
     val nodes: NodeAccess = NodeAccess(model, bounds)
     val conversions: Conversions = Conversions(nodes)
     private val walker: AxisWalker = AxisWalker(nodes, bounds)

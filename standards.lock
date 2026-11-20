@@ -147,6 +147,25 @@
             }
         },
         {
+            "id": "rfc:5261",
+            "reviewedOn": "2026-11-20",
+            "note": "RFC 5261 (2008-09); kxml-document implements add, replace and remove with pos, type and ws, the namespace rules of section 4.2 including the default namespace of the diff in selectors, and the error elements of section 5.1 except the character set and entity ones, which an XmlDocument cannot raise.",
+            "snapshot": {
+                "title": "An Extensible Markup Language (XML) Patch Operations Framework Utilizing XML Path Language (XPath) Selectors",
+                "status": "PROPOSED STANDARD",
+                "published": "September 2008",
+                "withdrawn": false,
+                "replacedBy": [],
+                "updatedBy": [],
+                "errata": {
+                    "3458": "HELD",
+                    "3465": "HELD",
+                    "3477": "HELD",
+                    "3478": "HELD"
+                }
+            }
+        },
+        {
             "id": "rfc:7303",
             "reviewedOn": "2026-11-20",
             "note": "Held erratum 4578 only narrows the change controller of the +xml suffix to its registration. kxml takes a byte order mark over the charset of a source over the declared encoding, as section 3 orders it and XmlSourceTest pins.",

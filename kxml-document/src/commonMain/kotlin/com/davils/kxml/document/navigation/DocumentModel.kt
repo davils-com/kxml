@@ -32,6 +32,7 @@ internal class DocumentModel internal constructor(
     private val values: Array<String?>,
     private val ranges: Array<TextRange?>,
     private val namespaces: Array<List<XmlNamespaceBinding>>,
+    private val locations: Locations,
 ) {
     val size: Int get() = kinds.size
 
@@ -75,6 +76,10 @@ internal class DocumentModel internal constructor(
     }
 
     fun value(node: Int): String? = values[node]
+
+    fun indexOf(node: Int): Int = locations.indexOf(node)
+
+    fun spanOf(node: Int): Int = locations.spanOf(node)
 
     fun attributeName(attribute: Int): XmlName = checkNotNull(names[attribute])
 

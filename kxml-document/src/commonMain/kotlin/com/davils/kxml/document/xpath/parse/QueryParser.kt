@@ -79,10 +79,10 @@ private val multiplications: Map<TokenKind, Operation> = mapOf(
 
 internal class QueryParser(
     private val tokens: List<Token>,
-    namespaces: (String) -> String?,
+    names: QueryNames,
     private val maximumNesting: Int,
 ) {
-    private val names: QueryNames = QueryNames(namespaces)
+    private val names: QueryNames = names
     private var position: Int = 0
     private var depth: Int = 0
 
@@ -212,8 +212,12 @@ internal class QueryParser(
 
     private fun step(): Step {
         val abbreviated = abbreviations[current.kind]
-        if (abbreviated != null) position += 1
-        return abbreviated ?: Step(axis(), nodeTest(), predicates())
+        if (abbreviated != null) {
+            position += 1
+            return abbreviated
+        }
+        val axis = axis()
+        return Step(axis, nodeTest(isElement = axis != Axis.Attribute && axis != Axis.Namespace), predicates())
     }
 
     private fun axis(): Axis {
@@ -228,10 +232,10 @@ internal class QueryParser(
         return axis
     }
 
-    private fun nodeTest(): NodeTest {
+    private fun nodeTest(isElement: Boolean): NodeTest {
         val test = current
         position += 1
-        if (test.kind == TokenKind.NameTest) return names.nameTest(test)
+        if (test.kind == TokenKind.NameTest) return names.nameTest(test, isElement)
         if (test.kind != TokenKind.NodeType) throw QuerySyntaxError("a step needs a node test", test.offset)
         expect(kind = TokenKind.LeftParen, reason = "a node type needs parentheses")
         val target = accept(TokenKind.Literal).takeIf { test.text == INSTRUCTION }

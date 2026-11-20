@@ -31,6 +31,52 @@ final enum class com.davils.kxml.document.c14n/XmlCanonicalization : kotlin/Enum
     }
 }
 
+final enum class com.davils.kxml.document.patch/XmlPatchErrorCode : kotlin/Enum<com.davils.kxml.document.patch/XmlPatchErrorCode> { // com.davils.kxml.document.patch/XmlPatchErrorCode|null[0]
+    enum entry InvalidAttributeValue // com.davils.kxml.document.patch/XmlPatchErrorCode.InvalidAttributeValue|null[0]
+    enum entry InvalidDiffFormat // com.davils.kxml.document.patch/XmlPatchErrorCode.InvalidDiffFormat|null[0]
+    enum entry InvalidNamespacePrefix // com.davils.kxml.document.patch/XmlPatchErrorCode.InvalidNamespacePrefix|null[0]
+    enum entry InvalidNamespaceUri // com.davils.kxml.document.patch/XmlPatchErrorCode.InvalidNamespaceUri|null[0]
+    enum entry InvalidNodeTypes // com.davils.kxml.document.patch/XmlPatchErrorCode.InvalidNodeTypes|null[0]
+    enum entry InvalidRootElementOperation // com.davils.kxml.document.patch/XmlPatchErrorCode.InvalidRootElementOperation|null[0]
+    enum entry InvalidWhitespaceDirective // com.davils.kxml.document.patch/XmlPatchErrorCode.InvalidWhitespaceDirective|null[0]
+    enum entry InvalidXmlPrologOperation // com.davils.kxml.document.patch/XmlPatchErrorCode.InvalidXmlPrologOperation|null[0]
+    enum entry UnlocatedNode // com.davils.kxml.document.patch/XmlPatchErrorCode.UnlocatedNode|null[0]
+
+    final val element // com.davils.kxml.document.patch/XmlPatchErrorCode.element|{}element[0]
+        final fun <get-element>(): kotlin/String // com.davils.kxml.document.patch/XmlPatchErrorCode.element.<get-element>|<get-element>(){}[0]
+    final val entries // com.davils.kxml.document.patch/XmlPatchErrorCode.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<com.davils.kxml.document.patch/XmlPatchErrorCode> // com.davils.kxml.document.patch/XmlPatchErrorCode.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): com.davils.kxml.document.patch/XmlPatchErrorCode // com.davils.kxml.document.patch/XmlPatchErrorCode.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<com.davils.kxml.document.patch/XmlPatchErrorCode> // com.davils.kxml.document.patch/XmlPatchErrorCode.values|values#static(){}[0]
+}
+
+final enum class com.davils.kxml.document.patch/XmlPatchPosition : kotlin/Enum<com.davils.kxml.document.patch/XmlPatchPosition> { // com.davils.kxml.document.patch/XmlPatchPosition|null[0]
+    enum entry After // com.davils.kxml.document.patch/XmlPatchPosition.After|null[0]
+    enum entry Append // com.davils.kxml.document.patch/XmlPatchPosition.Append|null[0]
+    enum entry Before // com.davils.kxml.document.patch/XmlPatchPosition.Before|null[0]
+    enum entry Prepend // com.davils.kxml.document.patch/XmlPatchPosition.Prepend|null[0]
+
+    final val entries // com.davils.kxml.document.patch/XmlPatchPosition.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<com.davils.kxml.document.patch/XmlPatchPosition> // com.davils.kxml.document.patch/XmlPatchPosition.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): com.davils.kxml.document.patch/XmlPatchPosition // com.davils.kxml.document.patch/XmlPatchPosition.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<com.davils.kxml.document.patch/XmlPatchPosition> // com.davils.kxml.document.patch/XmlPatchPosition.values|values#static(){}[0]
+}
+
+final enum class com.davils.kxml.document.patch/XmlPatchWhitespace : kotlin/Enum<com.davils.kxml.document.patch/XmlPatchWhitespace> { // com.davils.kxml.document.patch/XmlPatchWhitespace|null[0]
+    enum entry After // com.davils.kxml.document.patch/XmlPatchWhitespace.After|null[0]
+    enum entry Before // com.davils.kxml.document.patch/XmlPatchWhitespace.Before|null[0]
+    enum entry Both // com.davils.kxml.document.patch/XmlPatchWhitespace.Both|null[0]
+    enum entry None // com.davils.kxml.document.patch/XmlPatchWhitespace.None|null[0]
+
+    final val entries // com.davils.kxml.document.patch/XmlPatchWhitespace.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<com.davils.kxml.document.patch/XmlPatchWhitespace> // com.davils.kxml.document.patch/XmlPatchWhitespace.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): com.davils.kxml.document.patch/XmlPatchWhitespace // com.davils.kxml.document.patch/XmlPatchWhitespace.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<com.davils.kxml.document.patch/XmlPatchWhitespace> // com.davils.kxml.document.patch/XmlPatchWhitespace.values|values#static(){}[0]
+}
+
 final enum class com.davils.kxml.document.xpath/XPathNodeKind : kotlin/Enum<com.davils.kxml.document.xpath/XPathNodeKind> { // com.davils.kxml.document.xpath/XPathNodeKind|null[0]
     enum entry Attribute // com.davils.kxml.document.xpath/XPathNodeKind.Attribute|null[0]
     enum entry Comment // com.davils.kxml.document.xpath/XPathNodeKind.Comment|null[0]
@@ -45,6 +91,38 @@ final enum class com.davils.kxml.document.xpath/XPathNodeKind : kotlin/Enum<com.
 
     final fun valueOf(kotlin/String): com.davils.kxml.document.xpath/XPathNodeKind // com.davils.kxml.document.xpath/XPathNodeKind.valueOf|valueOf#static(kotlin.String){}[0]
     final fun values(): kotlin/Array<com.davils.kxml.document.xpath/XPathNodeKind> // com.davils.kxml.document.xpath/XPathNodeKind.values|values#static(){}[0]
+}
+
+sealed interface com.davils.kxml.document.patch/XmlPatchReading { // com.davils.kxml.document.patch/XmlPatchReading|null[0]
+    final class Read : com.davils.kxml.document.patch/XmlPatchReading { // com.davils.kxml.document.patch/XmlPatchReading.Read|null[0]
+        final val patch // com.davils.kxml.document.patch/XmlPatchReading.Read.patch|{}patch[0]
+            final fun <get-patch>(): com.davils.kxml.document.patch/XmlPatch // com.davils.kxml.document.patch/XmlPatchReading.Read.patch.<get-patch>|<get-patch>(){}[0]
+
+        final fun toString(): kotlin/String // com.davils.kxml.document.patch/XmlPatchReading.Read.toString|toString(){}[0]
+    }
+
+    final class Refused : com.davils.kxml.document.patch/XmlPatchReading { // com.davils.kxml.document.patch/XmlPatchReading.Refused|null[0]
+        final val error // com.davils.kxml.document.patch/XmlPatchReading.Refused.error|{}error[0]
+            final fun <get-error>(): com.davils.kxml.document.patch/XmlPatchError // com.davils.kxml.document.patch/XmlPatchReading.Refused.error.<get-error>|<get-error>(){}[0]
+
+        final fun toString(): kotlin/String // com.davils.kxml.document.patch/XmlPatchReading.Refused.toString|toString(){}[0]
+    }
+}
+
+sealed interface com.davils.kxml.document.patch/XmlPatchResult { // com.davils.kxml.document.patch/XmlPatchResult|null[0]
+    final class Applied : com.davils.kxml.document.patch/XmlPatchResult { // com.davils.kxml.document.patch/XmlPatchResult.Applied|null[0]
+        final val document // com.davils.kxml.document.patch/XmlPatchResult.Applied.document|{}document[0]
+            final fun <get-document>(): com.davils.kxml.core.node/XmlDocument // com.davils.kxml.document.patch/XmlPatchResult.Applied.document.<get-document>|<get-document>(){}[0]
+
+        final fun toString(): kotlin/String // com.davils.kxml.document.patch/XmlPatchResult.Applied.toString|toString(){}[0]
+    }
+
+    final class Failed : com.davils.kxml.document.patch/XmlPatchResult { // com.davils.kxml.document.patch/XmlPatchResult.Failed|null[0]
+        final val error // com.davils.kxml.document.patch/XmlPatchResult.Failed.error|{}error[0]
+            final fun <get-error>(): com.davils.kxml.document.patch/XmlPatchError // com.davils.kxml.document.patch/XmlPatchResult.Failed.error.<get-error>|<get-error>(){}[0]
+
+        final fun toString(): kotlin/String // com.davils.kxml.document.patch/XmlPatchResult.Failed.toString|toString(){}[0]
+    }
 }
 
 sealed interface com.davils.kxml.document.xpath/XPathValue { // com.davils.kxml.document.xpath/XPathValue|null[0]
@@ -113,6 +191,37 @@ final class com.davils.kxml.document.c14n/XmlCanonicalizer { // com.davils.kxml.
     }
 }
 
+final class com.davils.kxml.document.patch/XmlPatch { // com.davils.kxml.document.patch/XmlPatch|null[0]
+    constructor <init>(kotlin.collections/List<com.davils.kxml.document.patch/XmlPatchOperation>, com.davils.kxml.core.limit/XmlLimits = ...) // com.davils.kxml.document.patch/XmlPatch.<init>|<init>(kotlin.collections.List<com.davils.kxml.document.patch.XmlPatchOperation>;com.davils.kxml.core.limit.XmlLimits){}[0]
+
+    final val limits // com.davils.kxml.document.patch/XmlPatch.limits|{}limits[0]
+        final fun <get-limits>(): com.davils.kxml.core.limit/XmlLimits // com.davils.kxml.document.patch/XmlPatch.limits.<get-limits>|<get-limits>(){}[0]
+    final val operations // com.davils.kxml.document.patch/XmlPatch.operations|{}operations[0]
+        final fun <get-operations>(): kotlin.collections/List<com.davils.kxml.document.patch/XmlPatchOperation> // com.davils.kxml.document.patch/XmlPatch.operations.<get-operations>|<get-operations>(){}[0]
+
+    final fun apply(com.davils.kxml.core.node/XmlDocument): com.davils.kxml.document.patch/XmlPatchResult // com.davils.kxml.document.patch/XmlPatch.apply|apply(com.davils.kxml.core.node.XmlDocument){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // com.davils.kxml.document.patch/XmlPatch.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // com.davils.kxml.document.patch/XmlPatch.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // com.davils.kxml.document.patch/XmlPatch.toString|toString(){}[0]
+
+    final object Companion { // com.davils.kxml.document.patch/XmlPatch.Companion|null[0]
+        final fun read(com.davils.kxml.core.node/XmlDocument, com.davils.kxml.core.limit/XmlLimits = ...): com.davils.kxml.document.patch/XmlPatchReading // com.davils.kxml.document.patch/XmlPatch.Companion.read|read(com.davils.kxml.core.node.XmlDocument;com.davils.kxml.core.limit.XmlLimits){}[0]
+    }
+}
+
+final class com.davils.kxml.document.patch/XmlPatchError { // com.davils.kxml.document.patch/XmlPatchError|null[0]
+    final val code // com.davils.kxml.document.patch/XmlPatchError.code|{}code[0]
+        final fun <get-code>(): com.davils.kxml.document.patch/XmlPatchErrorCode // com.davils.kxml.document.patch/XmlPatchError.code.<get-code>|<get-code>(){}[0]
+    final val message // com.davils.kxml.document.patch/XmlPatchError.message|{}message[0]
+        final fun <get-message>(): kotlin/String // com.davils.kxml.document.patch/XmlPatchError.message.<get-message>|<get-message>(){}[0]
+    final val operation // com.davils.kxml.document.patch/XmlPatchError.operation|{}operation[0]
+        final fun <get-operation>(): kotlin/Int // com.davils.kxml.document.patch/XmlPatchError.operation.<get-operation>|<get-operation>(){}[0]
+
+    final fun equals(kotlin/Any?): kotlin/Boolean // com.davils.kxml.document.patch/XmlPatchError.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // com.davils.kxml.document.patch/XmlPatchError.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // com.davils.kxml.document.patch/XmlPatchError.toString|toString(){}[0]
+}
+
 final class com.davils.kxml.document.xpath/XPath { // com.davils.kxml.document.xpath/XPath|null[0]
     final val expression // com.davils.kxml.document.xpath/XPath.expression|{}expression[0]
         final fun <get-expression>(): kotlin/String // com.davils.kxml.document.xpath/XPath.expression.<get-expression>|<get-expression>(){}[0]
@@ -153,4 +262,56 @@ final class com.davils.kxml.document.xpath/XPathNode { // com.davils.kxml.docume
 final class com.davils.kxml.document/XmlDocumentLimitException : kotlin/IllegalStateException { // com.davils.kxml.document/XmlDocumentLimitException|null[0]
     final val limit // com.davils.kxml.document/XmlDocumentLimitException.limit|{}limit[0]
         final fun <get-limit>(): kotlin/String // com.davils.kxml.document/XmlDocumentLimitException.limit.<get-limit>|<get-limit>(){}[0]
+}
+
+sealed class com.davils.kxml.document.patch/XmlPatchOperation { // com.davils.kxml.document.patch/XmlPatchOperation|null[0]
+    final val namespaces // com.davils.kxml.document.patch/XmlPatchOperation.namespaces|{}namespaces[0]
+        final fun <get-namespaces>(): kotlin.collections/Map<kotlin/String, kotlin/String> // com.davils.kxml.document.patch/XmlPatchOperation.namespaces.<get-namespaces>|<get-namespaces>(){}[0]
+    final val selector // com.davils.kxml.document.patch/XmlPatchOperation.selector|{}selector[0]
+        final fun <get-selector>(): kotlin/String // com.davils.kxml.document.patch/XmlPatchOperation.selector.<get-selector>|<get-selector>(){}[0]
+
+    open fun equals(kotlin/Any?): kotlin/Boolean // com.davils.kxml.document.patch/XmlPatchOperation.equals|equals(kotlin.Any?){}[0]
+    open fun hashCode(): kotlin/Int // com.davils.kxml.document.patch/XmlPatchOperation.hashCode|hashCode(){}[0]
+    open fun toString(): kotlin/String // com.davils.kxml.document.patch/XmlPatchOperation.toString|toString(){}[0]
+
+    final class Add : com.davils.kxml.document.patch/XmlPatchOperation { // com.davils.kxml.document.patch/XmlPatchOperation.Add|null[0]
+        constructor <init>(kotlin/String, kotlin.collections/List<com.davils.kxml.core.node/XmlNode>, com.davils.kxml.document.patch/XmlPatchPosition = ..., kotlin.collections/Map<kotlin/String, kotlin/String> = ...) // com.davils.kxml.document.patch/XmlPatchOperation.Add.<init>|<init>(kotlin.String;kotlin.collections.List<com.davils.kxml.core.node.XmlNode>;com.davils.kxml.document.patch.XmlPatchPosition;kotlin.collections.Map<kotlin.String,kotlin.String>){}[0]
+
+        final val content // com.davils.kxml.document.patch/XmlPatchOperation.Add.content|{}content[0]
+            final fun <get-content>(): kotlin.collections/List<com.davils.kxml.core.node/XmlNode> // com.davils.kxml.document.patch/XmlPatchOperation.Add.content.<get-content>|<get-content>(){}[0]
+        final val position // com.davils.kxml.document.patch/XmlPatchOperation.Add.position|{}position[0]
+            final fun <get-position>(): com.davils.kxml.document.patch/XmlPatchPosition // com.davils.kxml.document.patch/XmlPatchOperation.Add.position.<get-position>|<get-position>(){}[0]
+    }
+
+    final class AddAttribute : com.davils.kxml.document.patch/XmlPatchOperation { // com.davils.kxml.document.patch/XmlPatchOperation.AddAttribute|null[0]
+        constructor <init>(kotlin/String, kotlin/String, kotlin/String, kotlin.collections/Map<kotlin/String, kotlin/String> = ...) // com.davils.kxml.document.patch/XmlPatchOperation.AddAttribute.<init>|<init>(kotlin.String;kotlin.String;kotlin.String;kotlin.collections.Map<kotlin.String,kotlin.String>){}[0]
+
+        final val name // com.davils.kxml.document.patch/XmlPatchOperation.AddAttribute.name|{}name[0]
+            final fun <get-name>(): kotlin/String // com.davils.kxml.document.patch/XmlPatchOperation.AddAttribute.name.<get-name>|<get-name>(){}[0]
+        final val value // com.davils.kxml.document.patch/XmlPatchOperation.AddAttribute.value|{}value[0]
+            final fun <get-value>(): kotlin/String // com.davils.kxml.document.patch/XmlPatchOperation.AddAttribute.value.<get-value>|<get-value>(){}[0]
+    }
+
+    final class AddNamespace : com.davils.kxml.document.patch/XmlPatchOperation { // com.davils.kxml.document.patch/XmlPatchOperation.AddNamespace|null[0]
+        constructor <init>(kotlin/String, kotlin/String, kotlin/String, kotlin.collections/Map<kotlin/String, kotlin/String> = ...) // com.davils.kxml.document.patch/XmlPatchOperation.AddNamespace.<init>|<init>(kotlin.String;kotlin.String;kotlin.String;kotlin.collections.Map<kotlin.String,kotlin.String>){}[0]
+
+        final val prefix // com.davils.kxml.document.patch/XmlPatchOperation.AddNamespace.prefix|{}prefix[0]
+            final fun <get-prefix>(): kotlin/String // com.davils.kxml.document.patch/XmlPatchOperation.AddNamespace.prefix.<get-prefix>|<get-prefix>(){}[0]
+        final val uri // com.davils.kxml.document.patch/XmlPatchOperation.AddNamespace.uri|{}uri[0]
+            final fun <get-uri>(): kotlin/String // com.davils.kxml.document.patch/XmlPatchOperation.AddNamespace.uri.<get-uri>|<get-uri>(){}[0]
+    }
+
+    final class Remove : com.davils.kxml.document.patch/XmlPatchOperation { // com.davils.kxml.document.patch/XmlPatchOperation.Remove|null[0]
+        constructor <init>(kotlin/String, com.davils.kxml.document.patch/XmlPatchWhitespace = ..., kotlin.collections/Map<kotlin/String, kotlin/String> = ...) // com.davils.kxml.document.patch/XmlPatchOperation.Remove.<init>|<init>(kotlin.String;com.davils.kxml.document.patch.XmlPatchWhitespace;kotlin.collections.Map<kotlin.String,kotlin.String>){}[0]
+
+        final val whitespace // com.davils.kxml.document.patch/XmlPatchOperation.Remove.whitespace|{}whitespace[0]
+            final fun <get-whitespace>(): com.davils.kxml.document.patch/XmlPatchWhitespace // com.davils.kxml.document.patch/XmlPatchOperation.Remove.whitespace.<get-whitespace>|<get-whitespace>(){}[0]
+    }
+
+    final class Replace : com.davils.kxml.document.patch/XmlPatchOperation { // com.davils.kxml.document.patch/XmlPatchOperation.Replace|null[0]
+        constructor <init>(kotlin/String, kotlin.collections/List<com.davils.kxml.core.node/XmlNode>, kotlin.collections/Map<kotlin/String, kotlin/String> = ...) // com.davils.kxml.document.patch/XmlPatchOperation.Replace.<init>|<init>(kotlin.String;kotlin.collections.List<com.davils.kxml.core.node.XmlNode>;kotlin.collections.Map<kotlin.String,kotlin.String>){}[0]
+
+        final val content // com.davils.kxml.document.patch/XmlPatchOperation.Replace.content|{}content[0]
+            final fun <get-content>(): kotlin.collections/List<com.davils.kxml.core.node/XmlNode> // com.davils.kxml.document.patch/XmlPatchOperation.Replace.content.<get-content>|<get-content>(){}[0]
+    }
 }

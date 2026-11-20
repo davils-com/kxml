@@ -39,6 +39,11 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
   `xml:base` fixup of Canonical XML 1.1 and the InclusiveNamespaces PrefixList of the exclusive method. A document with
   a relative namespace URI is refused, and the output is bounded by `maximumOutputLength`. Whole documents are
   compared with the canonicalizers of the JDK in a differential test.
+- `XmlPatch` applies the XML patch operations of RFC 5261, read from a diff document with `XmlPatch.read` or built in
+  code: `<add>` with `pos` and `type`, `<replace>` and `<remove>` with `ws`, selectors that resolve unprefixed names
+  through the default namespace of the diff, prefixes of added content mapped onto the declarations of the target,
+  and the error conditions of section 5.1. A patch is atomic, holds at most `maximumPatchOperations` operations and
+  counts its work against `maximumQuerySteps`.
 - All modules are Kotlin Multiplatform libraries with a `jvm` and a `wasmJs` target. Sources are decoded in common
   code, and untrusted text is escaped by `SafeText` of Kore.
 - Sources of bytes are detected as Appendix F of XML 1.0 describes it and decoded strictly from UTF-8, UTF-16 and

@@ -18,13 +18,19 @@ package com.davils.kxml.document.xpath.parse
 import com.davils.kxml.core.limit.XmlLimits
 
 internal object QueryParsing {
-    fun read(expression: String, namespaces: (String) -> String?, limits: XmlLimits): QueryReading {
+    fun read(
+        expression: String,
+        namespaces: (String) -> String?,
+        limits: XmlLimits,
+        elementNamespace: String? = null,
+    ): QueryReading {
         if (expression.length > limits.maximumQueryLength) {
             return QueryReading.Refused(reason = "the expression is longer than maximumQueryLength", offset = 0)
         }
         return try {
             val tokens = QueryLexer(expression).tokens()
-            val parser = QueryParser(tokens, namespaces = namespaces, maximumNesting = limits.maximumQueryNesting)
+            val names = QueryNames(namespaces, elementNamespace)
+            val parser = QueryParser(tokens, names = names, maximumNesting = limits.maximumQueryNesting)
             QueryReading.Read(parser.parse())
         } catch (error: QuerySyntaxError) {
             QueryReading.Refused(reason = error.reason, offset = error.offset)
