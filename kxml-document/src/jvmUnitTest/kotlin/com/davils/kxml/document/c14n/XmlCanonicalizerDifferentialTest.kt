@@ -19,12 +19,22 @@ package com.davils.kxml.document.c14n
 import com.davils.kxml.document.fixture.documentOf
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.shouldBe
+import io.kotest.property.Arb
+import io.kotest.property.arbitrary.element
+import io.kotest.property.arbitrary.flatMap
+import io.kotest.property.arbitrary.list
+import io.kotest.property.arbitrary.map
+import io.kotest.property.checkAll
 import java.io.ByteArrayInputStream
 import javax.xml.crypto.OctetStreamData
 import javax.xml.crypto.dom.DOMCryptoContext
 import javax.xml.crypto.dsig.TransformService
 
 private const val DOM: String = "DOM"
+private const val CASES: Int = 300
+private const val MOST_LEAVES: Int = 4
+private const val MOST_CHILDREN: Int = 6
 
 private val outside: String = """
     |<?xml version="1.0"?>
@@ -63,6 +73,27 @@ private val documents: List<String> = listOf(
         "t</c></b><p:d xmlns:p='urn:other'><e/></p:d></p:a>",
 )
 
+private val names: List<String> = listOf("a", "p:b", "c", "q:d")
+private val attributes: List<String> = listOf(
+    "", " x='1'", " p:y=\"&quot;&lt;\"", " z='a&#9;b&#10;c&#13;'", " xml:lang='en'", " xmlns='urn:d'",
+    " xmlns=''", " xmlns:q='urn:other'", " b='2' a='1'", " q:a='3' p:a='4'",
+)
+private val leaves: List<String> = listOf(
+    "t", " ", "\r\n", "&amp;&lt;&gt;", "&#x1F600;", "<!--c-->", "<?pi  data ?>", "<![CDATA[ <&>\r ]]>", "\u00E9",
+    "&#13;",
+)
+
+private val elements: Arb<String> = Arb.list(Arb.element(leaves), 0..MOST_LEAVES).flatMap { inner ->
+    Arb.element(names).flatMap { name ->
+        Arb.element(attributes).map { attribute -> "<$name$attribute>${inner.joinToString(separator = "")}</$name>" }
+    }
+}
+
+private val generated: Arb<String> = Arb.list(elements, 0..MOST_CHILDREN).map { children ->
+    val content = children.joinToString(separator = "")
+    "<?xml version='1.0'?>\n<!--p--><?s x?>\n<r xmlns:p='urn:p' xmlns:q='urn:q'>$content</r>"
+}
+
 private val context: DOMCryptoContext = object : DOMCryptoContext() {}
 
 private fun jdkCanonical(text: String, method: XmlCanonicalization): String {
@@ -88,6 +119,21 @@ class XmlCanonicalizerDifferentialTest : FunSpec({
             }
 
             differences.shouldBeEmpty()
+        }
+
+        test("keeps a single node after the document element, which the canonicalizers of the JDK drop") {
+            kxmlCanonical("<r/><?e?>", XmlCanonicalization.Canonical10) shouldBe "<r></r>\n<?e?>"
+            jdkCanonical("<r/><?e?>", XmlCanonicalization.Canonical10) shouldBe "<r></r>"
+            kxmlCanonical("<r/><!--z-->", XmlCanonicalization.Canonical10WithComments) shouldBe "<r></r>\n<!--z-->"
+            jdkCanonical("<r/><!--z-->", XmlCanonicalization.Canonical10WithComments) shouldBe "<r></r>"
+        }
+
+        test("of a generated document is the one the canonicalizers of the JDK write") {
+            checkAll(CASES, generated) { text ->
+                XmlCanonicalization.entries.forEach { method ->
+                    kxmlCanonical(text, method) shouldBe jdkCanonical(text, method)
+                }
+            }
         }
     }
 })
