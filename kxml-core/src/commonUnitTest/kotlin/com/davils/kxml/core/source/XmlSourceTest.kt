@@ -40,6 +40,17 @@ private const val ROCKET: String = "\uD83D\uDE80"
 private const val LONE_HIGH: String = "\uD800"
 private const val LONE_LOW: String = "\uDC00"
 
+private val overlongSlash: List<Int> = listOf(0xC0, 0xAF)
+private val encodedSurrogate: List<Int> = listOf(0xED, 0xA0, 0x80)
+private val beyondUnicode: List<Int> = listOf(0xF4, 0x90, 0x80, 0x80)
+
+private fun utf8Around(sequence: List<Int>): ByteArray {
+    val open = "<a>".encodeToByteArray()
+    val close = "</a>".encodeToByteArray()
+    val middle = ByteArray(sequence.size) { index -> sequence[index].toByte() }
+    return open + middle + close
+}
+
 private val invalidUtf8: ByteArray = "<a>".encodeToByteArray() + byteArrayOf(BROKEN_LEAD.toByte(), OPEN_PARENTHESIS)
 
 private fun utf16(text: String, isBigEndian: Boolean): ByteArray {
@@ -99,6 +110,14 @@ class XmlSourceTest : FunSpec({
 
         test("refuses bytes that are not valid UTF-8") {
             refusal(XmlSource.of(invalidUtf8)) shouldBe XmlDiagnosticCode.InvalidEncoding
+        }
+
+        test("refuses overlong forms, encoded surrogates and code points above U+10FFFF in UTF-8") {
+            val forbidden = listOf(overlongSlash, encodedSurrogate, beyondUnicode)
+
+            forbidden.forEach { sequence ->
+                refusal(XmlSource.of(utf8Around(sequence))) shouldBe XmlDiagnosticCode.InvalidEncoding
+            }
         }
 
         test("reads characters outside the basic plane from UTF-16") {
