@@ -77,6 +77,18 @@ final enum class com.davils.kxml.document.patch/XmlPatchWhitespace : kotlin/Enum
     final fun values(): kotlin/Array<com.davils.kxml.document.patch/XmlPatchWhitespace> // com.davils.kxml.document.patch/XmlPatchWhitespace.values|values#static(){}[0]
 }
 
+final enum class com.davils.kxml.document.redact/XmlRedactionRefusal : kotlin/Enum<com.davils.kxml.document.redact/XmlRedactionRefusal> { // com.davils.kxml.document.redact/XmlRedactionRefusal|null[0]
+    enum entry InvalidDocument // com.davils.kxml.document.redact/XmlRedactionRefusal.InvalidDocument|null[0]
+    enum entry LimitExceeded // com.davils.kxml.document.redact/XmlRedactionRefusal.LimitExceeded|null[0]
+    enum entry Undecidable // com.davils.kxml.document.redact/XmlRedactionRefusal.Undecidable|null[0]
+
+    final val entries // com.davils.kxml.document.redact/XmlRedactionRefusal.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<com.davils.kxml.document.redact/XmlRedactionRefusal> // com.davils.kxml.document.redact/XmlRedactionRefusal.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): com.davils.kxml.document.redact/XmlRedactionRefusal // com.davils.kxml.document.redact/XmlRedactionRefusal.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<com.davils.kxml.document.redact/XmlRedactionRefusal> // com.davils.kxml.document.redact/XmlRedactionRefusal.values|values#static(){}[0]
+}
+
 final enum class com.davils.kxml.document.xpath/XPathNodeKind : kotlin/Enum<com.davils.kxml.document.xpath/XPathNodeKind> { // com.davils.kxml.document.xpath/XPathNodeKind|null[0]
     enum entry Attribute // com.davils.kxml.document.xpath/XPathNodeKind.Attribute|null[0]
     enum entry Comment // com.davils.kxml.document.xpath/XPathNodeKind.Comment|null[0]
@@ -122,6 +134,24 @@ sealed interface com.davils.kxml.document.patch/XmlPatchResult { // com.davils.k
             final fun <get-error>(): com.davils.kxml.document.patch/XmlPatchError // com.davils.kxml.document.patch/XmlPatchResult.Failed.error.<get-error>|<get-error>(){}[0]
 
         final fun toString(): kotlin/String // com.davils.kxml.document.patch/XmlPatchResult.Failed.toString|toString(){}[0]
+    }
+}
+
+sealed interface com.davils.kxml.document.redact/XmlRedactionResult { // com.davils.kxml.document.redact/XmlRedactionResult|null[0]
+    final class Redacted : com.davils.kxml.document.redact/XmlRedactionResult { // com.davils.kxml.document.redact/XmlRedactionResult.Redacted|null[0]
+        final val edits // com.davils.kxml.document.redact/XmlRedactionResult.Redacted.edits|{}edits[0]
+            final fun <get-edits>(): kotlin.collections/List<com.davils.kore.core.text/TextEdit> // com.davils.kxml.document.redact/XmlRedactionResult.Redacted.edits.<get-edits>|<get-edits>(){}[0]
+        final val tree // com.davils.kxml.document.redact/XmlRedactionResult.Redacted.tree|{}tree[0]
+            final fun <get-tree>(): com.davils.kxml.core.syntax/XmlSyntaxTree // com.davils.kxml.document.redact/XmlRedactionResult.Redacted.tree.<get-tree>|<get-tree>(){}[0]
+
+        final fun toString(): kotlin/String // com.davils.kxml.document.redact/XmlRedactionResult.Redacted.toString|toString(){}[0]
+    }
+
+    final class Refused : com.davils.kxml.document.redact/XmlRedactionResult { // com.davils.kxml.document.redact/XmlRedactionResult.Refused|null[0]
+        final val reason // com.davils.kxml.document.redact/XmlRedactionResult.Refused.reason|{}reason[0]
+            final fun <get-reason>(): com.davils.kxml.document.redact/XmlRedactionRefusal // com.davils.kxml.document.redact/XmlRedactionResult.Refused.reason.<get-reason>|<get-reason>(){}[0]
+
+        final fun toString(): kotlin/String // com.davils.kxml.document.redact/XmlRedactionResult.Refused.toString|toString(){}[0]
     }
 }
 
@@ -285,6 +315,36 @@ final class com.davils.kxml.document.patch/XmlPatchError { // com.davils.kxml.do
     final fun toString(): kotlin/String // com.davils.kxml.document.patch/XmlPatchError.toString|toString(){}[0]
 }
 
+final class com.davils.kxml.document.redact/XmlRedaction : com.davils.kore.core.validation/Validatable { // com.davils.kxml.document.redact/XmlRedaction|null[0]
+    final val limits // com.davils.kxml.document.redact/XmlRedaction.limits|{}limits[0]
+        final fun <get-limits>(): com.davils.kxml.core.limit/XmlLimits // com.davils.kxml.document.redact/XmlRedaction.limits.<get-limits>|<get-limits>(){}[0]
+    final val paths // com.davils.kxml.document.redact/XmlRedaction.paths|{}paths[0]
+        final fun <get-paths>(): kotlin.collections/List<kotlin/String> // com.davils.kxml.document.redact/XmlRedaction.paths.<get-paths>|<get-paths>(){}[0]
+    final val replacement // com.davils.kxml.document.redact/XmlRedaction.replacement|{}replacement[0]
+        final fun <get-replacement>(): kotlin/String // com.davils.kxml.document.redact/XmlRedaction.replacement.<get-replacement>|<get-replacement>(){}[0]
+
+    final fun (com.davils.kore.core.validation/ValidationScope).validate() // com.davils.kxml.document.redact/XmlRedaction.validate|validate@com.davils.kore.core.validation.ValidationScope(){}[0]
+    final fun redact(com.davils.kxml.core.node/XmlDocument): com.davils.kxml.core.node/XmlDocument // com.davils.kxml.document.redact/XmlRedaction.redact|redact(com.davils.kxml.core.node.XmlDocument){}[0]
+    final fun redact(com.davils.kxml.core.syntax/XmlSyntaxTree): com.davils.kxml.document.redact/XmlRedactionResult // com.davils.kxml.document.redact/XmlRedaction.redact|redact(com.davils.kxml.core.syntax.XmlSyntaxTree){}[0]
+    final fun toString(): kotlin/String // com.davils.kxml.document.redact/XmlRedaction.toString|toString(){}[0]
+}
+
+final class com.davils.kxml.document.redact/XmlRedactionBuilder : com.davils.kore.core.dsl/ValidatingBuilder<com.davils.kxml.document.redact/XmlRedaction> { // com.davils.kxml.document.redact/XmlRedactionBuilder|null[0]
+    final var limits // com.davils.kxml.document.redact/XmlRedactionBuilder.limits|{}limits[0]
+        final fun <get-limits>(): com.davils.kxml.core.limit/XmlLimits // com.davils.kxml.document.redact/XmlRedactionBuilder.limits.<get-limits>|<get-limits>(){}[0]
+        final fun <set-limits>(com.davils.kxml.core.limit/XmlLimits) // com.davils.kxml.document.redact/XmlRedactionBuilder.limits.<set-limits>|<set-limits>(com.davils.kxml.core.limit.XmlLimits){}[0]
+    final var replacement // com.davils.kxml.document.redact/XmlRedactionBuilder.replacement|{}replacement[0]
+        final fun <get-replacement>(): kotlin/String // com.davils.kxml.document.redact/XmlRedactionBuilder.replacement.<get-replacement>|<get-replacement>(){}[0]
+        final fun <set-replacement>(kotlin/String) // com.davils.kxml.document.redact/XmlRedactionBuilder.replacement.<set-replacement>|<set-replacement>(kotlin.String){}[0]
+
+    final fun attribute(kotlin/Function1<com.davils.kxml.core.name/XmlName, kotlin/Boolean>) // com.davils.kxml.document.redact/XmlRedactionBuilder.attribute|attribute(kotlin.Function1<com.davils.kxml.core.name.XmlName,kotlin.Boolean>){}[0]
+    final fun comment(kotlin.text/Regex) // com.davils.kxml.document.redact/XmlRedactionBuilder.comment|comment(kotlin.text.Regex){}[0]
+    final fun element(kotlin/Function1<com.davils.kxml.core.name/XmlName, kotlin/Boolean>) // com.davils.kxml.document.redact/XmlRedactionBuilder.element|element(kotlin.Function1<com.davils.kxml.core.name.XmlName,kotlin.Boolean>){}[0]
+    final fun namespace(kotlin/String, kotlin/String) // com.davils.kxml.document.redact/XmlRedactionBuilder.namespace|namespace(kotlin.String;kotlin.String){}[0]
+    final fun path(kotlin/String) // com.davils.kxml.document.redact/XmlRedactionBuilder.path|path(kotlin.String){}[0]
+    final fun value(kotlin.text/Regex) // com.davils.kxml.document.redact/XmlRedactionBuilder.value|value(kotlin.text.Regex){}[0]
+}
+
 final class com.davils.kxml.document.xpath/XPath { // com.davils.kxml.document.xpath/XPath|null[0]
     final val expression // com.davils.kxml.document.xpath/XPath.expression|{}expression[0]
         final fun <get-expression>(): kotlin/String // com.davils.kxml.document.xpath/XPath.expression.<get-expression>|<get-expression>(){}[0]
@@ -378,3 +438,14 @@ sealed class com.davils.kxml.document.patch/XmlPatchOperation { // com.davils.kx
             final fun <get-content>(): kotlin.collections/List<com.davils.kxml.core.node/XmlNode> // com.davils.kxml.document.patch/XmlPatchOperation.Replace.content.<get-content>|<get-content>(){}[0]
     }
 }
+
+final object com.davils.kxml.document/XmlDocumentViolationCodes { // com.davils.kxml.document/XmlDocumentViolationCodes|null[0]
+    final val INVALID_PATH // com.davils.kxml.document/XmlDocumentViolationCodes.INVALID_PATH|{}INVALID_PATH[0]
+        final fun <get-INVALID_PATH>(): com.davils.kore.core.validation.violation/ViolationCode // com.davils.kxml.document/XmlDocumentViolationCodes.INVALID_PATH.<get-INVALID_PATH>|<get-INVALID_PATH>(){}[0]
+    final val INVALID_REPLACEMENT // com.davils.kxml.document/XmlDocumentViolationCodes.INVALID_REPLACEMENT|{}INVALID_REPLACEMENT[0]
+        final fun <get-INVALID_REPLACEMENT>(): com.davils.kore.core.validation.violation/ViolationCode // com.davils.kxml.document/XmlDocumentViolationCodes.INVALID_REPLACEMENT.<get-INVALID_REPLACEMENT>|<get-INVALID_REPLACEMENT>(){}[0]
+    final val TOO_MANY_RULES // com.davils.kxml.document/XmlDocumentViolationCodes.TOO_MANY_RULES|{}TOO_MANY_RULES[0]
+        final fun <get-TOO_MANY_RULES>(): com.davils.kore.core.validation.violation/ViolationCode // com.davils.kxml.document/XmlDocumentViolationCodes.TOO_MANY_RULES.<get-TOO_MANY_RULES>|<get-TOO_MANY_RULES>(){}[0]
+}
+
+final fun com.davils.kxml.document.redact/xmlRedaction(kotlin/Function1<com.davils.kxml.document.redact/XmlRedactionBuilder, kotlin/Unit>): com.davils.kxml.document.redact/XmlRedaction // com.davils.kxml.document.redact/xmlRedaction|xmlRedaction(kotlin.Function1<com.davils.kxml.document.redact.XmlRedactionBuilder,kotlin.Unit>){}[0]

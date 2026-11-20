@@ -52,6 +52,12 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
   elements match by their expanded name and the key attributes of `XmlMergeOptions`, text content replaces, and a
   deletion marker removes an element. `XmlMerged` holds the merged document and the layer every node comes from, by
   its path, and a merge takes at most `maximumMergeLayers` layers.
+- `XmlRedaction`, built with `xmlRedaction`, replaces secrets in a document: the content and attributes of elements
+  an `XPath` or a predicate selects, attribute values by name, texts and attribute values that match a pattern, and
+  comments. A syntax tree is redacted in place, so its layout survives, and the declaration of an entity a secret
+  comes from is redacted with it; a case the redaction cannot decide, such as an attribute value a DTD defaults, is
+  refused instead of passed through. Rules are bounded by `maximumRedactionRules`, and a value longer than
+  `maximumQueryStringLength` that a pattern would have to read fails the redaction instead of passing unread.
 - All modules are Kotlin Multiplatform libraries with a `jvm` and a `wasmJs` target. Sources are decoded in common
   code, and untrusted text is escaped by `SafeText` of Kore.
 - Sources of bytes are detected as Appendix F of XML 1.0 describes it and decoded strictly from UTF-8, UTF-16 and

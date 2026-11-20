@@ -2,6 +2,13 @@ public final class com/davils/kxml/document/XmlDocumentLimitException : java/lan
 	public final fun getLimit ()Ljava/lang/String;
 }
 
+public final class com/davils/kxml/document/XmlDocumentViolationCodes {
+	public static final field INSTANCE Lcom/davils/kxml/document/XmlDocumentViolationCodes;
+	public final fun getINVALID_PATH-J_S2PC0 ()Ljava/lang/String;
+	public final fun getINVALID_REPLACEMENT-J_S2PC0 ()Ljava/lang/String;
+	public final fun getTOO_MANY_RULES-J_S2PC0 ()Ljava/lang/String;
+}
+
 public final class com/davils/kxml/document/c14n/XmlCanonicalization : java/lang/Enum {
 	public static final field Canonical10 Lcom/davils/kxml/document/c14n/XmlCanonicalization;
 	public static final field Canonical10WithComments Lcom/davils/kxml/document/c14n/XmlCanonicalization;
@@ -219,6 +226,57 @@ public final class com/davils/kxml/document/patch/XmlPatchWhitespace : java/lang
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lcom/davils/kxml/document/patch/XmlPatchWhitespace;
 	public static fun values ()[Lcom/davils/kxml/document/patch/XmlPatchWhitespace;
+}
+
+public final class com/davils/kxml/document/redact/XmlRedaction : com/davils/kore/core/validation/Validatable {
+	public final fun getLimits ()Lcom/davils/kxml/core/limit/XmlLimits;
+	public final fun getPaths ()Ljava/util/List;
+	public final fun getReplacement ()Ljava/lang/String;
+	public final fun redact (Lcom/davils/kxml/core/node/XmlDocument;)Lcom/davils/kxml/core/node/XmlDocument;
+	public final fun redact (Lcom/davils/kxml/core/syntax/XmlSyntaxTree;)Lcom/davils/kxml/document/redact/XmlRedactionResult;
+	public fun toString ()Ljava/lang/String;
+	public fun validate (Lcom/davils/kore/core/validation/ValidationScope;)V
+}
+
+public final class com/davils/kxml/document/redact/XmlRedactionBuilder : com/davils/kore/core/dsl/ValidatingBuilder {
+	public synthetic fun assemble ()Lcom/davils/kore/core/validation/Validatable;
+	public final fun attribute (Lkotlin/jvm/functions/Function1;)V
+	public final fun comment (Lkotlin/text/Regex;)V
+	public final fun element (Lkotlin/jvm/functions/Function1;)V
+	public final fun getLimits ()Lcom/davils/kxml/core/limit/XmlLimits;
+	public final fun getReplacement ()Ljava/lang/String;
+	public final fun namespace (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun path (Ljava/lang/String;)V
+	public final fun setLimits (Lcom/davils/kxml/core/limit/XmlLimits;)V
+	public final fun setReplacement (Ljava/lang/String;)V
+	public final fun value (Lkotlin/text/Regex;)V
+}
+
+public final class com/davils/kxml/document/redact/XmlRedactionDslKt {
+	public static final fun xmlRedaction (Lkotlin/jvm/functions/Function1;)Lcom/davils/kxml/document/redact/XmlRedaction;
+}
+
+public final class com/davils/kxml/document/redact/XmlRedactionRefusal : java/lang/Enum {
+	public static final field InvalidDocument Lcom/davils/kxml/document/redact/XmlRedactionRefusal;
+	public static final field LimitExceeded Lcom/davils/kxml/document/redact/XmlRedactionRefusal;
+	public static final field Undecidable Lcom/davils/kxml/document/redact/XmlRedactionRefusal;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/davils/kxml/document/redact/XmlRedactionRefusal;
+	public static fun values ()[Lcom/davils/kxml/document/redact/XmlRedactionRefusal;
+}
+
+public abstract interface class com/davils/kxml/document/redact/XmlRedactionResult {
+}
+
+public final class com/davils/kxml/document/redact/XmlRedactionResult$Redacted : com/davils/kxml/document/redact/XmlRedactionResult {
+	public final fun getEdits ()Ljava/util/List;
+	public final fun getTree ()Lcom/davils/kxml/core/syntax/XmlSyntaxTree;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/document/redact/XmlRedactionResult$Refused : com/davils/kxml/document/redact/XmlRedactionResult {
+	public final fun getReason ()Lcom/davils/kxml/document/redact/XmlRedactionRefusal;
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class com/davils/kxml/document/xpath/XPath {

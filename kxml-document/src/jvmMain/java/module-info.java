@@ -23,5 +23,6 @@ module com.davils.kxml.document {
     exports com.davils.kxml.document.diff;
     exports com.davils.kxml.document.merge;
     exports com.davils.kxml.document.patch;
+    exports com.davils.kxml.document.redact;
     exports com.davils.kxml.document.xpath;
 }
