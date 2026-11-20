@@ -1,8 +1,9 @@
 [versions]
 kotlin = "2.4.21"
-kreate = "5.2.0"
-kore = "2.0.0"
-serialization = "1.12.0"
+kreate = "5.3.0"
+kore = "2.1.1"
+coroutines = "1.11.0"
+serialization = "1.13.0"
 # Floors for the classpaths of build tools, raised past known vulnerabilities.
 tooling-jackson = "2.22.3"
 tooling-bouncycastle = "1.85"
@@ -12,7 +13,10 @@ kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 kotlin-serialization-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }
 kreate-gradle-plugin = { module = "com.davils.kreate:com.davils.kreate.gradle.plugin", version.ref = "kreate" }
 kore-core = { module = "com.davils:kore-core", version.ref = "kore" }
+kore-testing = { module = "com.davils:kore-testing", version.ref = "kore" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "serialization" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
 
 [bundles]
 build-logic = [

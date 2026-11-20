@@ -26,7 +26,6 @@ kreate {
 
             semver {
                 enabled = true
-            klib = true
                 tagPrefix = ""
                 requireBreakingCommit = true
                 runOnCheck = true

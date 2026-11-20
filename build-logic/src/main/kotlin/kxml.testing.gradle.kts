@@ -24,6 +24,14 @@ plugins {
 }
 
 val parallelForks: Int = maxOf(1, Runtime.getRuntime().availableProcessors() / 2)
+val catalog: VersionCatalog = the<VersionCatalogsExtension>().named("libs")
+val koreTesting: String = notationOf("kore-testing")
+val serializationJson: String = notationOf("kotlinx-serialization-json")
+
+fun notationOf(alias: String): String {
+    val library = catalog.findLibrary(alias).get().get()
+    return "${library.module}:${library.versionConstraint.requiredVersion}"
+}
 
 kreate {
     project {
@@ -49,6 +57,10 @@ kreate {
             suites {
                 named("unitTest") {
                     nonJvmTargets = true
+                    dependencies {
+                        implementation(koreTesting)
+                        implementation(serializationJson)
+                    }
                 }
                 named("integrationTest") {
                     enabled = false
