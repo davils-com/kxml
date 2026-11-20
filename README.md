@@ -76,6 +76,22 @@ val xml = xml {
 }
 ```
 
+### Editing and formatting
+
+```kotlin
+val tree = XmlSyntaxTree.parse(text)
+val item = tree.document.root?.elements("item")?.first() ?: return
+
+when (val result = XmlEditor(tree).setAttribute(item, name = "id", value = "8 & up")) {
+    is XmlEditResult.Edited -> XmlFormatter().format(result.tree)   // only whitespace changes
+    is XmlEditResult.Refused -> println(result.reason)
+}
+```
+
+The syntax tree keeps every character of a document. `XmlSyntaxTree.edit` parses only the element an edit touches
+again, `XmlEditor` escapes what it writes and keeps everything else, entity references included, and
+`XmlFormatter` refuses rather than change what a document means.
+
 ### Serialization
 
 ```kotlin
