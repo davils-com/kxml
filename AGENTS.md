@@ -108,9 +108,9 @@ Every document kxml reads may come from an attacker, and so may every name, name
 it. kxml is built so that a mistake of a caller fails closed.
 
 - **No external resources, no unbounded expansion.** `XmlDoctype.Refuse` is the default; `XmlDoctype.Internal`
-  reads the internal subset. Every expansion of an entity charges `ExpansionBudget` of `XmlLimits` while it is done
-  and runs on an explicit stack, so a billion laughs document fails at its budget and nesting never overflows the
-  stack. Nothing is ever loaded unless the caller hands the reader a resolver of its own, and an entity that cannot
+  reads the internal subset and `XmlDoctype.External`, which needs an `XmlResolver`, external resources through it.
+  Every expansion of an entity charges `ExpansionBudget` of `XmlLimits` while it is done and runs on an explicit
+  stack, so a billion laughs document fails at its budget and nesting never overflows the stack. Nothing is ever loaded unless the caller hands the reader a resolver of its own, and an entity that cannot
   be read is refused, never dropped.
 - **Limits before work.** The reader checks every input against `XmlLimits` before it does work that grows with the
   input: the length of the source, the depth, the number of elements and attributes, the length of names and texts.

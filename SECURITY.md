@@ -35,8 +35,8 @@ The following are **in scope**:
 
 - a document that makes kxml use memory or CPU beyond what `XmlLimits` allows, overflow the stack, or throw out of
   the reader,
-- any access to a file, a URL or another external resource, any way past `XmlDoctype.Refuse`, and any entity
-  expansion beyond `maximumEntityExpansion` or `maximumEntityDepth`,
+- any access to a file, a URL or another external resource other than through the resolver of the caller, any way
+  past `XmlDoctype.Refuse`, and any entity expansion beyond `maximumEntityExpansion` or `maximumEntityDepth`,
 - a document that the reader accepts although it is not well-formed, or a node tree the writer turns into XML that is
   not well-formed or means something else,
 - untrusted text that reaches a message, a `toString` or the message of `XmlDecodingException` unescaped, so it can
@@ -61,6 +61,11 @@ The following are **not** vulnerabilities in kxml:
   without the declarations that follow it, as section 5.1 of XML 1.0 requires. A document type declaration changes
   what a document means through defaults, normalization and entities; an application that signs or compares
   documents keeps `XmlDoctype.Refuse`.
+- Under `XmlDoctype.External`, the resolver decides what a document can reach. kxml hands it the identifiers as the
+  document writes them and the base URI of the declaring resource, unchecked; a resolver that fetches any URI it is
+  given exposes the application to server-side request forgery and to reading local files. A resolver should map
+  identifiers to resources it trusts, such as files below one directory. An exception the resolver throws leaves the
+  reader.
 - On Wasm, `SafeText` of Kore takes the Unicode categories from the regular expressions of the JavaScript engine, on the
   JVM from the JDK. An engine with an older Unicode version may treat a newly assigned character as unassigned and
   escape it, never the other way round for the categories that matter.
