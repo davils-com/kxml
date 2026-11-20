@@ -72,13 +72,13 @@ internal class LayerMerging(
         val counts = OrderedMap<String, Int>()
         overlay.elements.forEach { element ->
             val name = expandedOf(element.name)
-            counts[name] = (counts[name] ?: 0) + 1
+            counts[name] = counts.getOrPut(name) { 0 } + 1
         }
         val deleted = HashSet<TracedNode>()
         val candidates = Candidates(base, deleted)
         val appended = mutableListOf<TracedNode.Element>()
         overlay.elements.forEach { element ->
-            val isOnly = counts[expandedOf(element.name)] == 1
+            val isOnly = counts.getOrPut(expandedOf(element.name)) { 0 } == 1
             val match = candidates.matchOf(element, isOnly)
             val marker = options.deletionMarker?.let(element::attribute)
             val isDeletion = marker?.value == DELETED
@@ -104,7 +104,7 @@ internal class LayerMerging(
     private fun appendedTo(base: TracedNode.Element, elements: List<TracedNode.Element>) {
         if (elements.isEmpty()) return
         val last = base.children.indexOfLast { child -> child is TracedNode.Element }
-        val indent = base.children.getOrNull(last - 1)?.takeIf { last > 0 && isBlankText(it) }
+        val indent = base.children.getOrNull(last - 1)?.takeIf(::isBlankText)
         val added = elements.flatMap { element ->
             val copied = indent?.let { found -> TracedNode.Leaf(found.toNode(), layer) }
             listOfNotNull(copied) + element
@@ -116,14 +116,13 @@ internal class LayerMerging(
     private inner class Candidates(base: TracedNode.Element, private val deleted: MutableSet<TracedNode>) {
         private val byKey = OrderedMap<String, ArrayDeque<TracedNode.Element>>()
         private val byName = OrderedMap<String, ArrayDeque<TracedNode.Element>>()
-        private val counts = OrderedMap<String, Int>()
 
         init {
             base.children.filterIsInstance<TracedNode.Element>().forEach(::added)
         }
 
         fun matchOf(element: XmlNode.Element, isOnly: Boolean): TracedNode.Element? {
-            val keys = options.keys[element.name] ?: return onlyOf(expandedOf(element.name))?.takeIf { isOnly }
+            val keys = options.keys[element.name] ?: return onlyOf(expandedOf(element.name), isOnly)
             val wanted = keyOf(element.name, keys) { name -> element.attribute(name)?.value }
             return wanted?.let { found -> byKey[found]?.firstOrNull() }
         }
@@ -131,16 +130,13 @@ internal class LayerMerging(
         fun added(element: TracedNode.Element): TracedNode.Element {
             val name = expandedOf(element.name)
             byName.getOrPut(name) { ArrayDeque() }.addLast(element)
-            counts[name] = (counts[name] ?: 0) + 1
             tracedKeyOf(element)?.let { key -> byKey.getOrPut(key) { ArrayDeque() }.addLast(element) }
             return element
         }
 
         fun removed(element: TracedNode.Element) {
             deleted += element
-            val name = expandedOf(element.name)
-            counts[name] = (counts[name] ?: 0) - 1
-            tracedKeyOf(element)?.let { key -> byKey[key]?.removeFirst() }
+            tracedKeyOf(element)?.let { key -> byKey.getOrPut(key) { ArrayDeque() }.removeFirst() }
         }
 
         private fun tracedKeyOf(element: TracedNode.Element): String? {
@@ -148,11 +144,10 @@ internal class LayerMerging(
             return keyOf(element.name, keys) { name -> element.valueOf(name) }
         }
 
-        private fun onlyOf(name: String): TracedNode.Element? {
-            val named = byName[name]
-            if (counts[name] != 1 || named == null) return null
+        private fun onlyOf(name: String, isOnly: Boolean): TracedNode.Element? {
+            val named = byName[name]?.takeIf { isOnly } ?: return null
             named.removeAll { element -> element in deleted }
-            return named.single()
+            return named.singleOrNull()
         }
     }
 

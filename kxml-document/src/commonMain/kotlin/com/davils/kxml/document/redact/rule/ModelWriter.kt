@@ -30,7 +30,7 @@ internal class ModelWriter(
     private val plan: RedactionPlan,
     private val replacement: String,
 ) {
-    private val writers: Map<NodeKind, (Int) -> XmlNode?> = mapOf(
+    private val writers: Map<NodeKind, (Int) -> XmlNode> = mapOf(
         NodeKind.Element to ::elementOf,
         NodeKind.Text to { node -> xmlText(valueOf(node)) },
         NodeKind.Comment to { node -> xmlComment(valueOf(node)) },
@@ -48,24 +48,24 @@ internal class ModelWriter(
         return XmlDocument(
             root = elementOf(top[rootAt]),
             declaration = original.declaration,
-            prolog = top.subList(fromIndex = 0, toIndex = rootAt).mapNotNull(::nodeOf),
-            epilog = top.subList(fromIndex = rootAt + 1, toIndex = top.size).mapNotNull(::nodeOf),
+            prolog = top.subList(fromIndex = 0, toIndex = rootAt).map(::nodeOf),
+            epilog = top.subList(fromIndex = rootAt + 1, toIndex = top.size).map(::nodeOf),
             doctype = original.doctype,
         )
     }
 
-    private fun nodeOf(node: Int): XmlNode? = writers.getValue(model.kind(node))(node)
+    private fun nodeOf(node: Int): XmlNode = writers.getValue(model.kind(node))(node)
 
     private fun elementOf(node: Int): XmlNode.Element = xmlElement(nameOf(node)) {
         model.declaredNamespaces(node).forEach { binding -> namespace(prefix = binding.prefix, uri = binding.uri) }
         model.attributes(node).forEach { attribute -> attribute(model.attributeName(attribute), valueOf(attribute)) }
         if (plan.isWhole(node)) text(replacement)
-        if (!plan.isWhole(node)) model.children(node).forEach { child -> nodeOf(child)?.let(::node) }
+        if (!plan.isWhole(node)) model.children(node).forEach { child -> node(nodeOf(child)) }
     }
 
     private fun valueOf(node: Int): String {
         if (plan.isRedacted(node)) return replacement
-        return plan.values[node] ?: model.value(node).orEmpty()
+        return plan.values[node] ?: model.stringValue(node)
     }
 
     private fun nameOf(node: Int): XmlName = checkNotNull(model.name(node))
