@@ -19,7 +19,9 @@ package com.davils.kxml.core
 import com.davils.kore.core.annotation.DavilsInternal
 import com.davils.kore.core.collection.immutableList
 import com.davils.kore.core.validation.violation.Severity
+import com.davils.kxml.core.compose.TreeComposer
 import com.davils.kxml.core.diagnostic.XmlDiagnostic
+import com.davils.kxml.core.node.XmlNode
 import com.davils.kxml.core.parser.ParseFailure
 import com.davils.kxml.core.parser.XmlScanner
 
@@ -39,6 +41,7 @@ import com.davils.kxml.core.parser.XmlScanner
 public class XmlReader internal constructor(
     private val scanner: XmlScanner?,
     private val decoding: List<XmlDiagnostic>,
+    private val whitespace: XmlWhitespace = XmlWhitespace.Keep,
 ) {
     private var failure: XmlDiagnostic? = null
     private var isDone: Boolean = scanner == null
@@ -79,6 +82,20 @@ public class XmlReader internal constructor(
         isDone = event == null
         return event
     }
+
+    /**
+     * Reads the next element at the current level with everything it contains and returns it as a node, with the
+     * range of every node in the text, so that a large document can be read one element at a time.
+     *
+     * Text, comments and processing instructions before the element are skipped, and so are the declarations of a
+     * document. When the element that encloses the current level ends before another element starts, its end tag is
+     * consumed and the result is `null`; it is `null` at the end of the document as well, and when reading stops at an
+     * error, which [diagnostics] then names. Whitespace is treated as the configuration of the reader asks.
+     *
+     * @return the next element, or `null`.
+     * @since 1.0.0
+     */
+    public fun nextElement(): XmlNode.Element? = TreeComposer(whitespace).element(this)
 
     /**
      * Returns the number of diagnostics and whether reading has ended, such as `XmlReader(reading, 0 diagnostics)`.

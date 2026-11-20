@@ -1090,6 +1090,7 @@ final class com.davils.kxml.core/XmlReader { // com.davils.kxml.core/XmlReader|n
         final fun <get-isValid>(): kotlin/Boolean // com.davils.kxml.core/XmlReader.isValid.<get-isValid>|<get-isValid>(){}[0]
 
     final fun next(): com.davils.kxml.core/XmlEvent? // com.davils.kxml.core/XmlReader.next|next(){}[0]
+    final fun nextElement(): com.davils.kxml.core.node/XmlNode.Element? // com.davils.kxml.core/XmlReader.nextElement|nextElement(){}[0]
     final fun toString(): kotlin/String // com.davils.kxml.core/XmlReader.toString|toString(){}[0]
 }
 

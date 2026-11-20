@@ -35,7 +35,8 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
   controls are allowed and a prefix may be undeclared with `xmlns:p=""`, which `XmlNamespaceBinding` now allows and
   the writer writes only into a document of XML 1.1. Other minor versions are read by the rules of XML 1.0.
 - `XmlReader`, from `Xml.reader`, reads a document event by event without building its tree and stops at the first
-  error; `Xml.parse` composes the tree from it without holding every event.
+  error; `Xml.parse` composes the tree from it without holding every event. `XmlReader.nextElement` composes only the
+  next element of the current level with its ranges, so a large document can be read one element at a time.
 - `XmlSyntaxTree` is the lossless syntax tree of a text: every character belongs to exactly one token, so the text of
   its root is the text again, and the rest of a text that stops being well formed becomes one `ERROR` token. It is
   read by the same rules and limits as `Xml.parse`, and every walk over it is iterative.

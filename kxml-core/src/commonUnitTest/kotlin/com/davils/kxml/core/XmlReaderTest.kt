@@ -47,6 +47,41 @@ class XmlReaderTest : FunSpec({
         }
     }
 
+    context("nextElement") {
+        test("reads the whole root of a fresh reader, as parse does") {
+            val reader = Xml.Default.reader(XmlSource.of(DOCUMENT))
+            val parsed = Xml.Default.parse(DOCUMENT).shouldBeInstanceOf<XmlParseResult.Parsed>()
+
+            val root = reader.nextElement()
+
+            root shouldBe parsed.document.root
+            root?.range shouldBe parsed.document.root.range
+            reader.nextElement().shouldBeNull()
+        }
+
+        test("reads the elements of a level one by one and ends with the end tag of their parent") {
+            val text = "<items> <item a='1'>x</item><!--k--> t <item/></items><!--after-->"
+            val reader = xml { whitespace = XmlWhitespace.DropIgnorable }.reader(XmlSource.of(text))
+
+            reader.next().shouldBeInstanceOf<XmlEvent.StartElement>()
+            val first = reader.nextElement()
+            val second = reader.nextElement()
+
+            first?.text shouldBe "x"
+            first?.range?.start shouldBe text.indexOf("<item a")
+            second?.elements shouldBe emptyList()
+            reader.nextElement().shouldBeNull()
+            reader.next().shouldBeInstanceOf<XmlEvent.Comment>()
+        }
+
+        test("stops at an error inside the element") {
+            val reader = Xml.Default.reader(XmlSource.of("<a><b></a>"))
+
+            reader.nextElement().shouldBeNull()
+            reader.isValid shouldBe false
+        }
+    }
+
     context("a reader of a broken document") {
         test("stops at the first error and keeps it") {
             val reader = Xml.Default.reader(XmlSource.of("<a><b></a>"))

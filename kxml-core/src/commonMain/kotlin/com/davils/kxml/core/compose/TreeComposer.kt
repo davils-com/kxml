@@ -48,6 +48,19 @@ internal class TreeComposer(private val whitespace: XmlWhitespace) {
         )
     }
 
+    fun element(reader: XmlReader): XmlNode.Element? {
+        var event = reader.next()
+        while (event != null && event !is XmlEvent.StartElement && event !is XmlEvent.EndElement) event = reader.next()
+        val start = event as? XmlEvent.StartElement ?: return null
+        accept(start)
+        var next = reader.next()
+        while (next != null) {
+            accept(next)
+            next = reader.takeIf { stack.isNotEmpty() }?.next()
+        }
+        return root.takeIf { stack.isEmpty() }
+    }
+
     private fun accept(event: XmlEvent) {
         if (event is XmlEvent.Text) return collect(event)
         flush()

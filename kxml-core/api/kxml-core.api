@@ -153,6 +153,7 @@ public final class com/davils/kxml/core/XmlReader {
 	public final fun getDiagnostics ()Ljava/util/List;
 	public final fun isValid ()Z
 	public final fun next ()Lcom/davils/kxml/core/XmlEvent;
+	public final fun nextElement ()Lcom/davils/kxml/core/node/XmlNode$Element;
 	public fun toString ()Ljava/lang/String;
 }
 

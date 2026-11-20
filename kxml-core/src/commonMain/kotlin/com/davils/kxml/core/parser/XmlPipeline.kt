@@ -67,6 +67,10 @@ internal class XmlPipeline(private val configuration: XmlConfiguration) {
             encoding = decoded.encoding,
             sink = NoSyntax,
         )
-        return XmlReader(scanner = scanner.takeUnless { isRefused }, decoding = decoded.diagnostics)
+        return XmlReader(
+            scanner = scanner.takeUnless { isRefused },
+            decoding = decoded.diagnostics,
+            whitespace = configuration.whitespace,
+        )
     }
 }
