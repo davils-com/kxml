@@ -197,7 +197,7 @@
         {
             "id": "w3c:xml",
             "reviewedOn": "2026-11-20",
-            "note": "XML 1.0 Fifth Edition of 2008-11-26 is the current Recommendation. kxml-core checks the well-formedness of documents without a DTD; it refuses a document type declaration by default and skips one under XmlDoctype.Ignore without reading its internal subset. Kreate does not read W3C errata yet, so none were reviewed here.",
+            "note": "Fifth Edition errata: only S01 and E01 are errata; editorial, substantive, S20130109, E20090916 and CharMod-Norm are headings or anchors of the errata page. S01 reserves only the instruction target xml in any case, which the reader and the writer already do and XmlWellFormednessTest pins; E01 recommends but does not require checking normalization, which kxml does not do. No change to the code.",
             "snapshot": {
                 "title": "Extensible Markup Language (XML) 1.0 (Fifth Edition)",
                 "status": "Recommendation",
@@ -206,13 +206,22 @@
                 "withdrawn": false,
                 "replacedBy": [],
                 "updatedBy": [],
-                "errata": {}
+                "errata": {
+                    "CharMod-Norm": "VERIFIED",
+                    "E01": "VERIFIED",
+                    "E20090916": "VERIFIED",
+                    "S01": "VERIFIED",
+                    "S20130109": "VERIFIED",
+                    "editorial": "VERIFIED",
+                    "substantive": "VERIFIED"
+                },
+                "fingerprint": "sha256:385dfaa3b3500c1fc6b0a500abf1e180c8b8a0faf9298e6e1a9004a2da9a1311"
             }
         },
         {
             "id": "w3c:xml-c14n10",
             "reviewedOn": "2026-11-20",
-            "note": "Canonical XML 1.0 (2001-03-15); kxml-document renders whole documents and XPath subsets, refuses relative namespace URIs and leaves out the xml namespace node.",
+            "note": "E02 is the only erratum, an editorial one confirming that the default namespace declaration is written as xmlns without changing the order of namespaces, which kxml already does; about and title are sections of the errata page. No change to the code.",
             "snapshot": {
                 "title": "Canonical XML Version 1.0",
                 "status": "Recommendation",
@@ -220,16 +229,19 @@
                 "published": "2001-03-15",
                 "withdrawn": false,
                 "replacedBy": [],
-                "updatedBy": [
-                    "w3c:xml-c14n11"
-                ],
-                "errata": {}
+                "updatedBy": [],
+                "errata": {
+                    "E02": "VERIFIED",
+                    "about": "VERIFIED",
+                    "title": "VERIFIED"
+                },
+                "fingerprint": "sha256:e2d2371f658b0d06592e5e35ff6d21c62bba2fefe315d0eff5ff3457fbfd1355"
             }
         },
         {
             "id": "w3c:xml-c14n11",
             "reviewedOn": "2026-11-20",
-            "note": "Canonical XML 1.1 (2008-05-02); simple inheritable attributes from all ancestors and the xml:base fixup over contiguously omitted ancestors as the prose of section 2.4 says, which example 3.8 contradicts; Apache Santuario agrees with the prose.",
+            "note": "e11-01 corrects the output of example 3.8 to xml:base=\"bar/foo\", which XmlCanonicalizerTest already asserts; e11-02 rewords the input model for octet streams and does not apply, since kxml canonicalizes parsed documents only; title is the page heading. No change to the code.",
             "snapshot": {
                 "title": "Canonical XML Version 1.1",
                 "status": "Recommendation",
@@ -238,13 +250,18 @@
                 "withdrawn": false,
                 "replacedBy": [],
                 "updatedBy": [],
-                "errata": {}
+                "errata": {
+                    "e11-01": "VERIFIED",
+                    "e11-02": "VERIFIED",
+                    "title": "VERIFIED"
+                },
+                "fingerprint": "sha256:1e7a8346dce41e996d387ec0be1eac18256d5959c7797af17010261d7e98b7c3"
             }
         },
         {
             "id": "w3c:xml-exc-c14n",
             "reviewedOn": "2026-11-20",
-            "note": "Exclusive XML Canonicalization 1.0 (2002-07-18); namespace declarations only where visibly utilized, the InclusiveNamespaces PrefixList with #default, no import of xml attributes into orphans.",
+            "note": "E01, E03, E05 and E06 are editorial and E02 concerns the schema type of the PrefixList, which kxml takes as a set of strings with #default. E04, E07 and E08 were already implemented: non-empty default namespaces are rendered, only attributes in the subset make a prefix visibly utilized and listed prefixes that never occur are ignored; XmlCanonicalizerTest now pins E07 and E08. about and title are sections of the errata page.",
             "snapshot": {
                 "title": "Exclusive XML Canonicalization Version 1.0",
                 "status": "Recommendation",
@@ -253,7 +270,19 @@
                 "withdrawn": false,
                 "replacedBy": [],
                 "updatedBy": [],
-                "errata": {}
+                "errata": {
+                    "E01": "VERIFIED",
+                    "E02": "VERIFIED",
+                    "E03": "VERIFIED",
+                    "E04": "VERIFIED",
+                    "E05": "VERIFIED",
+                    "E06": "VERIFIED",
+                    "E07": "VERIFIED",
+                    "E08": "VERIFIED",
+                    "about": "VERIFIED",
+                    "title": "VERIFIED"
+                },
+                "fingerprint": "sha256:47ebf342f8bbceeccb1025d240d41915fd9af6a7d195cef020a90264af7c295f"
             }
         },
         {
@@ -276,7 +305,7 @@
         {
             "id": "w3c:xml-names11",
             "reviewedOn": "2026-11-20",
-            "note": "Namespaces in XML 1.1 Second Edition. kxml-core lets a document of XML 1.1 undeclare a prefix and refuses it in XML 1.0; the writer undeclares a prefix only in a document of XML 1.1. IRIs as namespace names are compared as strings, as both versions require. Kreate does not read W3C errata yet.",
+            "note": "NE15 only corrects the links of productions 12 and 14; nothing in kxml changes.",
             "snapshot": {
                 "title": "Namespaces in XML 1.1 (Second Edition)",
                 "status": "Recommendation",
@@ -285,13 +314,16 @@
                 "withdrawn": false,
                 "replacedBy": [],
                 "updatedBy": [],
-                "errata": {}
+                "errata": {
+                    "NE15": "VERIFIED"
+                },
+                "fingerprint": "sha256:b3e5e46f29b75852916394c67d2e65b6eda7faa210aa1bb9120093f2e0e9ef77"
             }
         },
         {
             "id": "w3c:xml11",
             "reviewedOn": "2026-11-20",
-            "note": "XML 1.1 Second Edition of 2006-08-16. The series names XML 1.0 Fifth Edition as its newer member, which is a newer edition of the other version, not a successor of 1.1. kxml-core applies the line ends, restricted characters and character references of 1.1 to documents that declare version 1.1, as Xml11Test and the 1.1 cases of the W3C suite pin. Kreate does not read W3C errata yet.",
+            "note": "Second Edition errata E01 to E09, the rest being date headings: E01 to E05 and E09 are editorial or about validity, E06 matches the encoding labels kxml honours, and E08, an escaped < in an entity used in an attribute, is tested in EntityTest. E07 found a bug: a second byte order mark at the start of a document was removed as well; the decoder now keeps the mark for the scanner, which removes exactly one, and XmlSourceTest and XmlResolverTest pin it for documents and external entities.",
             "snapshot": {
                 "title": "Extensible Markup Language (XML) 1.1 (Second Edition)",
                 "status": "Recommendation",
@@ -299,16 +331,32 @@
                 "published": "2006-08-16",
                 "withdrawn": false,
                 "replacedBy": [],
-                "updatedBy": [
-                    "w3c:xml"
-                ],
-                "errata": {}
+                "updatedBy": [],
+                "errata": {
+                    "E01": "VERIFIED",
+                    "E02": "VERIFIED",
+                    "E03": "VERIFIED",
+                    "E04": "VERIFIED",
+                    "E05": "VERIFIED",
+                    "E06": "VERIFIED",
+                    "E07": "VERIFIED",
+                    "E08": "VERIFIED",
+                    "E09": "VERIFIED",
+                    "E20070925": "VERIFIED",
+                    "E20071205": "VERIFIED",
+                    "E20080118": "VERIFIED",
+                    "S20070815": "VERIFIED",
+                    "S20071205": "VERIFIED",
+                    "editorial": "VERIFIED",
+                    "substantive": "VERIFIED"
+                },
+                "fingerprint": "sha256:5058e6940f9a020026214e30d63150367594ccbfdc927c67019d9f6e49bf80f8"
             }
         },
         {
             "id": "w3c:xmlbase",
             "reviewedOn": "2026-11-20",
-            "note": "Only catalog files read xml:base: on catalog, group and every entry it sets the base of their URIs, tested in XmlCatalogTest. Documents do not apply xml:base yet.",
+            "note": "E04 is commented out of the errata page, which lists no known errors; its points, RFC 3986 references and the meaning of an empty xml:base or a fragment, match the resolution of xml:base in catalog files through UriReference of Kore. No change to the code.",
             "snapshot": {
                 "title": "XML Base (Second Edition)",
                 "status": "Recommendation",
@@ -317,13 +365,16 @@
                 "withdrawn": false,
                 "replacedBy": [],
                 "updatedBy": [],
-                "errata": {}
+                "errata": {
+                    "E04": "VERIFIED"
+                },
+                "fingerprint": "sha256:d7ce3774a93622cf9eea8c46365d6fd5395cfbd758cdcd48fb796f5751300677"
             }
         },
         {
             "id": "w3c:xpath-10",
             "reviewedOn": "2026-11-20",
-            "note": "XPath 1.0 Recommendation of 1999-11-16 with its errata; kxml-document implements the expression language, the data model of section 5 and the 27 core functions, with id() over xml:id only.",
+            "note": "All anchors are subsections of the erratum that replaced the non-normative Appendix B on the mapping of the Infoset. kxml leaves out the document type declaration and namespace declarations, joins adjacent text and CDATA and builds namespace nodes from the bindings in scope; id() reads xml:id only, as documented. B.4 found a bug: an empty CDATA section became an empty text node, which the model now leaves out, pinned in DocumentModelTest.",
             "snapshot": {
                 "title": "XML Path Language (XPath) Version 1.0",
                 "status": "Recommendation",
@@ -334,7 +385,17 @@
                 "updatedBy": [
                     "w3c:xpath-31"
                 ],
-                "errata": {}
+                "errata": {
+                    "IDA1IAS": "VERIFIED",
+                    "IDA4JAS": "VERIFIED",
+                    "IDAHMAS": "VERIFIED",
+                    "IDAILAS": "VERIFIED",
+                    "IDAJNAS": "VERIFIED",
+                    "IDAOHAS": "VERIFIED",
+                    "IDAUDAS": "VERIFIED",
+                    "element-nodes": "VERIFIED"
+                },
+                "fingerprint": "sha256:6deaabcccdb4562ee5ec31e58d2df07b7360a50013b9badd65638d7a7f4d6b7c"
             }
         }
     ]

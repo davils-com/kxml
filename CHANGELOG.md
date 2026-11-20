@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The first version of kxml: the XML reader, writer and kotlinx.serialization format of an internal Davils project as
 an open source library under the Apache License 2.0, for the JVM and WebAssembly, built on Kore 2.3.1 with Kreate
-5.3.0.
+5.4.1.
 
 ### Added
 

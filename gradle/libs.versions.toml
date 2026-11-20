@@ -1,6 +1,6 @@
 [versions]
 kotlin = "2.4.21"
-kreate = "5.3.0"
+kreate = "5.4.1"
 kore = "2.3.1"
 coroutines = "1.11.0"
 serialization = "1.13.0"
