@@ -191,6 +191,53 @@
             }
         },
         {
+            "id": "w3c:xml-c14n10",
+            "reviewedOn": "2026-11-20",
+            "note": "Canonical XML 1.0 (2001-03-15); kxml-document renders whole documents and XPath subsets, refuses relative namespace URIs and leaves out the xml namespace node.",
+            "snapshot": {
+                "title": "Canonical XML Version 1.0",
+                "status": "Recommendation",
+                "revision": "2001-03-15",
+                "published": "2001-03-15",
+                "withdrawn": false,
+                "replacedBy": [],
+                "updatedBy": [
+                    "w3c:xml-c14n11"
+                ],
+                "errata": {}
+            }
+        },
+        {
+            "id": "w3c:xml-c14n11",
+            "reviewedOn": "2026-11-20",
+            "note": "Canonical XML 1.1 (2008-05-02); simple inheritable attributes from all ancestors and the xml:base fixup over contiguously omitted ancestors as the prose of section 2.4 says, which example 3.8 contradicts; Apache Santuario agrees with the prose.",
+            "snapshot": {
+                "title": "Canonical XML Version 1.1",
+                "status": "Recommendation",
+                "revision": "2008-05-02",
+                "published": "2008-05-02",
+                "withdrawn": false,
+                "replacedBy": [],
+                "updatedBy": [],
+                "errata": {}
+            }
+        },
+        {
+            "id": "w3c:xml-exc-c14n",
+            "reviewedOn": "2026-11-20",
+            "note": "Exclusive XML Canonicalization 1.0 (2002-07-18); namespace declarations only where visibly utilized, the InclusiveNamespaces PrefixList with #default, no import of xml attributes into orphans.",
+            "snapshot": {
+                "title": "Exclusive XML Canonicalization Version 1.0",
+                "status": "Recommendation",
+                "revision": "2002-07-18",
+                "published": "2002-07-18",
+                "withdrawn": false,
+                "replacedBy": [],
+                "updatedBy": [],
+                "errata": {}
+            }
+        },
+        {
             "id": "w3c:xml-names",
             "reviewedOn": "2026-11-20",
             "note": "Namespaces in XML 1.0 Third Edition. The series names Namespaces in XML 1.1 as newer; kxml reads both, each for the version a document declares, and refuses undeclaring a prefix in XML 1.0. Kreate does not read W3C errata yet.",

@@ -6,6 +6,31 @@
 // - Show declarations: true
 
 // Library unique name: <com.davils:kxml-document>
+final enum class com.davils.kxml.document.c14n/XmlCanonicalization : kotlin/Enum<com.davils.kxml.document.c14n/XmlCanonicalization> { // com.davils.kxml.document.c14n/XmlCanonicalization|null[0]
+    enum entry Canonical10 // com.davils.kxml.document.c14n/XmlCanonicalization.Canonical10|null[0]
+    enum entry Canonical10WithComments // com.davils.kxml.document.c14n/XmlCanonicalization.Canonical10WithComments|null[0]
+    enum entry Canonical11 // com.davils.kxml.document.c14n/XmlCanonicalization.Canonical11|null[0]
+    enum entry Canonical11WithComments // com.davils.kxml.document.c14n/XmlCanonicalization.Canonical11WithComments|null[0]
+    enum entry Exclusive10 // com.davils.kxml.document.c14n/XmlCanonicalization.Exclusive10|null[0]
+    enum entry Exclusive10WithComments // com.davils.kxml.document.c14n/XmlCanonicalization.Exclusive10WithComments|null[0]
+
+    final val entries // com.davils.kxml.document.c14n/XmlCanonicalization.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<com.davils.kxml.document.c14n/XmlCanonicalization> // com.davils.kxml.document.c14n/XmlCanonicalization.entries.<get-entries>|<get-entries>#static(){}[0]
+    final val hasComments // com.davils.kxml.document.c14n/XmlCanonicalization.hasComments|{}hasComments[0]
+        final fun <get-hasComments>(): kotlin/Boolean // com.davils.kxml.document.c14n/XmlCanonicalization.hasComments.<get-hasComments>|<get-hasComments>(){}[0]
+    final val isExclusive // com.davils.kxml.document.c14n/XmlCanonicalization.isExclusive|{}isExclusive[0]
+        final fun <get-isExclusive>(): kotlin/Boolean // com.davils.kxml.document.c14n/XmlCanonicalization.isExclusive.<get-isExclusive>|<get-isExclusive>(){}[0]
+    final val uri // com.davils.kxml.document.c14n/XmlCanonicalization.uri|{}uri[0]
+        final fun <get-uri>(): kotlin/String // com.davils.kxml.document.c14n/XmlCanonicalization.uri.<get-uri>|<get-uri>(){}[0]
+
+    final fun valueOf(kotlin/String): com.davils.kxml.document.c14n/XmlCanonicalization // com.davils.kxml.document.c14n/XmlCanonicalization.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<com.davils.kxml.document.c14n/XmlCanonicalization> // com.davils.kxml.document.c14n/XmlCanonicalization.values|values#static(){}[0]
+
+    final object Companion { // com.davils.kxml.document.c14n/XmlCanonicalization.Companion|null[0]
+        final fun of(kotlin/String): com.davils.kxml.document.c14n/XmlCanonicalization? // com.davils.kxml.document.c14n/XmlCanonicalization.Companion.of|of(kotlin.String){}[0]
+    }
+}
+
 final enum class com.davils.kxml.document.xpath/XPathNodeKind : kotlin/Enum<com.davils.kxml.document.xpath/XPathNodeKind> { // com.davils.kxml.document.xpath/XPathNodeKind|null[0]
     enum entry Attribute // com.davils.kxml.document.xpath/XPathNodeKind.Attribute|null[0]
     enum entry Comment // com.davils.kxml.document.xpath/XPathNodeKind.Comment|null[0]
@@ -63,6 +88,28 @@ sealed interface com.davils.kxml.document.xpath/XPathValue { // com.davils.kxml.
         final fun equals(kotlin/Any?): kotlin/Boolean // com.davils.kxml.document.xpath/XPathValue.Truth.equals|equals(kotlin.Any?){}[0]
         final fun hashCode(): kotlin/Int // com.davils.kxml.document.xpath/XPathValue.Truth.hashCode|hashCode(){}[0]
         final fun toString(): kotlin/String // com.davils.kxml.document.xpath/XPathValue.Truth.toString|toString(){}[0]
+    }
+}
+
+final class com.davils.kxml.document.c14n/XmlCanonicalizer { // com.davils.kxml.document.c14n/XmlCanonicalizer|null[0]
+    constructor <init>(com.davils.kxml.document.c14n/XmlCanonicalization, kotlin.collections/Set<kotlin/String> = ..., com.davils.kxml.core.limit/XmlLimits = ...) // com.davils.kxml.document.c14n/XmlCanonicalizer.<init>|<init>(com.davils.kxml.document.c14n.XmlCanonicalization;kotlin.collections.Set<kotlin.String>;com.davils.kxml.core.limit.XmlLimits){}[0]
+
+    final val inclusivePrefixes // com.davils.kxml.document.c14n/XmlCanonicalizer.inclusivePrefixes|{}inclusivePrefixes[0]
+        final fun <get-inclusivePrefixes>(): kotlin.collections/Set<kotlin/String> // com.davils.kxml.document.c14n/XmlCanonicalizer.inclusivePrefixes.<get-inclusivePrefixes>|<get-inclusivePrefixes>(){}[0]
+    final val limits // com.davils.kxml.document.c14n/XmlCanonicalizer.limits|{}limits[0]
+        final fun <get-limits>(): com.davils.kxml.core.limit/XmlLimits // com.davils.kxml.document.c14n/XmlCanonicalizer.limits.<get-limits>|<get-limits>(){}[0]
+    final val method // com.davils.kxml.document.c14n/XmlCanonicalizer.method|{}method[0]
+        final fun <get-method>(): com.davils.kxml.document.c14n/XmlCanonicalization // com.davils.kxml.document.c14n/XmlCanonicalizer.method.<get-method>|<get-method>(){}[0]
+
+    final fun canonicalize(com.davils.kxml.core.node/XmlDocument): kotlin/ByteArray // com.davils.kxml.document.c14n/XmlCanonicalizer.canonicalize|canonicalize(com.davils.kxml.core.node.XmlDocument){}[0]
+    final fun canonicalize(com.davils.kxml.core.node/XmlDocument, com.davils.kxml.document.xpath/XPath): kotlin/ByteArray // com.davils.kxml.document.c14n/XmlCanonicalizer.canonicalize|canonicalize(com.davils.kxml.core.node.XmlDocument;com.davils.kxml.document.xpath.XPath){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // com.davils.kxml.document.c14n/XmlCanonicalizer.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // com.davils.kxml.document.c14n/XmlCanonicalizer.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // com.davils.kxml.document.c14n/XmlCanonicalizer.toString|toString(){}[0]
+
+    final object Companion { // com.davils.kxml.document.c14n/XmlCanonicalizer.Companion|null[0]
+        final const val DEFAULT_NAMESPACE // com.davils.kxml.document.c14n/XmlCanonicalizer.Companion.DEFAULT_NAMESPACE|{}DEFAULT_NAMESPACE[0]
+            final fun <get-DEFAULT_NAMESPACE>(): kotlin/String // com.davils.kxml.document.c14n/XmlCanonicalizer.Companion.DEFAULT_NAMESPACE.<get-DEFAULT_NAMESPACE>|<get-DEFAULT_NAMESPACE>(){}[0]
     }
 }
 

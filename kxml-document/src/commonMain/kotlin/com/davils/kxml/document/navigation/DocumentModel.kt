@@ -76,6 +76,8 @@ internal class DocumentModel internal constructor(
 
     fun value(node: Int): String? = values[node]
 
+    fun attributeName(attribute: Int): XmlName = checkNotNull(names[attribute])
+
     fun children(node: Int): Sequence<Int> = generateSequence(firstChild(node), ::nextSibling)
 
     fun isDescendant(node: Int, ancestor: Int): Boolean = node > ancestor && node < ends[ancestor]

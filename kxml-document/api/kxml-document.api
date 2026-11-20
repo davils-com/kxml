@@ -2,6 +2,44 @@ public final class com/davils/kxml/document/XmlDocumentLimitException : java/lan
 	public final fun getLimit ()Ljava/lang/String;
 }
 
+public final class com/davils/kxml/document/c14n/XmlCanonicalization : java/lang/Enum {
+	public static final field Canonical10 Lcom/davils/kxml/document/c14n/XmlCanonicalization;
+	public static final field Canonical10WithComments Lcom/davils/kxml/document/c14n/XmlCanonicalization;
+	public static final field Canonical11 Lcom/davils/kxml/document/c14n/XmlCanonicalization;
+	public static final field Canonical11WithComments Lcom/davils/kxml/document/c14n/XmlCanonicalization;
+	public static final field Companion Lcom/davils/kxml/document/c14n/XmlCanonicalization$Companion;
+	public static final field Exclusive10 Lcom/davils/kxml/document/c14n/XmlCanonicalization;
+	public static final field Exclusive10WithComments Lcom/davils/kxml/document/c14n/XmlCanonicalization;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getHasComments ()Z
+	public final fun getUri ()Ljava/lang/String;
+	public final fun isExclusive ()Z
+	public static fun valueOf (Ljava/lang/String;)Lcom/davils/kxml/document/c14n/XmlCanonicalization;
+	public static fun values ()[Lcom/davils/kxml/document/c14n/XmlCanonicalization;
+}
+
+public final class com/davils/kxml/document/c14n/XmlCanonicalization$Companion {
+	public final fun of (Ljava/lang/String;)Lcom/davils/kxml/document/c14n/XmlCanonicalization;
+}
+
+public final class com/davils/kxml/document/c14n/XmlCanonicalizer {
+	public static final field Companion Lcom/davils/kxml/document/c14n/XmlCanonicalizer$Companion;
+	public static final field DEFAULT_NAMESPACE Ljava/lang/String;
+	public fun <init> (Lcom/davils/kxml/document/c14n/XmlCanonicalization;Ljava/util/Set;Lcom/davils/kxml/core/limit/XmlLimits;)V
+	public synthetic fun <init> (Lcom/davils/kxml/document/c14n/XmlCanonicalization;Ljava/util/Set;Lcom/davils/kxml/core/limit/XmlLimits;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun canonicalize (Lcom/davils/kxml/core/node/XmlDocument;)[B
+	public final fun canonicalize (Lcom/davils/kxml/core/node/XmlDocument;Lcom/davils/kxml/document/xpath/XPath;)[B
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getInclusivePrefixes ()Ljava/util/Set;
+	public final fun getLimits ()Lcom/davils/kxml/core/limit/XmlLimits;
+	public final fun getMethod ()Lcom/davils/kxml/document/c14n/XmlCanonicalization;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/davils/kxml/document/c14n/XmlCanonicalizer$Companion {
+}
+
 public final class com/davils/kxml/document/xpath/XPath {
 	public static final field Companion Lcom/davils/kxml/document/xpath/XPath$Companion;
 	public fun equals (Ljava/lang/Object;)Z

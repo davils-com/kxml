@@ -33,6 +33,12 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
   evaluation is bounded by `maximumQuerySteps`, `maximumQueryResults` and `maximumQueryStringLength` and stops with
   an `XmlDocumentLimitException`; node-sets are compared through a sorted set and strings searched in linear time, so
   no input makes an evaluation quadratic. A differential test compares the results with `javax.xml.xpath`.
+- `XmlCanonicalizer` writes Canonical XML 1.0 and 1.1 and Exclusive XML Canonicalization 1.0, with and without
+  comments, as UTF-8 bytes: of a whole document in one pass whose cost does not grow with the namespaces in scope, or
+  of the subset an `XPath` selects, with the attributes of the XML namespace imported into orphan elements, the
+  `xml:base` fixup of Canonical XML 1.1 and the InclusiveNamespaces PrefixList of the exclusive method. A document with
+  a relative namespace URI is refused, and the output is bounded by `maximumOutputLength`. Whole documents are
+  compared with the canonicalizers of the JDK in a differential test.
 - All modules are Kotlin Multiplatform libraries with a `jvm` and a `wasmJs` target. Sources are decoded in common
   code, and untrusted text is escaped by `SafeText` of Kore.
 - Sources of bytes are detected as Appendix F of XML 1.0 describes it and decoded strictly from UTF-8, UTF-16 and

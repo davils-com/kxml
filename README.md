@@ -114,7 +114,7 @@ when (val decoding = format.decodeOrFailure<Order>("<Order/>")) {
 }
 ```
 
-### XPath
+### XPath and canonical XML
 
 ```kotlin
 val parsed = xml { }.parse("<shop xmlns='urn:shop'><book id='b1'>Kotlin</book></shop>") as XmlParseResult.Parsed
@@ -125,6 +125,12 @@ XPath.parse("count(//*)").evaluate(parsed.document)                    // XPathV
 
 `XPath` of `kxml-document` evaluates XPath 1.0 with its core function library. Every evaluation is bounded by the
 query limits of `XmlLimits` and stops with an `XmlDocumentLimitException` instead of running on.
+
+`XmlCanonicalizer` writes the canonical form of a document or of the subset an `XPath` selects, for XML Signature:
+
+```kotlin
+val canonical = XmlCanonicalizer(XmlCanonicalization.Exclusive10).canonicalize(parsed.document)   // UTF-8 bytes
+```
 
 ## Security
 

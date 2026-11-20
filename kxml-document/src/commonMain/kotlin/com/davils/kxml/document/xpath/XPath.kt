@@ -82,6 +82,8 @@ public class XPath private constructor(
      */
     public val isNodeSet: Boolean get() = syntax.type == ValueType.NodeSet
 
+    internal val parsed: Expression get() = syntax
+
     /**
      * Evaluates the expression with the root node of [document] as the context node, at position 1 of 1.
      *

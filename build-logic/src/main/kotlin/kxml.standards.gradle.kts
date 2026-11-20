@@ -77,6 +77,15 @@ kreate {
             w3c("xpath-10") {
                 note = "XPath 1.0 in kxml-document: XPath, its parser, its evaluation on the data model of section 5 and the core function library."
             }
+            w3c("xml-c14n10") {
+                note = "Canonical XML 1.0 in kxml-document: XmlCanonicalizer with Canonical10 and Canonical10WithComments, for whole documents and XPath subsets."
+            }
+            w3c("xml-c14n11") {
+                note = "Canonical XML 1.1 in kxml-document: XmlCanonicalizer with Canonical11, its simple inheritable attributes and the xml:base fixup."
+            }
+            w3c("xml-exc-c14n") {
+                note = "Exclusive XML Canonicalization 1.0 in kxml-document: XmlCanonicalizer with Exclusive10 and the InclusiveNamespaces PrefixList."
+            }
             unicode {
                 note = "The safe display of text follows the Unicode tables of the platform."
             }

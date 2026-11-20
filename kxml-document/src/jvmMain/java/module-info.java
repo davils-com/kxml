@@ -19,5 +19,6 @@ module com.davils.kxml.document {
     requires transitive com.davils.kxml.core;
 
     exports com.davils.kxml.document;
+    exports com.davils.kxml.document.c14n;
     exports com.davils.kxml.document.xpath;
 }
