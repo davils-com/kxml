@@ -20,12 +20,16 @@ import com.davils.kore.core.annotation.DavilsInternal
 import com.davils.kore.core.text.SafeText
 import com.davils.kore.core.text.TextRange
 import com.davils.kxml.core.name.XmlName
+import com.davils.kxml.core.name.XmlNamespaces
 
 /**
  * An attribute of an element.
  *
  * Two attributes are equal when their [name]s and [value]s are equal; the [range] takes no part in equality. An
  * instance is immutable. Use [XmlElementBuilder.attribute] to add one to an element, which also checks the value.
+ * A namespace declaration is no attribute: a name `xmlns` without a namespace and every name in the namespace
+ * [XmlNamespaces.XMLNS] are refused with an [IllegalArgumentException], so no attribute can declare a namespace when
+ * it is written; declare one with [XmlElementBuilder.namespace].
  *
  * @property name the resolved name.
  * @property value the normalized value, with every reference replaced.
@@ -38,6 +42,13 @@ public class XmlAttribute(
     public val range: TextRange? = null,
 ) {
     private val values: List<Any> get() = listOf(name, value)
+
+    init {
+        val isUndeclaredXmlns = name.namespace == null && name.local == XmlNamespaces.XMLNS_PREFIX
+        require(!isUndeclaredXmlns && name.namespace != XmlNamespaces.XMLNS) {
+            "The attribute $name is a namespace declaration"
+        }
+    }
 
     /**
      * Compares the name and the value.

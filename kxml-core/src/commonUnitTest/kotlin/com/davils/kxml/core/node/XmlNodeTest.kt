@@ -17,6 +17,7 @@
 package com.davils.kxml.core.node
 
 import com.davils.kxml.core.name.XmlName
+import com.davils.kxml.core.name.XmlNamespaces
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
@@ -27,6 +28,8 @@ private val bucket: XmlName = XmlName("Bucket")
 private val key: XmlName = XmlName("Key")
 private val id: XmlName = XmlName("id")
 private const val CONTROL: String = "\u0001"
+private const val URN: String = "urn:x"
+private const val XMLNS: String = "xmlns"
 
 class XmlNodeTest : FunSpec({
     context("elements") {
@@ -91,6 +94,14 @@ class XmlNodeTest : FunSpec({
                 }
             }
             shouldThrow<IllegalArgumentException> { xmlElement(bucket) { attribute(id, "\u0000") } }
+        }
+
+        test("refuse an attribute that would declare a namespace") {
+            shouldThrow<IllegalArgumentException> { XmlAttribute(XmlName(XMLNS), URN) }
+            shouldThrow<IllegalArgumentException> {
+                xmlElement(bucket) { attribute(XmlName("p", namespace = XmlNamespaces.XMLNS), URN) }
+            }
+            XmlAttribute(XmlName(XMLNS, namespace = URN, prefix = "p"), "v").name.local shouldBe XMLNS
         }
     }
 
