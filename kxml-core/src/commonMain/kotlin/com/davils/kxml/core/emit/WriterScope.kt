@@ -25,7 +25,10 @@ import com.davils.kxml.core.node.XmlNode
 private const val DEFAULT: String = ""
 private const val GENERATED_PREFIX: String = "ns"
 
-internal class WriterScope private constructor(private val parent: WriterScope?) {
+internal class WriterScope private constructor(
+    private val parent: WriterScope?,
+    private val isUndeclaringAllowed: Boolean,
+) {
     private val bindings = NameMap<String>()
 
     private val attributePrefixes = NameMap<String>()
@@ -33,7 +36,7 @@ internal class WriterScope private constructor(private val parent: WriterScope?)
     val declarations: List<XmlNamespaceBinding>
         get() = bindings.entries.map { (prefix, uri) -> XmlNamespaceBinding(prefix.takeIf { it.isNotEmpty() }, uri) }
 
-    fun child(): WriterScope = WriterScope(parent = this)
+    fun child(): WriterScope = WriterScope(parent = this, isUndeclaringAllowed = isUndeclaringAllowed)
 
     fun open(element: XmlNode.Element) {
         bindElement(element.name)
@@ -59,6 +62,8 @@ internal class WriterScope private constructor(private val parent: WriterScope?)
     }
 
     private fun bindExplicit(binding: XmlNamespaceBinding) {
+        val isUndeclaring = binding.prefix != null && binding.uri.isEmpty()
+        require(!isUndeclaring || isUndeclaringAllowed) { "A prefix can only be undeclared in a document of XML 1.1" }
         val prefix = binding.prefix ?: DEFAULT
         val current = lookup(prefix) ?: DEFAULT
         if (prefix !in bindings && current != binding.uri) bindings[prefix] = binding.uri
@@ -89,8 +94,8 @@ internal class WriterScope private constructor(private val parent: WriterScope?)
     }
 
     companion object {
-        fun root(): WriterScope {
-            val scope = WriterScope(parent = null)
+        fun root(isUndeclaringAllowed: Boolean): WriterScope {
+            val scope = WriterScope(parent = null, isUndeclaringAllowed = isUndeclaringAllowed)
             scope.bindings[XmlNamespaces.XML_PREFIX] = XmlNamespaces.XML
             return scope
         }

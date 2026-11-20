@@ -29,7 +29,7 @@ private const val DEFAULT: String = ""
 private const val COLON: Char = ':'
 private const val DECLARATION_PREFIX: String = "xmlns:"
 
-internal class NamespaceResolver {
+internal class NamespaceResolver(private val dialect: Dialect) {
     private val scopes = NameMap<ArrayDeque<String>>()
     private val frames = ArrayDeque<List<String>>()
 
@@ -83,7 +83,7 @@ internal class NamespaceResolver {
             )
         }
         if (!isXmlPrefix && isReservedUri) reserved(attribute, "The namespace $uri is reserved by XML")
-        if (prefix.isNotEmpty() && uri.isEmpty()) {
+        if (prefix.isNotEmpty() && uri.isEmpty() && !dialect.isVersion11) {
             failure(XmlDiagnosticCode.EmptyPrefixBinding, attribute.range, "The prefix $prefix cannot be unbound")
         }
     }

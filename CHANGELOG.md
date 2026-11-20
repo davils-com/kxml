@@ -13,7 +13,7 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
 
 ### Added
 
-- `kxml-core`: a namespace-aware XML 1.0 reader that never expands entities or loads external resources, refuses
+- `kxml-core`: a namespace-aware XML 1.0 and 1.1 reader that never expands entities or loads external resources, refuses
   document type declarations by default and checks every document against `XmlLimits`; an event stream, an immutable
   node tree, diagnostics with stable codes and positions, and a writer with configurable layout.
 - `kxml-serialization`: a kotlinx.serialization `StringFormat` for XML with attributes, text content, namespaces,
@@ -30,6 +30,10 @@ an open source library under the Apache License 2.0, for the JVM and WebAssembly
 - `XmlLimits` gives every limit a hard ceiling, `HARD_INPUT_LENGTH`, `HARD_DEPTH`, `HARD_ELEMENTS`, `HARD_ATTRIBUTES`
   and `HARD_NAME_LENGTH`, which no preset and no configuration exceeds; the limits validate themselves when they are
   created.
+- A document that declares version 1.1 is read by the rules of XML 1.1 and Namespaces in XML 1.1: NEL, U+2028 and
+  CR NEL end lines, the C1 controls are refused unless they stand as character references, references to C0
+  controls are allowed and a prefix may be undeclared with `xmlns:p=""`, which `XmlNamespaceBinding` now allows and
+  the writer writes only into a document of XML 1.1. Other minor versions are read by the rules of XML 1.0.
 - `XmlReader`, from `Xml.reader`, reads a document event by event without building its tree and stops at the first
   error; `Xml.parse` composes the tree from it without holding every event.
 - `XmlSyntaxTree` is the lossless syntax tree of a text: every character belongs to exactly one token, so the text of

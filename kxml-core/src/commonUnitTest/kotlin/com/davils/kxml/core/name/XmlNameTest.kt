@@ -107,9 +107,12 @@ class XmlNameTest : FunSpec({
             XmlNamespaceBinding(null, NAMESPACE).toString() shouldBe "xmlns=\"$NAMESPACE\""
         }
 
-        test("refuse a prefix that is no name or binds nothing") {
+        test("refuse a prefix that is no name") {
             shouldThrow<IllegalArgumentException> { XmlNamespaceBinding(prefix = "a:b", uri = NAMESPACE) }
-            shouldThrow<IllegalArgumentException> { XmlNamespaceBinding(prefix = "p", uri = "") }
+        }
+
+        test("undeclare a prefix with an empty namespace name, as Namespaces in XML 1.1 allows") {
+            XmlNamespaceBinding(prefix = "p", uri = "").uri shouldBe ""
         }
     }
 

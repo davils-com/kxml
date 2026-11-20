@@ -35,7 +35,9 @@ private const val DOUBLE_QUOTE: Char = '"'
 private const val SINGLE_QUOTE: Char = '\''
 private const val SPACE: String = " "
 private const val NEWLINE: String = "\n"
-private const val SPECIAL: String = "&\r]"
+private const val SPECIAL: String = "&\r]\u0085\u2028"
+private const val NEXT_LINE: Char = '\u0085'
+private const val LINE_SEPARATOR: Char = '\u2028'
 private const val SEMICOLON: String = ";"
 private const val CDATA_END: String = "]]>"
 private const val CHARACTER_PREFIX: String = "#"
@@ -58,12 +60,15 @@ internal class CharacterReader(
     private val cursor: Cursor,
     private val budget: ParseBudget,
     private val sink: SyntaxSink,
+    private val dialect: Dialect,
 ) {
     private val handlers: Map<Char, (Boolean) -> String?> = mapOf(
         CARRIAGE_RETURN to ::carriageReturn,
         LINE_FEED to ::whitespace,
         TAB to ::whitespace,
         BRACKET to ::bracket,
+        NEXT_LINE to ::lineSeparator,
+        LINE_SEPARATOR to ::lineSeparator,
     )
 
     fun text(): XmlEvent.Text {
@@ -153,7 +158,7 @@ internal class CharacterReader(
 
     private fun advanceCharacter() {
         val code = cursor.codePoint()
-        if (!XmlCharacters.isCharacter(code)) {
+        if (!dialect.isLiteral(code)) {
             failure(
                 XmlDiagnosticCode.InvalidCharacter,
                 TextRange.of(start = cursor.offset, length = 1),
@@ -165,7 +170,14 @@ internal class CharacterReader(
 
     private fun carriageReturn(isAttribute: Boolean): String {
         cursor.advance()
-        if (!cursor.isAtEnd && cursor.peek() == LINE_FEED) cursor.advance()
+        val isPaired = !cursor.isAtEnd && dialect.isPairedWithReturn(cursor.peek())
+        if (isPaired) cursor.advance()
+        return SPACE.takeIf { isAttribute } ?: NEWLINE
+    }
+
+    private fun lineSeparator(isAttribute: Boolean): String? {
+        if (!dialect.isLineSeparator(cursor.peek())) return null
+        cursor.advance()
         return SPACE.takeIf { isAttribute } ?: NEWLINE
     }
 
@@ -215,7 +227,7 @@ internal class CharacterReader(
         val allowed = HEX_DIGITS.takeIf { isHex } ?: DECIMAL_DIGITS
         val isDigits = digits.isNotEmpty() && digits.all { digit -> digit in allowed }
         val code = digits.takeIf { isDigits }?.toIntOrNull(radix)
-        if (code == null || !XmlCharacters.isCharacter(code)) {
+        if (code == null || !dialect.isReferable(code)) {
             failure(
                 XmlDiagnosticCode.InvalidReference,
                 range,

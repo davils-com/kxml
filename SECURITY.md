@@ -54,7 +54,7 @@ The following are **not** vulnerabilities in kxml:
 
 ## Known Limitations
 
-- kxml reads XML 1.0 with namespaces in UTF-8, UTF-16, UTF-32, ISO-8859-1 and US-ASCII only; it refuses every other
+- kxml reads XML 1.0 and 1.1 with namespaces in UTF-8, UTF-16, UTF-32, ISO-8859-1 and US-ASCII only; it refuses every other
   encoding, such as EBCDIC and Windows-1252, and reads the encoding declaration from the first 1,024 bytes. It does not validate against a DTD or a schema and
   never reads the internal subset of a document type declaration, so default attributes declared there are not
   applied.

@@ -42,12 +42,13 @@ internal class XmlScanner(
     private val sink: SyntaxSink,
 ) {
     private val cursor = Cursor(text)
+    private val dialect = Dialect()
     private val budget = ParseBudget(configuration.limits)
-    private val characters = CharacterReader(cursor, budget, sink)
+    private val characters = CharacterReader(cursor = cursor, budget = budget, sink = sink, dialect = dialect)
     private val tags = TagReader(cursor = cursor, budget = budget, characters = characters, sink = sink)
-    private val markup = MarkupReader(cursor = cursor, budget = budget, tags = tags, sink = sink)
+    private val markup = MarkupReader(cursor = cursor, budget = budget, tags = tags, sink = sink, dialect = dialect)
     private val declarations = DeclarationReader(cursor, characters, sink)
-    private val resolver = NamespaceResolver()
+    private val resolver = NamespaceResolver(dialect)
     private val open = ArrayDeque<OpenElement>()
     private val pending = ArrayDeque<XmlEvent>()
     private val noticed = mutableListOf<XmlDiagnostic>()
@@ -88,8 +89,10 @@ internal class XmlScanner(
             cursor.advance(BYTE_ORDER_MARK.length)
             sink.token(kind = XmlSyntaxKind.BYTE_ORDER_MARK, start = 0, end = cursor.offset)
         }
-        if (declarations.isAhead()) return declarations.read(encoding)
-        return next()
+        if (!declarations.isAhead()) return next()
+        val declaration = declarations.read(encoding)
+        dialect.adopt(declaration.declaration.version)
+        return declaration
     }
 
     private fun produce(): XmlEvent? {

@@ -24,6 +24,8 @@ import com.davils.kxml.core.node.XmlDocument
 import com.davils.kxml.core.node.XmlNode
 
 private const val INDENT: String = " "
+private const val VERSION_11: String = "1.1"
+
 private val standaloneValues: Map<Boolean, String> = mapOf(true to "yes", false to "no")
 
 internal class XmlWriter(private val options: XmlEmitOptions) {
@@ -33,26 +35,28 @@ internal class XmlWriter(private val options: XmlEmitOptions) {
 
     fun write(document: XmlDocument): String {
         val output = StringBuilder()
+        val isVersion11 = document.declaration?.version == VERSION_11
         document.declaration?.let { declaration ->
             output.append(declarationOf(declaration))
             separate(output)
         }
         document.prolog.forEach { node ->
-            tree(output, node)
+            tree(output, node, isVersion11)
             separate(output)
         }
-        tree(output, document.root)
+        tree(output, document.root, isVersion11)
         document.epilog.forEach { node ->
             separate(output)
-            tree(output, node)
+            tree(output, node, isVersion11)
         }
         separate(output)
         return output.toString()
     }
 
-    private fun tree(output: StringBuilder, root: XmlNode) {
+    private fun tree(output: StringBuilder, root: XmlNode, isVersion11: Boolean) {
         val steps = ArrayDeque<WriteStep>()
-        steps.addLast(WriteStep.Node(node = root, depth = 0, scope = WriterScope.root()))
+        val scope = WriterScope.root(isUndeclaringAllowed = isVersion11)
+        steps.addLast(WriteStep.Node(node = root, depth = 0, scope = scope))
         while (steps.isNotEmpty()) perform(output, steps.removeLast(), steps)
     }
 

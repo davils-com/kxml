@@ -1,9 +1,9 @@
 # AGENTS.md
 
 Binding rules for every agent and every person working in this repository. kxml is the XML library of Davils: a
-hardened, namespace-aware XML 1.0 reader and writer and a kotlinx.serialization format on top of it, for Kotlin on the
-JVM and on WebAssembly (`wasmJs`). It is built on [Kore](https://github.com/davils-com/kore), follows the rules of Kore and is published under the
-Apache License 2.0, with security first.
+hardened, namespace-aware XML 1.0 and 1.1 reader and writer and a kotlinx.serialization format on top of it, for Kotlin
+on the JVM and on WebAssembly (`wasmJs`). It is built on [Kore](https://github.com/davils-com/kore), follows the rules
+of Kore and is published under the Apache License 2.0, with security first.
 
 ## Repository
 

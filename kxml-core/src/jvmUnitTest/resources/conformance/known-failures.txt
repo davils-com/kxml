@@ -470,97 +470,58 @@ ibm-valid-P32-ibm32v02.xml dtd: the internal subset of the document type declara
 ibm-valid-P43-ibm43v01.xml dtd: the internal subset of the document type declaration is not read
 ibm-valid-P67-ibm67v01.xml dtd: the internal subset of the document type declaration is not read
 ibm-valid-P78-ibm78v01.xml dtd: the internal subset of the document type declaration is not read
-ibm-1-1-valid-P46-ibm46i01.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-valid-P46-ibm46i02.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P02-ibm02n10.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P02-ibm02n32.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P02-ibm02n33.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P02-ibm02n34.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P02-ibm02n35.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P02-ibm02n36.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P02-ibm02n37.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P02-ibm02n38.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P02-ibm02n39.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P02-ibm02n40.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P02-ibm02n41.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P02-ibm02n42.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P02-ibm02n43.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P02-ibm02n44.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P02-ibm02n45.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P02-ibm02n46.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P02-ibm02n47.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P02-ibm02n48.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P02-ibm02n49.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P02-ibm02n50.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P02-ibm02n51.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P02-ibm02n52.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P02-ibm02n53.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P02-ibm02n54.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P02-ibm02n55.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P02-ibm02n56.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P02-ibm02n57.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P02-ibm02n59.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P02-ibm02n60.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P02-ibm02n61.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P02-ibm02n62.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P02-ibm02n63.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P77-ibm77n02.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P77-ibm77n03.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P77-ibm77n14.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-not-wf-P77-ibm77n21.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-valid-P02-ibm02v02.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-valid-P02-ibm02v04.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-valid-P02-ibm02v05.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-valid-P03-ibm03v01.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-valid-P03-ibm03v02.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-valid-P03-ibm03v03.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-valid-P03-ibm03v04.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-valid-P03-ibm03v05.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-valid-P03-ibm03v06.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-valid-P03-ibm03v07.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-valid-P77-ibm77v04.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-valid-P77-ibm77v05.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-valid-P77-ibm77v06.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-valid-P77-ibm77v10.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-valid-P77-ibm77v11.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-valid-P77-ibm77v12.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-valid-P77-ibm77v16.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-valid-P77-ibm77v17.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-valid-P77-ibm77v18.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-valid-P77-ibm77v22.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-valid-P77-ibm77v23.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-valid-P77-ibm77v24.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-valid-P77-ibm77v28.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-valid-P77-ibm77v29.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
-ibm-1-1-valid-P77-ibm77v30.xml xml-1.1: XML 1.1 is read with the rules of XML 1.0
+ibm-1-1-valid-P46-ibm46i01.xml dtd: the internal subset of the document type declaration is not read
+ibm-1-1-valid-P46-ibm46i02.xml dtd: the internal subset of the document type declaration is not read
+ibm-1-1-not-wf-P02-ibm02n10.xml dtd: the internal subset of the document type declaration is not read
+ibm-1-1-not-wf-P77-ibm77n02.xml dtd: the internal subset of the document type declaration is not read
+ibm-1-1-not-wf-P77-ibm77n03.xml dtd: the internal subset of the document type declaration is not read
+ibm-1-1-not-wf-P77-ibm77n14.xml dtd: the internal subset of the document type declaration is not read
+ibm-1-1-not-wf-P77-ibm77n21.xml dtd: the internal subset of the document type declaration is not read
+ibm-1-1-valid-P02-ibm02v04.xml dtd: the internal subset of the document type declaration is not read
+ibm-1-1-valid-P03-ibm03v01.xml dtd: the internal subset of the document type declaration is not read
+ibm-1-1-valid-P03-ibm03v02.xml dtd: the internal subset of the document type declaration is not read
+ibm-1-1-valid-P03-ibm03v03.xml dtd: the internal subset of the document type declaration is not read
+ibm-1-1-valid-P03-ibm03v04.xml dtd: the internal subset of the document type declaration is not read
+ibm-1-1-valid-P03-ibm03v05.xml dtd: the internal subset of the document type declaration is not read
+ibm-1-1-valid-P03-ibm03v06.xml dtd: the internal subset of the document type declaration is not read
+ibm-1-1-valid-P03-ibm03v07.xml dtd: the internal subset of the document type declaration is not read
+ibm-1-1-valid-P77-ibm77v04.xml dtd: the internal subset of the document type declaration is not read
+ibm-1-1-valid-P77-ibm77v05.xml dtd: the internal subset of the document type declaration is not read
+ibm-1-1-valid-P77-ibm77v06.xml dtd: the internal subset of the document type declaration is not read
+ibm-1-1-valid-P77-ibm77v10.xml dtd: the internal subset of the document type declaration is not read
+ibm-1-1-valid-P77-ibm77v11.xml dtd: the internal subset of the document type declaration is not read
+ibm-1-1-valid-P77-ibm77v12.xml dtd: the internal subset of the document type declaration is not read
+ibm-1-1-valid-P77-ibm77v16.xml dtd: the internal subset of the document type declaration is not read
+ibm-1-1-valid-P77-ibm77v17.xml dtd: the internal subset of the document type declaration is not read
+ibm-1-1-valid-P77-ibm77v18.xml dtd: the internal subset of the document type declaration is not read
+ibm-1-1-valid-P77-ibm77v22.xml dtd: the internal subset of the document type declaration is not read
+ibm-1-1-valid-P77-ibm77v23.xml dtd: the internal subset of the document type declaration is not read
+ibm-1-1-valid-P77-ibm77v24.xml dtd: the internal subset of the document type declaration is not read
+ibm-1-1-valid-P77-ibm77v28.xml dtd: the internal subset of the document type declaration is not read
+ibm-1-1-valid-P77-ibm77v29.xml dtd: the internal subset of the document type declaration is not read
+ibm-1-1-valid-P77-ibm77v30.xml dtd: the internal subset of the document type declaration is not read
 rmt-e2e-15a dtd: the internal subset of the document type declaration is not read
 rmt-e2e-15e dtd: the internal subset of the document type declaration is not read
 rmt-e2e-15f dtd: the internal subset of the document type declaration is not read
 rmt-e2e-15h dtd: the internal subset of the document type declaration is not read
 rmt-e2e-18 dtd: the internal subset of the document type declaration is not read
 rmt-e2e-19 dtd: the internal subset of the document type declaration is not read
-rmt-e2e-50 xml-1.1: XML 1.1 is read with the rules of XML 1.0
-rmt-001 xml-1.1: XML 1.1 is read with the rules of XML 1.0
-rmt-002 xml-1.1: XML 1.1 is read with the rules of XML 1.0
-rmt-006 xml-1.1: XML 1.1 is read with the rules of XML 1.0
-rmt-011 xml-1.1: XML 1.1 is read with the rules of XML 1.0
-rmt-013 xml-1.1: XML 1.1 is read with the rules of XML 1.0
-rmt-034 xml-1.1: XML 1.1 is read with the rules of XML 1.0
-rmt-035 xml-1.1: XML 1.1 is read with the rules of XML 1.0
-rmt-036 xml-1.1: XML 1.1 is read with the rules of XML 1.0
-rmt-037 xml-1.1: XML 1.1 is read with the rules of XML 1.0
-rmt-041 xml-1.1: XML 1.1 is read with the rules of XML 1.0
-rmt-043 xml-1.1: XML 1.1 is read with the rules of XML 1.0
-rmt-050 xml-1.1: XML 1.1 is read with the rules of XML 1.0
-rmt-051 xml-1.1: XML 1.1 is read with the rules of XML 1.0
-rmt-052 xml-1.1: XML 1.1 is read with the rules of XML 1.0
-rmt-053 xml-1.1: XML 1.1 is read with the rules of XML 1.0
-rmt-054 xml-1.1: XML 1.1 is read with the rules of XML 1.0
+rmt-e2e-50 dtd: the internal subset of the document type declaration is not read
+rmt-001 dtd: the internal subset of the document type declaration is not read
+rmt-002 dtd: the internal subset of the document type declaration is not read
+rmt-006 dtd: the internal subset of the document type declaration is not read
+rmt-034 dtd: the internal subset of the document type declaration is not read
+rmt-035 dtd: the internal subset of the document type declaration is not read
+rmt-036 dtd: the internal subset of the document type declaration is not read
+rmt-037 dtd: the internal subset of the document type declaration is not read
+rmt-050 dtd: the internal subset of the document type declaration is not read
+rmt-051 dtd: the internal subset of the document type declaration is not read
+rmt-052 dtd: the internal subset of the document type declaration is not read
+rmt-053 dtd: the internal subset of the document type declaration is not read
+rmt-054 dtd: the internal subset of the document type declaration is not read
 rmt-ns10-012 dtd: the internal subset of the document type declaration is not read
 rmt-ns10-043 dtd: the internal subset of the document type declaration is not read
 rmt-ns10-044 dtd: the internal subset of the document type declaration is not read
-rmt-ns11-003 xml-1.1: XML 1.1 is read with the rules of XML 1.0
-rmt-ns11-004 xml-1.1: XML 1.1 is read with the rules of XML 1.0
 rmt-e3e-12 dtd: the internal subset of the document type declaration is not read
 rmt-e3e-13 dtd: the internal subset of the document type declaration is not read
 invalid-bo-1 dtd: the internal subset of the document type declaration is not read

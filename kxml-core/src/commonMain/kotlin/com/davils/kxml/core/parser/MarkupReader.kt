@@ -46,6 +46,7 @@ internal class MarkupReader(
     private val budget: ParseBudget,
     private val tags: TagReader,
     private val sink: SyntaxSink,
+    private val dialect: Dialect,
 ) {
     fun comment(): XmlEvent.Comment {
         val start = cursor.offset
@@ -163,7 +164,7 @@ internal class MarkupReader(
 
     private fun section(from: Int, to: Int, start: Int): String {
         budget.text(to - from, TextRange(start, to))
-        return Sections.normalized(cursor.text, from, to)
+        return Sections.normalized(text = cursor.text, from = from, to = to, dialect = dialect)
     }
 
     private fun checkTarget(target: String, start: Int) {

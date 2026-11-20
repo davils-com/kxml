@@ -25,8 +25,9 @@ import com.davils.kore.core.text.SafeText
  * An instance is immutable.
  *
  * @property prefix the declared prefix, or `null` for the default namespace.
- * @property uri the namespace name; empty only for a default namespace, where it undeclares the default.
- * @throws IllegalArgumentException if [prefix] is not a name without a colon, or binds a prefix to an empty [uri].
+ * @property uri the namespace name; empty to undeclare the default namespace or, as only Namespaces in XML 1.1
+ * allows, a prefix. The writer refuses to undeclare a prefix in a document that does not declare version 1.1.
+ * @throws IllegalArgumentException if [prefix] is not a name without a colon.
  * @since 1.0.0
  */
 @OptIn(DavilsInternal::class)
@@ -38,7 +39,6 @@ public class XmlNamespaceBinding(public val prefix: String?, public val uri: Str
             require(XmlCharacters.isNcName(declared)) {
                 "A namespace prefix must be a name, but was ${SafeText.quoted(declared)}"
             }
-            require(uri.isNotEmpty()) { "The prefix $declared cannot be bound to nothing" }
         }
     }
 

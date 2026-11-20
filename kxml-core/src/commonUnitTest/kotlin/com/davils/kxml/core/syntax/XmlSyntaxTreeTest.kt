@@ -59,7 +59,7 @@ private val markup: List<String> = listOf(
     "<a>", "</a>", "<b x='1'>", "</b>", "<c/>", "/>", ">", "<", "&amp;", "&#x41;", "&#65;", "&", ";", "&lt",
     "<!--c-->", "<!--", "-->", "<![CDATA[x]]>", "]]>", "<?pi d?>", "<?", "?>", "<?xml version='1.0'?>",
     "<!DOCTYPE a [<!ENTITY e 'v'>]>", "<!DOCTYPE", "text", " ", "\t", "\r\n", "\r", "'", "\"", "=", MARK,
-    "xmlns:p='urn:p'", "p:x='y'",
+    "xmlns:p='urn:p'", "p:x='y'", "<?xml version='1.1'?>", "\u0085", "\u2028", "\u0080", "&#x1;", "xmlns:p=''",
 )
 private val fragments: List<String> = markup + HostileFragments.all
 

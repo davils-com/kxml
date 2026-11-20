@@ -21,17 +21,13 @@ import com.davils.kxml.core.diagnostic.XmlDiagnosticCode
 import com.davils.kxml.core.internal.charCountOf
 import com.davils.kxml.core.internal.codePointAt
 import com.davils.kxml.core.internal.unicodeNameOf
-import com.davils.kxml.core.name.XmlCharacters
 
-private const val CRLF: String = "\r\n"
-private const val CARRIAGE_RETURN: Char = '\r'
-private const val LINE_FEED: Char = '\n'
 private const val NONE: Int = -1
 
 internal object Sections {
-    fun normalized(text: String, from: Int, to: Int): String {
+    fun normalized(text: String, from: Int, to: Int, dialect: Dialect): String {
         val raw = text.substring(startIndex = from, endIndex = to)
-        val invalid = invalidOffset(raw)
+        val invalid = invalidOffset(raw, dialect)
         if (invalid != NONE) {
             failure(
                 XmlDiagnosticCode.InvalidCharacter,
@@ -39,15 +35,14 @@ internal object Sections {
                 "The character ${unicodeNameOf(raw.codePointAt(invalid))} is not allowed in XML",
             )
         }
-        val joined = raw.replace(oldValue = CRLF, newValue = LINE_FEED.toString())
-        return joined.replace(oldChar = CARRIAGE_RETURN, newChar = LINE_FEED)
+        return dialect.normalizedLineEnds(raw)
     }
 
-    private fun invalidOffset(raw: String): Int {
+    private fun invalidOffset(raw: String, dialect: Dialect): Int {
         var index = 0
         while (index < raw.length) {
             val code = raw.codePointAt(index)
-            if (!XmlCharacters.isCharacter(code)) return index
+            if (!dialect.isLiteral(code)) return index
             index += charCountOf(code)
         }
         return NONE

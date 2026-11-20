@@ -1,8 +1,8 @@
 # kxml
 
-kxml is the XML library of Davils: a hardened, namespace-aware XML 1.0 reader and writer and a kotlinx.serialization
-format for Kotlin on the JVM and on WebAssembly (`wasmJs`), safe to feed with untrusted documents. It is built on
-[Kore](https://github.com/davils-com/kore) and published under the [Apache License 2.0](LICENSE).
+kxml is the XML library of Davils: a hardened, namespace-aware XML 1.0 and 1.1 reader and writer and a
+kotlinx.serialization format for Kotlin on the JVM and on WebAssembly (`wasmJs`), safe to feed with untrusted documents.
+It is built on [Kore](https://github.com/davils-com/kore) and published under the [Apache License 2.0](LICENSE).
 
 | Module | Artifact | What it holds |
 |---|---|---|
