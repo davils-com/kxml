@@ -35,12 +35,4 @@ internal class NameSet(names: Iterable<String> = emptyList()) : AbstractSet<Stri
         members[name] = Unit
         return isNew
     }
-
-    fun remove(name: String) {
-        members.remove(name)
-    }
-
-    fun clear() {
-        members.clear()
-    }
 }

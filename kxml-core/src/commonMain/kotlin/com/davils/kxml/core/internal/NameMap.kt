@@ -17,31 +17,28 @@
 package com.davils.kxml.core.internal
 
 internal class NameMap<V : Any> {
-    private var index = OrderedIndex<String>()
+    private val index = OrderedIndex<String>()
     private val keys = ArrayList<String>()
-    private val values = ArrayList<V?>()
+    private val values = ArrayList<V>()
 
-    var size: Int = 0
-        private set
+    val size: Int get() = keys.size
 
-    val names: List<String>
-        get() = keys.filterIndexed { ordinal, _ -> values[ordinal] != null }
+    val names: List<String> get() = keys.toList()
 
-    val entries: List<Pair<String, V>>
-        get() = keys.indices.mapNotNull { ordinal -> values[ordinal]?.let { value -> keys[ordinal] to value } }
+    val entries: List<Pair<String, V>> get() = keys.zip(values)
 
     operator fun get(name: String): V? = index.ordinalOf(name)?.let(values::get)
 
-    operator fun contains(name: String): Boolean = get(name) != null
+    operator fun contains(name: String): Boolean = index.ordinalOf(name) != null
 
     operator fun set(name: String, value: V) {
         val ordinal = index.ordinalFor(name)
-        if (ordinal == keys.size) {
-            keys.add(name)
-            values.add(null)
+        if (ordinal < keys.size) {
+            values[ordinal] = value
+            return
         }
-        if (values[ordinal] == null) size++
-        values[ordinal] = value
+        keys.add(name)
+        values.add(value)
     }
 
     fun getOrPut(name: String, value: () -> V): V {
@@ -50,18 +47,5 @@ internal class NameMap<V : Any> {
         val created = value()
         set(name, created)
         return created
-    }
-
-    fun remove(name: String) {
-        val ordinal = index.ordinalOf(name) ?: return
-        if (values[ordinal] != null) size--
-        values[ordinal] = null
-    }
-
-    fun clear() {
-        index = OrderedIndex()
-        keys.clear()
-        values.clear()
-        size = 0
     }
 }
