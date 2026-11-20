@@ -192,6 +192,29 @@ public class XmlLimitsBuilder internal constructor() : ValidatingBuilder<XmlLimi
      */
     public var maximumPatchOperations: Int = DEFAULT_PATCH_OPERATIONS
 
+    /**
+     * The most steps one diff of two documents takes; [DEFAULT_DIFF_WORK] by default, at most
+     * [XmlLimits.HARD_DIFF_WORK].
+     *
+     * @since 1.0.0
+     */
+    public var maximumDiffWork: Long = DEFAULT_DIFF_WORK
+
+    /**
+     * The most layers one merge takes; [DEFAULT_MERGE_LAYERS] by default, at most [XmlLimits.HARD_MERGE_LAYERS].
+     *
+     * @since 1.0.0
+     */
+    public var maximumMergeLayers: Int = DEFAULT_MERGE_LAYERS
+
+    /**
+     * The most rules one redaction takes; [DEFAULT_REDACTION_RULES] by default, at most
+     * [XmlLimits.HARD_REDACTION_RULES].
+     *
+     * @since 1.0.0
+     */
+    public var maximumRedactionRules: Int = DEFAULT_REDACTION_RULES
+
     internal fun from(limits: XmlLimits) {
         maximumInputLength = limits.maximumInputLength
         maximumDepth = limits.maximumDepth
@@ -214,6 +237,9 @@ public class XmlLimitsBuilder internal constructor() : ValidatingBuilder<XmlLimi
         maximumQueryResults = limits.maximumQueryResults
         maximumQueryStringLength = limits.maximumQueryStringLength
         maximumPatchOperations = limits.maximumPatchOperations
+        maximumDiffWork = limits.maximumDiffWork
+        maximumMergeLayers = limits.maximumMergeLayers
+        maximumRedactionRules = limits.maximumRedactionRules
     }
 
     override fun assemble(): XmlLimits = XmlLimits(this)
@@ -363,5 +389,26 @@ public class XmlLimitsBuilder internal constructor() : ValidatingBuilder<XmlLimi
          * @since 1.0.0
          */
         public const val DEFAULT_PATCH_OPERATIONS: Int = 10_000
+
+        /**
+         * The default of [maximumDiffWork]: 10,000,000 steps.
+         *
+         * @since 1.0.0
+         */
+        public const val DEFAULT_DIFF_WORK: Long = 10_000_000L
+
+        /**
+         * The default of [maximumMergeLayers]: 64 layers.
+         *
+         * @since 1.0.0
+         */
+        public const val DEFAULT_MERGE_LAYERS: Int = 64
+
+        /**
+         * The default of [maximumRedactionRules]: 1,024 rules.
+         *
+         * @since 1.0.0
+         */
+        public const val DEFAULT_REDACTION_RULES: Int = 1_024
     }
 }

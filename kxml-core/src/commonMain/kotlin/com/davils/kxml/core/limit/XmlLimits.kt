@@ -217,6 +217,29 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
      */
     public val maximumPatchOperations: Int = builder.maximumPatchOperations
 
+    /**
+     * The most steps one diff of two documents in `kxml-document` takes, counted in the nodes it visits and the cells
+     * of the alignments of their children: 10,000,000 by default, at most [HARD_DIFF_WORK]. An alignment that would
+     * exceed what remains replaces the element instead, so a diff stays correct and only grows coarser.
+     *
+     * @since 1.0.0
+     */
+    public val maximumDiffWork: Long = builder.maximumDiffWork
+
+    /**
+     * The most layers one merge of `kxml-document` takes: 64 by default, at most [HARD_MERGE_LAYERS].
+     *
+     * @since 1.0.0
+     */
+    public val maximumMergeLayers: Int = builder.maximumMergeLayers
+
+    /**
+     * The most rules one redaction of `kxml-document` takes: 1,024 by default, at most [HARD_REDACTION_RULES].
+     *
+     * @since 1.0.0
+     */
+    public val maximumRedactionRules: Int = builder.maximumRedactionRules
+
     init {
         validateOrThrow(SUBJECT)
     }
@@ -316,6 +339,17 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
                 value = maximumPatchOperations.toLong(),
                 ceiling = HARD_PATCH_OPERATIONS.toLong(),
             ),
+            Bound(property = ::maximumDiffWork, value = maximumDiffWork, ceiling = HARD_DIFF_WORK),
+            Bound(
+                property = ::maximumMergeLayers,
+                value = maximumMergeLayers.toLong(),
+                ceiling = HARD_MERGE_LAYERS.toLong(),
+            ),
+            Bound(
+                property = ::maximumRedactionRules,
+                value = maximumRedactionRules.toLong(),
+                ceiling = HARD_REDACTION_RULES.toLong(),
+            ),
         )
 
     private val values: List<Long> get() = bounds.map(Bound::value)
@@ -362,7 +396,8 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
             "catalogFiles=$maximumCatalogFiles, catalogDepth=$maximumCatalogDepth, output=$maximumOutputLength, " +
             "queryLength=$maximumQueryLength, queryNesting=$maximumQueryNesting, querySteps=$maximumQuerySteps, " +
             "queryResults=$maximumQueryResults, queryString=$maximumQueryStringLength, " +
-            "patchOperations=$maximumPatchOperations)"
+            "patchOperations=$maximumPatchOperations, diffWork=$maximumDiffWork, mergeLayers=$maximumMergeLayers, " +
+            "redactionRules=$maximumRedactionRules)"
 
     private fun ValidationScope.bounded(bound: Bound) {
         val value = bound.value
@@ -503,6 +538,27 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
          */
         public const val HARD_PATCH_OPERATIONS: Int = 1_000_000
 
+        /**
+         * The ceiling of [maximumDiffWork]: 100,000,000,000 steps.
+         *
+         * @since 1.0.0
+         */
+        public const val HARD_DIFF_WORK: Long = 100_000_000_000L
+
+        /**
+         * The ceiling of [maximumMergeLayers]: 4,096 layers.
+         *
+         * @since 1.0.0
+         */
+        public const val HARD_MERGE_LAYERS: Int = 4_096
+
+        /**
+         * The ceiling of [maximumRedactionRules]: 65,536 rules.
+         *
+         * @since 1.0.0
+         */
+        public const val HARD_REDACTION_RULES: Int = 65_536
+
         private const val SUBJECT: String = "xml limits"
         private const val RELAXED_ELEMENTS: Long = 50_000_000L
         private const val RELAXED_ATTRIBUTES: Int = 100_000
@@ -517,6 +573,9 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
         private const val RELAXED_QUERY_STEPS: Long = 1_000_000_000L
         private const val RELAXED_QUERY_RESULTS: Int = 50_000_000
         private const val RELAXED_PATCH_OPERATIONS: Int = 100_000
+        private const val RELAXED_DIFF_WORK: Long = 1_000_000_000L
+        private const val RELAXED_MERGE_LAYERS: Int = 1_024
+        private const val RELAXED_REDACTION_RULES: Int = 16_384
 
         /**
          * The default limits, for documents from sources that are not trusted: the `DEFAULT_*` values of
@@ -534,7 +593,8 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
          * levels of entities, 1,000 external resources and [HARD_INPUT_LENGTH] code units of each, 256 catalog files
          * and chains of 32 of them, [HARD_INPUT_LENGTH] code units of output, XPath expressions of [HARD_QUERY_LENGTH]
          * code units nested [HARD_QUERY_NESTING] levels deep, and evaluations of 1,000,000,000 steps, 50,000,000 nodes
-         * in a node-set and strings of [HARD_INPUT_LENGTH] code units, and patches of 100,000 operations.
+         * in a node-set and strings of [HARD_INPUT_LENGTH] code units, patches of 100,000 operations, diffs of
+         * 1,000,000,000 steps, merges of 1,024 layers and redactions of 16,384 rules.
          *
          * Every limit stays finite and at most its hard ceiling, so even a trusted source cannot exhaust the memory
          * without bound.
@@ -566,6 +626,9 @@ public class XmlLimits internal constructor(builder: XmlLimitsBuilder) : Validat
             builder.maximumQueryResults = RELAXED_QUERY_RESULTS
             builder.maximumQueryStringLength = HARD_INPUT_LENGTH
             builder.maximumPatchOperations = RELAXED_PATCH_OPERATIONS
+            builder.maximumDiffWork = RELAXED_DIFF_WORK
+            builder.maximumMergeLayers = RELAXED_MERGE_LAYERS
+            builder.maximumRedactionRules = RELAXED_REDACTION_RULES
             return builder.build()
         }
     }

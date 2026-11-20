@@ -87,6 +87,9 @@ class XmlLimitsTest : FunSpec({
                 maximumQueryResults = XmlLimits.HARD_QUERY_RESULTS
                 maximumQueryStringLength = XmlLimits.HARD_INPUT_LENGTH
                 maximumPatchOperations = XmlLimits.HARD_PATCH_OPERATIONS
+                maximumDiffWork = XmlLimits.HARD_DIFF_WORK
+                maximumMergeLayers = XmlLimits.HARD_MERGE_LAYERS
+                maximumRedactionRules = XmlLimits.HARD_REDACTION_RULES
             }
 
             ceilings.maximumElements shouldBe XmlLimits.HARD_ELEMENTS
@@ -102,6 +105,9 @@ class XmlLimitsTest : FunSpec({
             ceilings.maximumQueryResults shouldBe XmlLimits.HARD_QUERY_RESULTS
             ceilings.toString() shouldContain "queryString=${XmlLimits.HARD_INPUT_LENGTH}"
             ceilings.maximumPatchOperations shouldBe XmlLimits.HARD_PATCH_OPERATIONS
+            ceilings.maximumDiffWork shouldBe XmlLimits.HARD_DIFF_WORK
+            ceilings.maximumMergeLayers shouldBe XmlLimits.HARD_MERGE_LAYERS
+            ceilings.toString() shouldContain "redactionRules=${XmlLimits.HARD_REDACTION_RULES}"
             xmlLimits(base = ceilings) { } shouldBe ceilings
         }
 
@@ -129,6 +135,11 @@ class XmlLimitsTest : FunSpec({
             shouldThrow<ValidationException> {
                 xmlLimits { maximumPatchOperations = XmlLimits.HARD_PATCH_OPERATIONS + 1 }
             }
+            shouldThrow<ValidationException> { xmlLimits { maximumDiffWork = XmlLimits.HARD_DIFF_WORK + 1 } }
+            shouldThrow<ValidationException> { xmlLimits { maximumMergeLayers = XmlLimits.HARD_MERGE_LAYERS + 1 } }
+            shouldThrow<ValidationException> {
+                xmlLimits { maximumRedactionRules = XmlLimits.HARD_REDACTION_RULES + 1 }
+            }
         }
 
         test("refuse every limit below 1") {
@@ -148,6 +159,9 @@ class XmlLimitsTest : FunSpec({
             shouldThrow<ValidationException> { xmlLimits { maximumQueryResults = 0 } }
             shouldThrow<ValidationException> { xmlLimits { maximumQueryStringLength = 0 } }
             shouldThrow<ValidationException> { xmlLimits { maximumPatchOperations = 0 } }
+            shouldThrow<ValidationException> { xmlLimits { maximumDiffWork = 0 } }
+            shouldThrow<ValidationException> { xmlLimits { maximumMergeLayers = 0 } }
+            shouldThrow<ValidationException> { xmlLimits { maximumRedactionRules = 0 } }
         }
 
         test("keep the relaxed preset finite and within every ceiling") {

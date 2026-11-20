@@ -300,24 +300,28 @@ public final class com/davils/kxml/core/limit/XmlLimits : com/davils/kore/core/v
 	public static final field HARD_CATALOG_DEPTH I
 	public static final field HARD_CATALOG_FILES I
 	public static final field HARD_DEPTH I
+	public static final field HARD_DIFF_WORK J
 	public static final field HARD_ELEMENTS J
 	public static final field HARD_ENTITY_DECLARATIONS I
 	public static final field HARD_ENTITY_DEPTH I
 	public static final field HARD_ENTITY_EXPANSION J
 	public static final field HARD_EXTERNAL_RESOURCES I
 	public static final field HARD_INPUT_LENGTH I
+	public static final field HARD_MERGE_LAYERS I
 	public static final field HARD_NAME_LENGTH I
 	public static final field HARD_PATCH_OPERATIONS I
 	public static final field HARD_QUERY_LENGTH I
 	public static final field HARD_QUERY_NESTING I
 	public static final field HARD_QUERY_RESULTS I
 	public static final field HARD_QUERY_STEPS J
+	public static final field HARD_REDACTION_RULES I
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getMaximumAttributeDeclarations ()I
 	public final fun getMaximumAttributes ()I
 	public final fun getMaximumCatalogDepth ()I
 	public final fun getMaximumCatalogFiles ()I
 	public final fun getMaximumDepth ()I
+	public final fun getMaximumDiffWork ()J
 	public final fun getMaximumElements ()J
 	public final fun getMaximumEntityDeclarations ()I
 	public final fun getMaximumEntityDepth ()I
@@ -325,6 +329,7 @@ public final class com/davils/kxml/core/limit/XmlLimits : com/davils/kore/core/v
 	public final fun getMaximumExternalLength ()I
 	public final fun getMaximumExternalResources ()I
 	public final fun getMaximumInputLength ()I
+	public final fun getMaximumMergeLayers ()I
 	public final fun getMaximumNameLength ()I
 	public final fun getMaximumOutputLength ()I
 	public final fun getMaximumPatchOperations ()I
@@ -333,6 +338,7 @@ public final class com/davils/kxml/core/limit/XmlLimits : com/davils/kore/core/v
 	public final fun getMaximumQueryResults ()I
 	public final fun getMaximumQuerySteps ()J
 	public final fun getMaximumQueryStringLength ()I
+	public final fun getMaximumRedactionRules ()I
 	public final fun getMaximumTextLength ()I
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
@@ -351,6 +357,7 @@ public final class com/davils/kxml/core/limit/XmlLimitsBuilder : com/davils/kore
 	public static final field DEFAULT_CATALOG_DEPTH I
 	public static final field DEFAULT_CATALOG_FILES I
 	public static final field DEFAULT_DEPTH I
+	public static final field DEFAULT_DIFF_WORK J
 	public static final field DEFAULT_ELEMENTS J
 	public static final field DEFAULT_ENTITY_DECLARATIONS I
 	public static final field DEFAULT_ENTITY_DEPTH I
@@ -358,6 +365,7 @@ public final class com/davils/kxml/core/limit/XmlLimitsBuilder : com/davils/kore
 	public static final field DEFAULT_EXTERNAL_LENGTH I
 	public static final field DEFAULT_EXTERNAL_RESOURCES I
 	public static final field DEFAULT_INPUT_LENGTH I
+	public static final field DEFAULT_MERGE_LAYERS I
 	public static final field DEFAULT_NAME_LENGTH I
 	public static final field DEFAULT_PATCH_OPERATIONS I
 	public static final field DEFAULT_QUERY_LENGTH I
@@ -365,6 +373,7 @@ public final class com/davils/kxml/core/limit/XmlLimitsBuilder : com/davils/kore
 	public static final field DEFAULT_QUERY_RESULTS I
 	public static final field DEFAULT_QUERY_STEPS J
 	public static final field DEFAULT_QUERY_STRING_LENGTH I
+	public static final field DEFAULT_REDACTION_RULES I
 	public static final field DEFAULT_TEXT_LENGTH I
 	public synthetic fun assemble ()Lcom/davils/kore/core/validation/Validatable;
 	public final fun getMaximumAttributeDeclarations ()I
@@ -372,6 +381,7 @@ public final class com/davils/kxml/core/limit/XmlLimitsBuilder : com/davils/kore
 	public final fun getMaximumCatalogDepth ()I
 	public final fun getMaximumCatalogFiles ()I
 	public final fun getMaximumDepth ()I
+	public final fun getMaximumDiffWork ()J
 	public final fun getMaximumElements ()J
 	public final fun getMaximumEntityDeclarations ()I
 	public final fun getMaximumEntityDepth ()I
@@ -379,6 +389,7 @@ public final class com/davils/kxml/core/limit/XmlLimitsBuilder : com/davils/kore
 	public final fun getMaximumExternalLength ()I
 	public final fun getMaximumExternalResources ()I
 	public final fun getMaximumInputLength ()I
+	public final fun getMaximumMergeLayers ()I
 	public final fun getMaximumNameLength ()I
 	public final fun getMaximumOutputLength ()I
 	public final fun getMaximumPatchOperations ()I
@@ -387,12 +398,14 @@ public final class com/davils/kxml/core/limit/XmlLimitsBuilder : com/davils/kore
 	public final fun getMaximumQueryResults ()I
 	public final fun getMaximumQuerySteps ()J
 	public final fun getMaximumQueryStringLength ()I
+	public final fun getMaximumRedactionRules ()I
 	public final fun getMaximumTextLength ()I
 	public final fun setMaximumAttributeDeclarations (I)V
 	public final fun setMaximumAttributes (I)V
 	public final fun setMaximumCatalogDepth (I)V
 	public final fun setMaximumCatalogFiles (I)V
 	public final fun setMaximumDepth (I)V
+	public final fun setMaximumDiffWork (J)V
 	public final fun setMaximumElements (J)V
 	public final fun setMaximumEntityDeclarations (I)V
 	public final fun setMaximumEntityDepth (I)V
@@ -400,6 +413,7 @@ public final class com/davils/kxml/core/limit/XmlLimitsBuilder : com/davils/kore
 	public final fun setMaximumExternalLength (I)V
 	public final fun setMaximumExternalResources (I)V
 	public final fun setMaximumInputLength (I)V
+	public final fun setMaximumMergeLayers (I)V
 	public final fun setMaximumNameLength (I)V
 	public final fun setMaximumOutputLength (I)V
 	public final fun setMaximumPatchOperations (I)V
@@ -408,6 +422,7 @@ public final class com/davils/kxml/core/limit/XmlLimitsBuilder : com/davils/kore
 	public final fun setMaximumQueryResults (I)V
 	public final fun setMaximumQuerySteps (J)V
 	public final fun setMaximumQueryStringLength (I)V
+	public final fun setMaximumRedactionRules (I)V
 	public final fun setMaximumTextLength (I)V
 }
 
