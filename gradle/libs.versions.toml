@@ -1,12 +1,12 @@
 [versions]
 kotlin = "2.4.21"
-kreate = "5.4.1"
-kore = "2.3.1"
+kreate = "5.5.2"
+kore = "2.5.0"
 coroutines = "1.11.0"
 serialization = "1.13.0"
 # Floors for the classpaths of build tools, raised past known vulnerabilities.
-tooling-jackson = "2.22.3"
-tooling-bouncycastle = "1.85"
+tooling-jackson = "2.23.0"
+tooling-bouncycastle = "1.87"
 
 [libraries]
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
