@@ -36,7 +36,7 @@ dependencyResolutionManagement {
 ```kotlin
 // build.gradle.kts
 dependencies {
-    implementation("com.davils:kxml-serialization:1.0.0")
+    implementation("com.davils:kxml-serialization:1.0.1")
 }
 ```
 

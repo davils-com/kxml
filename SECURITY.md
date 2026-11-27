@@ -123,7 +123,7 @@ kxml does for Kore. A release also carries a signed build provenance attestation
 built it:
 
 ```bash
-gh attestation verify kxml-core-1.0.0.jar --repo davils-com/kxml --signer-repo davils-com/kotlin-workflow
+gh attestation verify kxml-core-1.0.1.jar --repo davils-com/kxml --signer-repo davils-com/kotlin-workflow
 ```
 
 Snapshots in `https://repo.davils.com/snapshots` are neither signed nor attested and are not meant for production.

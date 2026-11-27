@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.0.1 - 2026-11-27
+
+### Changed
+
+- **kxml builds on Kore 2.5.0, Kreate 5.5.2 and Gradle 9.9.2**, the versions every Davils library of this round shares,
+  so an application that uses several of them resolves a single Kore. Nothing kxml reads, writes or refuses changes.
+- **The Gradle wrapper waits longer and retries** when it downloads the distribution.
+
 ## 1.0.0 - 2026-11-20
 
 The first version of kxml: the XML reader, writer and kotlinx.serialization format of an internal Davils project as
